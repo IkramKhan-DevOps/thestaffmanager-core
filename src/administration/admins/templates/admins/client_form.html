@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block base_title %}admins | Client {% endblock %}
+{% block base_subhead_heading %}Client {% endblock %}
+{% block base_subhead_paragraph %}Client create/update form{% endblock %}
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:client-list' %}"><i class="fa fa-arrow-left"></i> Clients</a>
+{% endblock %}
+
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-check-circle"></i> Submit
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

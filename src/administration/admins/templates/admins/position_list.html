@@ -1,0 +1,54 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_title %}Admins | Positions{% endblock %}
+{% block base_subhead_heading %}Positions{% endblock %}
+{% block base_subhead_paragraph %}List of available Positions.{% endblock %}
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:position-add' %}">
+        <i class="fa fa-plus"></i> New Position
+    </a>
+{% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if object_list %}
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="">
+                                <tr>
+                                    <th>...</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for object in object_list %}
+                                    <tr>
+                                    <td>...</td>
+                                    </tr>
+                                {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    {% else %}
+                        <p class="mb-0 text-danger">
+                            <b>
+                                <i class="fa fa-exclamation-circle"></i>
+                                No objects available
+                            </b>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

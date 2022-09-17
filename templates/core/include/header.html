@@ -1,0 +1,91 @@
+{% load static %}
+<div class="topbar">
+
+
+    <nav class="navbar-custom">
+
+
+        {# LOGO HEADER #}
+        <div class="topbar-left">
+            <a href="#" class="logo">
+{#                <span>#}
+{#                    <img src="{% static 'core/logo-dark-250.png' %}" alt="logo-large" class="logo-lg">#}
+{#                </span>#}
+                <span>
+                    <img src="{% static 'core/logo-dark-ver-500.png' %}" alt="logo-small" class="logo-sm">
+                </span>
+            </a>
+        </div>
+
+        {# OTHER #}
+        <ul class="list-unstyled topbar-nav float-right mb-0">
+
+            <li class="dropdown">
+                <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-toggle="dropdown"
+                   href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                    <i class="mdi mdi-bell-outline nav-icon"></i>
+                    <span class="badge badge-danger badge-pill noti-icon-badge">1</span>
+                </a>
+
+                {# NOTIFICATIONS #}
+                <div class="dropdown-menu dropdown-menu-right dropdown-lg">
+                    <h6 class="dropdown-item-text">Notifications</h6>
+                    <div class="slimscroll notification-list">
+
+                        <a href="#" class="dropdown-item notify-item active">
+                            <div class="notify-icon bg-success"><i class="mdi mdi-pencil"></i></div>
+                            <p class="notify-details">New Notification<small class="text-muted">
+                                notifications not configured yet.</small>
+                            </p>
+                        </a>
+
+{#                        <a href="#" class="dropdown-item notify-item">#}
+{#                            <div class="notify-icon bg-warning"><i class="mdi mdi-message"></i></div>#}
+{#                            <p class="notify-details">New Teacher Message received#}
+{#                                <small class="text-muted">Message from teacher X</small>#}
+{#                            </p>#}
+{#                        </a>#}
+
+                    </div><!-- All-->
+                    <a href="javascript:void(0);" class="dropdown-item text-center text-primary">
+                        View all <i class="fi-arrow-right"></i>
+                    </a>
+                </div>
+            </li>
+
+            {# PROFILE #}
+            <li class="dropdown">
+                <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#"
+                   role="button" aria-haspopup="false" aria-expanded="false">
+                    <img src="{% static 'core/no-user.png' %}" alt="profile-user" class="rounded-circle">
+                    <span class="ml-1 nav-user-name hidden-sm"><i class="mdi mdi-chevron-down"></i></span>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="{% url 'accounts:user-change' %}"><i
+                            class="dripicons-user text-muted mr-2"></i> Profile
+                    </a>
+                    <a class="dropdown-item" href="{% url 'accounts:user-password-change' %}"><i
+                            class="dripicons-lock-open text-muted mr-2"></i> Change Password
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                        <i class="dripicons-exit text-muted mr-2"></i>Logout
+                    </a>
+                </div>
+            </li>
+
+        </ul>
+        <ul class="list-unstyled topbar-nav mb-0">
+            <li>
+                <button class="button-menu-mobile nav-link waves-effect waves-light"><i
+                        class="mdi mdi-menu nav-icon"></i>
+                </button>
+            </li>
+
+        </ul>
+    </nav>
+
+    <!-- end navbar-->
+</div>
+<!-- Top Bar End -->

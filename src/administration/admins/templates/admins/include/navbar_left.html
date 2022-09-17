@@ -1,0 +1,190 @@
+{% if request.user.is_superuser %}
+    <div class="left-sidenav">
+        <ul class="metismenu left-sidenav-menu" id="side-nav">
+            <li class="menu-title">INTEX247</li>
+
+            <li>
+                <a href="{% url 'admins:dashboard' %}">
+                    <i class="mdi mdi-view-dashboard"></i>
+                    <span>Newsfeed</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:live-chat' %}">
+                    <i class="mdi mdi-chat"></i>
+                    <span>Live Chat</span>
+                </a>
+            </li>
+
+            <li class="menu-title">SCHEDULING</li>
+            <li>
+                <a href="{% url 'admins:cases' %}">
+                    <i class="fa fa-notes-medical"></i>
+                    <span>Schedule</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:pipeline' %}">
+                    <i class="fa fa-calendar-check"></i>
+                    <span>Shifts</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:calls' %}">
+                    <i class="fa fa-clock"></i>
+                    <span>Time Clock</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:calls' %}">
+                    <i class="fa fa-calendar-times"></i>
+                    <span>Absences</span>
+                </a>
+            </li>
+
+            <li class="menu-title">CASES</li>
+            <li>
+                <a href="{% url 'admins:cases' %}">
+                    <i class="fa fa-notes-medical"></i>
+                    <span>Cases</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:pipeline' %}">
+                    <i class="mdi mdi-pipe"></i>
+                    <span>Pipelines</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:calls' %}">
+                    <i class="fa fa-phone"></i>
+                    <span>Calls</span>
+                </a>
+            </li>
+
+
+            <li class="menu-title">REPORTS</li>
+            <li>
+                <a href="{% url 'admins:reports' %}">
+                    <i class="fa fa-chart-line"></i>
+                    <span>Reports</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:shift-notes' %}">
+                    <i class="fa fa-paragraph"></i>
+                    <span>Shift Notes</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:charges-break' %}">
+                    <i class="mdi mdi-cash"></i>
+                    <span>charges Break</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:pay-run-report' %}">
+                    <i class="fa fa-edit"></i>
+                    <span>Pay Run Report</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:health' %}">
+                    <i class="mdi mdi-medical-bag"></i>
+                    <span>Health</span>
+                </a>
+            </li>
+
+
+            <li class="menu-title">USERS</li>
+
+            <li>
+                <a href="{% url 'admins:user-list' %}">
+                    <i class="fa fa-user"></i>
+                    <span>Users</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:employee-map' %}">
+                    <i class="fa fa-map"></i>
+                    <span>Employee Map</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:client-list' %}">
+                    <i class="fa fa-users"></i>
+                    <span>Clients</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:contact-list' %}">
+                    <i class="fa fa-phone"></i>
+                    <span>Contacts</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:site-list' %}">
+                    <i class="fa fa-building"></i>
+                    <span>Sites</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:asset-list' %}">
+                    <i class="fa fa-key"></i>
+                    <span>Assets</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:post-code-report' %}">
+                    <i class="fa fa-map-marked"></i>
+                    <span>Postcode Report</span>
+                </a>
+            </li>
+
+            <li class="menu-title">SETTINGS</li>
+            <li>
+                <a href="{% url 'admins:position-list' %}">
+                    <i class="fa fa-user-cog"></i>
+                    <span>Positions</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:qualification-list' %}">
+                    <i class="fa fa-graduation-cap"></i>
+                    <span>Qualifications</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:vehicle-list' %}">
+                    <i class="fa fa-car"></i>
+                    <span>Vehicles</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:report-type-list' %}">
+                    <i class="fa fa-chart-line"></i>
+                    <span>Reports Types</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:form-builder-list' %}">
+                    <i class="fa fa-paragraph"></i>
+                    <span>Form Builder</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:email-account-list' %}">
+                    <i class="mdi mdi-email"></i>
+                    <span>Email Accounts</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'admins:asset-audit-list' %}">
+                    <i class="fa fa-stamp"></i>
+                    <span>Asset Audit</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+{% endif %}

@@ -1,2 +1,1 @@
-# csr-dj-eximitas
-Eximitas CMS application
+# django_project_sample

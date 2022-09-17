@@ -1,0 +1,87 @@
+<div class="left-sidenav">
+
+    <ul class="metismenu left-sidenav-menu" id="side-nav">
+
+        {# MENU ITEM #}
+        <li class="menu-title">Main</li>
+        <li>
+
+            {# HEADING #}
+            <a href="javascript: void(0);">
+                <i class="mdi mdi-apps"></i>
+                <span>Courses</span>
+                <span class="menu-arrow">
+                            <i class="mdi mdi-chevron-right"></i>
+                        </span>
+            </a>
+
+            {# LISTS #}
+            <ul class="nav-second-level" aria-expanded="false">
+                <li><a href="#"><span>Summary</span></a></li>
+            </ul>
+        </li>
+
+        {# MENU ITEM #}
+        <li>
+            {# HEADING #}
+            <a href="javascript: void(0);">
+                <i class="mdi mdi-pencil"></i>
+                <span>Assignments</span>
+                <span class="menu-arrow">
+                            <i class="mdi mdi-chevron-right"></i>
+                        </span>
+            </a>
+
+            {# LISTS #}
+            <ul class="nav-second-level" aria-expanded="false">
+                <li><a href="{% url 'core:teacher-app:assignments' %}">Summary</a></li>
+            </ul>
+        </li>
+
+        {# MENU ITEM #}
+        <li>
+            {# HEADING #}
+            <a href="javascript: void(0);">
+                <i class="mdi mdi-clipboard-text"></i>
+                <span>Quizzes</span>
+                <span class="menu-arrow">
+                            <i class="mdi mdi-chevron-right"></i>
+                        </span>
+            </a>
+
+            {# LISTS #}
+            <ul class="nav-second-level" aria-expanded="false">
+                <li><a href="{% url 'core:teacher-app:start_quiz' %}">start quiz</a></li>
+                <li><a href="{% url 'core:teacher-app:quizzes' %}">summary</a></li>
+            </ul>
+        </li>
+
+        {# MENU ITEM #}
+        <li>
+            {# HEADING #}
+            <a href="{% url 'core:teacher-app:timetable' %}">
+                <i class="mdi mdi-timetable"></i>
+                <span>TimeTable</span>
+            </a>
+        </li>
+
+        {# MENU ITEM #}
+        <li>
+            {# HEADING #}
+            <a href="{% url 'core:teacher-app:fee' %}">
+                <i class="mdi mdi-cash"></i>
+                <span>Fee Status</span>
+            </a>
+        </li>
+
+        {# MENU ITEM #}
+        <li>
+            {# HEADING #}
+            <a href="{% url 'core:teacher-app:application' %}">
+                <i class="mdi mdi-format-letter-case"></i>
+                <span>Applications</span>
+            </a>
+        </li>
+
+    </ul>
+</div>

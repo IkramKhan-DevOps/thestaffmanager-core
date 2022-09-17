@@ -1,0 +1,42 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block base_title %}admins | User {% endblock %}
+{% block base_subhead_heading %} User {% endblock %}
+{% block base_subhead_paragraph %}User create/update form{% endblock %}
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:user-list' %}"><i class="fa fa-arrow-left"></i> Users</a>
+{% endblock %}
+
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-check-circle"></i> Submit
+                        </button>
+                        {% if update %}
+                            <a type="button" class="btn btn-danger" href="{% url 'admins:user-delete' object.pk %}">
+                                <i class="fa fa-trash"></i> Delete
+                            </a>
+                            <a type="button" class="btn btn-danger"
+                               href="{% url 'admins:user-password-reset' object.pk %}">
+                                <i class="fa fa-trash"></i> Password Reset
+                            </a>
+                        {% endif %}
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

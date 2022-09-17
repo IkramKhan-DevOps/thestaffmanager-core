@@ -1,0 +1,51 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>
+        {% block base_title %}
+            SCHOOL
+        {% endblock base_title %}
+    </title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta content="exarth.com" name="author"><!-- App favicon -->
+
+    <link rel="shortcut icon" href="{% static 'core/logo.png' %}"><!-- App css -->
+    <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'core/css/icons.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'core/css/metismenu.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'core/css/style.css' %}" rel="stylesheet" type="text/css">
+
+    {% block base_css_links %}
+
+    {% endblock base_css_links %}
+
+</head>
+
+
+<body class="account-body">
+
+
+
+{% block base_content %}
+
+{% endblock base_content %}
+
+<script src="{% static 'core/js/jquery.min.js' %}"></script>
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/metisMenu.min.js' %}"></script>
+<script src="{% static 'core/js/waves.min.js' %}"></script>
+<script src="{% static 'core/js/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'core/js/app.js' %}"></script>
+
+{% block base_js_links %}
+
+{% endblock base_js_links %}
+</body>
+</html>
+
+{% block base_js %}
+
+{% endblock base_js %}

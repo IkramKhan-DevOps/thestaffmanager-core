@@ -1,0 +1,29 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_title %}admins | {{ object }}{% endblock %}
+{% block base_subhead_heading %}{{ object }}{% endblock %}
+{% block base_subhead_paragraph %}Detail down description of {{ object }}.{% endblock %}
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:position-list' %}"><i class="fa fa-arrow-left"></i> Sites</a>
+{% endblock %}
+
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body text-center">
+                    <p class="display-1"><i class="fa fa-hammer"></i></p>
+                    <p class="mb-0 card-title text-danger">
+                        <b>EXIMITAS <small>Says.</small></b>
+                    </p>
+
+                    <p class="lead">Sorry for inconvenience the page is under-development.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

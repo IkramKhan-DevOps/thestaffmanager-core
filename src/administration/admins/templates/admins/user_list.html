@@ -1,0 +1,100 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_title %}admins | Users{% endblock %}
+{% block base_subhead_heading %}Users{% endblock %}
+{% block base_subhead_paragraph %}List of available users{% endblock %}
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:user-add' %}">
+        <i class="fa fa-plus"></i> New User
+    </a>
+{% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if object_list %}
+
+                        <div class="table-responsive">
+                            <table class="table border table-hover table-striped">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th>Username</th>
+                                    <th>FirstName</th>
+                                    <th>LastName</th>
+                                    <th>Email</th>
+                                    <th>Role</th>
+                                    <th>Date Joined</th>
+                                    <th>Last Login</th>
+                                    <th>Status</th>
+                                    <th>-</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for object in object_list %}
+                                    <tr>
+                                        <td>{{ object.username }}</td>
+                                        <td>{{ object.first_name }}</td>
+                                        <td>{{ object.last_name }}</td>
+                                        <td>{{ object.email }}</td>
+                                        <td>
+                                            {% if object.is_superuser %}
+                                                <b class="text-primary"><i class="fa fa-user-cog"></i> Admin</b>
+                                            {% else %}
+                                                {% if object.is_staff %}
+                                                    <b class="text-success"><i class="fa fa-user-check"></i> Co-ordinator</b>
+                                                {% else %}
+                                                    <b class="text-secondary"><i class="fa fa-times-circle"></i>
+                                                        Undefined</b>
+                                                {% endif %}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ object.date_joined }}</td>
+                                        <td>{{ object.last_login }}</td>
+                                        <td>
+                                            {% if object.is_active %}
+                                                <b class="text-success">
+                                                    <i class="fa fa-check-circle"></i>
+                                                </b>
+                                            {% else %}
+                                                <b class="text-danger">
+                                                    <i class="fa fa-times-circle"></i>
+                                                </b>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'admins:user-update' object.pk %}">
+                                                <b class="text-primary">
+                                                    <i class="fa fa-edit"></i>
+                                                </b>
+                                            </a>
+                                            <a href="{% url 'admins:user-delete' object.pk %}">
+                                                <b class="text-danger">
+                                                    <i class="fa fa-trash"></i>
+                                                </b>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="mb-0 text-danger">
+                            <b>
+                                <i class="fa fa-exclamation-circle"></i>
+                                No Users available
+                            </b>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

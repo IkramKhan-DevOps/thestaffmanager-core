@@ -1,0 +1,116 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+
+    <title>
+        {% block base_title %}
+
+        {% endblock base_title %}
+    </title>
+
+    <meta name="author" content="exarth.com">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    {# SEO #}
+    <link rel="shortcut icon" href="{% static 'core/logo.png' %}">
+
+    {# GLOBAL CSS #}
+    <link href="{% static 'core/css/bootstrap.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'core/css/icons.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'core/css/metismenu.min.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'core/css/style.css' %}" rel="stylesheet" type="text/css">
+
+    {# INTERNAL CSS #}
+    {% block base_css %}
+
+    {% endblock base_css %}
+</head>
+<body>
+
+{# HEADER #}
+{% block base_header %}
+    {% include 'core/include/header.html' %}
+{% endblock %}
+
+{# HEADING #}
+<div class="page-wrapper-img">
+    <div class="page-wrapper-img-inner">
+
+        {% block base_subhead %}
+            {% include 'core/include/subhead.html' %}
+        {% endblock %}
+
+        {# RIGHT SIDE #}
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="page-title-box">
+                    <div class="float-right align-item-center mt-2">
+                        {% block base_subhead_button %}
+
+                        {% endblock %}
+                    </div>
+                    <h4 class="page-title mb-2">
+                        <i class="mdi mdi-monitor mr-2"></i>
+                        {% block base_subhead_heading %}
+                            Dashboard
+                        {% endblock base_subhead_heading %}
+                    </h4>
+                    <div class="text-light">
+                        <p class="m-0">
+                            {% block base_subhead_paragraph %}
+
+                            {% endblock base_subhead_paragraph %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{# NAVIGATION #}
+<div class="page-wrapper">
+    <div class="page-wrapper-inner">
+
+        {% block base_nav_left %}
+            {% include 'admins/include/navbar_left.html' %}
+        {% endblock %}
+
+        <div class="page-content">
+            <div class="container-fluid">
+
+                {% include 'core/include/messages.html' %}
+
+                {% block base_content %}
+
+                {% endblock %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{# GLOBAL SCRIPTS #}
+<script src="{% static 'core/js/jquery.min.js' %}"></script>
+<script src="{% static 'core/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'core/js/metisMenu.min.js' %}"></script>
+<script src="{% static 'core/js/waves.min.js' %}"></script>
+<script src="{% static 'core/js/jquery.slimscroll.min.js' %}"></script>
+<script src="{% static 'core/js/app.js' %}"></script>
+
+{# INTERNAL SCRIPTS #}
+{% block base_internal_scripts %}
+
+{% endblock base_internal_scripts %}
+
+</body>
+</html>
+
+{# EXTERNAL SCRIPTS #}
+{% block base_external_scripts %}
+
+{% endblock base_external_scripts %}

@@ -1,0 +1,27 @@
+{% load static %}
+
+<div class="sidebar-user media">
+    <div class="media-body">
+        <h5 class="text-light">
+            Welcome {{ request.user }}
+        </h5>
+
+        <ul class="list-unstyled list-inline mb-0 mt-2">
+            <li class="list-inline-item">
+                <a href="{% url 'accounts:user-change' %}" class="">
+                    <i class="mdi mdi-account text-light"></i>
+                </a>
+            </li>
+            <li class="list-inline-item">
+                <a href="{% url 'accounts:user-password-change' %}" class="">
+                    <i class="mdi mdi-shield text-light"></i>
+                </a>
+            </li>
+            <li class="list-inline-item">
+                <a href="{% url 'accounts:logout' %}" class="">
+                    <i class="mdi mdi-power text-danger"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>

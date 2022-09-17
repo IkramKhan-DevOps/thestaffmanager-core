@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block base_title %}Post Code Report {% endblock %}
+{% block base_subhead_heading %} Post Code Report {% endblock %}
+
+{% block base_content %}
+
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-body text-center">
+
+                    <form>
+                        <input type="text" placeholder="Enter postcode here" class="form-control">
+                        <br>
+                        <button class="btn btn-success">
+                            <i class="fa fa-paragraph"></i> Generate Report
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
