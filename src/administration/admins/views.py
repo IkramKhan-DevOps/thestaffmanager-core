@@ -28,7 +28,7 @@ import csv, io
 
 @method_decorator(login_required, name='dispatch')
 class DashboardView(TemplateView):
-    template_name = 'admins/dashboard.html'
+    template_name = 'admins/news-feed.html'
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)

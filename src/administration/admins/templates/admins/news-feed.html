@@ -1,0 +1,79 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_title %}
+    admins | Dashboard
+{% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <div class="d-flex justify-content-between">
+                            <h3>News Feed</h3>
+                            <span>
+                                    <a href="{% url 'admins:employee-map' %}" class="btn btn-secondary">Map</a>
+                                    <a href="#" class="btn btn-primary">
+                                        <span class="d-none d-md-inline">Create </span>
+                                        <span>New</span>
+                                        <span class="d-none d-md-inline"> Post</span>
+                                    </a>
+                                </span>
+                        </div>
+                    </div>
+                    <div id="news-feed-index-table" data-livecount="0">
+                        <form action="" method="GET" class="row m-0 mb-2">
+                            <div class="col-12 m-0 p-0">
+                                <div class="row m-0 p-0">
+                                    <div class="col-12 col-md-6 mb-2 mb-md-0 p-0">
+                                        <div class="form-group m-0 px-2 py-1 border rounded"><i
+                                                class="fa fa-search mr-2"></i><input
+                                                class="border-0 bg-transparent w-75" type="text" name="search"
+                                                placeholder="Search news feed" value=""></div>
+                                    </div>
+                                    <div class="col-12 col-md-6 p-0">
+                                        <div class="row m-0 p-0">
+                                            <div class="col-6 m-0 p-0 pr-1 pl-md-1 pr-md-0 bespoke-datepicker">
+                                                <div class="react-datepicker-wrapper">
+                                                    <div class="react-datepicker__input-container"><input type="date"
+                                                                                                          placeholder="Created At: [yyyy-mm-dd]"
+                                                                                                          class="w-100 form-group m-0 px-2 py-1 border rounded"
+                                                                                                          value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-6 m-0 p-0 pl-1 bespoke-datepicker">
+                                                <div class="react-datepicker-wrapper">
+                                                    <div class="react-datepicker__input-container"><input type="date"
+                                                                                                          placeholder="Close At: [yyyy-mm-dd]"
+                                                                                                          class="w-100 form-group m-0 px-2 py-1 border rounded"
+                                                                                                          value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <p class="text-muted mb-2"><small>Last updated: 19:39:20 17/09/2022&nbsp;&nbsp;<a href="#">(pause)</a>&nbsp;&nbsp;</small>
+                        </p>
+                        <div class="table-responsive">
+                            <table class="table table-striped">
+                                <tbody>
+                                <tr>
+                                    <td class="text-center">No data.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
