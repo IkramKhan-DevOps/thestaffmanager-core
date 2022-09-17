@@ -1,0 +1,1 @@
+$('[data-plugin="custommodal"]').on("click",function(t){new Custombox.modal({content:{target:$(this).attr("href"),effect:$(this).attr("data-animation")}}).open()});

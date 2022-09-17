@@ -1,0 +1,1 @@
+!function(t){"use strict";tippy(".tippy-btn"),tippy("#myElement",{html:document.querySelector("#feature__html"),arrow:!0,animation:"fade"})}(jQuery);
