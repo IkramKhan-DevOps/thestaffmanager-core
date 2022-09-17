@@ -22,14 +22,40 @@
                             <table class="table table-bordered table-striped">
                                 <thead class="">
                                 <tr>
-                                    <th>...</th>
+                                    <th>ID</th>
+                                    <th>Icon</th>
+                                    <th>Name</th>
+                                    <th>Description</th>
+                                    <th>created On</th>
+                                    <th>Last edited</th>
+                                    <th>Status</th>
+                                    <th>Created By</th>
+                                    <th>No of Questions</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 {% for object in object_list %}
                                     <tr>
-                                    <td>...</td>
+                                    <td>{{ object.id }}</td>
+                                    <td>{{ object.name }}</td>
+                                    <td>{{ object.description }}</td>
+                                    <td>{{ object.created_on }}</td>
+                                    <td>{{ object.updated_on }}</td>
+                                    <td>{{ object.is_active }}</td>
+                                    <td>{{ object.created_by }}</td>
+                                    <td>00</td>
+                                    <th>
+                                        <a href="{% url 'admins:form-builder-detail' object.pk %}">
+                                            <i class="fa fa-eye"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:form-builder-update' object.pk %}">
+                                            <i class="fa fa-edit"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:form-builder-delete' object.pk %}" class="text-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </th>
                                     </tr>
                                 {% endfor %}
 

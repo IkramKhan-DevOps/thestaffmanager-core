@@ -22,14 +22,30 @@
                             <table class="table table-bordered table-striped">
                                 <thead class="">
                                 <tr>
-                                    <th>...</th>
+                                    <th>Name</th>
+                                    <th>Parent Client</th>
+                                    <th>Xero Contact Name</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 {% for object in object_list %}
                                     <tr>
-                                    <td>...</td>
+                                    <td>{{ object.name }}</td>
+                                    <td>{{ object.parent_client }}</td>
+                                    <td>{{ object.xero_contact_name }}</td>
+                                    <th>
+                                        <a href="{% url 'admins:client-detail' object.pk %}">
+                                            <i class="fa fa-eye"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:client-update' object.pk %}">
+                                            <i class="fa fa-edit"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:client-delete' object.pk %}" class="text-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </th>
                                     </tr>
                                 {% endfor %}
 

@@ -22,14 +22,36 @@
                             <table class="table table-bordered table-striped">
                                 <thead class="">
                                 <tr>
-                                    <th>...</th>
+                                    <th>Type</th>
+                                    <th>Color</th>
+                                    <th>Make</th>
+                                    <th>Model</th>
+                                    <th>Registration No</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 {% for object in object_list %}
                                     <tr>
-                                    <td>...</td>
+                                    <td>{{ object.type }}</td>
+                                    <td>{{ object.color }}</td>
+                                    <td>{{ object.make }}</td>
+                                    <td>{{ object.model }}</td>
+                                    <td>{{ object.registration }}</td>
+
+                                    <th>
+                                        <a href="{% url 'admins:vehicle-detail' object.pk %}">
+                                            <i class="fa fa-eye"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:vehicle-update' object.pk %}">
+                                            <i class="fa fa-edit"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:vehicle-delete' object.pk %}" class="text-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </th>
+
                                     </tr>
                                 {% endfor %}
 

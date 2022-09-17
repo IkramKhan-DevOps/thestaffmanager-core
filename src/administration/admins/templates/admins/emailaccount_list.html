@@ -22,14 +22,28 @@
                             <table class="table table-bordered table-striped">
                                 <thead class="">
                                 <tr>
-                                    <th>...</th>
+                                    <th>Email</th>
+                                    <th>HostName</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 {% for object in object_list %}
                                     <tr>
-                                    <td>...</td>
+                                    <td>{{ object.email }}</td>
+                                    <td>{{ object.hostname }}</td>
+                                    <th>
+                                        <a href="{% url 'admins:email-account-detail' object.pk %}">
+                                            <i class="fa fa-eye"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:email-account-update' object.pk %}">
+                                            <i class="fa fa-edit"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:email-account-delete' object.pk %}" class="text-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </th>
                                     </tr>
                                 {% endfor %}
 

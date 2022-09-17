@@ -22,14 +22,38 @@
                             <table class="table table-bordered table-striped">
                                 <thead class="">
                                 <tr>
-                                    <th>...</th>
+                                    <th>Site ID</th>
+                                    <th>Name</th>
+                                    <th>Client</th>
+                                    <th>Location</th>
+                                    <th>Cases</th>
+                                    <th>Shifts</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 {% for object in object_list %}
                                     <tr>
-                                    <td>...</td>
+                                    <td>{{ object.site_id }}</td>
+                                    <td>{{ object.name }}</td>
+                                    <td>{{ object.client }}</td>
+                                    <td>{{ object.city }}</td>
+                                    <td>00</td>
+                                    <td>00</td>
+
+                                    <th>
+                                        <a href="{% url 'admins:site-detail' object.pk %}">
+                                            <i class="fa fa-eye"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:site-update' object.pk %}">
+                                            <i class="fa fa-edit"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:site-delete' object.pk %}" class="text-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </th>
+
                                     </tr>
                                 {% endfor %}
 

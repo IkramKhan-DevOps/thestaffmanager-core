@@ -22,14 +22,34 @@
                             <table class="table table-bordered table-striped">
                                 <thead class="">
                                 <tr>
-                                    <th>...</th>
+                                    <th>Audited On</th>
+                                    <th>User Name</th>
+                                    <th>Asset Name</th>
+                                    <th>Asset Result</th>
+                                    <th></th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 {% for object in object_list %}
                                     <tr>
-                                    <td>...</td>
+                                    <td>{{ object.audited_on }}</td>
+                                    <td>{{ object.user }}</td>
+                                    <td>{{ object.asset }}</td>
+                                    <td>{{ object.audit_result }}</td>
+
+                                    <th>
+                                        <a href="{% url 'admins:asset-audit-detail' object.pk %}">
+                                            <i class="fa fa-eye"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:asset-audit-update' object.pk %}">
+                                            <i class="fa fa-edit"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:asset-audit-delete' object.pk %}" class="text-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </th>
+
                                     </tr>
                                 {% endfor %}
 
