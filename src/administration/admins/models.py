@@ -157,6 +157,17 @@ class Qualification(models.Model):
         return str(self.name)
 
 
+class Employee(models.Model):
+    name = models.CharField(max_length=255)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name_plural = "Employees"
+
+    def __str__(self):
+        return str(self.name)
+
+
 class Vehicle(models.Model):
     TYPE_CHOICE = (
         ('mru', 'Mobile responsive unit'),
@@ -245,3 +256,34 @@ class AssetAudit(models.Model):
     def __str__(self):
         return str(self.user)
 
+
+class Shift(models.Model):
+    JOB_TYPE_CHOICE = (
+        ('shift', 'Shift'),
+        ('response', 'Response'),
+    )
+
+    job_type = models.CharField(default='shift', choices=JOB_TYPE_CHOICE, max_length=50)
+
+    start_date = models.DateField()
+    end_date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+
+    # TODO:NOTE: on response type position is not required
+    position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)
+    quantity = models.PositiveIntegerField(default=1)
+
+    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
+    pay_rate = models.FloatField(default=0)
+    charge_rate = models.FloatField(default=0)
+    extra_charges = models.FloatField(default=0)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name_plural = "Shifts"
+
+    def __str__(self):
+        return str(self.pk)

@@ -519,7 +519,7 @@ class PostCodeReportView(TemplateView):
 
 @method_decorator(login_required, name='dispatch')
 class ScheduleView(TemplateView):
-    template_name = 'admins/construction.html'
+    template_name = 'admins/schedule.html'
 
 
 @method_decorator(login_required, name='dispatch')

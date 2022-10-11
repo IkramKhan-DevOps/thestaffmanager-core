@@ -5,6 +5,7 @@ python-decouple
 djangorestframework
 markdown
 django-filter
-colorfield
+django-colorfield
+
 
 # python -m pip install --upgrade Pillow >>> install pillow with this
