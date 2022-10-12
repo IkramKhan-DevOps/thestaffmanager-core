@@ -19,7 +19,7 @@ from rest_framework.generics import ListAPIView, get_object_or_404 as api_get_ob
 
 from .models import (
     Position, Client, Contact, Site, Asset, Qualification, Vehicle, ReportType,
-    EmailAccount, FormBuilder, AssetAudit,
+    EmailAccount, FormBuilder, AssetAudit, Shift,
 )
 import csv, io
 
@@ -240,6 +240,40 @@ class SiteUpdateView(UpdateView):
 class SiteDeleteView(DeleteView):
     model = Site
     success_url = reverse_lazy('admins:site-list')
+
+
+@method_decorator(login_required, name='dispatch')
+class ShiftListView(ListView):
+    model = Shift
+
+
+@method_decorator(login_required, name='dispatch')
+class ShiftDetailView(DetailView):
+    model = Shift
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(ShiftDetailView, self).get_context_data(**kwargs)
+        return context
+
+
+@method_decorator(login_required, name='dispatch')
+class ShiftCreateView(CreateView):
+    model = Shift
+    fields = '__all__'
+    success_url = reverse_lazy('admins:shift-list')
+
+
+@method_decorator(login_required, name='dispatch')
+class ShiftUpdateView(UpdateView):
+    model = Shift
+    fields = '__all__'
+    success_url = reverse_lazy('admins:shift-list')
+
+
+@method_decorator(login_required, name='dispatch')
+class ShiftDeleteView(DeleteView):
+    model = Shift
+    success_url = reverse_lazy('admins:shift-list')
 
 
 """ ASSETS """

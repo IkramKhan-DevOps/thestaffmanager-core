@@ -20,11 +20,8 @@
                         <div class="d-flex justify-content-between">
                             <h3>News Feed</h3>
                             <span>
-                                    <a href="{% url 'admins:employee-map' %}" class="btn btn-secondary">Map</a>
-                                    <a href="#" class="btn btn-primary">
-                                        <span class="d-none d-md-inline">Create </span>
-                                        <span>New</span>
-                                        <span class="d-none d-md-inline"> Post</span>
+                                    <a href="{% url 'admins:shift-add' %}" class="btn btn-primary">
+                                        Create Shift
                                     </a>
                                 </span>
                         </div>
@@ -67,7 +64,7 @@
                         <p class="text-muted mb-2"><small>Last updated: 19:39:20 17/09/2022&nbsp;&nbsp;<a href="#">(pause)</a>&nbsp;&nbsp;</small>
                         </p>
                         <hr>
-                        <div id='calendar'></div>
+                        <div id='shifts_calender'></div>
                     </div>
                 </div>
             </div>
@@ -84,7 +81,7 @@
     <script>
 
         document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('calendar');
+            var calendarEl = document.getElementById('shifts_calender');
 
             var calendar = new FullCalendar.Calendar(calendarEl, {
                 initialView: 'dayGridMonth',

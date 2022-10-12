@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block base_title %}admins | Shifts {% endblock %}
+{% block base_subhead_heading %}Shifts {% endblock %}
+{% block base_subhead_paragraph %}Shifts create/update form{% endblock %}
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:position-list' %}"><i class="fa fa-arrow-left"></i> View Shifts</a>
+{% endblock %}
+
+{% block base_css %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+{% endblock %}
+
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-check-circle"></i> Submit
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block base_internal_scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block base_external_scripts %}
+
+    <script>
+        $(document).ready(function () {
+
+            $('#id_start_date').datetimepicker({
+                format: 'Y-m-d',
+                timepicker:false,
+            });
+            $('#id_end_date').datetimepicker({
+                format: 'Y-m-d',
+                timepicker:false,
+            });
+
+            $('#id_start_time').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+            $('#id_end_time').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+
+        })
+    </script>
+
+{% endblock %}

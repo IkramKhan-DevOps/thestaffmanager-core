@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_title %}Admins | Positions{% endblock %}
+{% block base_subhead_heading %}Positions{% endblock %}
+{% block base_subhead_paragraph %}List of available Positions.{% endblock %}
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:position-add' %}">
+        <i class="fa fa-plus"></i> New Position
+    </a>
+{% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if object_list %}
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped">
+                                <thead class="">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Card Color</th>
+                                    <th>Charge Rate</th>
+                                    <th>Pay Rate</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for object in object_list %}
+                                    <tr>
+                                    <td>{{ object.name }}</td>
+                                    <td>{{ object.card_color }}</td>
+                                    <td>{{ object.charge_rate }}</td>
+                                    <td>{{ object.pay_rate }}</td>
+                                    <th>
+                                        <a href="{% url 'admins:position-detail' object.pk %}">
+                                            <i class="fa fa-eye"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:position-update' object.pk %}">
+                                            <i class="fa fa-edit"></i>
+                                        </a> |
+                                        <a href="{% url 'admins:position-delete' object.pk %}" class="text-danger">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </th>
+                                    </tr>
+                                {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    {% else %}
+                        <p class="mb-0 text-danger">
+                            <b>
+                                <i class="fa fa-exclamation-circle"></i>
+                                No objects available
+                            </b>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
