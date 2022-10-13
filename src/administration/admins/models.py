@@ -300,4 +300,4 @@ class ShiftDay(models.Model):
         verbose_name_plural = "Shift Days"
 
     def __str__(self):
-        return str(self.shift.pk)
+        return str(self.pk)

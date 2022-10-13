@@ -23,9 +23,36 @@ import datetime
 
 
 def date_range(start, end):
+    """
+    :param start:
+    :param end:
+    :return dates in range:
+
+    :desc check this first if it is in month, year and daily routine vise
+    """
     delta = end - start
+
+    # TODO:REQUIREMENT: add checks here month repeat - weekly repeat
     days = [start + datetime.timedelta(days=i) for i in range(delta.days + 1)]
     return days
+
+
+def shifts_create_update_logic(shift, is_create=True):
+    """
+    :param shift:
+    :param is_create:
+    :return None:
+
+    ":desc add new one's and delete previous ones"
+
+    """
+    dates = date_range(Shift.objects.first().start_date, Shift.objects.first().end_date)
+
+    # TODO:ALERT: this deletes all previous records and adds new ones --
+    #  this logic is wrong if data is long and lengthy
+    if not is_create:
+        ShiftDay.objects.filter(shift=shift).delete()
+        [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
 
 
 @method_decorator(login_required, name='dispatch')
@@ -264,10 +291,7 @@ class ShiftCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
-        dates = date_range(Shift.objects.first().start_date, Shift.objects.first().end_date)
-        for _date in dates:
-            ShiftDay.objects.get_or_create(shift_date=_date, shift=self.object)
-
+        shifts_create_update_logic(self.object, is_create=True)
         return reverse_lazy('admins:shift-list')
 
 
@@ -277,10 +301,7 @@ class ShiftUpdateView(UpdateView):
     fields = '__all__'
 
     def get_success_url(self):
-        dates = date_range(Shift.objects.first().start_date, Shift.objects.first().end_date)
-        for _date in dates:
-            ShiftDay.objects.get_or_create(shift_date=_date, shift=self.object)
-
+        shifts_create_update_logic(self.object, is_create=False)
         return reverse_lazy('admins:shift-list')
 
 
@@ -595,7 +616,6 @@ class ScheduleView(TemplateView):
 
             return shifts_queryset
 
-        print(date_range(Shift.objects.first().start_date, Shift.objects.first().end_date))
         context['shifts'] = get_query_over_request(self.request.GET.get('date'))
         return context
 
