@@ -10,3 +10,10 @@ class UserProfileForm(ModelForm):
             'first_name', 'last_name', 'email'
         ]
 
+
+class ShiftForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = '__all__'
+

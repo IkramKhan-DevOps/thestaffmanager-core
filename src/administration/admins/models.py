@@ -287,3 +287,17 @@ class Shift(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
+    def get_shifts(self):
+        return ShiftDay.objects.filter(shift=self)
+
+
+class ShiftDay(models.Model):
+    shift = models.ForeignKey(Shift, on_delete=models.CASCADE)
+    shift_date = models.DateField()
+
+    class Meta:
+        verbose_name_plural = "Shift Days"
+
+    def __str__(self):
+        return str(self.shift.pk)

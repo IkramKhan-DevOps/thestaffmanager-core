@@ -1,11 +1,8 @@
-import json
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.core.paginator import Paginator
-from django.forms import model_to_dict
-from django.http import JsonResponse
+from django.core import serializers
+from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AdminPasswordChangeForm
 from django.urls import reverse_lazy
@@ -14,16 +11,21 @@ from django.views import View
 from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
     CreateView)
-from rest_framework import permissions
-from rest_framework.generics import ListAPIView, get_object_or_404 as api_get_object_or_404
 
 from .models import (
     Position, Client, Contact, Site, Asset, Qualification, Vehicle, ReportType,
-    EmailAccount, FormBuilder, AssetAudit, Shift,
+    EmailAccount, FormBuilder, AssetAudit, Shift, ShiftDay,
 )
-import csv, io
+import calendar
+import datetime
 
 """ MAIN """
+
+
+def date_range(start, end):
+    delta = end - start
+    days = [start + datetime.timedelta(days=i) for i in range(delta.days + 1)]
+    return days
 
 
 @method_decorator(login_required, name='dispatch')
@@ -260,14 +262,26 @@ class ShiftDetailView(DetailView):
 class ShiftCreateView(CreateView):
     model = Shift
     fields = '__all__'
-    success_url = reverse_lazy('admins:shift-list')
+
+    def get_success_url(self):
+        dates = date_range(Shift.objects.first().start_date, Shift.objects.first().end_date)
+        for _date in dates:
+            ShiftDay.objects.get_or_create(shift_date=_date, shift=self.object)
+
+        return reverse_lazy('admins:shift-list')
 
 
 @method_decorator(login_required, name='dispatch')
 class ShiftUpdateView(UpdateView):
     model = Shift
     fields = '__all__'
-    success_url = reverse_lazy('admins:shift-list')
+
+    def get_success_url(self):
+        dates = date_range(Shift.objects.first().start_date, Shift.objects.first().end_date)
+        for _date in dates:
+            ShiftDay.objects.get_or_create(shift_date=_date, shift=self.object)
+
+        return reverse_lazy('admins:shift-list')
 
 
 @method_decorator(login_required, name='dispatch')
@@ -554,6 +568,36 @@ class PostCodeReportView(TemplateView):
 @method_decorator(login_required, name='dispatch')
 class ScheduleView(TemplateView):
     template_name = 'admins/schedule.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ScheduleView, self).get_context_data(**kwargs)
+
+        def get_query_over_request(get_request):
+
+            shifts_queryset = Shift.objects.filter(
+                Q(start_date__month=datetime.date.today().month, start_date__year=datetime.date.today().year)
+            ).values(
+                'id', 'start_date', 'end_date', 'start_time', 'end_time', 'client__name'
+            )
+
+            if get_request:
+                split_request = get_request.split()
+                if "-" in get_request and len(split_request) == 2:
+                    requested_month = int(split_request[1])
+                    requested_year = int(split_request[0])
+                    if 0 < requested_month < 13:
+
+                        shifts_queryset = Shift.objects.filter(
+                            Q(start_date__month=requested_month, start_date__year=requested_year)
+                        ).values(
+                            'id', 'start_date', 'end_date', 'start_time', 'end_time', 'client__name'
+                        )
+
+            return shifts_queryset
+
+        print(date_range(Shift.objects.first().start_date, Shift.objects.first().end_date))
+        context['shifts'] = get_query_over_request(self.request.GET.get('date'))
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
