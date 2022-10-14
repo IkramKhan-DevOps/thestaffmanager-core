@@ -88,10 +88,12 @@
 
             {# EVENTS ------------------------------------------------------------------ #}
             $('.fc-prev-button').click(function () {
-                button_prev_next(false);
+                if ($(this).attr('title') === "Previous Month")
+                    button_prev_next(false);
             })
             $('.fc-next-button').click(function () {
-                button_prev_next(true);
+                if ($(this).attr('title') === "Next month")
+                    button_prev_next(true);
             })
 
             {# FUNCTIONS --------------------------------------------------------------- #}
