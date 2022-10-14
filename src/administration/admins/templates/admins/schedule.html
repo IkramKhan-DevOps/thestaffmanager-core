@@ -75,40 +75,101 @@
 
 {% block base_internal_scripts %}
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/moment@2.24.0/min/moment.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.min.js'></script>
 {% endblock %}
 
 {% block base_external_scripts %}
     <script>
 
-        let shifts = [
-            {% for shift in shifts %}
-                {
-                    title: '{{ shift.client.name }}',
-                    start: '{{ shift.start_date|date:"Y-m-d" }}T{{ shift.start_time|time:"H:i:s" }}',
-                    end: '{{ shift.start_date|date:"Y-m-d" }}T{{ shift.end_time|time:"H:i:s" }}',
-                },
-            {% endfor %}
-        ]
+        $(document).ready(function () {
 
-        console.log(shifts);
+            init();
 
-        document.addEventListener('DOMContentLoaded', function () {
-            var calendarEl = document.getElementById('shifts_calender');
+            {# EVENTS ------------------------------------------------------------------ #}
+            $('.fc-prev-button').click(function () {
+                button_prev_next(false);
+            })
+            $('.fc-next-button').click(function () {
+                button_prev_next(true);
+            })
 
-            var calendar = new FullCalendar.Calendar(calendarEl, {
-                initialView: 'dayGridMonth',
-                initialDate: '2022-10-01',
-                editable: true, // DRAG ABLE NOW
-                headerToolbar: {
-                    left: 'prev,next today',
-                    center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
-                },
-                events: shifts
-            });
+            {# FUNCTIONS --------------------------------------------------------------- #}
 
-            calendar.render();
-        });
+            function init() {
+
+                build_calender();
+
+            }
+
+            function build_calender() {
+                let shifts = [
+                    {% for shift in shifts %}
+                        {
+                            id: '{{ shift.shift_id }}',
+                            url: '{% url 'admins:shift-detail' shift.shift_id %}',
+                            title: '{{ shift.shift__client__name }}',
+                            start: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__start_time|time:"H:i:s" }}',
+                            end: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__end_time|time:"H:i:s" }}',
+                        },
+                    {% endfor %}
+                ]
+                var calendarEl = document.getElementById('shifts_calender');
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    initialDate: '{{ current_year }}-{{ current_month }}-{{ current_day }}',
+                    editable: true,
+                    dayMaxEventRows: true,
+                    views: {
+                        timeGrid: {
+                            dayMaxEventRows: 6
+                        }
+                    },
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                    },
+                    events: shifts,
+                    eventClick: function (info) {
+
+                        info.jsEvent.preventDefault();
+                        if (info.event.url) {
+                            window.open(info.event.url);
+                        }
+
+                    },
+
+                });
+                calendar.render();
+            }
+
+            function button_prev_next(isNext) {
+                let current_month = {{ current_month }};
+                let current_year = {{ current_year }};
+                let required_month = current_month;
+                let required_year = current_year;
+
+                if (isNext === true) {
+                    required_month = current_month + 1;
+                    if (current_month == "12") {
+                        required_month = 1;
+                        required_year += 1;
+                    }
+                } else {
+                    required_month = current_month - 1;
+                    if (current_month == "1") {
+                        required_month = 12;
+                        required_year -= 1;
+                    }
+                }
+
+                window.location = "{% url 'admins:schedule' %}?year=" + required_year + "&month=" + required_month + "";
+            }
+
+        })
+
 
     </script>
 {% endblock %}

@@ -46,7 +46,8 @@ def shifts_create_update_logic(shift, is_create=True):
     ":desc add new one's and delete previous ones"
 
     """
-    dates = date_range(Shift.objects.first().start_date, Shift.objects.first().end_date)
+
+    dates = date_range(shift.start_date, shift.end_date)
 
     # TODO:ALERT: this deletes all previous records and adds new ones --
     #  this logic is wrong if data is long and lengthy
@@ -593,30 +594,49 @@ class ScheduleView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ScheduleView, self).get_context_data(**kwargs)
 
-        def get_query_over_request(get_request):
+        def get_query_over_request(_request):
 
-            shifts_queryset = Shift.objects.filter(
-                Q(start_date__month=datetime.date.today().month, start_date__year=datetime.date.today().year)
+            # DEFAULT: query year and month
+            _current_month = datetime.date.today().month
+            _current_year = datetime.date.today().year
+            shifts_queryset = ShiftDay.objects.filter(
+                Q(shift_date__month=datetime.date.today().month, shift_date__year=datetime.date.today().year)
             ).values(
-                'id', 'start_date', 'end_date', 'start_time', 'end_time', 'client__name'
+                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift__client__name', 'shift_date'
             )
 
-            if get_request:
-                split_request = get_request.split()
-                if "-" in get_request and len(split_request) == 2:
-                    requested_month = int(split_request[1])
-                    requested_year = int(split_request[0])
-                    if 0 < requested_month < 13:
+            # CHECK1: if request contains date in get
+            requested_month = _request.GET.get('month')
+            requested_year = _request.GET.get('year')
 
-                        shifts_queryset = Shift.objects.filter(
-                            Q(start_date__month=requested_month, start_date__year=requested_year)
-                        ).values(
-                            'id', 'start_date', 'end_date', 'start_time', 'end_time', 'client__name'
-                        )
+            if (requested_month and 0 < int(requested_month) < 13) and \
+                    (requested_year and int(requested_year) > 0):
 
-            return shifts_queryset
+                print("validated")
+                shifts_queryset = ShiftDay.objects.filter(
+                    Q(shift_date__month=datetime.date.today().month,
+                      shift_date__year=datetime.date.today().year)
+                ).values(
+                    'id', 'shift_id', 'shift__start_time', 'shift__end_time',
+                    'shift__client__name', 'shift_date'
+                )
+                _current_year = requested_year
+                _current_month = requested_month if int(requested_month) > 9 else "0" + requested_month
 
-        context['shifts'] = get_query_over_request(self.request.GET.get('date'))
+            return shifts_queryset, _current_month, _current_year
+
+        # CALL: get month, year and query over it
+        shifts, current_month, current_year = get_query_over_request(self.request)
+
+        # DISPLAY: results
+        print(current_month)
+        print(current_year)
+
+        # CONTEXT: data
+        context['shifts'] = shifts
+        context['current_day'] = "01"
+        context['current_month'] = current_month
+        context['current_year'] = current_year
         return context
 
 
