@@ -54,6 +54,8 @@ def shifts_create_update_logic(shift, is_create=True):
     if not is_create:
         ShiftDay.objects.filter(shift=shift).delete()
         [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
+    else:
+        [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
 
 
 @method_decorator(login_required, name='dispatch')
@@ -612,7 +614,6 @@ class ScheduleView(TemplateView):
             if (requested_month and 0 < int(requested_month) < 13) and \
                     (requested_year and int(requested_year) > 0):
 
-                print("validated")
                 shifts_queryset = ShiftDay.objects.filter(
                     Q(shift_date__month=datetime.date.today().month,
                       shift_date__year=datetime.date.today().year)
@@ -627,10 +628,6 @@ class ScheduleView(TemplateView):
 
         # CALL: get month, year and query over it
         shifts, current_month, current_year = get_query_over_request(self.request)
-
-        # DISPLAY: results
-        print(current_month)
-        print(current_year)
 
         # CONTEXT: data
         context['shifts'] = shifts
