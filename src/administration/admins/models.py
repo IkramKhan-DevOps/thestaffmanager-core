@@ -262,6 +262,11 @@ class Shift(models.Model):
         ('shift', 'Shift'),
         ('response', 'Response'),
     )
+    SHIFT_CYCLE_TYPE = (
+        ('r', 'Regular'),
+        ('w', 'Weekly repeat'),
+        ('d', 'Selected Dates'),
+    )
 
     job_type = models.CharField(default='shift', choices=JOB_TYPE_CHOICE, max_length=50)
 
@@ -280,6 +285,8 @@ class Shift(models.Model):
     pay_rate = models.FloatField(default=0)
     charge_rate = models.FloatField(default=0)
     extra_charges = models.FloatField(default=0)
+
+    shift_cycle = models.CharField(max_length=1, default='r', null=True, blank=False)
 
     class Meta:
         ordering = ['id']
