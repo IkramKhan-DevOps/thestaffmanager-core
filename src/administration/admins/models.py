@@ -262,7 +262,7 @@ class Shift(models.Model):
         ('shift', 'Shift'),
         ('response', 'Response'),
     )
-    SHIFT_CYCLE_TYPE = (
+    REPEAT_POLICY_TYPE = (
         ('r', 'Regular'),
         ('w', 'Weekly repeat'),
         ('d', 'Selected Dates'),
@@ -286,7 +286,7 @@ class Shift(models.Model):
     charge_rate = models.FloatField(default=0)
     extra_charges = models.FloatField(default=0)
 
-    shift_cycle = models.CharField(max_length=1, default='r', null=True, blank=False)
+    repeat_policy = models.CharField(max_length=1, default='r', choices=REPEAT_POLICY_TYPE, null=True, blank=False)
 
     class Meta:
         ordering = ['id']
