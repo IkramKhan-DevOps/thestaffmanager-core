@@ -12,7 +12,7 @@ from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
     CreateView)
 
-from .bll import shifts_create_update_logic
+from .bll import shifts_create_update_logic, shifts_create_update
 from .models import (
     Position, Client, Contact, Site, Asset, Qualification, Vehicle, ReportType,
     EmailAccount, FormBuilder, AssetAudit, Shift, ShiftDay,
@@ -259,7 +259,7 @@ class ShiftCreateView(CreateView):
     fields = '__all__'
 
     def get_success_url(self):
-        shifts_create_update_logic(self.object, is_create=True)
+        shifts_create_update(self.object, self.request.POST)
         return reverse_lazy('admins:shift-list')
 
 
@@ -267,9 +267,21 @@ class ShiftCreateView(CreateView):
 class ShiftUpdateView(UpdateView):
     model = Shift
     fields = '__all__'
+    
+    def get_context_data(self, **kwargs):
+        context = super(ShiftUpdateView, self).get_context_data(**kwargs)
+        week_list = self.object.get_week_shifts_status()
+        context['monday'] = 'checked' if week_list[0] else ''
+        context['tuesday'] = 'checked' if week_list[1] else ''
+        context['wednesday'] = 'checked' if week_list[2] else ''
+        context['thursday'] = 'checked' if week_list[3] else ''
+        context['friday'] = 'checked' if week_list[4] else ''
+        context['saturday'] = 'checked' if week_list[5] else ''
+        context['sunday'] = 'checked' if week_list[6] else ''
+        return context
 
     def get_success_url(self):
-        shifts_create_update_logic(self.object, is_create=False)
+        shifts_create_update(self.object, self.request.POST, False)
         return reverse_lazy('admins:shift-list')
 
 
@@ -562,7 +574,6 @@ class ScheduleView(TemplateView):
         context = super(ScheduleView, self).get_context_data(**kwargs)
 
         def get_query_over_request(_request):
-
             # DEFAULT: query year and month
             _current_month = datetime.date.today().month
             _current_year = datetime.date.today().year
@@ -578,7 +589,6 @@ class ScheduleView(TemplateView):
 
             if (requested_month and 0 < int(requested_month) < 13) and \
                     (requested_year and int(requested_year) > 0):
-
                 shifts_queryset = ShiftDay.objects.filter(
                     Q(shift_date__month=datetime.date.today().month,
                       shift_date__year=datetime.date.today().year)

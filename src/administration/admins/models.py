@@ -285,6 +285,7 @@ class Shift(models.Model):
     pay_rate = models.FloatField(default=0)
     charge_rate = models.FloatField(default=0)
     extra_charges = models.FloatField(default=0)
+    week_days = models.CharField(max_length=7, default='', blank=True, editable=False)
 
     repeat_policy = models.CharField(max_length=1, default='r', choices=REPEAT_POLICY_TYPE, null=True, blank=False)
 
@@ -297,6 +298,16 @@ class Shift(models.Model):
 
     def get_shifts(self):
         return ShiftDay.objects.filter(shift=self)
+
+    def get_week_shifts_status(self):
+
+        llist = []
+        for x in range(7):
+            if str(x) in self.week_days:
+                llist.append(True)
+            else:
+                llist.append(False)
+        return llist
 
 
 class ShiftDay(models.Model):
