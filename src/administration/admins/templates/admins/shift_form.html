@@ -20,147 +20,172 @@
 {% block base_content %}
 
     <div class="row justify-content-center">
-        <div class="col-sm-6">
-            <div class="card">
-                <form method="post">
-                    {% csrf_token %}
-                    <div class="card-body">
+        <div class="col-sm-12">
 
-                        {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-check-circle"></i> Submit
-                        </button>
-                    </div>
-                    <div class="card-body border-top" id="customize">
-                        <div>
+            <form method="post">
+                <div class="row">
 
-                            <div id="weekly">
-                                <div class="form-group row">
-                                    <div class="col-md-9">
-                                        <div class="checkbox my-2">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="monday" name="monday" data-parsley-multiple="groups"
-                                                       data-parsley-mincheck="2" {% if object%}{{ monday }}{% else %}required{% endif %}>
-                                                <label class="custom-control-label" for="monday">
-                                                    Monday
-                                                </label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="tuesday" name="tuesday" data-parsley-multiple="groups"
-                                                       data-parsley-mincheck="2" {% if object%}{{ tuesday }}{% else %}required{% endif %}>
-                                                <label class="custom-control-label" for="tuesday">
-                                                    Tuesday
-                                                </label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="wednesday" name="wednesday" data-parsley-multiple="groups"
-                                                       data-parsley-mincheck="2" {% if object%}{{ wednesday }}{% else %}required{% endif %}>
-                                                <label class="custom-control-label" for="wednesday">
-                                                    Wednesday
-                                                </label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="thursday" name="thursday" data-parsley-multiple="groups"
-                                                       data-parsley-mincheck="2" {% if object%}{{ thursday }}{% else %}required{% endif %}>
-                                                <label class="custom-control-label" for="thursday">
-                                                    Thursday
-                                                </label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="friday" name="friday" data-parsley-multiple="groups"
-                                                       data-parsley-mincheck="2" {% if object%}{{ friday }}{% else %}required{% endif %}>
-                                                <label class="custom-control-label" for="friday">
-                                                    Friday
-                                                </label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="saturday" name="saturday" data-parsley-multiple="groups"
-                                                       data-parsley-mincheck="2" {% if object%}{{ saturday }}{% else %}{% endif %}>
-                                                <label class="custom-control-label" for="saturday">
-                                                    Saturday
-                                                </label>
-                                            </div>
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input"
-                                                       id="sunday" name="sunday" data-parsley-multiple="groups"
-                                                       data-parsley-mincheck="2" {% if object%}{{ sunday }}{% else %}{% endif %}>
-                                                <label class="custom-control-label" for="sunday">
-                                                    Sunday
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <div class="col-sm-6">
+
+                        <div class="card">
+                            {% csrf_token %}
+                            <div class="card-body">
+
+                                {{ form|crispy }}
+
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-check-circle"></i> Submit
+                                </button>
                             </div>
+                        </div>
 
-                            <div id="selected_dates">
-                                <form method="POST" class="form-horizontal well" role="form">
-                                    <fieldset>
-                                        <div class="repeater-custom-show-hide">
-                                            <div data-repeater-list="car">
-
-                                                {% if shift.repeat_policy == 'd' %}
-                                                    {% for shift_day in shift.shiftday_set.all %}
-
-                                                        <div data-repeater-item="">
-                                                            <div class="form-group row d-flex align-items-end">
-                                                                <div class="col-sm-8">
-                                                                    <input id="selected-date-item" type="date"
-                                                                           name="car[{{ forloop.counter }}][date]"
-                                                                           class="form-control"
-                                                                           value="{{ shift_day.shift_date.isoformat }}">
-                                                                </div>
-                                                                <div class="col-sm-4">
-                                                            <span data-repeater-delete="" class="btn btn-danger">
-                                                                Remove
-                                                            </span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    {% endfor %}
-                                                {% else %}
-                                                    <div data-repeater-item="">
-                                                        <div class="form-group row d-flex align-items-end">
-                                                            <div class="col-sm-8">
-                                                                <input id="selected-date-item" type="date"
-                                                                       name="car[0][date]"
-                                                                       class="form-control">
-                                                            </div>
-                                                            <div class="col-sm-4">
-                                                            <span data-repeater-delete="" class="btn btn-danger">
-                                                                Remove
-                                                            </span>
-                                                            </div>
-                                                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                        <div class="card-body border-bottom">
+                            <p class="mb-0 card-title">Repeat Policy</p>
+                        </div>
+                            <div class="card-body" id="customize">
+                                <div>
+                                    <div id="weekly">
+                                        <p class="mb-2 h3">Weekly Repeat</p>
+                                        <div class="form-group row">
+                                            <div class="col-md-9">
+                                                <div class="checkbox my-2">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="monday" name="monday" data-parsley-multiple="groups"
+                                                               data-parsley-mincheck="2"
+                                                               {% if object %}{{ monday }}{% else %}required{% endif %}>
+                                                        <label class="custom-control-label" for="monday">
+                                                            Monday
+                                                        </label>
                                                     </div>
-                                                {% endif %}
-
-                                            </div>
-                                            <div class="form-group row mb-0">
-                                                <div class="col-sm-12">
-                                                    <span data-repeater-create="" class="btn btn-light btn-md">
-                                                        <span class="fa fa-plus"></span> Add Date
-                                                    </span>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="tuesday" name="tuesday"
+                                                               data-parsley-multiple="groups"
+                                                               data-parsley-mincheck="2"
+                                                               {% if object %}{{ tuesday }}{% else %}required{% endif %}>
+                                                        <label class="custom-control-label" for="tuesday">
+                                                            Tuesday
+                                                        </label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="wednesday" name="wednesday"
+                                                               data-parsley-multiple="groups"
+                                                               data-parsley-mincheck="2"
+                                                               {% if object %}{{ wednesday }}{% else %}required{% endif %}>
+                                                        <label class="custom-control-label" for="wednesday">
+                                                            Wednesday
+                                                        </label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="thursday" name="thursday"
+                                                               data-parsley-multiple="groups"
+                                                               data-parsley-mincheck="2"
+                                                               {% if object %}{{ thursday }}{% else %}required{% endif %}>
+                                                        <label class="custom-control-label" for="thursday">
+                                                            Thursday
+                                                        </label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="friday" name="friday" data-parsley-multiple="groups"
+                                                               data-parsley-mincheck="2"
+                                                               {% if object %}{{ friday }}{% else %}required{% endif %}>
+                                                        <label class="custom-control-label" for="friday">
+                                                            Friday
+                                                        </label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="saturday" name="saturday"
+                                                               data-parsley-multiple="groups"
+                                                               data-parsley-mincheck="2"
+                                                                {% if object %}{{ saturday }}{% else %}{% endif %}>
+                                                        <label class="custom-control-label" for="saturday">
+                                                            Saturday
+                                                        </label>
+                                                    </div>
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input"
+                                                               id="sunday" name="sunday" data-parsley-multiple="groups"
+                                                               data-parsley-mincheck="2"
+                                                                {% if object %}{{ sunday }}{% else %}{% endif %}>
+                                                        <label class="custom-control-label" for="sunday">
+                                                            Sunday
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </fieldset>
-                                </form>
+                                    </div>
+
+                                    <div id="selected_dates">
+                                        <p class="mb-2 h3">Selected Dates</p>
+                                        <form method="POST" class="form-horizontal well" role="form">
+                                            <fieldset>
+                                                <div class="repeater-custom-show-hide">
+                                                    <div data-repeater-list="car">
+
+                                                        {% if shift.repeat_policy == 'd' %}
+                                                            {% for shift_day in shift.shiftday_set.all %}
+
+                                                                <div data-repeater-item="">
+                                                                    <div class="form-group row d-flex align-items-end">
+                                                                        <div class="col-sm-8">
+                                                                            <input id="selected-date-item" type="date"
+                                                                                   name="car[{{ forloop.counter }}][date]"
+                                                                                   class="form-control"
+                                                                                   value="{{ shift_day.shift_date.isoformat }}">
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                            <span data-repeater-delete="" class="btn btn-danger">
+                                                                Remove
+                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            <div data-repeater-item="">
+                                                                <div class="form-group row d-flex align-items-end">
+                                                                    <div class="col-sm-8">
+                                                                        <input id="selected-date-item" type="date"
+                                                                               name="car[0][date]"
+                                                                               class="form-control">
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                            <span data-repeater-delete="" class="btn btn-danger">
+                                                                Remove
+                                                            </span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+
+                                                    </div>
+                                                    <div class="form-group row mb-0">
+                                                        <div class="col-sm-12">
+                                                    <span data-repeater-create="" class="btn btn-light btn-md">
+                                                        <span class="fa fa-plus"></span> Add Date
+                                                    </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body border-top">
-
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
 
 
         </div>
