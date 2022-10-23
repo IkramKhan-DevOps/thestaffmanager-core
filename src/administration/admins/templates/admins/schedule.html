@@ -112,7 +112,7 @@
                             {% if shift.shift_date < current_date  %}
                                 editable: false,
                             {% else %}
-                                editable:true,
+                                editable: true,
                                 url: '{% url 'admins:shift-detail' shift.shift_id %}',
                             {% endif %}
 
@@ -156,6 +156,40 @@
                         }
 
                     },
+                    eventResize: function (info) {
+
+                        // CONFIRM CHANGE
+                        if (confirm(info.event.title + " end is now " + info.event.end.toISOString() + " is this okay?")) {
+
+                            // GET INFORMATION
+                            let shift_id = info.event.id;
+                            let shift_end_time = info.event.end.toISOString();
+
+                            // CALL API
+                            alert(shift_id + " " + shift_end_time)
+
+                            {#info.revert();#}
+                        }
+                    },
+                    eventDrop: function (info) {
+                        alert(info.event.title + " was dropped on " + info.event.start.toISOString());
+
+                        // CONFIRM CHANGE
+                        if (confirm("Are you sure about this change?")) {
+
+                            // GET INFORMATION
+                            let shift_id = info.event.id;
+                            let new_event_start = info.event.start.toISOString();
+                            let new_event_end = info.event.end.toISOString();
+                            let old_event_start = info.oldEvent.start.toISOString();
+                            let old_event_end = info.oldEvent.end.toISOString();
+
+                            // CALL API
+                            console.log(shift_id)
+                            console.log("OLD:: S: "+old_event_start+" E:"+old_event_end)
+                            console.log("NEW:: S: "+new_event_start+" E:"+new_event_end)
+                        }
+                    }
 
                 });
                 calendar.render();
