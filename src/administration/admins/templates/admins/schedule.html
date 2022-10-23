@@ -180,15 +180,19 @@
 
                             // GET INFORMATION
                             let shift_id = info.event.id;
-                            let new_event_start = info.event.start.toISOString();
-                            let new_event_end = info.event.end.toISOString();
-                            let old_event_start = info.oldEvent.start.toISOString();
-                            let old_event_end = info.oldEvent.end.toISOString();
+                            let new_event_start = info.event.start.toLocaleString();
+                            let new_event_end = info.event.end.toLocaleString();
+                            let old_event_start = info.oldEvent.start.toLocaleString();
+                            let old_event_end = info.oldEvent.end.toLocaleString();
 
                             // CALL API
                             console.log(shift_id)
-                            console.log("OLD:: S: " + old_event_start + " E:" + old_event_end)
-                            console.log("NEW:: S: " + new_event_start + " E:" + new_event_end)
+                            console.log("OLD :" + old_event_start+" - "+old_event_end)
+                            console.log("NEW :" + new_event_start+" - "+new_event_end)
+
+                            console.log("");
+                            console.log("OLD :" + new Date(old_event_start).toUTCString()+" - "+new Date(old_event_end).toUTCString())
+                            console.log("NEW :" + new Date(new_event_start).toUTCString()+" - "+new Date(new_event_end).toUTCString())
 
                             change_times_api(shift_id, 'time', old_event_start, old_event_end, new_event_start, new_event_end)
                         }

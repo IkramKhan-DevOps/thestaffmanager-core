@@ -79,7 +79,13 @@
                     {% if shift.shiftday_set.count %}
 
                         {% for shift_day in object.shiftday_set.all %}
-                            <p class="mb-0"><i class="fa fa-clock"></i> {{ shift_day.shift_date }}</p>
+                            <p class="mb-0">
+                            {% if shift_day.shift_date < current_date %}
+                                <del><i class="fa fa-clock-o"></i> {{ shift_day.shift_date }} </del>
+                            {% else %}
+                                <i class="fa fa-clock"></i> {{ shift_day.shift_date }}
+                            {% endif %}
+                            </p>
                         {% endfor %}
 
 

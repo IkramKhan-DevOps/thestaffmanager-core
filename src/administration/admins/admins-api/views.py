@@ -31,7 +31,7 @@ class ChangeTimesAPI(APIView):
             return Response(status=HTTP_400_BAD_REQUEST, data=context)
 
         # CONVERT TO PYTHON DATETIME
-        old_time_start = datetime.strptime(old_time_end, "%a, %d %b %Y %H:%M:%S %Z")
+        old_time_start = datetime.strptime(old_time_start, "%a, %d %b %Y %H:%M:%S %Z")
         old_time_end = datetime.strptime(old_time_end, "%a, %d %b %Y %H:%M:%S %Z")
         new_time_start = datetime.strptime(new_time_start, "%a, %d %b %Y %H:%M:%S %Z")
         new_time_end = datetime.strptime(new_time_end, "%a, %d %b %Y %H:%M:%S %Z")

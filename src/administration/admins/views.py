@@ -266,6 +266,7 @@ class ShiftDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(ShiftDetailView, self).get_context_data(**kwargs)
+        context['current_date'] = datetime.date.today()
         return context
 
 
