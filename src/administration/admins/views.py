@@ -246,6 +246,18 @@ class ShiftListView(ListView):
     model = Shift
     paginate_by = 50
 
+    def get_context_data(self, **kwargs):
+        context = super(ShiftListView, self).get_context_data(**kwargs)
+        filter_object = ShiftFilter(self.request.GET, queryset=Shift.objects.all())
+        context['filter_form'] = filter_object.form
+
+        paginator = Paginator(filter_object.qs, 50)
+        page_number = self.request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        context['object_list'] = page_object
+        return context
+
 
 @method_decorator(login_required, name='dispatch')
 class ShiftDetailView(DetailView):
