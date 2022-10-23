@@ -9,6 +9,7 @@ from django.contrib.auth.forms import UserCreationForm, AdminPasswordChangeForm
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
+from django.views.decorators.cache import never_cache
 from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
     CreateView)
@@ -583,7 +584,7 @@ class PostCodeReportView(TemplateView):
 """ --------------------------------------------- """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator([login_required, never_cache], name='dispatch')
 class ScheduleView(TemplateView):
     template_name = 'admins/schedule.html'
 
@@ -597,7 +598,8 @@ class ScheduleView(TemplateView):
             shifts_queryset = ShiftDay.objects.filter(
                 Q(shift_date__month=datetime.date.today().month, shift_date__year=datetime.date.today().year)
             ).values(
-                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift__client__name', 'shift_date'
+                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift__client__name', 'shift_date',
+                'shift__employee'
             )
 
             # CHECK1: if request contains date in get
@@ -623,9 +625,10 @@ class ScheduleView(TemplateView):
 
         # CONTEXT: data
         context['shifts'] = shifts
-        context['current_day'] = "01"
+        context['current_day'] = datetime.date.today().day
         context['current_month'] = current_month
         context['current_year'] = current_year
+        context['current_date'] = datetime.date.today()
         return context
 
 

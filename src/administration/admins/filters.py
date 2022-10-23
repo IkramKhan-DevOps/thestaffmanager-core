@@ -5,7 +5,7 @@ from src.administration.admins.models import Shift
 
 
 class ShiftFilter(django_filters.FilterSet):
-    id = django_filters.CharFilter(widget=TextInput(attrs={'placeholder': 'ID'}), lookup_expr='icontains')
+    id = django_filters.CharFilter(widget=TextInput(attrs={'placeholder': 'Shift ID'}), lookup_expr='icontains')
 
     class Meta:
         model = Shift

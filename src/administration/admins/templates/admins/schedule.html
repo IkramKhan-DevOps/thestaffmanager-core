@@ -88,7 +88,7 @@
 
             {# EVENTS ------------------------------------------------------------------ #}
             $('.fc-prev-button').click(function () {
-                if ($(this).attr('title') === "Previous Month")
+                if ($(this).attr('title') === "Previous month")
                     button_prev_next(false);
             })
             $('.fc-next-button').click(function () {
@@ -107,8 +107,23 @@
                     {% for shift in shifts %}
                         {
                             id: '{{ shift.shift_id }}',
-                            url: '{% url 'admins:shift-detail' shift.shift_id %}',
                             title: '{{ shift.shift__client__name }}',
+
+                            {% if shift.shift_date < current_date  %}
+                                editable: false,
+                            {% else %}
+                                editable:true,
+                                url: '{% url 'admins:shift-detail' shift.shift_id %}',
+                            {% endif %}
+
+                            display: 'block',
+
+                            {% if shift.shift__employee %}
+                                color: 'green',
+                            {% else %}
+                                color: 'red',
+                            {% endif %}
+
                             start: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__start_time|time:"H:i:s" }}',
                             end: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__end_time|time:"H:i:s" }}',
                         },
@@ -120,6 +135,7 @@
                     initialView: 'dayGridMonth',
                     initialDate: '{{ current_year }}-{{ current_month }}-{{ current_day }}',
                     editable: true,
+                    nowIndicator: true,
                     dayMaxEventRows: true,
                     views: {
                         timeGrid: {
@@ -127,7 +143,7 @@
                         }
                     },
                     headerToolbar: {
-                        left: 'prev,next today',
+                        left: 'prev,next',
                         center: 'title',
                         right: 'dayGridMonth,timeGridWeek,timeGridDay'
                     },

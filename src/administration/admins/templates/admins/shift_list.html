@@ -66,7 +66,17 @@
                                         <td>{{ object.end_time }}</td>
                                         <td>{{ object.quantity }}</td>
                                         <td>{{ object.client.name }}</td>
-                                        <td>{{ object.employee.name }}</td>
+                                        <td>
+                                            {% if object.employee %}
+                                                <b class="text-success">
+                                                    {{ object.employee.name }}
+                                                </b>
+                                            {% else %}
+                                                <b class="text-danger">
+                                                    un assigned
+                                                </b>
+                                            {% endif %}
+                                        </td>
                                         <td>{{ object.charge_rate }}</td>
                                         <td>{{ object.pay_rate }}</td>
                                         <td>{{ object.shiftday_set.count }}</td>
