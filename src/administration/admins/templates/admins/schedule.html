@@ -19,6 +19,7 @@
                     <div class="card-title">
                         <div class="d-flex justify-content-between">
                             <h3>News Feed</h3>
+                            {% csrf_token %}
                             <span>
                                     <a href="{% url 'admins:shift-add' %}" class="btn btn-primary">
                                         Create Shift
@@ -83,6 +84,22 @@
     <script>
 
         $(document).ready(function () {
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
 
             init();
 
@@ -159,23 +176,7 @@
                     eventResize: function (info) {
 
                         // CONFIRM CHANGE
-                        if (confirm(info.event.title + " end is now " + info.event.end.toISOString() + " is this okay?")) {
-
-                            // GET INFORMATION
-                            let shift_id = info.event.id;
-                            let shift_end_time = info.event.end.toISOString();
-
-                            // CALL API
-                            alert(shift_id + " " + shift_end_time)
-
-                            {#info.revert();#}
-                        }
-                    },
-                    eventDrop: function (info) {
-                        alert(info.event.title + " was dropped on " + info.event.start.toISOString());
-
-                        // CONFIRM CHANGE
-                        if (confirm("Are you sure about this change?")) {
+                        if (confirm(info.event.title + " end is now " + info.event.end.toISOString() + " is this okay? Resize")) {
 
                             // GET INFORMATION
                             let shift_id = info.event.id;
@@ -186,8 +187,30 @@
 
                             // CALL API
                             console.log(shift_id)
-                            console.log("OLD:: S: "+old_event_start+" E:"+old_event_end)
-                            console.log("NEW:: S: "+new_event_start+" E:"+new_event_end)
+                            console.log("OLD:: S: " + old_event_start + " E:" + old_event_end)
+                            console.log("NEW:: S: " + new_event_start + " E:" + new_event_end)
+
+                            change_times_api(shift_id, 'time', old_event_start, old_event_end, new_event_start, new_event_end)
+                        }
+                    },
+                    eventDrop: function (info) {
+
+                        // CONFIRM CHANGE
+                        if (confirm("Are you sure about this change? DROP")) {
+
+                            // GET INFORMATION
+                            let shift_id = info.event.id;
+                            let new_event_start = info.event.start.toISOString();
+                            let new_event_end = info.event.end.toISOString();
+                            let old_event_start = info.oldEvent.start.toISOString();
+                            let old_event_end = info.oldEvent.end.toISOString();
+
+                            // CALL API
+                            console.log(shift_id)
+                            console.log("OLD:: S: " + old_event_end)
+                            console.log("NEW:: S: " + new_event_end)
+
+                            change_times_api(shift_id, 'date', old_event_start, old_event_end, new_event_start, new_event_end)
                         }
                     }
 
@@ -218,8 +241,26 @@
                 window.location = "{% url 'admins:schedule' %}?year=" + required_year + "&month=" + required_month + "";
             }
 
-        })
-
-
+            function change_times_api(shift_id, direction, old_time_start, old_time_end, new_time_start, new_time_end) {
+                $.ajax({
+                    url: "/a/api/shift/" + shift_id + "/times/change/",
+                    type: 'POST',
+                    data: {
+                        old_time_start: new Date(old_time_start).toUTCString(),
+                        old_time_end: new Date(old_time_end).toUTCString(),
+                        new_time_start: new Date(new_time_start).toUTCString(),
+                        new_time_end: new Date(new_time_end).toUTCString(),
+                        direction: direction,
+                    },
+                    headers: {'X-CSRFToken': getCookie('csrftoken')},
+                    success: function (result) {
+                        console.log(result);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }
+        });
     </script>
 {% endblock %}

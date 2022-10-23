@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 from .views import (
     DashboardView,
     PositionListView, PositionDeleteView, PositionCreateView, PositionUpdateView, PositionDetailView,
@@ -151,4 +151,8 @@ urlpatterns += [
     path('user/<int:pk>/change/', UserUpdateView.as_view(), name='user-update'),
     path('user/<int:pk>/delete/', UserDeleteView.as_view(), name='user-delete'),
     path('user/<int:pk>/reset/password/', UserPasswordResetView.as_view(), name='user-password-reset'),
+]
+
+urlpatterns += [
+    path('api/', include('src.administration.admins.admins-api.urls', namespace='admins-api'))
 ]
