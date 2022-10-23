@@ -72,3 +72,13 @@ def shifts_create_update(shift, post, is_create=True):
         [date_index_names.append(key_name) if "car" in key_name else None for key_name in post]
         [date_index_values.append(post[f'{name}']) for name in date_index_names]
         shifts_create_update_logic(shift, is_create, date_index_values)
+
+
+def get_shift_days_dict(shift):
+    days = [0, 1, 2, 3, 4, 5, 6]
+    context = {"days": []}
+    if shift.repeat_policy == 'w':
+        week_list = shift.get_week_shifts_status()
+        for day in days:
+            pass
+        context['days'].append({'name': 'day', 'on': True})

@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block base_title %}Admins | Shifts{% endblock %}
 {% block base_subhead_heading %}Shifts{% endblock %}
@@ -13,16 +14,33 @@
 {% block base_content %}
 
     <div class="row">
+
+
         <div class="col-12">
             <div class="card">
+            <div class="card-body border-bottom">
+                <form method="get">
+                <div class="input-group mb-3">
+                    {{ filter_form }}
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        <a href="{% url 'admins:shift-list' %}" class="btn btn-danger" type="submit">
+                            <i class="fa fa-brush"></i>
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+            </div>
                 <div class="card-body">
                     {% if object_list %}
 
                         <div class="table-responsive">
-                            <table class="table table-borderless table-striped">
-                                <thead class="">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
                                 <tr>
-                                    <th>ID</th>
                                     <th>Type</th>
                                     <th>Start Date</th>
                                     <th>End Date</th>
@@ -34,14 +52,13 @@
                                     <th>Charge Rate</th>
                                     <th>Pay Rate</th>
                                     <th>Days</th>
-                                    <th></th>
+                                    <th>-</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 {% for object in object_list %}
                                     <tr>
-                                        <td>{{ object.id }}</td>
                                         <td>{{ object.get_job_type_display }}</td>
                                         <td>{{ object.start_date }}</td>
                                         <td>{{ object.end_date }}</td>
@@ -56,12 +73,6 @@
                                         <th>
                                             <a href="{% url 'admins:shift-detail' object.pk %}">
                                                 <i class="fa fa-eye"></i>
-                                            </a> |
-                                            <a href="{% url 'admins:shift-update' object.pk %}">
-                                                <i class="fa fa-edit"></i>
-                                            </a> |
-                                            <a href="{% url 'admins:shift-delete' object.pk %}" class="text-danger">
-                                                <i class="fa fa-trash"></i>
                                             </a>
                                         </th>
                                     </tr>
@@ -72,6 +83,48 @@
                             </table>
                         </div>
 
+                        <ul class="pagination pagination-rounded justify-content-center mt-3 pb-1">
+
+                    {% if object_list.has_previous %}
+
+                        <li class="page-item">
+                            <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
+                               class="page-link">
+                                <i class="mdi mdi-chevron-left"></i>
+                            </a>
+                        </li>
+
+                        <li class="page-item">
+                            <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
+                               class="page-link"> {{ object_list.previous_page_number }}
+                            </a>
+                        </li>
+
+                    {% endif %}
+
+                    {#                    <li class="page-item"><a href="/" class="page-link">1</a></li>#}
+                    <li class="page-item active">
+                        <a href="#" class="page-link">{{ object_list.number }}</a>
+                    </li>
+
+                    {% if object_list.has_next %}
+
+                        <li class="page-item">
+                            <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
+                               class="page-link"> {{ object_list.next_page_number }}
+                            </a>
+                        </li>
+
+                        <li class="page-item">
+                            <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
+                               class="page-link">
+                                <i class="mdi mdi-chevron-right"></i>
+                            </a>
+                        </li>
+                    {% endif %}
+
+                </ul>
+
                     {% else %}
                         <p class="mb-0 text-danger">
                             <b>
@@ -80,9 +133,26 @@
                             </b>
                         </p>
                     {% endif %}
+
                 </div>
             </div>
         </div>
     </div>
 
+{% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+        $(document).ready(function () {
+
+            $("#id_client option:first").text("-- Client --");
+            $("#id_site option:first").text("-- Site --");
+            $("#id_employee option:first").text("-- Employee --");
+
+            $('label').hide();
+            $('input').addClass('form-control');
+            $('select').addClass('form-control');
+
+        });
+    </script>
 {% endblock %}

@@ -302,11 +302,7 @@ class Shift(models.Model):
     def get_week_shifts_status(self):
 
         llist = []
-        for x in range(7):
-            if str(x) in self.week_days:
-                llist.append(True)
-            else:
-                llist.append(False)
+        [llist.append(True) if str(x) in self.week_days else llist.append(False) for x in range(7)]
         return llist
 
 

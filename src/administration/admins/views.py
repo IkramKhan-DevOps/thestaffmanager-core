@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.core import serializers
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import UserCreationForm, AdminPasswordChangeForm
@@ -13,6 +14,7 @@ from django.views.generic import (
     CreateView)
 
 from .bll import shifts_create_update_logic, shifts_create_update
+from .filters import ShiftFilter
 from .models import (
     Position, Client, Contact, Site, Asset, Qualification, Vehicle, ReportType,
     EmailAccount, FormBuilder, AssetAudit, Shift, ShiftDay,
@@ -242,13 +244,14 @@ class SiteDeleteView(DeleteView):
 @method_decorator(login_required, name='dispatch')
 class ShiftListView(ListView):
     model = Shift
+    paginate_by = 50
 
 
 @method_decorator(login_required, name='dispatch')
 class ShiftDetailView(DetailView):
     model = Shift
 
-    def get_context_data(self, *, object_list=None, **kwargs):
+    def get_context_data(self, **kwargs):
         context = super(ShiftDetailView, self).get_context_data(**kwargs)
         return context
 
@@ -260,7 +263,7 @@ class ShiftCreateView(CreateView):
 
     def get_success_url(self):
         shifts_create_update(self.object, self.request.POST)
-        return reverse_lazy('admins:shift-list')
+        return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 
 @method_decorator(login_required, name='dispatch')
@@ -271,18 +274,20 @@ class ShiftUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(ShiftUpdateView, self).get_context_data(**kwargs)
         week_list = self.object.get_week_shifts_status()
-        context['monday'] = 'checked' if week_list[0] else ''
-        context['tuesday'] = 'checked' if week_list[1] else ''
-        context['wednesday'] = 'checked' if week_list[2] else ''
-        context['thursday'] = 'checked' if week_list[3] else ''
-        context['friday'] = 'checked' if week_list[4] else ''
-        context['saturday'] = 'checked' if week_list[5] else ''
-        context['sunday'] = 'checked' if week_list[6] else ''
+        if self.object.repeat_policy == 'w':
+            context['monday'] = 'checked' if week_list[0] else ''
+            context['tuesday'] = 'checked' if week_list[1] else ''
+            context['wednesday'] = 'checked' if week_list[2] else ''
+            context['thursday'] = 'checked' if week_list[3] else ''
+            context['friday'] = 'checked' if week_list[4] else ''
+            context['saturday'] = 'checked' if week_list[5] else ''
+            context['sunday'] = 'checked' if week_list[6] else ''
+
         return context
 
     def get_success_url(self):
         shifts_create_update(self.object, self.request.POST, False)
-        return reverse_lazy('admins:shift-list')
+        return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 
 @method_decorator(login_required, name='dispatch')

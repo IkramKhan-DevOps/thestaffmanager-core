@@ -1,26 +1,171 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_title %}admins | {{ object }}{% endblock %}
-{% block base_subhead_heading %} {{ object }}{% endblock %}
-{% block base_subhead_paragraph %}Detail down description of {{ object }}.{% endblock %}
+{% block base_title %}admins | Shift {{ object }}{% endblock %}
+{% block base_subhead_heading %} Shift {{ object }}{% endblock %}
+{% block base_subhead_paragraph %}Detail down description of Shift {{ object }}.{% endblock %}
 {% block base_subhead_button %}
-    <a class="btn btn-primary" href="{% url 'admins:position-list' %}"><i class="fa fa-arrow-left"></i> Positions</a>
+    <a class="btn btn-primary" href="{% url 'admins:shift-list' %}"><i class="fa fa-arrow-left"></i> View shifts</a>
 {% endblock %}
 
 
 {% block base_content %}
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-9">
             <div class="card">
-                <div class="card-body text-center">
-                    <p class="display-1"><i class="fa fa-hammer"></i></p>
-                    <p class="mb-0 card-title text-danger">
-                        <b>EXIMITAS <small>Says.</small></b>
+                <div class="card-body border-bottom text-center">
+                    <iframe src="https://embed.lottiefiles.com/animation/65730" class="border-0"></iframe>
+                    <p class="mb-0">
+                        {{ object.start_date }} - {{ object.end_date }}
+                        <b>
+                            <a href="{% url 'admins:shift-update' object.pk %}">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </b>
+                        <br>
+                        {{ object.start_time }} - {{ object.end_time }}
                     </p>
+                </div>
+                <div class="card-body">
+                    <div class="row justify-content-center text-center">
+                        <div class="col">
+                            <h1><i class="fa fa-list"></i></h1>
+                            <p class="mb-0 small">Type and Repeat policy</p>
+                            <p class="mb-0">
+                                <b>{{ object.get_job_type_display }}</b><br>({{ object.get_repeat_policy_display }})</p>
+                        </div>
+                        <div class="col">
+                            <h1><i class="fa fa-user-cog"></i></h1>
+                            <p class="mb-0 small">Employee and Position</p>
+                            <p class="mb-0">
+                                {% if object.employee %}
+                                    <b>{{ object.employee.name }}</b>
+                                {% else %}
+                                    <b class="text-danger">Not assigned</b>
+                                {% endif %}
+                            <br>({{ object.position.name }})
+                            </p>
+                        </div>
+                        <div class="col">
+                            <h1><i class="fa fa-user"></i></h1>
+                            <p class="mb-0 small">Client and site</p>
+                            <p class="mb-0"><b>{{ object.client.name }}</b><br>({{ object.site.name }})</p>
+                        </div>
+                        <div class="col">
+                            <h1><i class="fa fa-user"></i></h1>
+                            <p class="mb-0 small">Pay, Charge and Extras</p>
+                            <p class="mb-0"><b>$100 - $200</b><br>($100)</p>
+                        </div>
+                        <div class="col">
+                            <h1><i class="fa fa-user"></i></h1>
+                            <p class="mb-0 small">Qty and shift Days</p>
+                            <p class="mb-0"><b>{{ object.quantity }}</b><br>
+                                ({{ object.shiftday_set.count }})
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                    <p class="lead">Sorry for inconvenience the page is under-development.</p>
+        </div>
+
+        <div class="col-sm-3">
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0 card-title"><b>Shift Days</b></p>
+                </div>
+                <div class="card-body border-bottom">
+                    {% if shift.shiftday_set.count %}
+
+                        {% for shift_day in object.shiftday_set.all %}
+                            <p class="mb-0"><i class="fa fa-clock"></i> {{ shift_day.shift_date }}</p>
+                        {% endfor %}
+
+
+                    {% else %}
+                        <p class="mb-0 text-danger">
+                            <b><i class="fa fa-exclamation-circle"></i> No shift days available.</b>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if object.repeat_policy == 'w' %}
+
+                <div class="card">
+                    <div class="card-body border-bottom">
+                        <p class="mb-0 card-title"><b>Week Days</b></p>
+                    </div>
+                    <div class="card-body border-bottom">
+                        <p class="mb-0">
+                            {% if '0' in object.week_days %}
+                                <i class="fa fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %} | Monday
+                        </p>
+
+                        <p class="mb-0">
+                            {% if '1' in object.week_days %}
+                                <i class="fa fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %} | Tuesday
+                        </p>
+
+                        <p class="mb-0">
+                            {% if '2' in object.week_days %}
+                                <i class="fa fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %} | Wednesday
+                        </p>
+
+                        <p class="mb-0">
+                            {% if '3' in object.week_days %}
+                                <i class="fa fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %} | Thursday
+                        </p>
+
+                        <p class="mb-0">
+                            {% if '4' in object.week_days %}
+                                <i class="fa fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %} | Friday
+                        </p>
+
+                        <p class="mb-0">
+                            {% if '5' in object.week_days %}
+                                <i class="fa fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %} | Saturday
+                        </p>
+                        <p class="mb-0">
+                            {% if '6' in object.week_days %}
+                                <i class="fa fa-check-circle text-success"></i>
+                            {% else %}
+                                <i class="fa fa-times-circle text-danger"></i>
+                            {% endif %} | Sunday
+                        </p>
+                    </div>
+                </div>
+
+            {% endif %}
+
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0 card-title"><b>Delete Shift</b></p>
+                </div>
+                <div class="card-body border-bottom">
+                    <p class="">Once you have deleted the shift there is no way to get back this data.</p>
+                    <a class="btn btn-danger" href="{% url 'admins:shift-delete' object.pk %}">
+                        <i class="fa fa-trash"></i> Delete
+                    </a>
                 </div>
             </div>
         </div>
