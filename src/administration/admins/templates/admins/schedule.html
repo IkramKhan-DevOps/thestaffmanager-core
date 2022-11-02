@@ -190,28 +190,40 @@
                 ]
 
 
-                    {% for object in employees %}
-                        staff.push({
-                            id: '{{ object.id }}',
-                            name: '{{ object.name }}',
-                            color: 'green',
-                            title: 'Employee',
-                            img: 'https://img.icons8.com/color/48/000000/blocked-account-male.png'
+                {% for object in employees %}
+                    staff.push({
+                        id: '{{ object.id }}',
+                        name: '{{ object.name }}',
+                        color: 'green',
+                        title: 'Employee',
+                        img: 'https://img.icons8.com/color/48/000000/blocked-account-male.png'
 
-                        });
-                    {% endfor %}
+                    });
+                {% endfor %}
 
                 var shifts = [
                     {% for shift in shifts %}
-                        {
-                            resource: parseInt({{ shift.shift__employee_id }}),
-                            slot: 2,
-                            title: '{{ shift.shift__site__name }}',
-                            start: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__start_time|time:"H:i:s" }}',
-                            end: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__end_time|time:"H:i:s" }}',
-                        },
+                        {% if shift.shift__employee_id %}
+                            {
+                                resource: parseInt({{ shift.shift__employee_id }}),
+                                slot: 2,
+                                title: '{{ shift.shift__site__name }}',
+                                start: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__start_time|time:"H:i:s" }}',
+                                end: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__end_time|time:"H:i:s" }}',
+                            },
+                        {% else%}
+                            {
+                                resource: 0,
+                                slot: 2,
+                                title: '{{ shift.shift__site__name }}',
+                                start: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__start_time|time:"H:i:s" }}',
+                                end: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__end_time|time:"H:i:s" }}',
+                            },
+                        {% endif %}
+
                     {% endfor %}
                 ]
+
 
                 var slots = [
                     {

@@ -33,11 +33,11 @@ class ScheduleView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ScheduleView, self).get_context_data(**kwargs)
 
-        from faker import Faker
-        fake = Faker()
-
-        for _ in range(50):
-            Employee.objects.create(name=fake.name())
+        # from faker import Faker
+        # fake = Faker()
+        #
+        # for _ in range(50):
+        #     Employee.objects.create(name=fake.name())
 
         def get_query_over_request(_request):
             # DEFAULT: query year and month
@@ -78,6 +78,7 @@ class ScheduleView(TemplateView):
         context['current_month'] = current_month
         context['current_year'] = current_year
         context['current_date'] = datetime.date.today()
+
 
         return context
 
