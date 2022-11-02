@@ -19,7 +19,7 @@ SECRET_KEY = "abncvskjdfqywu8e47902dhbnsajkdyuq9qoihdashdaksjdhsd@345"
 DEBUG = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-ALLOWED_HOSTS = ['127.0.0.1', 'exarthdev3.pythonanywhere.com']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [
