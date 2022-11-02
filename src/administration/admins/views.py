@@ -26,6 +26,62 @@ import datetime
 """ MAIN """
 
 
+@method_decorator([login_required, never_cache], name='dispatch')
+class ScheduleView(TemplateView):
+    template_name = 'admins/schedule.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(ScheduleView, self).get_context_data(**kwargs)
+
+        from faker import Faker
+        fake = Faker()
+
+        for _ in range(50):
+            Employee.objects.create(name=fake.name())
+
+        def get_query_over_request(_request):
+            # DEFAULT: query year and month
+            _current_month = datetime.date.today().month
+            _current_year = datetime.date.today().year
+            shifts_queryset = ShiftDay.objects.filter(
+                Q(shift_date__month=datetime.date.today().month, shift_date__year=datetime.date.today().year)
+            ).values(
+                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift__client__name', 'shift_date',
+                'shift__employee', 'shift__employee_id', 'shift__site__name'
+            )
+
+            # CHECK1: if request contains date in get
+            requested_month = _request.GET.get('month')
+            requested_year = _request.GET.get('year')
+
+            if (requested_month and 0 < int(requested_month) < 13) and \
+                    (requested_year and int(requested_year) > 0):
+                shifts_queryset = ShiftDay.objects.filter(
+                    Q(shift_date__month=datetime.date.today().month,
+                      shift_date__year=datetime.date.today().year)
+                ).values(
+                    'id', 'shift_id', 'shift__start_time', 'shift__end_time',
+                    'shift__client__name', 'shift_date'
+                )
+                _current_year = requested_year
+                _current_month = requested_month if int(requested_month) > 9 else "0" + requested_month
+
+            return shifts_queryset, _current_month, _current_year
+
+        # CALL: get month, year and query over it
+        shifts, current_month, current_year = get_query_over_request(self.request)
+
+        # CONTEXT: data
+        context['shifts'] = shifts
+        context['employees'] = Employee.objects.all()
+        context['current_day'] = datetime.date.today().day
+        context['current_month'] = current_month
+        context['current_year'] = current_year
+        context['current_date'] = datetime.date.today()
+
+        return context
+
+
 @method_decorator(login_required, name='dispatch')
 class DashboardView(TemplateView):
     template_name = 'admins/news-feed.html'
@@ -583,62 +639,6 @@ class PostCodeReportView(TemplateView):
 
 
 """ --------------------------------------------- """
-
-
-@method_decorator([login_required, never_cache], name='dispatch')
-class ScheduleView(TemplateView):
-    template_name = 'admins/schedule.html'
-
-    def get_context_data(self, **kwargs):
-        context = super(ScheduleView, self).get_context_data(**kwargs)
-
-        # from faker import Faker
-        # fake = Faker()
-        #
-        # for _ in range(50):
-        #     Employee.objects.create(name=fake.name())
-
-        def get_query_over_request(_request):
-            # DEFAULT: query year and month
-            _current_month = datetime.date.today().month
-            _current_year = datetime.date.today().year
-            shifts_queryset = ShiftDay.objects.filter(
-                Q(shift_date__month=datetime.date.today().month, shift_date__year=datetime.date.today().year)
-            ).values(
-                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift__client__name', 'shift_date',
-                'shift__employee', 'shift__employee_id', 'shift__site__name'
-            )
-
-            # CHECK1: if request contains date in get
-            requested_month = _request.GET.get('month')
-            requested_year = _request.GET.get('year')
-
-            if (requested_month and 0 < int(requested_month) < 13) and \
-                    (requested_year and int(requested_year) > 0):
-                shifts_queryset = ShiftDay.objects.filter(
-                    Q(shift_date__month=datetime.date.today().month,
-                      shift_date__year=datetime.date.today().year)
-                ).values(
-                    'id', 'shift_id', 'shift__start_time', 'shift__end_time',
-                    'shift__client__name', 'shift_date'
-                )
-                _current_year = requested_year
-                _current_month = requested_month if int(requested_month) > 9 else "0" + requested_month
-
-            return shifts_queryset, _current_month, _current_year
-
-        # CALL: get month, year and query over it
-        shifts, current_month, current_year = get_query_over_request(self.request)
-
-        # CONTEXT: data
-        context['shifts'] = shifts
-        context['employees'] = Employee.objects.all()
-        context['current_day'] = datetime.date.today().day
-        context['current_month'] = current_month
-        context['current_year'] = current_year
-        context['current_date'] = datetime.date.today()
-
-        return context
 
 
 @method_decorator(login_required, name='dispatch')
