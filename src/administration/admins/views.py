@@ -18,7 +18,7 @@ from .bll import shifts_create_update_logic, shifts_create_update
 from .filters import ShiftFilter
 from .models import (
     Position, Client, Contact, Site, Asset, Qualification, Vehicle, ReportType,
-    EmailAccount, FormBuilder, AssetAudit, Shift, ShiftDay,
+    EmailAccount, FormBuilder, AssetAudit, Shift, ShiftDay, Employee,
 )
 import calendar
 import datetime
@@ -592,6 +592,12 @@ class ScheduleView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ScheduleView, self).get_context_data(**kwargs)
 
+        # from faker import Faker
+        # fake = Faker()
+        #
+        # for _ in range(50):
+        #     Employee.objects.create(name=fake.name())
+
         def get_query_over_request(_request):
             # DEFAULT: query year and month
             _current_month = datetime.date.today().month
@@ -600,7 +606,7 @@ class ScheduleView(TemplateView):
                 Q(shift_date__month=datetime.date.today().month, shift_date__year=datetime.date.today().year)
             ).values(
                 'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift__client__name', 'shift_date',
-                'shift__employee'
+                'shift__employee', 'shift__employee_id', 'shift__site__name'
             )
 
             # CHECK1: if request contains date in get
@@ -626,10 +632,12 @@ class ScheduleView(TemplateView):
 
         # CONTEXT: data
         context['shifts'] = shifts
+        context['employees'] = Employee.objects.all()
         context['current_day'] = datetime.date.today().day
         context['current_month'] = current_month
         context['current_year'] = current_year
         context['current_date'] = datetime.date.today()
+
         return context
 
 
