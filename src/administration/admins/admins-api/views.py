@@ -1,11 +1,20 @@
 from datetime import datetime, date
 
 from django.utils.decorators import method_decorator
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
 from src.administration.admins.models import Shift, ShiftDay
+from .serializers import ShiftDaySerializer
+
+
+class ShiftListAPIView(ListAPIView):
+    queryset = ShiftDay.objects.all()
+    serializer_class = ShiftDaySerializer
+    permission_classes = [IsAdminUser]
 
 
 class ChangeTimesAPI(APIView):

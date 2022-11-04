@@ -277,20 +277,6 @@
 
                     });
                 {% endfor %}
-                var shifts = [
-                    {% for shift in shifts %}
-                        {
-                            {% if shift.shift__employee_id %}
-                                resource: parseInt({{ shift.shift__employee_id }}),
-                            {% else%}
-                                resource: 0,
-                            {% endif %}
-                            title: '<b>Hii</b>  {{ shift.shift__start_time|time:"H:i" }}-{{ shift.shift__end_time|time:"H:i" }}',
-                            start: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__start_time|time:"H:i:s" }}',
-                            end: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__end_time|time:"H:i:s" }}',
-                        },
-                    {% endfor %}
-                ]
                 var invalid = [];
 
                 // CALENDER ENV
@@ -302,7 +288,6 @@
                         }
                     },
                     height: 800,
-                    data: shifts,
                     dragToCreate: false,
                     dragToResize: false,
                     dragToMove: true,
@@ -330,7 +315,6 @@
                     onEventClick: function (args, inst) {
                         oldShift = $.extend({}, args.event);
                         tempShift = args.event;
-                        console.log(args)
 
                         if (!popup.isVisible()) {
                             createEditPopup(args);
@@ -357,6 +341,32 @@
                             '<img class="employee-shifts-avatar" src="' + resource.img + '"/>' +
                             '</div>';
                     },
+                    onPageLoading: function (event, inst) {
+                        var year = event.firstDay.getFullYear(),
+                            month = event.firstDay.getMonth(),
+                            day = event.firstDay.getDate();
+
+                        $.getJSON('{% url 'admins:admins-api:shift-list' %}', function (data) {
+                            var events = [];
+
+                            for (var i = 0; i < data.length; i++) {
+                                var event = data[i];
+                                events.push({
+                                    start: event.shift_date+"T"+event.shift.start_time,
+                                    end: event.shift_date+"T"+event.shift.end_time,
+                                    title: event.shift.start_time+" - "+event.shift.end_time,
+                                    resource: event.shift.employee == null? 0 : event.shift.employee.id
+                                });
+                            }
+
+                            inst.setEvents(events);
+
+
+                            mobiscroll.toast({
+                                message: 'shifts are updated'
+                            });
+                        }, 'jsonp');
+                    }
                 }).mobiscroll('getInst');
 
                 $('#shift-management-select').mobiscroll().select({
@@ -414,9 +424,10 @@
                                 text: 'Add',
                                 keyCode: 'enter',
                                 handler: function () {
-                                    calendar.updateEvent(tempShift);
-                                    deleteShift = false;
+                                    {#calendar.updateEvent(tempShift);#}
+                                    {#deleteShift = false;#}
                                     popup.close();
+                                    window.location = "{% url 'admins:shift-add' %}"
 
                                 },
                                 cssClass: 'mbsc-popup-button-primary'
@@ -428,8 +439,10 @@
 
                     popup.open();
                 }
+
                 // POPUP: CREATEUPDATE
                 function createEditPopup(args) {
+
                     var ev = args.event;
                     var resource = staff.find(function (r) {
                         return r.id == ev.resource
@@ -450,12 +463,13 @@
                         buttons: [
                             'cancel',
                             {
-                                text: 'Save',
+                                text: 'View',
                                 keyCode: 'enter',
                                 handler: function () {
                                     var date = range.getVal();
 
                                     // update event with the new properties on save button click
+                                    /*
                                     calendar.updateEvent({
                                         id: ev.id,
                                         title: formatDate('HH:mm', date[0]) + ' - ' + formatDate('HH:mm', date[1] ? date[1] : date[0]),
@@ -467,6 +481,8 @@
                                     });
 
                                     restoreShift = false;
+                                    * */
+                                    window.location = "/a/shift/" + ev.id + "/change/";
                                     popup.close();
                                 },
                                 cssClass: 'mbsc-popup-button-primary'
