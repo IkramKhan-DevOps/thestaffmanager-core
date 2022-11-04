@@ -19,11 +19,54 @@
             padding-bottom: 8px;
         }
 
+        .employee-shifts-cont {
+            position: relative;
+            padding-left: 42px;
+            max-height: 40px;
+        }
+
+        .employee-shifts-avatar {
+            position: absolute;
+            max-height: 40px;
+            max-width: 40px;
+            top: 18px;
+            -webkit-transform: translate(-50%, -50%);
+            transform: translate(-50%, -50%);
+            left: 20px;
+        }
+
+        .employee-shifts-name {
+            font-size: 15px;
+        }
+
+        .employee-shifts-title {
+            font-size: 12px;
+        }
+
+        .md-employee-shifts .mbsc-timeline-resource,
+        .md-employee-shifts .mbsc-timeline-resource-col {
+            width: 200px;
+            align-items: center;
+            display: flex;
+        }
+
+        .md-employee-shifts .mbsc-schedule-event {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+        }
+
+        {# NEW ONE #}
         .md-shift-management-calendar .mbsc-schedule-event {
             display: flex;
             align-items: center;
             justify-content: center;
             height: 36px;
+        }
+
+        .md-shift-management-calendar .mbsc-timeline-slots {
+            height: 94px;
         }
 
         .md-shift-management-calendar .mbsc-timeline-header-placeholder {
@@ -33,6 +76,10 @@
         .md-shift-management-calendar .mbsc-timeline-resource {
             display: flex;
             align-items: center;
+        }
+
+        .md-shift-management-calendar .mbsc-timeline-slot {
+            width: 200px;
         }
 
         .md-shift-header-controls {
@@ -96,43 +143,10 @@
             padding-right: 3px;
         }
 
-
-        .employee-shifts-cont {
-            position: relative;
-            padding-left: 42px;
-            max-height: 40px;
-        }
-
-        .employee-shifts-avatar {
-            position: absolute;
-            max-height: 40px;
-            max-width: 40px;
-            top: 18px;
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-            left: 20px;
-        }
-
-        .employee-shifts-name {
-            font-size: 15px;
-        }
-
-        .employee-shifts-title {
-            font-size: 12px;
-        }
-
-        .md-employee-shifts .mbsc-timeline-resource,
-        .md-employee-shifts .mbsc-timeline-resource-col {
-            width: 200px;
-            align-items: center;
-            display: flex;
-        }
-
-        .md-employee-shifts .mbsc-schedule-event {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 36px;
+        .md-shift-header-controls input {
+            border: 0px;
+            padding: 4px;
+            border-radius: 5px;
         }
     </style>
     <link href="{% static 'mobi/css/mobiscroll.jquery.min.css' %}" rel="stylesheet"/>
@@ -327,7 +341,7 @@
                             '<select id="shift-management-select">' +
                             '<option value="day">Day</option>' +
                             '<option value="week" selected>Week</option>' +
-                            '<option value="month" selected>Month</option>' +
+                            '<option value="month">Month</option>' +
                             '</select>' +
                             '</div>' +
                             '<div mbsc-calendar-prev></div>' +
@@ -352,10 +366,11 @@
                             for (var i = 0; i < data.length; i++) {
                                 var event = data[i];
                                 events.push({
-                                    start: event.shift_date+"T"+event.shift.start_time,
-                                    end: event.shift_date+"T"+event.shift.end_time,
-                                    title: event.shift.start_time+" - "+event.shift.end_time,
-                                    resource: event.shift.employee == null? 0 : event.shift.employee.id
+                                    id: event.shift.id,
+                                    start: event.shift_date + "T" + event.shift.start_time,
+                                    end: event.shift_date + "T" + event.shift.end_time,
+                                    title: event.shift.start_time + " - " + event.shift.end_time,
+                                    resource: event.shift.employee == null ? 0 : event.shift.employee.id
                                 });
                             }
 
