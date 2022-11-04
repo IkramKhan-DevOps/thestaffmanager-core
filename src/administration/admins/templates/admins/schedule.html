@@ -19,6 +19,84 @@
             padding-bottom: 8px;
         }
 
+        .md-shift-management-calendar .mbsc-schedule-event {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
+        }
+
+        .md-shift-management-calendar .mbsc-timeline-header-placeholder {
+            height: 120px;
+        }
+
+        .md-shift-management-calendar .mbsc-timeline-resource {
+            display: flex;
+            align-items: center;
+        }
+
+        .md-shift-header-controls {
+            flex: 1 0 auto;
+            display: flex;
+            justify-content: end;
+        }
+
+        .md-shift-header-controls .mbsc-checkbox {
+            padding: 18px 0 18px 45px;
+        }
+
+        .md-shift-cal-view.mbsc-textfield-wrapper {
+            margin: 12px 12px 12px 28px;
+        }
+
+        .md-shift-cal-view .mbsc-select.mbsc-textfield {
+            height: 32px;
+            width: 120px;
+        }
+
+        .md-shift-cal-view .mbsc-icon.mbsc-select-icon {
+            width: 20px;
+            height: 20px;
+            top: 7px;
+        }
+
+        .md-shift-resource {
+            font-size: 18px;
+        }
+
+        .md-shift-resource-icon {
+            margin-right: 10px;
+        }
+
+        .md-shift-header {
+            margin: 3px 6px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .md-shift-name {
+            font-size: 15px;
+        }
+
+        .md-shift-time {
+            opacity: .5;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .md-shift-count {
+            margin-top: 6px;
+            margin-right: 12px;
+            display: inline-block;
+            width: 26px;
+            height: 20px;
+        }
+
+        .md-shift-icon {
+            padding-right: 3px;
+        }
+
+
         .employee-shifts-cont {
             position: relative;
             padding-left: 42px;
@@ -179,6 +257,7 @@
                 var $notes = $('#employee-shifts-notes');
                 var $deleteButton = $('#employee-shifts-delete');
 
+                // DATA OBJECTS
                 var staff = [
                     {
                         id: '0',
@@ -188,8 +267,6 @@
                         img: 'https://img.icons8.com/fluency/48/000000/remove-user-male.png'
                     }
                 ]
-
-
                 {% for object in employees %}
                     staff.push({
                         id: '{{ object.id }}',
@@ -200,56 +277,137 @@
 
                     });
                 {% endfor %}
-
                 var shifts = [
                     {% for shift in shifts %}
-                        {% if shift.shift__employee_id %}
-                            {
+                        {
+                            {% if shift.shift__employee_id %}
                                 resource: parseInt({{ shift.shift__employee_id }}),
-                                slot: 2,
-                                title: '{{ shift.shift__site__name }}',
-                                start: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__start_time|time:"H:i:s" }}',
-                                end: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__end_time|time:"H:i:s" }}',
-                            },
-                        {% else%}
-                            {
+                            {% else%}
                                 resource: 0,
-                                slot: 2,
-                                title: '{{ shift.shift__site__name }}',
-                                start: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__start_time|time:"H:i:s" }}',
-                                end: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__end_time|time:"H:i:s" }}',
-                            },
-                        {% endif %}
-
+                            {% endif %}
+                            title: '<b>Hii</b>  {{ shift.shift__start_time|time:"H:i" }}-{{ shift.shift__end_time|time:"H:i" }}',
+                            start: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__start_time|time:"H:i:s" }}',
+                            end: '{{ shift.shift_date|date:"Y-m-d" }}T{{ shift.shift__end_time|time:"H:i:s" }}',
+                        },
                     {% endfor %}
                 ]
-
-
-                var slots = [
-                    {
-                        id: 1,
-                        name: 'Morning',
-                    }, {
-                        id: 2,
-                        name: 'Afternoon',
-                    }];
-
                 var invalid = [];
 
+                // CALENDER ENV
+                calendar = $('#demo-employee-shifts-calendar').mobiscroll().eventcalendar({
+                    view: {
+                        timeline: {
+                            type: 'day',
+                            eventList: true,
+                        }
+                    },
+                    height: 800,
+                    data: shifts,
+                    dragToCreate: false,
+                    dragToResize: false,
+                    dragToMove: true,
+                    clickToCreate: true,
+                    resources: staff,
+                    {#invalid: invalid,#}
+                    extendDefaultEvent: function (ev) {
+                        var d = ev.start;
+                        var start = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+                        var end = new Date(d.getFullYear(), d.getMonth(), d.getDate());
 
+                        return {
+                            title: formatDate('HH:mm', start) + ' - ' + formatDate('HH:mm', end),
+                            start: start,
+                            resource: ev.resource
+                        };
+                    },
+                    onEventCreate: function (args, inst) {
+                        // store temporary event
+                        tempShift = args.event;
+                        setTimeout(function () {
+                            createAddPopup(args);
+                        }, 100);
+                    },
+                    onEventClick: function (args, inst) {
+                        oldShift = $.extend({}, args.event);
+                        tempShift = args.event;
+                        console.log(args)
+
+                        if (!popup.isVisible()) {
+                            createEditPopup(args);
+                        }
+                    },
+
+                    renderHeader: function () {
+                        return '<div mbsc-calendar-nav></div>' +
+                            '<div class="md-shift-header-controls">' +
+                            '<select id="shift-management-select">' +
+                            '<option value="day">Day</option>' +
+                            '<option value="week" selected>Week</option>' +
+                            '<option value="month" selected>Month</option>' +
+                            '</select>' +
+                            '</div>' +
+                            '<div mbsc-calendar-prev></div>' +
+                            '<div mbsc-calendar-today></div>' +
+                            '<div mbsc-calendar-next></div>';
+                    },
+                    renderResource: function (resource) {
+                        return '<div class="employee-shifts-cont">' +
+                            '<div class="employee-shifts-name">' + resource.name + '</div>' +
+                            '<div class="employee-shifts-title">' + resource.title + '</div>' +
+                            '<img class="employee-shifts-avatar" src="' + resource.img + '"/>' +
+                            '</div>';
+                    },
+                }).mobiscroll('getInst');
+
+                $('#shift-management-select').mobiscroll().select({
+                    inputElement: document.getElementById('shift-management-view'),
+                    touchUi: false,
+                    onChange: function (event, inst) {
+                        if (event.value == 'day') {
+                            calendar.setOptions({
+                                view: {
+                                    timeline: {
+                                        type: 'day',
+                                        eventList: true
+                                    }
+                                }
+                            });
+                        } else if (event.value == 'month') {
+                            calendar.setOptions({
+                                view: {
+                                    timeline: {
+                                        type: 'month',
+                                        eventList: true
+                                    }
+                                }
+                            });
+                        } else {
+                            calendar.setOptions({
+                                view: {
+                                    timeline: {
+                                        type: 'week',
+                                        eventList: true,
+                                        startDay: 1,
+                                        endDay: 5
+                                    }
+                                }
+                            });
+                        }
+                    }
+                });
+
+
+                // POPUP: CREATE
                 function createAddPopup(args) {
                     // hide delete button inside add popup
                     $deleteButton.hide();
                     deleteShift = true;
                     restoreShift = false;
-                    var slot = slots.find(function (s) {
-                        return s.id === tempShift.slot
-                    });
 
                     // set popup header text and buttons for adding
                     popup.setOptions({
                         headerText: '<div>New shift</div><div class="employee-shifts-day">' +
-                            formatDate('DDDD', new Date(tempShift.start)) + ' ' + slot.name + ',' + formatDate('DD MMMM YYYY', new Date(tempShift.start)) + '</div>',
+                            formatDate('DDDD', new Date(tempShift.start)) + ' ' + formatDate('DD MMMM YYYY', new Date(tempShift.start)) + '</div>',
                         buttons: [
                             'cancel',
                             {
@@ -257,34 +415,28 @@
                                 keyCode: 'enter',
                                 handler: function () {
                                     calendar.updateEvent(tempShift);
-
                                     deleteShift = false;
                                     popup.close();
+
                                 },
                                 cssClass: 'mbsc-popup-button-primary'
                             }
                         ]
                     });
                     // fill popup with a new event data
-                    range.setOptions({
-                        minTime: tempShift.slot == 1 ? '07:00' : '12:00',
-                        maxTime: tempShift.slot == 1 ? '13:00' : '18:00'
-                    });
                     range.setVal([tempShift.start, tempShift.end]);
 
                     popup.open();
                 }
-
+                // POPUP: CREATEUPDATE
                 function createEditPopup(args) {
                     var ev = args.event;
                     var resource = staff.find(function (r) {
                         return r.id == ev.resource
                     });
-                    var slot = slots.find(function (s) {
-                        return s.id == ev.slot
-                    });
+
                     var headerText = '<div>Edit ' + resource.name + '\'s hours</div><div class="employee-shifts-day">' +
-                        formatDate('DDDD', new Date(ev.start)) + ' ' + slot.name + ',' + formatDate('DD MMMM YYYY', new Date(ev.start)) + '</div>';
+                        formatDate('DDDD', new Date(ev.start)) + ' ' + formatDate('DD MMMM YYYY', new Date(ev.start)) + '</div>';
 
                     // show delete button inside edit popup
                     $deleteButton.show();
@@ -312,7 +464,6 @@
                                         end: date[1] ? date[1] : date[0],
                                         resource: resource.id,
                                         color: resource.color,
-                                        slot: slot.id,
                                     });
 
                                     restoreShift = false;
@@ -325,68 +476,10 @@
 
                     // fill popup with the selected event data
                     $notes.mobiscroll('getInst').value = ev.notes || '';
-                    range.setOptions({
-                        minTime: ev.slot == 1 ? '07:00' : '12:00',
-                        maxTime: ev.slot == 1 ? '13:00' : '18:00'
-                    });
                     range.setVal([ev.start, ev.end]);
 
                     popup.open();
                 }
-
-                calendar = $('#demo-employee-shifts-calendar').mobiscroll().eventcalendar({
-                    view: {
-                        timeline: {
-                            type: 'month',
-                            eventList: true,
-                            timeCellStep: 60,
-                            timeLabelStep: 60,
-                        }
-                    },
-                    height: 800,
-                    data: shifts,
-                    dragToCreate: false,
-                    dragToResize: false,
-                    dragToMove: true,
-                    clickToCreate: true,
-                    resources: staff,
-                    invalid: invalid,
-                    slots: slots,
-                    extendDefaultEvent: function (ev) {
-                        var d = ev.start;
-                        var start = new Date(d.getFullYear(), d.getMonth(), d.getDate(), ev.slot == 1 ? 7 : 12);
-                        var end = new Date(d.getFullYear(), d.getMonth(), d.getDate(), ev.slot == 1 ? 13 : 18);
-
-                        return {
-                            title: formatDate('HH:mm', start) + ' - ' + formatDate('HH:mm', end),
-                            start: start,
-                            end: end,
-                            resource: ev.resource
-                        };
-                    },
-                    onEventCreate: function (args, inst) {
-                        // store temporary event
-                        tempShift = args.event;
-                        setTimeout(function () {
-                            createAddPopup(args);
-                        }, 100);
-                    },
-                    onEventClick: function (args, inst) {
-                        oldShift = $.extend({}, args.event);
-                        tempShift = args.event;
-
-                        if (!popup.isVisible()) {
-                            createEditPopup(args);
-                        }
-                    },
-                    renderResource: function (resource) {
-                        return '<div class="employee-shifts-cont">' +
-                            '<div class="employee-shifts-name">' + resource.name + '</div>' +
-                            '<div class="employee-shifts-title">' + resource.title + '</div>' +
-                            '<img class="employee-shifts-avatar" src="' + resource.img + '"/>' +
-                            '</div>';
-                    },
-                }).mobiscroll('getInst');
 
                 popup = $('#demo-employee-shifts-popup').mobiscroll().popup({
                     display: 'bottom',
@@ -409,7 +502,6 @@
                         }
                     }
                 }).mobiscroll('getInst');
-
                 range = $('#demo-employee-shifts-date').mobiscroll().datepicker({
                     controls: ['time'],
                     select: 'range',
@@ -429,12 +521,10 @@
                         tempShift.title = formatDate('HH:mm', date[0]) + ' - ' + formatDate('HH:mm', date[1] ? date[1] : date[0]);
                     }
                 }).mobiscroll('getInst');
-
                 $notes.on('change', function (ev) {
                     // update current event's title
                     tempShift.notes = ev.target.value;
                 });
-
                 $deleteButton.on('click', function () {
                     // delete current event on button click
                     calendar.removeEvent(tempShift);
@@ -455,6 +545,7 @@
                         message: 'Shift deleted'
                     });
                 });
+
             });
 
         });
