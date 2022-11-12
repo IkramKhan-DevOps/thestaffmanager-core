@@ -17,8 +17,7 @@ from django.views.generic import (
 from .bll import shifts_create_update_logic, shifts_create_update
 from .filters import ShiftFilter
 from .models import (
-    Position, Client, Contact, Site, Asset, Qualification, Vehicle, ReportType,
-    EmailAccount, FormBuilder, AssetAudit, Shift, ShiftDay, Employee,
+    Position, Client, Site, ReportType, Shift, ShiftDay, Employee,
 )
 import calendar
 import datetime
