@@ -10,7 +10,7 @@
                 </a>
             </li>
 
-            <li class="menu-title">SCHEDULING</li>
+            <li class="menu-title">SHIFTS AND SCHEDULE</li>
             <li>
                 <a href="{% url 'admins:schedule' %}">
                     <i class="fa fa-notes-medical"></i>
@@ -64,7 +64,7 @@
             </li>
 
 
-            <li class="menu-title">USERS</li>
+            <li class="menu-title">USERS MANAGEMENT</li>
 
             <li>
                 <a href="{% url 'admins:user-list' %}">
@@ -73,19 +73,25 @@
                 </a>
             </li>
             <li>
+                <a href="{% url 'admins:user-list' %}">
+                    <i class="fa fa-user-cog"></i>
+                    <span>Employees</span>
+                </a>
+            </li>
+            <li>
                 <a href="{% url 'admins:client-list' %}">
                     <i class="fa fa-users"></i>
                     <span>Clients</span>
                 </a>
             </li>
+
+            <li class="menu-title">SETTINGS</li>
             <li>
                 <a href="{% url 'admins:site-list' %}">
                     <i class="fa fa-building"></i>
                     <span>Sites</span>
                 </a>
             </li>
-
-            <li class="menu-title">SETTINGS</li>
             <li>
                 <a href="{% url 'admins:position-list' %}">
                     <i class="fa fa-user-cog"></i>
