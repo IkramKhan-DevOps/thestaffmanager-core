@@ -1,5 +1,6 @@
-from django.contrib.auth.models import User
 from django.forms import ModelForm
+
+from src.accounts.models import User, Employee
 
 
 class UserProfileForm(ModelForm):
@@ -17,3 +18,10 @@ class ShiftForm(ModelForm):
         model = User
         fields = '__all__'
 
+
+class EmployeeCreateForm(ModelForm):
+    class Meta:
+        model = Employee
+        fields = [
+            'user', 'is_internal_employee'
+        ]

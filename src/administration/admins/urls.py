@@ -11,7 +11,7 @@ from .views import (
     AuditLogView, LiveChatView, CasesView, CallsView, PipelineView,
     ScheduleView, ShiftsView, TimeClockView, AbsencesView,
     PayRunReportView, ShiftNotesView, ChargesBreakView, ReportsView, HealthView, ShiftListView, ShiftDetailView,
-    ShiftCreateView, ShiftUpdateView, ShiftDeleteView
+    ShiftCreateView, ShiftUpdateView, ShiftDeleteView, EmployeeCreateView
 )
 
 app_name = 'admins'
@@ -83,6 +83,10 @@ urlpatterns += [
     path('user/<int:pk>/change/', UserUpdateView.as_view(), name='user-update'),
     path('user/<int:pk>/delete/', UserDeleteView.as_view(), name='user-delete'),
     path('user/<int:pk>/reset/password/', UserPasswordResetView.as_view(), name='user-password-reset'),
+]
+
+urlpatterns += [
+    path('employee/create/', EmployeeCreateView.as_view(), name="employee-create")
 ]
 
 urlpatterns += [

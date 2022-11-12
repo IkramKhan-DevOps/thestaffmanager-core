@@ -1,6 +1,5 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.core import serializers
 from django.core.paginator import Paginator
 from django.db.models import Q
@@ -16,11 +15,14 @@ from django.views.generic import (
 
 from .bll import shifts_create_update_logic, shifts_create_update
 from .filters import ShiftFilter
+from .forms import EmployeeCreateForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee,
 )
 import calendar
 import datetime
+
+from ...accounts.models import User
 
 """ MAIN """
 
@@ -185,6 +187,28 @@ class UserPasswordResetView(View):
             form.save(commit=True)
             messages.success(request, f"{user.get_full_name()}'s password changed successfully.")
         return render(request, 'admins/user_password_change.html', {'form': form})
+
+
+""" EMPLOYEES """
+
+
+@method_decorator(login_required, name='dispatch')
+class EmployeeCreateView(CreateView):
+    model = User
+    form_class = EmployeeCreateForm
+    template_name = 'admins/employee_form.html'
+    success_url = reverse_lazy('admins:Employee-list')
+
+    def form_valid(self, form):
+        form.instance.is_staff = True
+        return super().form_valid(form)
+
+
+@method_decorator(login_required, name='dispatch')
+class EmployeeDeleteView(DeleteView):
+    model = Employee
+    template_name = 'admins/client_confirm_delete.html'
+    success_url = reverse_lazy('admins:employee-list')
 
 
 """ CLIENTS and CONTACTS """

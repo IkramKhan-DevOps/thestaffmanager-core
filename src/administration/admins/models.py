@@ -1,8 +1,9 @@
 from colorfield.fields import ColorField
-from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+
+from src.accounts.models import User, Employee
 
 
 class Position(models.Model):
@@ -100,17 +101,6 @@ class Site(models.Model):
         return str(self.name)
 
 
-class Employee(models.Model):
-    name = models.CharField(max_length=255)
-
-    class Meta:
-        ordering = ['id']
-        verbose_name_plural = "Employees"
-
-    def __str__(self):
-        return str(self.name)
-
-
 class Shift(models.Model):
     JOB_TYPE_CHOICE = (
         ('shift', 'Shift'),
@@ -135,7 +125,7 @@ class Shift(models.Model):
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)
     quantity = models.PositiveIntegerField(default=1)
 
-    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True)
+    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="employee")
     pay_rate = models.FloatField(default=0)
     charge_rate = models.FloatField(default=0)
     extra_charges = models.FloatField(default=0)
