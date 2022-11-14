@@ -25,6 +25,19 @@ class Position(models.Model):
     def __str__(self):
         return str(self.name)
 
+    @classmethod
+    def fake_position(cls, loop=10):
+        print()
+        print("- POSITIONS: build")
+        for x in range(loop):
+            Position.objects.create(
+                name=fake.bs(), card_color="#FFFFFF", charge_rate=fake.random_number(digits=3),
+                pay_rate=fake.random_number(digits=3)
+            )
+            print(f"---- Position: {x} faked.")
+        print("- END ")
+        print()
+
 
 class Client(models.Model):
 
@@ -69,6 +82,18 @@ class ReportType(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    @classmethod
+    def fake_report_type(cls, loop=10):
+        print()
+        print("- REPORT TYPE: build")
+        for x in range(loop):
+            ReportType.objects.create(
+                name=fake.bs(), icon="fa fa-icon"
+            )
+            print(f"---- Report Type: {x} faked.")
+        print("- END ")
+        print()
 
 
 class Site(models.Model):
