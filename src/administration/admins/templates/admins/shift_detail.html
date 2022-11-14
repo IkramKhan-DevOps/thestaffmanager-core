@@ -15,7 +15,25 @@
         <div class="col-sm-9">
             <div class="card">
                 <div class="card-body border-bottom text-center">
-                    <iframe src="https://embed.lottiefiles.com/animation/65730" class="border-0"></iframe>
+                    <iframe src="https://embed.lottiefiles.com/animation/101467" height="200" class="border-0"></iframe>
+                    <p class="mb-0">
+                        {% if object.employee %}
+                            <b>
+                                <a href="{% url 'admins:user-update' object.employee.user.pk %}">
+                                    {% if object.employee.user.get_full_name %}
+                                        {{ object.employee.user.get_full_name }}
+                                    {% else %}
+                                        {{ object.employee.user.username }}
+                                    {% endif %}
+                                </a>
+                            </b>
+                        {% else %}
+                            <b class="text-danger">NOT ASSIGNED</b>
+                        {% endif %}
+                    </p>
+                    <p class="mb-1 text-muted">
+                        ({{ object.position.name }})
+                    </p>
                     <p class="mb-0">
                         {{ object.start_date }} - {{ object.end_date }}
                         <b>
@@ -23,7 +41,8 @@
                                 <i class="fa fa-edit"></i>
                             </a>
                         </b>
-                        <br>
+                    </p>
+                    <p class="mb-0">
                         {{ object.start_time }} - {{ object.end_time }}
                     </p>
                 </div>
@@ -35,30 +54,19 @@
                             <p class="mb-0">
                                 <b>{{ object.get_job_type_display }}</b><br>({{ object.get_repeat_policy_display }})</p>
                         </div>
+
                         <div class="col">
-                            <h1><i class="fa fa-user-cog"></i></h1>
-                            <p class="mb-0 small">Employee and Position</p>
-                            <p class="mb-0">
-                                {% if object.employee %}
-                                    <b>{{ object.employee.name }}</b>
-                                {% else %}
-                                    <b class="text-danger">Not assigned</b>
-                                {% endif %}
-                            <br>({{ object.position.name }})
-                            </p>
-                        </div>
-                        <div class="col">
-                            <h1><i class="fa fa-user"></i></h1>
+                            <h1><i class="fa fa-building"></i></h1>
                             <p class="mb-0 small">Client and site</p>
                             <p class="mb-0"><b>{{ object.client.name }}</b><br>({{ object.site.name }})</p>
                         </div>
                         <div class="col">
-                            <h1><i class="fa fa-user"></i></h1>
+                            <h1><i class="fa fa-dollar-sign"></i></h1>
                             <p class="mb-0 small">Pay, Charge and Extras</p>
                             <p class="mb-0"><b>$100 - $200</b><br>($100)</p>
                         </div>
                         <div class="col">
-                            <h1><i class="fa fa-user"></i></h1>
+                            <h1><i class="fa fa-calendar-check"></i></h1>
                             <p class="mb-0 small">Qty and shift Days</p>
                             <p class="mb-0"><b>{{ object.quantity }}</b><br>
                                 ({{ object.shiftday_set.count }})
@@ -80,11 +88,11 @@
 
                         {% for shift_day in object.shiftday_set.all %}
                             <p class="mb-0">
-                            {% if shift_day.shift_date < current_date %}
-                                <del><i class="fa fa-clock-o"></i> {{ shift_day.shift_date }} </del>
-                            {% else %}
-                                <i class="fa fa-clock"></i> {{ shift_day.shift_date }}
-                            {% endif %}
+                                {% if shift_day.shift_date < current_date %}
+                                    <del><i class="fa fa-clock-o"></i> {{ shift_day.shift_date }} </del>
+                                {% else %}
+                                    <i class="fa fa-clock"></i> {{ shift_day.shift_date }}
+                                {% endif %}
                             </p>
                         {% endfor %}
 
@@ -163,12 +171,12 @@
 
             {% endif %}
 
-            <div class="card">
-                <div class="card-body border-bottom">
+            <div class="card border border-danger">
+                <div class="card-body bg-danger text-white">
                     <p class="mb-0 card-title"><b>Delete Shift</b></p>
                 </div>
                 <div class="card-body border-bottom">
-                    <p class="">Once you have deleted the shift there is no way to get back this data.</p>
+                    <p class="text-danger">Once you have deleted the shift there is no way to get back this data.</p>
                     <a class="btn btn-danger" href="{% url 'admins:shift-delete' object.pk %}">
                         <i class="fa fa-trash"></i> Delete
                     </a>

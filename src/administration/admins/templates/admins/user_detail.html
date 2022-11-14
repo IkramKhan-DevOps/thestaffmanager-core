@@ -17,7 +17,11 @@
                 <div class="card-body">
                     <div class="text-center">
                         {% if not object.profile_image %}
-                            <img src="{% static 'core/no-user.png' %}" height="100" class="rounded-circle">
+                            <div class="text-center">
+                                <iframe src="https://embed.lottiefiles.com/animation/57946" height="200"
+                                        class="border-0"></iframe>
+                            </div>
+                            {#                            <img src="{% static 'core/no-user.png' %}" height="100" class="rounded-circle">#}
                         {% else %}
                             <img src="{{ object.profile_image.url }}" height="100" class="rounded-circle">
                         {% endif %}
