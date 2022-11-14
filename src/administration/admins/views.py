@@ -15,7 +15,7 @@ from django.views.generic import (
 
 from .bll import shifts_create_update_logic, shifts_create_update
 from .filters import ShiftFilter
-from .forms import EmployeeCreateForm
+from .forms import EmployeeForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee,
 )
@@ -138,10 +138,10 @@ class UserListView(ListView):
 
 
 @method_decorator(login_required, name='dispatch')
-class UserCreateView(CreateView):
+class UserStaffCreateView(CreateView):
     model = User
     form_class = UserCreationForm
-    template_name = 'admins/user_form.html'
+    template_name = 'admins/user_create_form.html'
     success_url = reverse_lazy('admins:user-list')
 
     def form_valid(self, form):
@@ -150,15 +150,28 @@ class UserCreateView(CreateView):
 
 
 @method_decorator(login_required, name='dispatch')
+class UserEmployeeCreateView(CreateView):
+    model = User
+    form_class = UserCreationForm
+    template_name = 'admins/user_create_form.html'
+    success_url = reverse_lazy('admins:user-list')
+
+    def form_valid(self, form):
+        form.instance.is_staff = True
+        form.instance.is_employee = True
+        return super().form_valid(form)
+
+
+@method_decorator(login_required, name='dispatch')
 class UserUpdateView(UpdateView):
     model = User
-    fields = ['first_name', 'last_name', 'email', 'is_staff', 'is_active']
+    fields = ['profile_image', 'first_name', 'last_name', 'email', 'username', 'is_employee', 'is_active']
     template_name = 'admins/user_form.html'
     success_url = reverse_lazy('admins:user-list')
 
     def get_context_data(self, **kwargs):
         context = super(UserUpdateView, self).get_context_data(**kwargs)
-        context['update'] = True
+        context['employee_form'] = EmployeeForm()
         return context
 
 
@@ -167,6 +180,12 @@ class UserDeleteView(DeleteView):
     model = User
     template_name = 'admins/client_confirm_delete.html'
     success_url = reverse_lazy('admins:user-list')
+
+
+@method_decorator(login_required, name='dispatch')
+class UserDetailView(DetailView):
+    model = User
+    template_name = 'admins/user_detail.html'
 
 
 @method_decorator(login_required, name='dispatch')
@@ -188,28 +207,6 @@ class UserPasswordResetView(View):
             form.save(commit=True)
             messages.success(request, f"{user.get_full_name()}'s password changed successfully.")
         return render(request, 'admins/user_password_change.html', {'form': form})
-
-
-""" EMPLOYEES """
-
-
-@method_decorator(login_required, name='dispatch')
-class EmployeeCreateView(CreateView):
-    model = User
-    form_class = EmployeeCreateForm
-    template_name = 'admins/employee_form.html'
-    success_url = reverse_lazy('admins:Employee-list')
-
-    def form_valid(self, form):
-        form.instance.is_staff = True
-        return super().form_valid(form)
-
-
-@method_decorator(login_required, name='dispatch')
-class EmployeeDeleteView(DeleteView):
-    model = Employee
-    template_name = 'admins/client_confirm_delete.html'
-    success_url = reverse_lazy('admins:employee-list')
 
 
 """ CLIENTS and CONTACTS """

@@ -14,12 +14,17 @@ class User(AbstractUser):
     )
     phone_number = models.CharField(max_length=30, null=True, blank=True)
 
-    is_employee = models.BooleanField(default=False)
+    is_employee = models.BooleanField(default=False, help_text="Designates whether this user is employee")
 
     class Meta:
         ordering = ['-id']
         verbose_name = 'User'
         verbose_name_plural = 'Users'
+
+    def get_employee_profile(self):
+        if self.is_employee:
+            return Employee.objects.get_or_create(user=self)
+        return None
 
     def __str__(self):
         return self.username
@@ -30,7 +35,13 @@ class User(AbstractUser):
 
 
 class Employee(models.Model):
+    EMPLOYEE_TYPE_CHOICE = (
+        ('s', 'Service Partner'),
+        ('f', 'Full Time')
+    )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    employee_id = models.CharField(max_length=255, null=True, blank=True, help_text="Employee id must be unique")
+    employee_type = models.CharField(max_length=1, choices=EMPLOYEE_TYPE_CHOICE, default='s')
     is_internal_employee = models.BooleanField(
         default=True
     )

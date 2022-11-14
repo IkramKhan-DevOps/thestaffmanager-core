@@ -1,0 +1,94 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_title %}admins | {{ object }}{% endblock %}
+{% block base_subhead_heading %}{{ object }} Profile{% endblock %}
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:user-list' %}">
+        <i class="fa fa-list"></i> Users
+    </a>
+{% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="text-center">
+                        {% if not object.profile_image %}
+                            <img src="{% static 'core/no-user.png' %}" height="100" class="rounded-circle">
+                        {% else %}
+                            <img src="{{ object.profile_image.url }}" height="100" class="rounded-circle">
+                        {% endif %}
+                        <p class="mb-0">
+                            <b>
+                                {% if object.get_full_name %}
+                                    {{ object.get_full_name }}
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </b>
+                            <small class="text-muted">({{ object.username }})</small>
+                            <b><a href="{% url 'admins:user-update' object.pk %}"><i class="fa fa-edit"></i></a></b>
+                        </p>
+                        <p class="mb-0">
+                            {% if object.is_active %}
+                                <i class="fa fa-check-square text-success"></i> active
+                            {% else %}
+                                <i class="fa fa-times-circle text-danger"></i> inactive
+                            {% endif %}
+                        </p>
+                    </div>
+
+                    <div class="row mt-4">
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="mdi mdi-email"></i></p>
+                            <p class="mb-0 text-center h5">Email</p>
+                            <p class="mb-0 text-center">{{ object.email }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="mdi mdi-phone"></i></p>
+                            <p class="mb-0 text-center h5">Phone</p>
+                            <p class="mb-0 text-center">{{ object.phone_number }}</p>
+                        </div>
+                        <div class="col text-center">
+                            <p class="mb-0 text-center h3"><i class="fa fa-user-cog"></i></p>
+                            <p class="mb-0 text-center h5">Access Level</p>
+                            <p class="mb-0 text-center">
+                                {% if object.is_staff %}
+                                    {% if object.is_superuser %}
+                                        <b class="text-danger">Super User</b>
+                                    {% else %}
+                                        {% if user.is_employee %}
+                                            <b class="text-primary">Employee</b>
+                                        {% else %}
+                                            <b class="text-warning">Staff</b>
+                                        {% endif %}
+                                    {% endif %}
+                                {% endif %}
+                            </p>
+                        </div>
+
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-user-edit"></i></p>
+                            <p class="mb-0 text-center h5">Profile</p>
+                            <p class="mb-0 text-center">
+                                <a href="{% url 'admins:user-update' object.pk %}">Update</a>
+                            </p>
+                        </div>
+
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-user-lock"></i></p>
+                            <p class="mb-0 text-center h5">Password</p>
+                            <p class="mb-0 text-center text-danger">
+                                <a href="{% url 'admins:user-password-reset' object.pk %}">Change</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

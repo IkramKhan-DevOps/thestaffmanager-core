@@ -19,9 +19,9 @@ class ShiftForm(ModelForm):
         fields = '__all__'
 
 
-class EmployeeCreateForm(ModelForm):
+class EmployeeForm(ModelForm):
     class Meta:
         model = Employee
         fields = [
-            'user', 'is_internal_employee'
+            'employee_id', 'employee_type', 'is_internal_employee'
         ]

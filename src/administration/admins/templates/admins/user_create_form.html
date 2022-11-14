@@ -2,16 +2,17 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block base_title %}Admins | Student Password Reset {% endblock %}
-{% block base_subhead_heading %}Password Reset {% endblock %}
+{% block base_title %}admins | Create User {% endblock %}
+{% block base_subhead_heading %} Create User {% endblock %}
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:user-list' %}"><i class="fa fa-arrow-left"></i> Users</a>
 {% endblock %}
 
+
 {% block base_content %}
 
-    <div class="row">
-        <div class="col-12">
+    <div class="row justify-content-center">
+        <div class="col-6">
             <div class="card">
                 <div class="card-body">
 
@@ -26,6 +27,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
 {% endblock %}

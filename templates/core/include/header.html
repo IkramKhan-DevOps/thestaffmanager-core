@@ -8,9 +8,9 @@
         {# LOGO HEADER #}
         <div class="topbar-left">
             <a href="#" class="logo">
-{#                <span>#}
-{#                    <img src="{% static 'core/logo-dark-250.png' %}" alt="logo-large" class="logo-lg">#}
-{#                </span>#}
+                {#                <span>#}
+                {#                    <img src="{% static 'core/logo-dark-250.png' %}" alt="logo-large" class="logo-lg">#}
+                {#                </span>#}
                 <span>
                     <img src="{% static 'core/logo-staff-dark-ver-500.png' %}" alt="logo-small" class="logo-sm">
                 </span>
@@ -39,12 +39,12 @@
                             </p>
                         </a>
 
-{#                        <a href="#" class="dropdown-item notify-item">#}
-{#                            <div class="notify-icon bg-warning"><i class="mdi mdi-message"></i></div>#}
-{#                            <p class="notify-details">New Teacher Message received#}
-{#                                <small class="text-muted">Message from teacher X</small>#}
-{#                            </p>#}
-{#                        </a>#}
+                        {#                        <a href="#" class="dropdown-item notify-item">#}
+                        {#                            <div class="notify-icon bg-warning"><i class="mdi mdi-message"></i></div>#}
+                        {#                            <p class="notify-details">New Teacher Message received#}
+                        {#                                <small class="text-muted">Message from teacher X</small>#}
+                        {#                            </p>#}
+                        {#                        </a>#}
 
                     </div><!-- All-->
                     <a href="javascript:void(0);" class="dropdown-item text-center text-primary">
@@ -57,7 +57,11 @@
             <li class="dropdown">
                 <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#"
                    role="button" aria-haspopup="false" aria-expanded="false">
-                    <img src="{% static 'core/no-user.png' %}" alt="profile-user" class="rounded-circle">
+                    {% if request.user.profile_image %}
+                        <img src="{{ request.user.profile_image.url }}" alt="profile-user" class="rounded-circle">
+                    {% else %}
+                        <img src="{% static 'core/no-user.png' %}" alt="profile-user" class="rounded-circle">
+                    {% endif %}
                     <span class="ml-1 nav-user-name hidden-sm"><i class="mdi mdi-chevron-down"></i></span>
                 </a>
 

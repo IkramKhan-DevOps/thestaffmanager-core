@@ -5,8 +5,8 @@
 {% block base_subhead_heading %}Users{% endblock %}
 {% block base_subhead_paragraph %}List of available users{% endblock %}
 {% block base_subhead_button %}
-    <a class="btn btn-primary" href="{% url 'admins:user-add' %}">
-        <i class="fa fa-plus"></i> New User
+    <a class="btn btn-primary" href="{% url 'admins:user-employee-add' %}">
+        <i class="fa fa-plus"></i> New Employee
     </a>
 {% endblock %}
 
@@ -26,8 +26,8 @@
                                     <th>FirstName</th>
                                     <th>LastName</th>
                                     <th>Email</th>
-                                    <th>Role</th>
-                                    <th>Date Joined</th>
+                                    <th>Type</th>
+                                    <th>Joined</th>
                                     <th>Last Login</th>
                                     <th>Status</th>
                                     <th>-</th>
@@ -36,9 +36,9 @@
                                 <tbody>
 
                                 {% for object in object_list %}
-                                    <tr>
+                                    <tr class="{% if object.is_superuser %}border border-danger{% endif %}">
                                         <td>{{ object.username }}</td>
-                                        <td>{{ object.first_name }}</td>
+                                        <td>{{ object.employee }}</td>
                                         <td>{{ object.last_name }}</td>
                                         <td>{{ object.email }}</td>
                                         <td>
@@ -67,14 +67,9 @@
                                             {% endif %}
                                         </td>
                                         <td>
-                                            <a href="{% url 'admins:user-update' object.pk %}">
+                                            <a href="{% url 'admins:user-detail' object.pk %}">
                                                 <b class="text-primary">
                                                     <i class="fa fa-edit"></i>
-                                                </b>
-                                            </a>
-                                            <a href="{% url 'admins:user-delete' object.pk %}">
-                                                <b class="text-danger">
-                                                    <i class="fa fa-trash"></i>
                                                 </b>
                                             </a>
                                         </td>
