@@ -8,7 +8,7 @@ class UserProfileForm(ModelForm):
     class Meta:
         model = User
         fields = [
-            'first_name', 'last_name', 'email'
+            'profile_image', 'username', 'first_name', 'last_name', 'email', 'phone_number'
         ]
 
 
