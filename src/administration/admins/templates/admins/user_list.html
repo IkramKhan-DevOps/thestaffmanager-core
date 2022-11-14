@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block base_title %}admins | Users{% endblock %}
 {% block base_subhead_heading %}Users{% endblock %}
@@ -15,11 +16,25 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
+
+                <div class="card-body border-bottom">
+                    <form method="get">
+                        <div class="input-group">
+                            {{ filter_form }}
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="card-body">
                     {% if object_list %}
 
                         <div class="table-responsive">
-                            <table class="table border table-hover table-striped">
+                            <table class="table table-hover">
                                 <thead class="thead-light">
                                 <tr>
                                     <th>Username</th>
@@ -46,7 +61,8 @@
                                                 <b class="text-primary"><i class="fa fa-user-cog"></i> Admin</b>
                                             {% else %}
                                                 {% if object.is_staff %}
-                                                    <b class="text-success"><i class="fa fa-user-check"></i> Co-ordinator</b>
+                                                    <b class="text-success"><i class="fa fa-user-check"></i>
+                                                        Co-ordinator</b>
                                                 {% else %}
                                                     <b class="text-secondary"><i class="fa fa-times-circle"></i>
                                                         Undefined</b>
@@ -69,7 +85,7 @@
                                         <td>
                                             <a href="{% url 'admins:user-detail' object.pk %}">
                                                 <b class="text-primary">
-                                                    <i class="fa fa-edit"></i>
+                                                    <i class="fa fa-eye"></i>
                                                 </b>
                                             </a>
                                         </td>
@@ -88,8 +104,52 @@
                         </p>
                     {% endif %}
                 </div>
+
+                <div class="card-body border-top">
+                    <ul class="pagination">
+                        {% if object_list.has_previous %}
+                            <li>
+                            <span>
+                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
+                                    Previous
+                                </a>
+                            </span>
+                            </li>
+                        {% endif %}
+                        <li class="">
+                            <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
+                        </li>
+                        {% if object_list.has_next %}
+                            <li>
+                            <span>
+                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
+                                    Next
+                                </a>
+                            </span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+
             </div>
         </div>
     </div>
 
+
+{% endblock %}
+
+
+{% block base_external_scripts %}
+    <script>
+        $(document).ready(function () {
+
+            $("#id_is_active option:first").text("-- Is Active --");
+            $("#id_is_employee option:first").text("-- Is Employee --");
+
+            $('label').hide();
+            $('input').addClass('form-control');
+            $('select').addClass('form-control');
+
+        });
+    </script>
 {% endblock %}

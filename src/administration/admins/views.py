@@ -14,7 +14,7 @@ from django.views.generic import (
     CreateView)
 
 from .bll import shifts_create_update_logic, shifts_create_update
-from .filters import ShiftFilter
+from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter
 from .forms import EmployeeForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee,
@@ -132,9 +132,21 @@ class PositionDeleteView(DeleteView):
 
 @method_decorator(login_required, name='dispatch')
 class UserListView(ListView):
-    queryset = \
-        User.objects.all()
+    queryset = User.objects.all()
     template_name = 'admins/user_list.html'
+    paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        context = super(UserListView, self).get_context_data(**kwargs)
+        _filter = UserFilter(self.request.GET, queryset=User.objects.filter())
+        context['filter_form'] = _filter.form
+
+        paginator = Paginator(_filter.qs, 50)
+        page_number = self.request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        context['object_list'] = page_object
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
@@ -215,6 +227,19 @@ class UserPasswordResetView(View):
 @method_decorator(login_required, name='dispatch')
 class ClientListView(ListView):
     queryset = Client.objects.all()
+    paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        context = super(ClientListView, self).get_context_data(**kwargs)
+        _filter = ClientFilter(self.request.GET, queryset=self.queryset)
+        context['filter_form'] = _filter.form
+
+        paginator = Paginator(_filter.qs, 50)
+        page_number = self.request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        context['object_list'] = page_object
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
@@ -252,6 +277,19 @@ class ClientDeleteView(DeleteView):
 @method_decorator(login_required, name='dispatch')
 class SiteListView(ListView):
     queryset = Site.objects.all()
+    paginate_by = 50
+
+    def get_context_data(self, **kwargs):
+        context = super(SiteListView, self).get_context_data(**kwargs)
+        _filter = SiteFilter(self.request.GET, queryset=self.queryset)
+        context['filter_form'] = _filter.form
+
+        paginator = Paginator(_filter.qs, 50)
+        page_number = self.request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        context['object_list'] = page_object
+        return context
 
 
 @method_decorator(login_required, name='dispatch')

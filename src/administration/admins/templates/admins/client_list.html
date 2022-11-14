@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block base_title %}Admins | Clients{% endblock %}
 {% block base_subhead_heading %}Clients{% endblock %}
@@ -15,6 +16,20 @@
     <div class="row">
         <div class="col-12">
             <div class="card">
+
+                <div class="card-body border-bottom">
+                    <form method="get">
+                        <div class="input-group">
+                            {{ filter_form }}
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i> Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
                 <div class="card-body">
                     {% if object_list %}
 
@@ -25,21 +40,21 @@
                                     <th>Name</th>
                                     <th>Parent Client</th>
                                     <th>Xero Contact Name</th>
-                                    <th></th>
+                                    <th>-</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 {% for object in object_list %}
                                     <tr>
-                                    <td>{{ object.name }}</td>
-                                    <td>{{ object.parent_client }}</td>
-                                    <td>{{ object.xero_contact_name }}</td>
-                                    <th>
-                                        <a href="{% url 'admins:client-detail' object.pk %}">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                    </th>
+                                        <td>{{ object.name }}</td>
+                                        <td>{{ object.parent_client }}</td>
+                                        <td>{{ object.xero_contact_name }}</td>
+                                        <th>
+                                            <a href="{% url 'admins:client-detail' object.pk %}">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </th>
                                     </tr>
                                 {% endfor %}
 
@@ -57,8 +72,48 @@
                         </p>
                     {% endif %}
                 </div>
+
+                <div class="card-body border-top">
+                    <ul class="pagination">
+                        {% if object_list.has_previous %}
+                            <li>
+                            <span>
+                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
+                                    Previous
+                                </a>
+                            </span>
+                            </li>
+                        {% endif %}
+                        <li class="">
+                            <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
+                        </li>
+                        {% if object_list.has_next %}
+                            <li>
+                            <span>
+                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
+                                    Next
+                                </a>
+                            </span>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
+{% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+        $(document).ready(function () {
+
+            $("#id_is_active option:first").text("-- Is Active --");
+
+            $('label').hide();
+            $('input').addClass('form-control');
+            $('select').addClass('form-control');
+
+        });
+    </script>
 {% endblock %}
