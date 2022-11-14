@@ -13,16 +13,196 @@
 
     <div class="row">
         <div class="col-sm-12">
-            <div class="card">
-                <div class="card-body text-center">
-                    <p class="display-1"><i class="fa fa-hammer"></i></p>
-                    <p class="mb-0 card-title text-danger">
-                        <b>EXIMITAS <small>Says.</small></b>
-                    </p>
 
-                    <p class="lead">Sorry for inconvenience the page is under-development.</p>
+            {# SITE #}
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0 card-title"><b>SITE INFORMATION</b></p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-star"></i></p>
+                            <p class="mb-0 text-center"><b>Site ID</b></p>
+                            <p class="mb-0 text-center">{{ object.site_id }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-barcode"></i></p>
+                            <p class="mb-0 text-center"><b>Site Name</b></p>
+                            <p class="mb-0 text-center">{{ object.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-phone-square"></i></p>
+                            <p class="mb-0 text-center"><b>Check Calls</b></p>
+                            <p class="mb-0 text-center">
+                                {% if object.check_calls_enable %}
+                                    <i class="fa fa-check-circle text-success"></i>
+                                {% else %}
+                                    <i class="fa fa-times-circle text-danger"></i>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-phone"></i></p>
+                            <p class="mb-0 text-center"><b>First Confirmation Calls</b></p>
+                            <p class="mb-0 text-center">
+                                {% if object.enable_first_shift_confirmation %}
+                                    <i class="fa fa-check-circle text-success"></i>
+                                {% else %}
+                                    <i class="fa fa-times-circle text-danger"></i>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-phone"></i></p>
+                            <p class="mb-0 text-center"><b>Second Confirmation Calls</b></p>
+                            <p class="mb-0 text-center">
+                                {% if object.enable_second_shift_confirmation %}
+                                    <i class="fa fa-check-circle text-success"></i>
+                                {% else %}
+                                    <i class="fa fa-times-circle text-danger"></i>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class=" fa fa-camera"></i></p>
+                            <p class="mb-0 text-center"><b>Camera System</b></p>
+                            <p class="mb-0 text-center">
+                                {% if object.camera_system_url %}
+                                    <i class="fa fa-check-circle text-success"></i>
+                                {% else %}
+                                    <i class="fa fa-times-circle text-danger"></i>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            {# ADDRESS #}
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0 card-title"><b>SITE ADDRESS</b></p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-building"></i></p>
+                            <p class="mb-0 text-center"><b>Company Name</b></p>
+                            <p class="mb-0 text-center">{{ object.company_name }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-map-marked"></i></p>
+                            <p class="mb-0 text-center"><b>Address 1</b></p>
+                            <p class="mb-0 text-center">{{ object.address_line_1 }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-map-marked"></i></p>
+                            <p class="mb-0 text-center"><b>Address 2</b></p>
+                            <p class="mb-0 text-center">{{ object.address_line_2 }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-mountain"></i></p>
+                            <p class="mb-0 text-center"><b>Town/City</b></p>
+                            <p class="mb-0 text-center">{{ object.city }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-map"></i></p>
+                            <p class="mb-0 text-center"><b>Country</b></p>
+                            <p class="mb-0 text-center">{{ object.country }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {# CLOCK IN #}
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0 card-title"><b>SITE NOTES</b></p>
+                </div>
+                <div class="card-body">
+                    {{ object.notes }}
+                </div>
+            </div>
+
+            {# CLOCK IN #}
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0 card-title"><b>CLOCK IN TOLERANCE MINUTES</b></p>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <table class="table table-hover table-bordered ">
+                                <tr>
+                                    <th class="text-uppercase">Day check in Enabled</th>
+                                    <td>
+                                        {% if object.enable_day_check_ins %}
+                                            <i class="fa fa-check-circle text-success"></i>
+                                        {% else %}
+                                            <i class="fa fa-times-circle text-danger"></i>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase">Check in Day start</th>
+                                    <td>{{ object.check_in_day_start }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase">Check in day frequency min minutes</th>
+                                    <td>{{ object.check_in_day_frequency_min_minutes }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase">Check in day frequency max minutes</th>
+                                    <td>{{ object.check_in_day_frequency_max_minutes }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase">First shift confirmation hours before</th>
+                                    <td>{{ object.first_shift_confirmation_minutes_before }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-sm-6">
+                            <table class="table table-hover table-bordered ">
+                                <tr>
+                                    <th class="text-uppercase">Night check in Enabled</th>
+                                    <td>
+                                        {% if object.enable_night_check_ins %}
+                                            <i class="fa fa-check-circle text-success"></i>
+                                        {% else %}
+                                            <i class="fa fa-times-circle text-danger"></i>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase">Check in Night start</th>
+                                    <td>{{ object.check_in_night_start }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase">Check in night frequency min minutes</th>
+                                    <td>{{ object.check_in_night_frequency_min_minutes }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase">Check in night frequency max minutes</th>
+                                    <td>{{ object.check_in_night_frequency_max_minutes }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="text-uppercase">Second shift confirmation hours before</th>
+                                    <td>{{ object.second_shift_confirmation_minutes_before }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'admins:site-update' object.pk %}" class="btn btn-primary text-white"><i class="fa fa-edit"></i> Edit Site</a>
+                    <a href="{% url 'admins:site-delete' object.pk %}" class="btn btn-danger text-white"><i class="fa fa-trash"></i> Delete Site</a>
+                </div>
+            </div>
+
         </div>
     </div>
 

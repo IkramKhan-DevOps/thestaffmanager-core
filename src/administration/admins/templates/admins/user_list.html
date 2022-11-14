@@ -36,7 +36,7 @@
                                 <tbody>
 
                                 {% for object in object_list %}
-                                    <tr class="{% if object.is_superuser %}border border-danger{% endif %}">
+                                    <tr class="{% if object.is_superuser %}bg-danger text-white{% endif %}">
                                         <td>{{ object.username }}</td>
                                         <td>{{ object.employee }}</td>
                                         <td>{{ object.last_name }}</td>

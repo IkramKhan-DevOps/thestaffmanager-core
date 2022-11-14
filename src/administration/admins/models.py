@@ -8,6 +8,7 @@ from src.accounts.models import User, Employee
 from faker import Faker
 fake = Faker()
 
+
 class Position(models.Model):
 
     name = models.CharField(max_length=255)

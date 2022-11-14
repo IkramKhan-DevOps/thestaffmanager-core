@@ -55,7 +55,7 @@
                                                 <td>
                                                     <b>
                                                         <a href="{% url 'admins:site-detail' site.pk %}">
-                                                            <i class="fa fa-edit"></i>
+                                                            <i class="fa fa-eye"></i>
                                                         </a>
                                                     </b>
                                                 </td>
@@ -74,7 +74,17 @@
                     </div>
                 </div>
             </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <a href="{% url 'admins:client-update' object.pk %}" class="btn btn-primary text-white"><i
+                            class="fa fa-edit"></i> Edit Client</a>
+                    <a href="{% url 'admins:client-delete' object.pk %}" class="btn btn-danger text-white"><i
+                            class="fa fa-trash"></i> Delete client</a>
+                </div>
+            </div>
         </div>
+
     </div>
 
 {% endblock %}

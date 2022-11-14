@@ -6,6 +6,9 @@ from django.contrib.auth.models import AbstractUser
 
 from core import settings
 
+from faker import Faker
+fake = Faker()
+
 
 class User(AbstractUser):
     profile_image = ResizedImageField(
@@ -54,16 +57,31 @@ class Employee(models.Model):
     def __str__(self):
         return self.user.username
 
-#
-# @receiver(post_save, sender=settings.AUTH_USER_MODEL, dispatch_uid="create_statics")
-# def create_user_stats(sender, instance, created, **kwargs):
-#     """
-#     :TOPIC if user creates at any point the statistics model will be initialized
-#     :param sender:
-#     :param instance:
-#     :param created:
-#     :param kwargs:
-#     :return:
-#     """
-#     if created:
-#         pass
+    @classmethod
+    def fake_employees(cls, loop=10):
+        print()
+        print("- EMPLOYEES: build")
+        for x in range(loop):
+            User.objects.create(
+                username=fake.user_name(), first_name=fake.first_name(), last_name=fake.last_name(),
+                email=fake.ascii_email(), password=f'poiuyt0987654', phone_number=fake.phone_number(),
+                is_employee=True, is_active=True
+            )
+            print(f"---- Employee: {x} faked.")
+        print("- END ")
+        print()
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL, dispatch_uid="create_user_save")
+def create_user_save(sender, instance, created, **kwargs):
+    """
+    :TOPIC if user creates at any point the statistics model will be initialized
+    :param sender:
+    :param instance:
+    :param created:
+    :param kwargs:
+    :return:
+    """
+    if created:
+        if instance.is_employee:
+            Employee.objects.create(user=instance)
