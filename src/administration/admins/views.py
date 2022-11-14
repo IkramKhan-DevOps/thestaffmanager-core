@@ -132,7 +132,8 @@ class PositionDeleteView(DeleteView):
 
 @method_decorator(login_required, name='dispatch')
 class UserListView(ListView):
-    queryset = User.objects.all()
+    queryset = \
+        User.objects.all()
     template_name = 'admins/user_list.html'
 
 
