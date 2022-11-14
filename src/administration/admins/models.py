@@ -5,6 +5,8 @@ from django.dispatch import receiver
 
 from src.accounts.models import User, Employee
 
+from faker import Faker
+fake = Faker()
 
 class Position(models.Model):
 
@@ -40,6 +42,21 @@ class Client(models.Model):
     def __str__(self):
         return str(self.name)
 
+    def get_sites(self):
+        return Site.objects.filter(client=self)
+
+    @classmethod
+    def fake_client(cls, loop=10):
+        print()
+        print("- CLIENTS: build")
+        for x in range(loop):
+            Client.objects.create(
+                name=fake.bs(), xero_contact_name=fake.isbn10()
+            )
+            print(f"---- Client: {x} faked.")
+        print("- END ")
+        print()
+
 
 class ReportType(models.Model):
     name = models.CharField(max_length=255)
@@ -70,7 +87,7 @@ class Site(models.Model):
     address_line_1 = models.CharField(max_length=255)
     address_line_2 = models.CharField(max_length=255)
     city = models.CharField(max_length=255, verbose_name='City/Town')
-    Country = models.CharField(max_length=255)
+    country = models.CharField(max_length=255)
     geo_fencing_range = models.CharField(max_length=1000)
 
     enable_day_check_ins = models.BooleanField(default=True)
@@ -99,6 +116,42 @@ class Site(models.Model):
 
     def __str__(self):
         return str(self.name)
+
+    @classmethod
+    def fake_site(cls, loop=10):
+        print(fake.country())
+        print()
+        print("- SITES: build")
+        for x in range(loop):
+            Site.objects.create(
+                site_id=fake.random_number(digits=3, fix_len=False),
+                name=fake.isbn10(),
+                client=Client.objects.order_by('?').first(),
+                check_calls_enable=fake.pybool(),
+                camera_system_url=f"https://example.com/{fake.ean(length=13)}/",
+                notes=fake.paragraph(nb_sentences=3),
+                company_name=fake.bs(),
+                address_line_1=fake.address(),
+                address_line_2=fake.address(),
+                city=fake.city(),
+                country=fake.country(),
+                geo_fencing_range=fake.random_number(digits=5, fix_len=False),
+                enable_day_check_ins=fake.pybool(),
+                enable_night_check_ins=fake.pybool(),
+                check_in_day_start=fake.date_time(),
+                check_in_night_start=fake.date_time(),
+                first_shift_confirmation_minutes_before=fake.random_number(digits=2, fix_len=False),
+                second_shift_confirmation_minutes_before=fake.random_number(digits=2, fix_len=False),
+                check_in_day_frequency_min_minutes=fake.random_number(digits=2, fix_len=False),
+                check_in_day_frequency_max_minutes=fake.random_number(digits=2, fix_len=False),
+                check_in_night_frequency_min_minutes=fake.random_number(digits=2, fix_len=False),
+                check_in_night_frequency_max_minutes=fake.random_number(digits=2, fix_len=False),
+                enable_first_shift_confirmation=fake.pybool(),
+                enable_second_shift_confirmation=fake.pybool(),
+            )
+            print(f"---- Site: {x} faked.")
+        print("- END ")
+        print()
 
 
 class Shift(models.Model):

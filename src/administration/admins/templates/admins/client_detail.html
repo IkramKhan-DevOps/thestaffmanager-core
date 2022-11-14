@@ -1,9 +1,9 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_title %}admins | {{ object }}{% endblock %}
-{% block base_subhead_heading %} {{ object }}{% endblock %}
-{% block base_subhead_paragraph %}Details down description of {{ object }}.{% endblock %}
+{% block base_title %}admins | {{ object.name }}{% endblock %}
+{% block base_subhead_heading %} {{ object.name }}{% endblock %}
+{% block base_subhead_paragraph %}{{ object.name }} - {{ object.xero_contact_name }}{% endblock %}
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:client-list' %}"><i class="fa fa-arrow-left"></i> Clients</a>
 {% endblock %}
@@ -14,13 +14,64 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
-                <div class="card-body text-center">
-                    <p class="display-1"><i class="fa fa-hammer"></i></p>
-                    <p class="mb-0 card-title text-danger">
-                        <b>EXIMITAS <small>Says.</small></b>
-                    </p>
-
-                    <p class="lead">Sorry for inconvenience the page is under-development.</p>
+                <div class="card-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-toggle="tab" href="#sites" role="tab"
+                               aria-selected="true">Sites
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-toggle="tab" href="#assets" role="tab" aria-selected="false">
+                                Assets
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane p-3 active" id="sites" role="tabpanel">
+                            {% if not object.get_sites %}
+                                <p class="mb-0 text-danger">
+                                    Not sites available.
+                                </p>
+                            {% else %}
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Name</th>
+                                            <th>Location</th>
+                                            <th>Display ID</th>
+                                            <th>-</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for site in object.get_sites %}
+                                            <tr>
+                                                <td>{{ site.site_id }}</td>
+                                                <td>{{ site.name }}</td>
+                                                <td>{{ site.address_line_1 }}</td>
+                                                <td>{{ site.pk }}</td>
+                                                <td>
+                                                    <b>
+                                                        <a href="{% url 'admins:site-detail' site.pk %}">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                    </b>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="tab-pane p-3" id="assets" role="tabpanel">
+                            <p class="mb-0 text-danger">
+                                Not implemented yet.
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
