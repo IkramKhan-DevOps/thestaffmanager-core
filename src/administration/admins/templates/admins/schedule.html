@@ -174,35 +174,12 @@
                         <form action="" method="GET" class="row m-0 mb-2">
                             <div class="col-12 m-0 p-0">
                                 <div class="row m-0 p-0">
-                                    <div class="col-12 col-md-6 mb-2 mb-md-0 p-0">
+                                    <div class="col-sm-12 mb-md-0 p-0">
                                         <div class="form-group m-0 px-2 py-1 border rounded">
                                             <i class="fa fa-search mr-2"></i>
                                             <input class="border-0 bg-transparent w-75" type="text" name="search"
                                                    placeholder="Search news feed" value=""
                                             >
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-md-6 p-0">
-                                        <div class="row m-0 p-0">
-                                            <div class="col-6 m-0 p-0 pr-1 pl-md-1 pr-md-0 bespoke-datepicker">
-                                                <div class="react-datepicker-wrapper">
-                                                    <div class="react-datepicker__input-container">
-                                                        <input type="date" placeholder="Created At: [yyyy-mm-dd]"
-                                                               class="w-100 form-group m-0 px-2 py-1 border rounded"
-                                                               value=""
-                                                        >
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 m-0 p-0 pl-1 bespoke-datepicker">
-                                                <div class="react-datepicker-wrapper">
-                                                    <div class="react-datepicker__input-container"><input type="date"
-                                                                                                          placeholder="Close At: [yyyy-mm-dd]"
-                                                                                                          class="w-100 form-group m-0 px-2 py-1 border rounded"
-                                                                                                          value="">
-                                                    </div>
-                                                </div>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -293,8 +270,6 @@
                 {% endfor %}
                 var invalid = [];
 
-                console.log(staff)
-
                 // CALENDER ENV
                 calendar = $('#demo-employee-shifts-calendar').mobiscroll().eventcalendar({
                     view: {
@@ -310,17 +285,6 @@
                     clickToCreate: true,
                     resources: staff,
                     {#invalid: invalid,#}
-                    extendDefaultEvent: function (ev) {
-                        var d = ev.start;
-                        var start = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-                        var end = new Date(d.getFullYear(), d.getMonth(), d.getDate());
-
-                        return {
-                            title: formatDate('HH:mm', start) + ' - ' + formatDate('HH:mm', end),
-                            start: start,
-                            resource: ev.resource
-                        };
-                    },
                     onEventCreate: function (args, inst) {
                         // store temporary event
                         tempShift = args.event;
@@ -365,22 +329,24 @@
                         $.getJSON('{% url 'admins:admins-api:shift-list' %}', function (data) {
                             var events = [];
 
+                            console.log(data)
+
                             for (var i = 0; i < data.length; i++) {
                                 var event = data[i];
+
+                                {#let start = (event.shift.start_time).split(":")#}
+                                {#let end = (event.shift.start_time).split(":")#}
+
                                 events.push({
                                     id: event.shift.id,
+                                    title: event.shift.site.name,
                                     start: event.shift_date + "T" + event.shift.start_time,
                                     end: event.shift_date + "T" + event.shift.end_time,
-                                    title: event.shift.start_time + " - " + event.shift.end_time,
                                     resource: event.shift.employee == null ? 0 : event.shift.employee.id
                                 });
                             }
 
-                            console.log(events)
-
                             inst.setEvents(events);
-
-
                             mobiscroll.toast({
                                 message: 'shifts are updated'
                             });

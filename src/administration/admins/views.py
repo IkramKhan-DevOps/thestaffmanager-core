@@ -34,12 +34,6 @@ class ScheduleView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(ScheduleView, self).get_context_data(**kwargs)
 
-        # from faker import Faker
-        # fake = Faker()
-        #
-        # for _ in range(50):
-        #     Employee.objects.create(name=fake.name())
-
         def get_query_over_request(_request):
             # DEFAULT: query year and month
             _current_month = datetime.date.today().month
@@ -54,6 +48,10 @@ class ScheduleView(TemplateView):
             # CHECK1: if request contains date in get
             requested_month = _request.GET.get('month')
             requested_year = _request.GET.get('year')
+            search = self.request.GET.get('search')
+            _employees = Employee.objects.all()
+            if search:
+                _employees = _employees.filter(user__username__icontains=search)
 
             if (requested_month and 0 < int(requested_month) < 13) and \
                     (requested_year and int(requested_year) > 0):
@@ -67,14 +65,14 @@ class ScheduleView(TemplateView):
                 _current_year = requested_year
                 _current_month = requested_month if int(requested_month) > 9 else "0" + requested_month
 
-            return shifts_queryset, _current_month, _current_year
+            return shifts_queryset, _current_month, _current_year, _employees
 
         # CALL: get month, year and query over it
-        shifts, current_month, current_year = get_query_over_request(self.request)
+        shifts, current_month, current_year, employees = get_query_over_request(self.request)
 
         # CONTEXT: data
         context['shifts'] = shifts
-        context['employees'] = Employee.objects.all()
+        context['employees'] = employees
         context['current_day'] = datetime.date.today().day
         context['current_month'] = current_month
         context['current_year'] = current_year
@@ -362,7 +360,7 @@ class ShiftCreateView(CreateView):
 class ShiftUpdateView(UpdateView):
     model = Shift
     fields = '__all__'
-    
+
     def get_context_data(self, **kwargs):
         context = super(ShiftUpdateView, self).get_context_data(**kwargs)
         week_list = self.object.get_week_shifts_status()
