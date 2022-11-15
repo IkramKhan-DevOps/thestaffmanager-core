@@ -433,7 +433,7 @@ class ShiftsView(TemplateView):
 
 @method_decorator(login_required, name='dispatch')
 class TimeClockView(TemplateView):
-    template_name = 'admins/construction.html'
+    template_name = 'admins/time_clock.html'
 
 
 @method_decorator(login_required, name='dispatch')

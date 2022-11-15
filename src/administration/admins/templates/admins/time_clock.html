@@ -1,0 +1,75 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_title %}Time Clock{% endblock %}
+{% block base_subhead_heading %} Time Clock {% endblock %}
+
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <div id="news-feed-index-table" data-livecount="0">
+                        <form action="" method="GET" class="row m-0 mb-2">
+                            <div class="col-12 m-0 p-0">
+                                <div class="row m-0 p-0">
+                                    <div class="col-sm-12 mb-md-0 p-0">
+                                        <div class="form-group m-0 px-2 py-1 border rounded">
+                                            <i class="fa fa-search mr-2"></i>
+                                            <input class="border-0 bg-transparent w-75" type="text" name="search"
+                                                   placeholder="Search news feed" value=""
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        <p class="text-muted mb-2"><small>Last updated: 19:39:20 17/09/2022&nbsp;&nbsp;<a href="#">(pause)</a>&nbsp;&nbsp;</small>
+                        </p>
+                        <hr>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th>Employee</th>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Shift Time</th>
+                                    <th>Clock Time</th>
+                                    <th>Billed Time</th>
+                                    <th>Billed Hours</th>
+                                    <th>Status</th>
+                                    <th>-</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for object in '123456789'|make_list %}
+                                    <tr>
+                                        <td>Name</td>
+                                        <td>12/12/12</td>
+                                        <td>12/12/12</td>
+                                        <td>12:12</td>
+                                        <td>12:12</td>
+                                        <td>12</td>
+                                        <td><span class="badge badge-primary">Overtime</span></td>
+                                        <td>
+                                            <a href="#" class="btn btn-danger">
+                                                <i class="fa fa-trash"></i> Accept
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
