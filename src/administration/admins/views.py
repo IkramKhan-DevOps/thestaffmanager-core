@@ -80,7 +80,6 @@ class ScheduleView(TemplateView):
         context['current_year'] = current_year
         context['current_date'] = datetime.date.today()
 
-
         return context
 
 

@@ -1,3 +1,4 @@
+from src.accounts.models import User
 from src.administration.admins.models import ShiftDay, Shift, Employee, Client, Site
 from rest_framework import serializers
 
@@ -18,11 +19,21 @@ class ClientSerializer(serializers.ModelSerializer):
         ]
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = [
+            'id', 'username'
+        ]
+
+
 class EmployeeSerializer(serializers.ModelSerializer):
+    user = UserSerializer(many=False, read_only=True)
+
     class Meta:
         model = Employee
         fields = [
-            'id', 'name'
+            'id', 'user'
         ]
 
 

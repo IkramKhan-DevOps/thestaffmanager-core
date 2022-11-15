@@ -284,7 +284,7 @@
                 {% for object in employees %}
                     staff.push({
                         id: '{{ object.id }}',
-                        name: '{{ object.name }}',
+                        name: '{{ object }}',
                         color: 'green',
                         title: 'Employee',
                         img: 'https://img.icons8.com/color/48/000000/blocked-account-male.png'
@@ -292,6 +292,8 @@
                     });
                 {% endfor %}
                 var invalid = [];
+
+                console.log(staff)
 
                 // CALENDER ENV
                 calendar = $('#demo-employee-shifts-calendar').mobiscroll().eventcalendar({
@@ -373,6 +375,8 @@
                                     resource: event.shift.employee == null ? 0 : event.shift.employee.id
                                 });
                             }
+
+                            console.log(events)
 
                             inst.setEvents(events);
 
