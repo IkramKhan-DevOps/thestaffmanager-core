@@ -49,6 +49,5 @@ class ShiftDayFilter(django_filters.FilterSet):
 
     class Meta:
         model = ShiftDay
-        fields = {
-        }
+        fields = {}
 

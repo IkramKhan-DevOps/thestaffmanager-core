@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load custom_tags %}
 
 {% block base_title %}Time Clock{% endblock %}
 {% block base_subhead_heading %} Time Clock {% endblock %}
@@ -21,7 +22,7 @@
                                         <i class="fa fa-search"></i> Search
                                     </button>
                                     <a href="{% url 'admins:time-clock' %}" class="btn btn-danger">
-                                        <i class="fa fa-brush"></i>
+                                        <i class="fa fa-route"></i>
                                     </a>
                                 </div>
                             </div>
@@ -99,6 +100,31 @@
                                 </tbody>
                             </table>
                         </div>
+
+                    <hr>
+                    <ul class="pagination">
+                        {% if object_list.has_previous %}
+                            <li>
+                            <span>
+                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
+                                    Previous
+                                </a>
+                            </span>
+                            </li>
+                        {% endif %}
+                        <li class="">
+                            <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
+                        </li>
+                        {% if object_list.has_next %}
+                            <li>
+                            <span>
+                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
+                                    Next
+                                </a>
+                            </span>
+                            </li>
+                        {% endif %}
+                    </ul>
 
                     </div>
                 </div>
