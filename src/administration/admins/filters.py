@@ -2,7 +2,7 @@ import django_filters
 from django.forms import TextInput
 
 from src.accounts.models import User
-from src.administration.admins.models import Shift, Client, Site
+from src.administration.admins.models import Shift, Client, Site, ShiftDay
 
 
 class ShiftFilter(django_filters.FilterSet):
@@ -41,3 +41,14 @@ class SiteFilter(django_filters.FilterSet):
     class Meta:
         model = Site
         fields = {'is_active'}
+
+
+class ShiftDayFilter(django_filters.FilterSet):
+    shift_date = django_filters.DateRangeFilter()
+    shift__employee__user__username = django_filters.CharFilter(lookup_expr='icontains')
+
+    class Meta:
+        model = ShiftDay
+        fields = {
+        }
+

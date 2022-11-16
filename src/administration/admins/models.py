@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 from colorfield.fields import ColorField
 from django.db import models
 from django.db.models.signals import post_save
@@ -31,7 +33,7 @@ class Position(models.Model):
         print("- POSITIONS: build")
         for x in range(loop):
             Position.objects.create(
-                name=fake.bs(), card_color="#FFFFFF", charge_rate=fake.random_number(digits=3),
+                name=fake.job(), card_color="#FFFFFF", charge_rate=fake.random_number(digits=3),
                 pay_rate=fake.random_number(digits=3)
             )
             print(f"---- Position: {x} faked.")
@@ -230,11 +232,50 @@ class Shift(models.Model):
 
 
 class ShiftDay(models.Model):
+    STATUS_CHOICE = (
+        ('awa', 'Awaiting'),
+        ('run', 'Running'),
+        ('com', 'Completed'),
+        ('mis', 'Missed'),
+    )
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE)
+
+    clock_in = models.DateTimeField(null=True, blank=True)
+    clock_out = models.DateTimeField(null=True, blank=True)
+    extra_time_in_minutes = models.PositiveIntegerField(default=0)
+
     shift_date = models.DateField()
+    status = models.CharField(max_length=3, default="awa", choices=STATUS_CHOICE)
 
     class Meta:
         verbose_name_plural = "Shift Days"
 
     def __str__(self):
         return str(self.pk)
+
+    def get_billed_hours(self):
+        return int((self.clock_out - self.clock_in).total_seconds()) / 3600 if self.clock_in and self.clock_out else None
+
+    def get_end_date(self):
+        start = datetime.combine(self.shift_date, self.shift.start_time)
+        end = datetime.combine(self.shift_date, self.shift.end_time)
+        total_hours = int((end-start).total_seconds()/3600)
+        if total_hours < 0:
+            return self.shift_date + timedelta(days=1)
+        else:
+            return self.shift_date
+
+    def get_shift_hours(self):
+        start = datetime.combine(self.shift_date, self.shift.start_time)
+        end = datetime.combine(self.get_end_date(), self.shift.end_time)
+        return round((end-start).total_seconds()/3600)
+
+    def get_shift_action(self):
+        if self.shift_date <= datetime.today().date():
+            pass
+        else:
+            self.status = "miss"
+            self.save()
+
+        return self.status
+

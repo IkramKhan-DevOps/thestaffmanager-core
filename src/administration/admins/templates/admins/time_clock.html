@@ -12,20 +12,21 @@
             <div class="card">
                 <div class="card-body">
                     <div id="news-feed-index-table" data-livecount="0">
-                        <form action="" method="GET" class="row m-0 mb-2">
-                            <div class="col-12 m-0 p-0">
-                                <div class="row m-0 p-0">
-                                    <div class="col-sm-12 mb-md-0 p-0">
-                                        <div class="form-group m-0 px-2 py-1 border rounded">
-                                            <i class="fa fa-search mr-2"></i>
-                                            <input class="border-0 bg-transparent w-75" type="text" name="search"
-                                                   placeholder="Search news feed" value=""
-                                            >
-                                        </div>
-                                    </div>
+
+                        <form method="get">
+                            <div class="input-group">
+                                {{ filter_form }}
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-search"></i> Search
+                                    </button>
+                                    <a href="{% url 'admins:time-clock' %}" class="btn btn-danger">
+                                        <i class="fa fa-brush"></i>
+                                    </a>
                                 </div>
                             </div>
                         </form>
+
                         <p class="text-muted mb-2"><small>Last updated: 19:39:20 17/09/2022&nbsp;&nbsp;<a href="#">(pause)</a>&nbsp;&nbsp;</small>
                         </p>
                         <hr>
@@ -38,27 +39,60 @@
                                     <th>Start</th>
                                     <th>End</th>
                                     <th>Shift Time</th>
-                                    <th>Clock Time</th>
                                     <th>Billed Time</th>
+                                    <th>Shift Hours</th>
                                     <th>Billed Hours</th>
                                     <th>Status</th>
                                     <th>-</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for object in '123456789'|make_list %}
+                                {% for object in object_list %}
                                     <tr>
-                                        <td>Name</td>
-                                        <td>12/12/12</td>
-                                        <td>12/12/12</td>
-                                        <td>12:12</td>
-                                        <td>12:12</td>
-                                        <td>12</td>
-                                        <td><span class="badge badge-primary">Overtime</span></td>
                                         <td>
-                                            <a href="#" class="btn btn-danger">
-                                                <i class="fa fa-trash"></i> Accept
-                                            </a>
+                                            <b>
+                                                <a href="{% url 'admins:user-detail' object.shift.employee.user.pk %}">
+                                                    {{ object.shift.employee }}
+                                                </a>
+                                            </b>
+                                        </td>
+                                        <td>{{ object.shift_date }}</td>
+                                        <td>{{ object.get_end_date }}</td>
+                                        <td>{{ object.shift.start_time }}</td>
+                                        <td>{{ object.shift.end_time }}</td>
+                                        <td>
+                                            {{ object.get_shift_hours }}
+                                        </td>
+                                        <td>
+                                            {% if object.get_billed_hours %}
+                                                {{ object.get_billed_hours }}
+                                            {% else %}
+                                                -
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                        <span class="badge badge-light">
+                                            {{ object.get_status_display }}
+                                        </span>
+                                        </td>
+                                        <td>
+                                            {% if get_shift_action == "awa" %}
+                                                <a href="#" class="btn btn-primary">
+                                                    <i class="fa fa-clock"></i> Clock In
+                                                </a>
+                                            {% elif get_shift_action == "run" %}
+                                                <a href="#" class="btn btn-primary">
+                                                    <i class="fa fa-clock"></i> Clock Out
+                                                </a>
+                                            {% elif get_shift_action == "com" %}
+                                                <a href="#" class="btn btn-success">
+                                                    <i class="fa fa-check-circle"></i> Completed
+                                                </a>
+                                            {% else %}
+                                                <a href="#" class="btn btn-danger">
+                                                    <i class="mdi mdi-call-missed"></i> Missed
+                                                </a>
+                                            {% endif %}
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -72,4 +106,16 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+        $(document).ready(function () {
+
+            $('label').hide();
+            $('input').addClass('form-control');
+            $('select').addClass('form-control');
+
+        });
+    </script>
 {% endblock %}
