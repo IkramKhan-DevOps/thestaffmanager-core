@@ -242,9 +242,11 @@ class ShiftDay(models.Model):
 
     clock_in = models.DateTimeField(null=True, blank=True)
     clock_out = models.DateTimeField(null=True, blank=True)
+    shift_hours = models.PositiveIntegerField(default=0)
     extra_time_in_minutes = models.PositiveIntegerField(default=0)
 
     shift_date = models.DateField()
+    shift_end_date = models.DateField()
     status = models.CharField(max_length=3, default="awa", choices=STATUS_CHOICE)
 
     class Meta:
@@ -253,22 +255,24 @@ class ShiftDay(models.Model):
     def __str__(self):
         return str(self.pk)
 
-    def get_billed_hours(self):
-        return int((self.clock_out - self.clock_in).total_seconds()) / 3600 if self.clock_in and self.clock_out else None
-
-    def get_end_date(self):
+    def save(self, *args, **kwargs):
         start = datetime.combine(self.shift_date, self.shift.start_time)
         end = datetime.combine(self.shift_date, self.shift.end_time)
-        total_hours = int((end-start).total_seconds()/3600)
-        if total_hours < 0:
-            return self.shift_date + timedelta(days=1)
-        else:
-            return self.shift_date
+        total_hours = round((end - start).total_seconds() / 3600)
 
-    def get_shift_hours(self):
+        if total_hours < 0:
+            self.shift_end_date = self.shift_date + timedelta(days=1)
+        else:
+            self.shift_end_date = self.shift_date
+
         start = datetime.combine(self.shift_date, self.shift.start_time)
-        end = datetime.combine(self.get_end_date(), self.shift.end_time)
-        return round((end-start).total_seconds()/3600)
+        end = datetime.combine(self.shift_end_date, self.shift.end_time)
+        self.shift_hours = round((end - start).total_seconds() / 3600)
+
+        super(ShiftDay, self).save(*args, **kwargs)
+
+    def get_billed_hours(self):
+        return int((self.clock_out - self.clock_in).total_seconds()) / 3600 if self.clock_in and self.clock_out else None
 
     def get_shift_action(self):
         if self.shift_date <= datetime.today().date():
