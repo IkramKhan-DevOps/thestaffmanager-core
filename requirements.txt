@@ -6,6 +6,8 @@ djangorestframework
 markdown
 django-filter
 django-colorfield
-
+Faker
+django-resized
+django-filter
 
 # python -m pip install --upgrade Pillow >>> install pillow with this
