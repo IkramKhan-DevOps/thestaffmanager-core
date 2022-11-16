@@ -137,5 +137,4 @@ assets/
 /.idea
 .idea
 
-db.sqlite3
 main.py
