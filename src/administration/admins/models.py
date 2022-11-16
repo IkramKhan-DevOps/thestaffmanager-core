@@ -242,8 +242,11 @@ class ShiftDay(models.Model):
 
     clock_in = models.DateTimeField(null=True, blank=True)
     clock_out = models.DateTimeField(null=True, blank=True)
+
     shift_hours = models.PositiveIntegerField(default=0)
-    extra_time_in_minutes = models.PositiveIntegerField(default=0)
+    worked_hours = models.PositiveIntegerField(default=0)
+
+    extra_hours = models.IntegerField(default=0)
 
     shift_date = models.DateField()
     shift_end_date = models.DateField()
@@ -256,30 +259,36 @@ class ShiftDay(models.Model):
         return str(self.pk)
 
     def save(self, *args, **kwargs):
+        """
+        :start       --- get start datetime from (shift_date + shift_start_time)
+        :end         --- get start datetime from (shift_date + shift_end_time)
+        :total hours --- end - start
+        """
+
         start = datetime.combine(self.shift_date, self.shift.start_time)
         end = datetime.combine(self.shift_date, self.shift.end_time)
-        total_hours = round((end - start).total_seconds() / 3600)
 
-        if total_hours < 0:
+        if start > end:
             self.shift_end_date = self.shift_date + timedelta(days=1)
+            end = datetime.combine(self.shift_end_date, self.shift.end_time)
+            self.shift_hours = round((end - start).total_seconds() / 3600)
         else:
             self.shift_end_date = self.shift_date
+            self.shift_hours = round((end - start).total_seconds() / 3600)
 
-        start = datetime.combine(self.shift_date, self.shift.start_time)
-        end = datetime.combine(self.shift_end_date, self.shift.end_time)
-        self.shift_hours = round((end - start).total_seconds() / 3600)
+        if self.clock_out and self.clock_in:
+            self.worked_hours = round((self.clock_out - self.clock_in).total_seconds() / 3600)
+            self.extra_hours = self.worked_hours - self.shift_hours
 
         super(ShiftDay, self).save(*args, **kwargs)
-
-    def get_billed_hours(self):
-        return int((self.clock_out - self.clock_in).total_seconds()) / 3600 if self.clock_in and self.clock_out else None
 
     def get_shift_action(self):
         if self.shift_date <= datetime.today().date():
             pass
         else:
-            self.status = "miss"
-            self.save()
+            if not self.status == self.STATUS_CHOICE[3][0]:
+                self.status = self.STATUS_CHOICE[3][0]
+                self.save()
 
         return self.status
 

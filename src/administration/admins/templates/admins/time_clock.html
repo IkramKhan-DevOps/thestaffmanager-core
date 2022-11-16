@@ -21,35 +21,43 @@
                                     <button class="btn btn-primary" type="submit">
                                         <i class="fa fa-search"></i> Search
                                     </button>
-                                    <a href="{% url 'admins:time-clock' %}" class="btn btn-danger">
-                                        <i class="fa fa-route"></i>
+                                    <a href="{% url 'admins:time-clock' %}?shift_date=today&shift__employee__user__username="
+                                       class="btn btn-danger">
+                                        <i class="mdi mdi-refresh"></i>
                                     </a>
                                 </div>
                             </div>
                         </form>
 
-                        <p class="text-muted mb-2"><small>Last updated: 19:39:20 17/09/2022&nbsp;&nbsp;<a href="#">(pause)</a>&nbsp;&nbsp;</small>
                         </p>
                         <hr>
 
-                        <div class="table-responsive">
+                        <div class="table-responsive" id="table">
                             <table class="table table-hover">
                                 <thead class="thead-light">
                                 <tr>
+                                    <th>Shift</th>
                                     <th>Employee</th>
                                     <th>Start</th>
                                     <th>End</th>
                                     <th>Shift Time</th>
                                     <th>Billed Time</th>
                                     <th>Shift Hours</th>
-                                    <th>Billed Hours</th>
+                                    <th>Active Hours</th>
+                                    <th>Extra Hours</th>
                                     <th>Status</th>
-                                    <th>-</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for object in object_list %}
                                     <tr>
+                                        <td>
+                                            <b>
+                                                <a href="{% url 'admins:shift-detail' object.shift.pk %}">
+                                                    {{ object.shift.pk }}
+                                                </a>
+                                            </b>
+                                        </td>
                                         <td>
                                             <b>
                                                 <a href="{% url 'admins:user-detail' object.shift.employee.user.pk %}">
@@ -65,34 +73,31 @@
                                             {{ object.shift_hours }}
                                         </td>
                                         <td>
-                                            {% if object.get_billed_hours %}
-                                                {{ object.get_billed_hours }}
-                                            {% else %}
-                                                -
-                                            {% endif %}
+                                            {{ object.worked_hours }}
                                         </td>
                                         <td>
-                                        <span class="badge badge-light">
-                                            {{ object.get_status_display }}
-                                        </span>
+                                            {{ object.extra_hours }}
                                         </td>
-                                        <td>
-                                            {% if get_shift_action == "awa" %}
-                                                <a href="#" class="btn btn-primary">
+                                        <td id="btn-div-{{ object.pk }}">
+                                            {% if object.get_shift_action == "awa" %}
+                                                <button type="button" id="status_change_btn" data-action="run"
+                                                        data-id="{{ object.pk }}" class="btn btn-sm btn-primary">
                                                     <i class="fa fa-clock"></i> Clock In
-                                                </a>
-                                            {% elif get_shift_action == "run" %}
-                                                <a href="#" class="btn btn-primary">
+                                                </button>
+                                            {% elif object.get_shift_action == "run" %}
+                                                <button type="button" class="btn btn-sm btn-warning"
+                                                        id="status_change_btn" data-action="com"
+                                                        data-id="{{ object.pk }}">
                                                     <i class="fa fa-clock"></i> Clock Out
-                                                </a>
-                                            {% elif get_shift_action == "com" %}
-                                                <a href="#" class="btn btn-success">
-                                                    <i class="fa fa-check-circle"></i> Completed
-                                                </a>
+                                                </button>
+                                            {% elif object.get_shift_action == "com" %}
+                                                <span class="badge badge-success">
+                                                    <i class="mdi mdi-call-missed"></i> completed
+                                                </span>
                                             {% else %}
-                                                <a href="#" class="btn btn-danger">
+                                                <span class="badge badge-danger">
                                                     <i class="mdi mdi-call-missed"></i> Missed
-                                                </a>
+                                                </span>
                                             {% endif %}
                                         </td>
                                     </tr>
@@ -101,30 +106,30 @@
                             </table>
                         </div>
 
-                    <hr>
-                    <ul class="pagination">
-                        {% if object_list.has_previous %}
-                            <li>
+                        <hr>
+                        <ul class="pagination">
+                            {% if object_list.has_previous %}
+                                <li>
                             <span>
                                 <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
                                     Previous
                                 </a>
                             </span>
+                                </li>
+                            {% endif %}
+                            <li class="">
+                                <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
                             </li>
-                        {% endif %}
-                        <li class="">
-                            <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
-                        </li>
-                        {% if object_list.has_next %}
-                            <li>
+                            {% if object_list.has_next %}
+                                <li>
                             <span>
                                 <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
                                     Next
                                 </a>
                             </span>
-                            </li>
-                        {% endif %}
-                    </ul>
+                                </li>
+                            {% endif %}
+                        </ul>
 
                     </div>
                 </div>
@@ -141,6 +146,19 @@
             $('label').hide();
             $('input').addClass('form-control');
             $('select').addClass('form-control');
+
+            $('#table #status_change_btn').on("click", function (event) {
+                const id = $(this).attr('data-id')
+                const status = $(this).attr('data-action')
+
+                $.get("/a/api/shift-day/" + id + "/status/" + status + "/change/", function (data, status) {
+                    if (status === 'success') {
+                        location.reload();
+                    }
+                });
+
+            });
+
 
         });
     </script>
