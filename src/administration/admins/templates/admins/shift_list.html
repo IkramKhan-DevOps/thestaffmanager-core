@@ -68,9 +68,11 @@
                                         <td>{{ object.client.name }}</td>
                                         <td>
                                             {% if object.employee %}
-                                                <b class="text-success">
-                                                    {{ object.employee.name }}
+                                                <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
+                                                <b>
+                                                    {{ object.employee }}
                                                 </b>
+                                                </a>
                                             {% else %}
                                                 <b class="text-danger">
                                                     un assigned

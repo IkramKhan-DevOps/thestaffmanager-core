@@ -76,34 +76,71 @@
                 </div>
             </div>
 
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0"><b>Shift Days</b></p>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive" id="table">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th>Start</th>
+                                    <th>End</th>
+                                    <th>Shift Time</th>
+                                    <th>Billed Time</th>
+                                    <th>Shift Hours</th>
+                                    <th>Active Hours</th>
+                                    <th>Extra Hours</th>
+                                    <th>Status</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for object in object.get_shifts %}
+                                    <tr>
+                                        <td>{{ object.shift_date }}</td>
+                                        <td>{{ object.shift_end_date }}</td>
+                                        <td>{{ object.shift.start_time }}</td>
+                                        <td>{{ object.shift.end_time }}</td>
+                                        <td>
+                                            {{ object.shift_hours }}
+                                        </td>
+                                        <td>
+                                            {{ object.worked_hours }}
+                                        </td>
+                                        <td>
+                                            {{ object.extra_hours }}
+                                        </td>
+                                        <td id="btn-div-{{ object.pk }}">
+                                            {% if object.get_shift_action == "awa" %}
+                                                <span class="badge badge-light">
+                                                    <i class="mdi mdi-exclamation"></i> Awaiting
+                                                </span>
+                                            {% elif object.get_shift_action == "run" %}
+                                                <span class="badge badge-primary">
+                                                    <i class="mdi mdi-run"></i> Running
+                                                </span>
+                                            {% elif object.get_shift_action == "com" %}
+                                                <span class="badge badge-success">
+                                                    <i class="mdi mdi-call-missed"></i> completed
+                                                </span>
+                                            {% else %}
+                                                <span class="badge badge-danger">
+                                                    <i class="mdi mdi-call-missed"></i> Missed
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="col-sm-3">
-            <div class="card">
-                <div class="card-body border-bottom">
-                    <p class="mb-0 card-title"><b>Shift Days</b></p>
-                </div>
-                <div class="card-body border-bottom">
-                    {% if shift.shiftday_set.count %}
-
-                        {% for shift_day in object.shiftday_set.all %}
-                            <p class="mb-0">
-                                {% if shift_day.shift_date < current_date %}
-                                    <del><i class="fa fa-clock-o"></i> {{ shift_day.shift_date }} </del>
-                                {% else %}
-                                    <i class="fa fa-clock"></i> {{ shift_day.shift_date }}
-                                {% endif %}
-                            </p>
-                        {% endfor %}
-
-
-                    {% else %}
-                        <p class="mb-0 text-danger">
-                            <b><i class="fa fa-exclamation-circle"></i> No shift days available.</b>
-                        </p>
-                    {% endif %}
-                </div>
-            </div>
 
             {% if object.repeat_policy == 'w' %}
 
@@ -169,6 +206,24 @@
                     </div>
                 </div>
 
+            {% elif object.repeat_policy == 'd' %}
+                <div class="card">
+                    <div class="card-body border-bottom">
+                        <p class="mb-0 card-title"><b>Week Days</b></p>
+                    </div>
+                    <div class="card-body border-bottom">
+                        Shifts depends upon some <code>selected dates</code>, you can view the shift days on left/above.
+                    </div>
+                </div>
+            {% else %}
+                <div class="card">
+                    <div class="card-body border-bottom">
+                        <p class="mb-0 card-title"><b>Regular Shifts</b></p>
+                    </div>
+                    <div class="card-body border-bottom">
+                        Shifts are of regular type means each day is included as a shift day from <code>start data</code> to <code>end date</code>
+                    </div>
+                </div>
             {% endif %}
 
             <div class="card border border-danger">

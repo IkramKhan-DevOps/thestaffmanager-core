@@ -1,7 +1,8 @@
 from datetime import datetime, date
 
+from django.utils import timezone
 from django.utils.decorators import method_decorator
-from rest_framework.generics import ListAPIView
+from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,6 +16,26 @@ class ShiftListAPIView(ListAPIView):
     queryset = ShiftDay.objects.all()
     serializer_class = ShiftDaySerializer
     permission_classes = [IsAdminUser]
+
+
+class ShiftDayStatusChange(APIView):
+
+    def get(self, request, pk, status, *args, **kwargs):
+        shift_day = get_object_or_404(ShiftDay, pk=pk)
+
+        if status not in ['run', 'com'] or shift_day.status not in ["run", "awa"]:
+            return Response(status=HTTP_400_BAD_REQUEST, data={"message": "Kindly place a correct status"})
+
+        if status == "run":
+            shift_day.status = "run"
+            shift_day.clock_in = timezone.now()
+            shift_day.save()
+        elif status == "com":
+            shift_day.status = "com"
+            shift_day.clock_out = timezone.now()
+            shift_day.save()
+
+        return Response(status=HTTP_200_OK, data={"message": "status changed successfully"})
 
 
 class ChangeTimesAPI(APIView):

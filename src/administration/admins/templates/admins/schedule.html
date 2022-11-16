@@ -161,7 +161,7 @@
                 <div class="card-body">
                     <div class="card-title">
                         <div class="d-flex justify-content-between">
-                            <h3>News Feed</h3>
+                            <h3></h3>
                             {% csrf_token %}
                             <span>
                                     <a href="{% url 'admins:shift-add' %}" class="btn btn-primary">
@@ -178,14 +178,14 @@
                                         <div class="form-group m-0 px-2 py-1 border rounded">
                                             <i class="fa fa-search mr-2"></i>
                                             <input class="border-0 bg-transparent w-75" type="text" name="search"
-                                                   placeholder="Search news feed" value=""
+                                                   placeholder="Search employee" value=""
                                             >
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </form>
-                        <p class="text-muted mb-2"><small>Last updated: 19:39:20 17/09/2022&nbsp;&nbsp;<a href="#">(pause)</a>&nbsp;&nbsp;</small>
+                        <p class="text-muted mb-2"><small>Last updated: 00:00:00 00/00/0000&nbsp;&nbsp;<a href="#">(paused)</a>&nbsp;&nbsp;</small>
                         </p>
                         <hr>
                         <div id="demo-employee-shifts-calendar" class="md-employee-shifts"></div>
@@ -339,7 +339,7 @@
 
                                 events.push({
                                     id: event.shift.id,
-                                    title: event.shift.site.name,
+                                    title: event.shift.start_time + " : " + event.shift.end_time,
                                     start: event.shift_date + "T" + event.shift.start_time,
                                     end: event.shift_date + "T" + event.shift.end_time,
                                     resource: event.shift.employee == null ? 0 : event.shift.employee.id

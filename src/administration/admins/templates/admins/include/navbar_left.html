@@ -1,12 +1,12 @@
 {% if request.user.is_superuser %}
     <div class="left-sidenav">
         <ul class="metismenu left-sidenav-menu" id="side-nav">
-            <li class="menu-title">INTEX247</li>
+            <li class="menu-title">General</li>
 
             <li>
                 <a href="{% url 'admins:dashboard' %}">
                     <i class="mdi mdi-view-dashboard"></i>
-                    <span>Newsfeed</span>
+                    <span>Dashboard</span>
                 </a>
             </li>
 
@@ -24,7 +24,7 @@
                 </a>
             </li>
             <li>
-                <a href="{% url 'admins:time-clock' %}">
+                <a href="{% url 'admins:time-clock' %}?shift_date=today&shift__employee__user__username=">
                     <i class="fa fa-clock"></i>
                     <span>Time Clock</span>
                 </a>

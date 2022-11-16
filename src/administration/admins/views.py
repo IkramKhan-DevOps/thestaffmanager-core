@@ -14,7 +14,7 @@ from django.views.generic import (
     CreateView)
 
 from .bll import shifts_create_update_logic, shifts_create_update
-from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter
+from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
 from .forms import EmployeeForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee,
@@ -83,10 +83,11 @@ class ScheduleView(TemplateView):
 
 @method_decorator(login_required, name='dispatch')
 class DashboardView(TemplateView):
-    template_name = 'admins/news-feed.html'
+    template_name = 'admins/dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
+        context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
         return context
 
 
@@ -432,8 +433,23 @@ class ShiftsView(TemplateView):
 
 
 @method_decorator(login_required, name='dispatch')
-class TimeClockView(TemplateView):
+class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
+
+    def get_queryset(self):
+        return ShiftDay.objects.all().order_by('-id')
+
+    def get_context_data(self, **kwargs):
+        context = super(TimeClockView, self).get_context_data(**kwargs)
+        filter_object = ShiftDayFilter(self.request.GET, queryset=self.get_queryset())
+        context['filter_form'] = filter_object.form
+
+        paginator = Paginator(filter_object.qs, 50)
+        page_number = self.request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        context['object_list'] = page_object
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
