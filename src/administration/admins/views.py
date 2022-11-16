@@ -83,10 +83,11 @@ class ScheduleView(TemplateView):
 
 @method_decorator(login_required, name='dispatch')
 class DashboardView(TemplateView):
-    template_name = 'admins/news-feed.html'
+    template_name = 'admins/dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
+        context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
         return context
 
 
