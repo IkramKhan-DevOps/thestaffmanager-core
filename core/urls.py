@@ -1,7 +1,6 @@
-from django.conf.urls import url
 from django.contrib import admin
 from django.shortcuts import redirect
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from .settings import MEDIA_ROOT, STATIC_ROOT
 from django.views.static import serve
@@ -23,7 +22,7 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    url(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
-    url(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
+    re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
+    re_path(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
 ]
 

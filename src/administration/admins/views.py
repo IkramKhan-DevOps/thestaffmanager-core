@@ -387,6 +387,30 @@ class ShiftDeleteView(DeleteView):
     success_url = reverse_lazy('admins:shift-list')
 
 
+""" SHIFT DAY """
+
+
+@method_decorator(login_required, name='dispatch')
+class ShiftDayUpdateView(UpdateView):
+    model = ShiftDay
+    fields = [
+        'shift_date', 'shift_end_date', 'clock_in', 'clock_out',
+        'shift_hours', 'worked_hours', 'extra_hours', 'status'
+    ]
+
+    def get_success_url(self):
+        return reverse_lazy('admins:shift-detail', args=[self.object.shift.pk])
+
+
+@method_decorator(login_required, name='dispatch')
+class ShiftDayDeleteView(DeleteView):
+    model = ShiftDay
+    success_url = reverse_lazy('admins:shift-list')
+
+    def get_success_url(self):
+        return reverse_lazy("admins:shift-detail", args=[self.object.shift.pk])
+
+
 """ ReportTypeS """
 
 

@@ -93,6 +93,7 @@
                                     <th>Active Hours</th>
                                     <th>Extra Hours</th>
                                     <th>Status</th>
+                                    <th>-</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -130,6 +131,13 @@
                                                 </span>
                                             {% endif %}
                                         </td>
+                                    <td>
+                                        <b>
+                                            <a href="{% url 'admins:shift-day-update' object.pk %}">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </b>
+                                    </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>

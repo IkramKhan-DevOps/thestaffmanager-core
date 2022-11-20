@@ -7,6 +7,7 @@ from .views import (
     ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView,
     SiteListView, SiteDetailView, SiteUpdateView, SiteDeleteView, SiteCreateView,
     ReportTypeListView, ReportTypeDetailView, ReportTypeUpdateView, ReportTypeDeleteView, ReportTypeCreateView,
+    ShiftDayUpdateView, ShiftDayDeleteView,
 
     AuditLogView, LiveChatView, CasesView, CallsView, PipelineView,
     ScheduleView, ShiftsView, TimeClockView, AbsencesView,
@@ -51,6 +52,11 @@ urlpatterns += [
     path('shift/<int:pk>/', ShiftDetailView.as_view(), name='shift-detail'),
     path('shift/<int:pk>/change/', ShiftUpdateView.as_view(), name='shift-update'),
     path('shift/<int:pk>/delete/', ShiftDeleteView.as_view(), name='shift-delete'),
+]
+
+urlpatterns += [
+    path('shift-day/<int:pk>/change/', ShiftDayUpdateView.as_view(), name='shift-day-update'),
+    path('shift-day/<int:pk>/delete/', ShiftDayDeleteView.as_view(), name='shift-day-delete'),
 ]
 
 urlpatterns += [

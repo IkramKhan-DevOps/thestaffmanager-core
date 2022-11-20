@@ -1,0 +1,95 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block base_title %}admins | Shift Day {% endblock %}
+{% block base_subhead_heading %}Shift Day {% endblock %}
+
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:shift-detail' object.shift.pk %}"><i class="fa fa-arrow-left"></i> Back to Shift</a>
+{% endblock %}
+
+{% block base_css %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+{% endblock %}
+
+
+{% block base_content %}
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+
+
+            <form method="post" id="form">
+                {% csrf_token %}
+
+                <div class="card">
+
+                    <div class="text-center">
+                        <iframe src="https://embed.lottiefiles.com/animation/7448" height="200" class="border-0"></iframe>
+                    </div>
+
+                    {% csrf_token %}
+                    <div class="card-body">
+
+                        {{ form|crispy }}
+
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body">
+                        <button type="submit" id="submit" class="btn btn-primary">
+                            <i class="fa fa-check-circle"></i> Submit
+                        </button>
+                        <a href="{% url 'admins:shift-day-delete' object.pk %}" class="btn btn-danger">
+                            <i class="fa fa-trash"></i> Delete
+                        </a>
+                    </div>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block base_internal_scripts %}
+    <script src="{% static 'core/plugins/repeater/jquery.repeater.min.js' %}"></script>
+    <script src="{% static 'core/pages/jquery.form-repeater.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block base_external_scripts %}
+
+    <script>
+        $(document).ready(function () {
+
+            $('#id_shift_date').datetimepicker({
+                format: 'Y-m-d',
+                timepicker: false,
+            });
+            $('#id_shift_end_date').datetimepicker({
+                format: 'Y-m-d',
+                timepicker: false,
+            });
+
+            $('#id_clock_in').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+            $('#id_clock_out').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+
+
+        })
+    </script>
+
+{% endblock %}
