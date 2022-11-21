@@ -199,6 +199,13 @@ class UserDetailView(DetailView):
     model = User
     template_name = 'admins/user_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+        if self.object.is_employee:
+            context['shifts'] = Shift.objects.filter(employee__user=self.object)
+            context['docs'] = UserDocument.objects.filter(user=self.object)
+        return context
+
 
 @method_decorator(login_required, name='dispatch')
 class UserPasswordResetView(View):
