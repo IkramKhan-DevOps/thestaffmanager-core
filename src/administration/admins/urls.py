@@ -7,11 +7,13 @@ from .views import (
     ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView,
     SiteListView, SiteDetailView, SiteUpdateView, SiteDeleteView, SiteCreateView,
     ReportTypeListView, ReportTypeDetailView, ReportTypeUpdateView, ReportTypeDeleteView, ReportTypeCreateView,
+    ShiftDayUpdateView, ShiftDayDeleteView,
 
     AuditLogView, LiveChatView, CasesView, CallsView, PipelineView,
     ScheduleView, ShiftsView, TimeClockView, AbsencesView,
     PayRunReportView, ShiftNotesView, ChargesBreakView, ReportsView, HealthView, ShiftListView, ShiftDetailView,
-    ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView
+    ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
+    UserEmployeeUpdateView
 )
 
 app_name = 'admins'
@@ -54,6 +56,11 @@ urlpatterns += [
 ]
 
 urlpatterns += [
+    path('shift-day/<int:pk>/change/', ShiftDayUpdateView.as_view(), name='shift-day-update'),
+    path('shift-day/<int:pk>/delete/', ShiftDayDeleteView.as_view(), name='shift-day-delete'),
+]
+
+urlpatterns += [
     path('client/', ClientListView.as_view(), name='client-list'),
     path('client/add/', ClientCreateView.as_view(), name='client-add'),
     path('client/<int:pk>/', ClientDetailView.as_view(), name='client-detail'),
@@ -85,6 +92,11 @@ urlpatterns += [
     path('user/staff/add/', UserStaffCreateView.as_view(), name='user-staff-add'),
     path('user/employee/add/', UserEmployeeCreateView.as_view(), name='user-employee-add'),
     path('user/<int:pk>/reset/password/', UserPasswordResetView.as_view(), name='user-password-reset'),
+
+    path('user/<int:pk>/employee/change/', UserEmployeeUpdateView.as_view(), name='user-employee-update'),
+    path('user/<int:pk>/document/upload/', UserDocumentCreateView.as_view(), name='user-doc-upload'),
+    path('user/<int:user_pk>/document/<int:pk>/delete/', UserDocumentDeleteView.as_view(), name='user-doc-delete'),
+
 ]
 
 urlpatterns += [

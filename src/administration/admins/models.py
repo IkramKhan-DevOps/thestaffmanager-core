@@ -265,20 +265,21 @@ class ShiftDay(models.Model):
         :total hours --- end - start
         """
 
-        start = datetime.combine(self.shift_date, self.shift.start_time)
-        end = datetime.combine(self.shift_date, self.shift.end_time)
+        if self.shift_date:
+            start = datetime.combine(self.shift_date, self.shift.start_time)
+            end = datetime.combine(self.shift_date, self.shift.end_time)
 
-        if start > end:
-            self.shift_end_date = self.shift_date + timedelta(days=1)
-            end = datetime.combine(self.shift_end_date, self.shift.end_time)
-            self.shift_hours = round((end - start).total_seconds() / 3600)
-        else:
-            self.shift_end_date = self.shift_date
-            self.shift_hours = round((end - start).total_seconds() / 3600)
+            if start > end:
+                self.shift_end_date = self.shift_date + timedelta(days=1)
+                end = datetime.combine(self.shift_end_date, self.shift.end_time)
+                self.shift_hours = round((end - start).total_seconds() / 3600)
+            else:
+                self.shift_end_date = self.shift_date
+                self.shift_hours = round((end - start).total_seconds() / 3600)
 
-        if self.clock_out and self.clock_in:
-            self.worked_hours = round((self.clock_out - self.clock_in).total_seconds() / 3600)
-            self.extra_hours = self.worked_hours - self.shift_hours
+            if self.clock_out and self.clock_in:
+                self.worked_hours = round((self.clock_out - self.clock_in).total_seconds() / 3600)
+                self.extra_hours = self.worked_hours - self.shift_hours
 
         super(ShiftDay, self).save(*args, **kwargs)
 

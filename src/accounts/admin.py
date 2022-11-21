@@ -19,7 +19,7 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 
-from src.accounts.models import User
+from src.accounts.models import User, UserDocument
 
 csrf_protect_m = method_decorator(csrf_protect)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
@@ -208,3 +208,4 @@ class UserCustomAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserCustomAdmin)
+admin.site.register(UserDocument)

@@ -1,13 +1,22 @@
 import calendar
 import datetime
 
-from src.administration.admins.models import ShiftDay, Shift
+from src.administration.admins.models import ShiftDay
 
 
-def date_range(shift_id, start, end, repeat_policy, *args):
+# GET DATES: between (start - end) according to policy.
+def date_range(shift, start, end, repeat_policy, *args):
+    """
+    :param shift:
+    :param start: form where to start dates
+    :param end: from where to end dates
+    :param repeat_policy: how dates are captured
+    :param args: extra info (selected dates - week dates etc)
+    :return:
+    """
+
     delta = end - start
     days = []
-    shift = Shift.objects.get(pk=shift_id)
     shift.week_days = ""
 
     # CHECK FOR WEEK DAYS - REPEAT
@@ -33,7 +42,7 @@ def date_range(shift_id, start, end, repeat_policy, *args):
 
     # IF NOT WEEK NEITHER DATES
     elif repeat_policy == 'd':
-        days = list(args[0][0])
+        [days.append(datetime.datetime.strptime(x, '%Y-%m-%d')) for x in args[0][0]]
     else:
         days = [start + datetime.timedelta(days=i) for i in range(delta.days + 1)]
 
@@ -41,25 +50,43 @@ def date_range(shift_id, start, end, repeat_policy, *args):
     return days
 
 
-def shifts_create_update_logic(shift, is_create=True, *args, **kwargs):
-    dates = date_range(shift.id, shift.start_date, shift.end_date, shift.repeat_policy, args)
-
-    if not is_create:
+# STEP3: if request for update
+def shifts_update_in(dates, shift, previous_shift, refresh):
+    if shift.start_date == previous_shift.start_date and shift.end_date == previous_shift.end_date and \
+            shift.repeat_policy == previous_shift.repeat_policy and shift.week_days == previous_shift.week_days:
+        if refresh:
+            print("Changes required")
+            ShiftDay.objects.filter(shift=shift).delete()
+            [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
+        else:
+            print("Not changes detected")
+    else:
+        print("changes required")
         ShiftDay.objects.filter(shift=shift).delete()
         [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
-    else:
-        [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
 
 
-def shifts_create_update(shift, post, is_create=True):
+# STEP3: if request for create
+def shift_create_in(dates, shift):
+    [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
+
+
+# STEP2: get dates and redirect according to request type.
+def shifts_create_update_logic(shift, is_create, previous_shift, refresh, *args):
+    dates = date_range(shift, shift.start_date, shift.end_date, shift.repeat_policy, args)
+    shifts_update_in(dates, shift, previous_shift, refresh) if not is_create else shift_create_in(dates, shift)
+
+
+# STEP1: input request with (create/update) - (policy-type)
+def shifts_create_update(shift, post, is_create=True, refresh=False, previous_shift=None):
     # if shift policy is regular
     if shift.repeat_policy == 'r':
-        shifts_create_update_logic(shift, is_create)
+        shifts_create_update_logic(shift, is_create, previous_shift, refresh)
 
     # if shift policy is week
     elif shift.repeat_policy == 'w':
         shifts_create_update_logic(
-            shift, is_create,
+            shift, is_create, previous_shift, refresh,
             post.get('monday'), post.get('tuesday'), post.get('wednesday'), post.get('thursday'), post.get('friday'),
             post.get('saturday'), post.get('sunday')
         )
@@ -69,12 +96,22 @@ def shifts_create_update(shift, post, is_create=True):
         date_index_names = []
         date_index_values = []
 
-        [date_index_names.append(key_name) if "car" in key_name else None for key_name in post]
+        # get keys first then names
+        [date_index_names.append(key) if "car" in key else None for key, name in post.items()]
         [date_index_values.append(post[f'{name}']) for name in date_index_names]
-        shifts_create_update_logic(shift, is_create, date_index_values)
+
+        # if difference in length
+        if len(date_index_values) != ShiftDay.objects.filter(shift=shift).count():
+            refresh = True
+
+        shifts_create_update_logic(shift, is_create, previous_shift, refresh, date_index_values)
 
 
 def get_shift_days_dict(shift):
+    """
+    :param shift: model object:
+    :return:
+    """
     days = [0, 1, 2, 3, 4, 5, 6]
     context = {"days": []}
     if shift.repeat_policy == 'w':

@@ -10,7 +10,8 @@ class ShiftDayAdmin(admin.ModelAdmin):
 
 
 class ShiftAdmin(admin.ModelAdmin):
-    list_display = ['id', 'start_date', 'end_date', 'start_time', 'end_time', 'client', 'pay_rate', 'charge_rate']
+    list_display = ['id', 'start_date', 'end_date', 'start_time', 'end_time', 'client', 'pay_rate', 'charge_rate',
+                    'week_days']
 
 
 admin.site.register(Position)

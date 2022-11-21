@@ -29,6 +29,9 @@ class User(AbstractUser):
             return Employee.objects.get_or_create(user=self)
         return None
 
+    def get_user_documents(self):
+        return UserDocument.objects.filter(user=self)
+
     def __str__(self):
         return self.username
 
@@ -70,6 +73,23 @@ class Employee(models.Model):
             print(f"---- Employee: {x} faked.")
         print("- END ")
         print()
+
+
+class UserDocument(models.Model):
+    document_name = models.CharField(max_length=255)
+    document_file = models.FileField(upload_to='accounts/files/employees/docs/')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=True)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name_plural = "Employee Documents"
+
+    def __str__(self):
+        return self.document_name
+
+    def delete(self, *args, **kwargs):
+        self.document_file.delete(save=True)
+        super(UserDocument, self).delete(*args, **kwargs)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL, dispatch_uid="create_user_save")

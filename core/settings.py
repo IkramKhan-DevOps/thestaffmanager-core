@@ -17,10 +17,14 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "abncvskjdfqywu8e47902dhbnsajkdyuq9qoihdashdaksjdhsd@345"
 DEBUG = True
+SERVER = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'accounts.User'
 
-ALLOWED_HOSTS = ['*']
+if SERVER:
+    ALLOWED_HOSTS = ['thestaffmanager.com']
+else:
+    ALLOWED_HOSTS = ['*']
 
 # Application definition
 INSTALLED_APPS = [

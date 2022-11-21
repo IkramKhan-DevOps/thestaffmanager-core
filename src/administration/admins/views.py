@@ -15,14 +15,14 @@ from django.views.generic import (
 
 from .bll import shifts_create_update_logic, shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
-from .forms import EmployeeForm
+from .forms import EmployeeForm, UserDocumentForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee,
 )
 import calendar
 import datetime
 
-from ...accounts.models import User
+from ...accounts.models import User, UserDocument
 
 """ MAIN """
 
@@ -181,7 +181,9 @@ class UserUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UserUpdateView, self).get_context_data(**kwargs)
-        context['employee_form'] = EmployeeForm()
+        if self.object.is_employee:
+            context['employee_form'] = EmployeeForm(instance=Employee.objects.filter(user=self.object).first())
+            context['document_form'] = UserDocumentForm()
         return context
 
 
@@ -196,6 +198,13 @@ class UserDeleteView(DeleteView):
 class UserDetailView(DetailView):
     model = User
     template_name = 'admins/user_detail.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+        if self.object.is_employee:
+            context['shifts'] = Shift.objects.filter(employee__user=self.object)
+            context['docs'] = UserDocument.objects.filter(user=self.object)
+        return context
 
 
 @method_decorator(login_required, name='dispatch')
@@ -217,6 +226,45 @@ class UserPasswordResetView(View):
             form.save(commit=True)
             messages.success(request, f"{user.get_full_name()}'s password changed successfully.")
         return render(request, 'admins/user_password_change.html', {'form': form})
+
+
+class UserEmployeeUpdateView(View):
+
+    def post(self, request, pk, *args, **kwargs):
+        user = get_object_or_404(User.objects.filter(is_employee=True), pk=pk)
+        form = EmployeeForm(request.POST, instance=Employee.objects.filter(user=user).first())
+
+        if form.is_valid():
+            form.save(commit=True)
+            messages.success(request, f"User {user.username} profile information updated")
+        else:
+            messages.error(request, "Something is wrong with this request")
+
+        return redirect("admins:user-update", pk)
+
+
+@method_decorator(login_required, name='dispatch')
+class UserDocumentCreateView(View):
+
+    def post(self, request, pk, *args, **kwargs):
+        user = get_object_or_404(User, pk=pk)
+        form = UserDocumentForm(request.POST, files=request.FILES)
+        if form.is_valid():
+            form.instance.user = user
+            form.save(commit=True)
+            messages.success(request, f"User {user.username} document added successfully")
+        else:
+            messages.error(request, "Something is Wrong with this request")
+        return redirect("admins:user-update", pk)
+
+
+@method_decorator(login_required, name='dispatch')
+class UserDocumentDeleteView(DeleteView):
+    model = UserDocument
+    template_name = 'admins/userdocument_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy("admins:user-update", args=[self.kwargs['user_pk']])
 
 
 """ CLIENTS and CONTACTS """
@@ -319,6 +367,9 @@ class SiteDeleteView(DeleteView):
     success_url = reverse_lazy('admins:site-list')
 
 
+""" SHIFTS """
+
+
 @method_decorator(login_required, name='dispatch')
 class ShiftListView(ListView):
     model = Shift
@@ -361,10 +412,16 @@ class ShiftCreateView(CreateView):
 class ShiftUpdateView(UpdateView):
     model = Shift
     fields = '__all__'
+    previous_shift = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.previous_shift = get_object_or_404(Shift, pk=kwargs['pk'])
+        return super(ShiftUpdateView, self).dispatch(request)
 
     def get_context_data(self, **kwargs):
         context = super(ShiftUpdateView, self).get_context_data(**kwargs)
         week_list = self.object.get_week_shifts_status()
+
         if self.object.repeat_policy == 'w':
             context['monday'] = 'checked' if week_list[0] else ''
             context['tuesday'] = 'checked' if week_list[1] else ''
@@ -377,7 +434,7 @@ class ShiftUpdateView(UpdateView):
         return context
 
     def get_success_url(self):
-        shifts_create_update(self.object, self.request.POST, False)
+        shifts_create_update(self.object, self.request.POST, False, False, self.previous_shift)
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 
@@ -385,6 +442,30 @@ class ShiftUpdateView(UpdateView):
 class ShiftDeleteView(DeleteView):
     model = Shift
     success_url = reverse_lazy('admins:shift-list')
+
+
+""" SHIFT DAY """
+
+
+@method_decorator(login_required, name='dispatch')
+class ShiftDayUpdateView(UpdateView):
+    model = ShiftDay
+    fields = [
+        'shift_date', 'shift_end_date', 'clock_in', 'clock_out',
+        'shift_hours', 'worked_hours', 'extra_hours', 'status'
+    ]
+
+    def get_success_url(self):
+        return reverse_lazy('admins:shift-detail', args=[self.object.shift.pk])
+
+
+@method_decorator(login_required, name='dispatch')
+class ShiftDayDeleteView(DeleteView):
+    model = ShiftDay
+    success_url = reverse_lazy('admins:shift-list')
+
+    def get_success_url(self):
+        return reverse_lazy("admins:shift-detail", args=[self.object.shift.pk])
 
 
 """ ReportTypeS """
@@ -437,7 +518,7 @@ class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
     def get_queryset(self):
-        return ShiftDay.objects.all().order_by('-id')
+        return ShiftDay.objects.all().order_by('status', '-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
 
     def get_context_data(self, **kwargs):
         context = super(TimeClockView, self).get_context_data(**kwargs)
