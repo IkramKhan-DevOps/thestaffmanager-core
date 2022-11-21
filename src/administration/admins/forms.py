@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from src.accounts.models import User, Employee
+from src.accounts.models import User, Employee, UserDocument
 
 
 class UserProfileForm(ModelForm):
@@ -17,6 +17,15 @@ class ShiftForm(ModelForm):
     class Meta:
         model = User
         fields = '__all__'
+
+
+class UserDocumentForm(ModelForm):
+
+    class Meta:
+        model = UserDocument
+        fields = [
+            'document_name', 'document_file'
+        ]
 
 
 class EmployeeForm(ModelForm):

@@ -108,6 +108,10 @@ def shifts_create_update(shift, post, is_create=True, refresh=False, previous_sh
 
 
 def get_shift_days_dict(shift):
+    """
+    :param shift: model object:
+    :return:
+    """
     days = [0, 1, 2, 3, 4, 5, 6]
     context = {"days": []}
     if shift.repeat_policy == 'w':

@@ -15,14 +15,14 @@ from django.views.generic import (
 
 from .bll import shifts_create_update_logic, shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
-from .forms import EmployeeForm
+from .forms import EmployeeForm, UserDocumentForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee,
 )
 import calendar
 import datetime
 
-from ...accounts.models import User
+from ...accounts.models import User, UserDocument
 
 """ MAIN """
 
@@ -182,6 +182,7 @@ class UserUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(UserUpdateView, self).get_context_data(**kwargs)
         context['employee_form'] = EmployeeForm()
+        context['document_form'] = UserDocumentForm()
         return context
 
 
@@ -217,6 +218,30 @@ class UserPasswordResetView(View):
             form.save(commit=True)
             messages.success(request, f"{user.get_full_name()}'s password changed successfully.")
         return render(request, 'admins/user_password_change.html', {'form': form})
+
+
+@method_decorator(login_required, name='dispatch')
+class UserDocumentCreateView(View):
+
+    def post(self, request, pk, *args, **kwargs):
+        user = get_object_or_404(User, pk=pk)
+        form = UserDocumentForm(request.POST, files=request.FILES)
+        if form.is_valid():
+            form.instance.user = user
+            form.save(commit=True)
+            messages.success(request, f"User {user.username} document added successfully")
+        else:
+            messages.error(request, "Something is Wrong with this request")
+        return redirect("admins:user-update", pk)
+
+
+@method_decorator(login_required, name='dispatch')
+class UserDocumentDeleteView(DeleteView):
+    model = UserDocument
+    template_name = 'admins/userdocument_confirm_delete.html'
+
+    def get_success_url(self):
+        return reverse_lazy("admins:user-update", args=[self.kwargs['user_pk']])
 
 
 """ CLIENTS and CONTACTS """
