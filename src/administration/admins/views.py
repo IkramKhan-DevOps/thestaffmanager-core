@@ -373,6 +373,7 @@ class ShiftUpdateView(UpdateView):
     def get_context_data(self, **kwargs):
         context = super(ShiftUpdateView, self).get_context_data(**kwargs)
         week_list = self.object.get_week_shifts_status()
+
         if self.object.repeat_policy == 'w':
             context['monday'] = 'checked' if week_list[0] else ''
             context['tuesday'] = 'checked' if week_list[1] else ''
@@ -385,7 +386,7 @@ class ShiftUpdateView(UpdateView):
         return context
 
     def get_success_url(self):
-        shifts_create_update(self.object, self.request.POST, False, self.previous_shift)
+        shifts_create_update(self.object, self.request.POST, False, False, self.previous_shift)
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 
