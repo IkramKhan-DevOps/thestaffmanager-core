@@ -469,7 +469,7 @@ class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
     def get_queryset(self):
-        return ShiftDay.objects.all().order_by('-id')
+        return ShiftDay.objects.all().order_by('status', '-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
 
     def get_context_data(self, **kwargs):
         context = super(TimeClockView, self).get_context_data(**kwargs)
