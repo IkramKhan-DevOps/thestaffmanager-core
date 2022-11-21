@@ -29,6 +29,7 @@ class UserDocumentForm(ModelForm):
 
 
 class EmployeeForm(ModelForm):
+
     class Meta:
         model = Employee
         fields = [

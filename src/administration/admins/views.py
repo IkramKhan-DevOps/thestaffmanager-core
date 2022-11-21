@@ -181,8 +181,9 @@ class UserUpdateView(UpdateView):
 
     def get_context_data(self, **kwargs):
         context = super(UserUpdateView, self).get_context_data(**kwargs)
-        context['employee_form'] = EmployeeForm()
-        context['document_form'] = UserDocumentForm()
+        if self.object.is_employee:
+            context['employee_form'] = EmployeeForm(instance=Employee.objects.filter(user=self.object).first())
+            context['document_form'] = UserDocumentForm()
         return context
 
 
@@ -218,6 +219,21 @@ class UserPasswordResetView(View):
             form.save(commit=True)
             messages.success(request, f"{user.get_full_name()}'s password changed successfully.")
         return render(request, 'admins/user_password_change.html', {'form': form})
+
+
+class UserEmployeeUpdateView(View):
+
+    def post(self, request, pk, *args, **kwargs):
+        user = get_object_or_404(User.objects.filter(is_employee=True), pk=pk)
+        form = EmployeeForm(request.POST, instance=Employee.objects.filter(user=user).first())
+
+        if form.is_valid():
+            form.save(commit=True)
+            messages.success(request, f"User {user.username} profile information updated")
+        else:
+            messages.error(request, "Something is wrong with this request")
+
+        return redirect("admins:user-update", pk)
 
 
 @method_decorator(login_required, name='dispatch')

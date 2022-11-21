@@ -12,7 +12,8 @@ from .views import (
     AuditLogView, LiveChatView, CasesView, CallsView, PipelineView,
     ScheduleView, ShiftsView, TimeClockView, AbsencesView,
     PayRunReportView, ShiftNotesView, ChargesBreakView, ReportsView, HealthView, ShiftListView, ShiftDetailView,
-    ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView
+    ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
+    UserEmployeeUpdateView
 )
 
 app_name = 'admins'
@@ -92,7 +93,7 @@ urlpatterns += [
     path('user/employee/add/', UserEmployeeCreateView.as_view(), name='user-employee-add'),
     path('user/<int:pk>/reset/password/', UserPasswordResetView.as_view(), name='user-password-reset'),
 
-    path('user/<int:pk>/profile/change/', UserUpdateView.as_view(), name='user-update'),
+    path('user/<int:pk>/employee/change/', UserEmployeeUpdateView.as_view(), name='user-employee-update'),
     path('user/<int:pk>/document/upload/', UserDocumentCreateView.as_view(), name='user-doc-upload'),
     path('user/<int:user_pk>/document/<int:pk>/delete/', UserDocumentDeleteView.as_view(), name='user-doc-delete'),
 
