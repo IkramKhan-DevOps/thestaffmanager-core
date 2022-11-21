@@ -96,93 +96,128 @@
     {% if object.is_employee %}
 
         <div class="row">
-        <div class="col-sm-8">
-            <div class="card">
-                <div class="card-body border-bottom">
-                    <p class="mb-0 card-title"><b>Employee Shifts</b></p>
-                </div>
-                <div class="card-body">
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-body border-bottom">
+                        <p class="mb-0 card-title"><b>Employee Shifts</b></p>
+                    </div>
+                    <div class="card-body">
 
-                    {% if shifts %}
+                        {% if shifts %}
 
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="thead-light">
-                                <tr>
-                                    <th>Type</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>From</th>
-                                    <th>To</th>
-                                    <th>Client</th>
-                                    <th>Days</th>
-                                    <th>-</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                {% for object in shifts %}
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="thead-light">
                                     <tr>
-                                        <td>{{ object.get_job_type_display }}</td>
-                                        <td>{{ object.start_date }}</td>
-                                        <td>{{ object.end_date }}</td>
-                                        <td>{{ object.start_time }}</td>
-                                        <td>{{ object.end_time }}</td>
-                                        <td>{{ object.client.name }}</td>
-                                        <td>{{ object.shiftday_set.count }}</td>
-                                        <th>
-                                            <a href="{% url 'admins:shift-detail' object.pk %}">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                        </th>
+                                        <th>Type</th>
+                                        <th>Start Date</th>
+                                        <th>End Date</th>
+                                        <th>From</th>
+                                        <th>To</th>
+                                        <th>Client</th>
+                                        <th>Days</th>
+                                        <th>-</th>
                                     </tr>
-                                {% endfor %}
+                                    </thead>
+                                    <tbody>
+
+                                    {% for object in shifts %}
+                                        <tr>
+                                            <td>{{ object.get_job_type_display }}</td>
+                                            <td>{{ object.start_date }}</td>
+                                            <td>{{ object.end_date }}</td>
+                                            <td>{{ object.start_time }}</td>
+                                            <td>{{ object.end_time }}</td>
+                                            <td>{{ object.client.name }}</td>
+                                            <td>{{ object.shiftday_set.count }}</td>
+                                            <th>
+                                                <a href="{% url 'admins:shift-detail' object.pk %}">
+                                                    <i class="fa fa-eye"></i>
+                                                </a>
+                                            </th>
+                                        </tr>
+                                    {% endfor %}
 
 
-                                </tbody>
-                            </table>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        {% else %}
+                            <p class="mb-0 text-danger">
+                                <b>
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    No objects available
+                                </b>
+                            </p>
+                        {% endif %}
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+
+                <div class="card">
+                    <div class="card-body border-bottom">
+                        <p class="mb-0 card-title">
+                            <b>Employee Details</b>
+                        </p>
+                    </div>
+                    <div class="card-body">
+
+                        <div class="row mt-4">
+                            <div class="col">
+                                <p class="mb-0 text-center h3"><i class="mdi mdi-fingerprint"></i></p>
+                                <p class="mb-0 text-center h5">ID</p>
+                                <p class="mb-0 text-center">{{ object.employee.employee_id }}</p>
+                            </div>
+                            <div class="col">
+                                <p class="mb-0 text-center h3"><i class="mdi mdi-view-dashboard"></i></p>
+                                <p class="mb-0 text-center h5">Type</p>
+                                <p class="mb-0 text-center">{{ object.employee.get_employee_type_display }}</p>
+                            </div>
+                            <div class="col">
+                                <p class="mb-0 text-center h3"><i class="mdi mdi-office-building"></i></p>
+                                <p class="mb-0 text-center h5">Internal</p>
+                                <p class="mb-0 text-center">
+                                    {% if object.employee.is_internal_employee %}
+                                        <i class="fa fa-check-circle text-success"></i>
+                                    {% else %}
+                                        <i class="fa fa-times-circle text-danger"></i>
+                                    {% endif %}
+                                </p>
+                            </div>
                         </div>
 
-                    {% else %}
-                        <p class="mb-0 text-danger">
-                            <b>
-                                <i class="fa fa-exclamation-circle"></i>
-                                No objects available
-                            </b>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-body border-bottom">
+                        <p class="mb-0 card-title">
+                            <b>Employee Documents</b>
                         </p>
-                    {% endif %}
+                    </div>
+                    <div class="card-body">
 
+                        {% if object.get_user_documents %}
+                            <p><b>List of available documents</b></p>
+                            <ol>
+                                {% for document in object.get_user_documents %}
+                                    <li>
+                                        <b><a href="{{ document.document_file.url }}">{{ document.document_name }}</a></b>
+                                    </li>
+                                {% endfor %}
+                            </ol>
+                        {% else %}
+                            <p class="text-danger mb-0"><b>No documents found for this user.</b></p>
+                        {% endif %}
+
+                    </div>
                 </div>
+
             </div>
         </div>
-        <div class="col-sm-4">
-
-            <div class="card">
-                <div class="card-body border-bottom">
-                    <p class="mb-0 card-title">
-                        <b>Employee Documents</b>
-                    </p>
-                </div>
-                <div class="card-body">
-
-                    {% if object.get_user_documents %}
-                        <p><b>List of available documents</b></p>
-                        <ol>
-                            {% for document in object.get_user_documents %}
-                                <li>
-                                    <b><a href="{{ document.document_file.url }}">{{ document.document_name }}</a></b>
-                                </li>
-                            {% endfor %}
-                        </ol>
-                    {% else %}
-                        <p class="text-danger mb-0"><b>No documents found for this user.</b></p>
-                    {% endif %}
-
-                </div>
-            </div>
-
-        </div>
-    </div>
 
     {% endif %}
 
