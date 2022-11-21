@@ -319,6 +319,9 @@ class SiteDeleteView(DeleteView):
     success_url = reverse_lazy('admins:site-list')
 
 
+""" SHIFTS """
+
+
 @method_decorator(login_required, name='dispatch')
 class ShiftListView(ListView):
     model = Shift
@@ -361,6 +364,11 @@ class ShiftCreateView(CreateView):
 class ShiftUpdateView(UpdateView):
     model = Shift
     fields = '__all__'
+    previous_shift = None
+
+    def dispatch(self, request, *args, **kwargs):
+        self.previous_shift = get_object_or_404(Shift, pk=kwargs['pk'])
+        return super(ShiftUpdateView, self).dispatch(request)
 
     def get_context_data(self, **kwargs):
         context = super(ShiftUpdateView, self).get_context_data(**kwargs)
@@ -377,7 +385,7 @@ class ShiftUpdateView(UpdateView):
         return context
 
     def get_success_url(self):
-        shifts_create_update(self.object, self.request.POST, False)
+        shifts_create_update(self.object, self.request.POST, False, self.previous_shift)
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 
@@ -461,7 +469,7 @@ class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
     def get_queryset(self):
-        return ShiftDay.objects.all().order_by('status', '-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
+        return ShiftDay.objects.all().order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super(TimeClockView, self).get_context_data(**kwargs)
