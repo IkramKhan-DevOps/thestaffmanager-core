@@ -17,7 +17,7 @@ class LoginView(View):
             if request.user.is_superuser:
                 return redirect('admins:dashboard')
             else:
-                return redirect('teacher:dashboard')
+                return redirect('employees:dashboard')
 
         form = AuthenticationForm()
         return render(request, template_name='accounts/login.html', context={'form': form})
@@ -43,12 +43,6 @@ class LogoutView(View):
     def get(self, request):
         logout(request)
         return redirect('/accounts/login/')
-
-
-class ForgetPasswordView(View):
-
-    def get(self, request):
-        return render(request, 'accounts/forget-password.html')
 
 
 @method_decorator(login_required, name='dispatch')

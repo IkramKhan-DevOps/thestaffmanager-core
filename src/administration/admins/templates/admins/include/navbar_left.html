@@ -1,4 +1,4 @@
-{% if not request.user.is_superuser %}
+{% if request.user.is_superuser %}
     <div class="left-sidenav">
         <ul class="metismenu left-sidenav-menu" id="side-nav">
             <li class="menu-title">General</li>
