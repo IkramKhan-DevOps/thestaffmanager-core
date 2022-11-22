@@ -29,7 +29,8 @@
                 <div class="card">
 
                     <div class="text-center">
-                        <iframe src="https://embed.lottiefiles.com/animation/7448" height="200" class="border-0"></iframe>
+                        <iframe src="https://embed.lottiefiles.com/animation/7448" height="200"
+                                class="border-0"></iframe>
                     </div>
 
                     {% csrf_token %}
@@ -220,6 +221,9 @@
             let weekly_div = $("#weekly");
             let regular_div = $("#regular");
             let dates_div = $("#selected_dates");
+            let client_options = $('#id_client')
+            let site_options = $('#id_site')
+            const empty_html = "<option value>--------</option>"
 
             let create = {% if object %} false {% else %} true {% endif %};
             let repeat_policy = "{{ object.repeat_policy }}";
@@ -246,6 +250,25 @@
             $('#id_end_time').datetimepicker({
                 datepicker: false,
                 format: 'H:i:s'
+            });
+            document.getElementById("submit").addEventListener("click", function () {
+                $('form#form').submit();
+            });
+
+            client_options.change(function (event) {
+                site_options.html('')
+                let format_html = empty_html;
+                let value = $(this).val();
+                if (value !== undefined && value != null && value > 0) {
+                    $.get('/a/api/client/' + value + '/sites/', function (data, status) {
+                        if (status === 'success') {
+                            for (const datum of data) {
+                                format_html += `<option value='${datum.id}'>${datum.name}</option>`;
+                            }
+                        }
+                        site_options.append(format_html);
+                    });
+                }
             });
 
             function update_ui(action) {
@@ -277,11 +300,6 @@
             function init() {
                 update_ui(repeat_policy);
             }
-
-            let form = document.getElementsByTagName("form");
-            document.getElementById("submit").addEventListener("click", function () {
-                $('form#form').submit();
-            });
 
         })
     </script>
