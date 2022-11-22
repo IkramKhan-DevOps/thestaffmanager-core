@@ -8,145 +8,130 @@
 {% block base_css %}
 
     <style>
-        .employee-shifts-day {
+        .md-meal-type {
             font-size: 14px;
             font-weight: 600;
             opacity: .6;
         }
 
-        .employee-shifts-popup .mbsc-popup .mbsc-popup-header {
+        .md-meal-planner-popup .mbsc-popup .mbsc-popup-header {
             padding-top: 8px;
             padding-bottom: 8px;
         }
 
-        .employee-shifts-cont {
+        .md-meal-planner-cont {
             position: relative;
-            padding-left: 42px;
-            max-height: 40px;
+            padding-left: 34px;
+            text-align: left;
         }
 
-        .employee-shifts-avatar {
+        .md-meal-planner-title {
+            font-size: 20px;
+        }
+
+        .md-meal-planner-kcal {
+            color: #929292;
+        }
+
+        .md-meal-planner-icon {
             position: absolute;
-            max-height: 40px;
-            max-width: 40px;
-            top: 18px;
-            -webkit-transform: translate(-50%, -50%);
-            transform: translate(-50%, -50%);
-            left: 20px;
+            left: 0;
         }
 
-        .employee-shifts-name {
-            font-size: 15px;
+        .md-meal-planner-calendar.mbsc-calendar .mbsc-schedule-event-all-day-inner {
+            height: 40px;
+            display: flex;
+            align-items: center;
         }
 
-        .employee-shifts-title {
+        .md-meal-planner-calendar .md-meal-planner-event-title {
             font-size: 12px;
         }
 
-        .md-employee-shifts .mbsc-timeline-resource,
-        .md-employee-shifts .mbsc-timeline-resource-col {
-            width: 200px;
-            align-items: center;
-            display: flex;
+        .md-meal-planner-calendar .md-meal-planner-event-desc {
+            opacity: .6;
         }
 
-        .md-employee-shifts .mbsc-schedule-event {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 36px;
+        .md-meal-planner-popup .mbsc-segmented-item:first-child .mbsc-selected.mbsc-material,
+        .md-meal-planner-popup .mbsc-segmented-item:first-child .mbsc-selected.mbsc-windows,
+        .md-meal-planner-popup .mbsc-segmented-item:first-child .mbsc-segmented-selectbox-inner {
+            background: #f08786;
         }
 
-        {# NEW ONE #}
-        .md-shift-management-calendar .mbsc-schedule-event {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 36px;
+        .md-meal-planner-popup .mbsc-segmented-item:nth-child(2) .mbsc-selected.mbsc-material,
+        .md-meal-planner-popup .mbsc-segmented-item:nth-child(2) .mbsc-selected.mbsc-windows,
+        .md-meal-planner-popup .mbsc-segmented-item:nth-child(2) .mbsc-segmented-selectbox-inner {
+            background: #8abe89;
         }
 
-        .md-shift-management-calendar .mbsc-timeline-slots {
-            height: 94px;
+        .md-meal-planner-popup .mbsc-segmented-item:nth-child(3) .mbsc-selected.mbsc-material,
+        .md-meal-planner-popup .mbsc-segmented-item:nth-child(3) .mbsc-selected.mbsc-windows,
+        .md-meal-planner-popup .mbsc-segmented-item:nth-child(3) .mbsc-segmented-selectbox-inner {
+            background: #99d3ef;
         }
 
-        .md-shift-management-calendar .mbsc-timeline-header-placeholder {
-            height: 120px;
+        .md-meal-planner-popup .mbsc-segmented-item:nth-child(4) .mbsc-selected.mbsc-material,
+        .md-meal-planner-popup .mbsc-segmented-item:nth-child(4) .mbsc-selected.mbsc-windows,
+        .md-meal-planner-popup .mbsc-segmented-item:nth-child(4) .mbsc-segmented-selectbox-inner {
+            background: #f0ce8e;
         }
 
-        .md-shift-management-calendar .mbsc-timeline-resource {
-            display: flex;
-            align-items: center;
+        .md-meal-planner-popup .mbsc-segmented-item:last-child .mbsc-selected.mbsc-material,
+        .md-meal-planner-popup .mbsc-segmented-item:last-child .mbsc-selected.mbsc-windows,
+        .md-meal-planner-popup .mbsc-segmented-item:last-child .mbsc-segmented-selectbox-inner {
+            background: #b48bce;
         }
 
-        .md-shift-management-calendar .mbsc-timeline-slot {
-            width: 200px;
+        .md-tooltip .mbsc-popup-content {
+            padding: 0;
         }
 
-        .md-shift-header-controls {
-            flex: 1 0 auto;
-            display: flex;
-            justify-content: end;
-        }
-
-        .md-shift-header-controls .mbsc-checkbox {
-            padding: 18px 0 18px 45px;
-        }
-
-        .md-shift-cal-view.mbsc-textfield-wrapper {
-            margin: 12px 12px 12px 28px;
-        }
-
-        .md-shift-cal-view .mbsc-select.mbsc-textfield {
-            height: 32px;
-            width: 120px;
-        }
-
-        .md-shift-cal-view .mbsc-icon.mbsc-select-icon {
-            width: 20px;
-            height: 20px;
-            top: 7px;
-        }
-
-        .md-shift-resource {
-            font-size: 18px;
-        }
-
-        .md-shift-resource-icon {
-            margin-right: 10px;
-        }
-
-        .md-shift-header {
-            margin: 3px 6px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .md-shift-name {
+        .md-tooltip {
             font-size: 15px;
+            font-weight: 600;
         }
 
-        .md-shift-time {
-            opacity: .5;
+        .md-tooltip-header {
+            padding: 12px 16px;
+            color: #eee;
+        }
+
+        .md-tooltip-info {
+            padding: 16px 16px 60px 16px;
+            position: relative;
+            line-height: 32px;
+        }
+
+        .md-tooltip-time,
+        .md-tooltip-status-button {
+            float: right;
+        }
+
+        .md-tooltip-title {
+            margin-bottom: 0px;
+        }
+
+        .md-tooltip-text {
+            font-weight: 200;
+        }
+
+        .md-tooltip-info .mbsc-button {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .md-tooltip-info .mbsc-button.mbsc-material {
             font-size: 12px;
-            margin-left: 5px;
         }
 
-        .md-shift-count {
-            margin-top: 6px;
-            margin-right: 12px;
-            display: inline-block;
-            width: 26px;
-            height: 20px;
+        .md-tooltip-view-button {
+            position: absolute;
         }
 
-        .md-shift-icon {
-            padding-right: 3px;
-        }
-
-        .md-shift-header-controls input {
-            border: 0px;
-            padding: 4px;
-            border-radius: 5px;
+        .md-tooltip-delete-button {
+            position: absolute;
+            bottom: 16px;
+            right: 16px;
         }
     </style>
     <link href="{% static 'mobi/css/mobiscroll.jquery.min.css' %}" rel="stylesheet"/>
@@ -188,32 +173,37 @@
                         <p class="text-muted mb-2"><small>Last updated: 00:00:00 00/00/0000&nbsp;&nbsp;<a href="#">(paused)</a>&nbsp;&nbsp;</small>
                         </p>
                         <hr>
-                        <div id="demo-employee-shifts-calendar" class="md-employee-shifts"></div>
 
-                        <div id="demo-employee-shifts-popup" class="employee-shifts-popup">
-                            <div class="mbsc-form-group">
-                                <label for="employee-shifts-start">
-                                    Shift start
-                                    <input mbsc-input data-dropdown="true" id="employee-shifts-start"/>
-                                </label>
-                                <label for="employee-shifts-end">
-                                    Shift end
-                                    <input mbsc-input data-dropdown="true" id="employee-shifts-end"/>
-                                </label>
-                                <div id="demo-employee-shifts-date"></div>
+                        <div id="demo-meal-planner" class="md-meal-planner-calendar"></div>
+
+                        <div id="custom-event-tooltip-popup" class="md-tooltip">
+                            <div id="tooltip-event-header" class="md-tooltip-header">
+                                <span id="tooltip-event-name-age" class="md-tooltip-name-age"></span>
+                                <span id="tooltip-event-time" class="md-tooltip-time"></span>
                             </div>
-                            <div class="mbsc-form-group">
-                                <label>
-                                    Notes
-                                    <textarea mbsc-textarea id="employee-shifts-notes"></textarea>
-                                </label>
-                            </div>
-                            <div class="mbsc-button-group">
-                                <button class="mbsc-button-block" id="employee-shifts-delete" mbsc-button
-                                        data-color="danger" data-variant="outline">Delete shift
+                            <div class="md-tooltip-info p-4">
+                                <div class="md-tooltip-title">ID:
+                                    <span id="tooltip-event-title" class="md-tooltip-status md-tooltip-text"></span>
+                                </div>
+
+                                <div class="md-tooltip-title">Employee:
+                                    <span id="tooltip-event-reason" class="md-tooltip-reason md-tooltip-text"></span>
+                                </div>
+                                <div class="md-tooltip-title">Client:
+                                    <span id="tooltip-event-location"
+                                          class="md-tooltip-location md-tooltip-text"></span>
+                                </div>
+                                <button id="tooltip-event-view" mbsc-button data-color="success"
+                                        class="md-tooltip-view-button">View Shift Details
                                 </button>
+                                {#                                <button id="tooltip-event-delete" mbsc-button data-color="danger" data-variant="outline"#}
+                                {#                                        class="md-tooltip-delete-button">Delete appointment#}
+                                {#                                </button>#}
                             </div>
                         </div>
+                        <div id="demo-custom-event-tooltip"></div>
+
+
                     </div>
                 </div>
             </div>
@@ -231,324 +221,218 @@
 {% block base_external_scripts %}
     <script>
 
-        $(document).ready(function () {
-            mobiscroll.setOptions({
-                theme: 'ios',
-                themeVariant: 'light'
+        mobiscroll.setOptions({
+            theme: 'ios',
+            themeVariant: 'light'
+        });
+
+        $(function () {
+            var formatDate = mobiscroll.util.datetime.formatDate;
+            var calendar;
+            var popup;
+            var oldMeal;
+            var tempMeal;
+            var deleteMeal;
+
+            // DATA OBJECTS
+            var types = [
+                {
+                    id: '0',
+                    name: 'Not assigned',
+                    color: 'red',
+                    title: 'Shifts are not assigned',
+                    icon: '🍜'
+                }
+            ]
+            {% for object in employees %}
+                types.push({
+                    id: '{{ object.id }}',
+                    name: '{{ object }}',
+                    color: 'green',
+                    title: 'Employee',
+                    icon: '🥨'
+
+                });
+            {% endfor %}
+
+            var currentEvent;
+            var timer;
+            var $tooltip = $('#custom-event-tooltip-popup');
+            {#var $deleteButton = $('#tooltip-event-delete');#}
+            var $fileButton = $('#tooltip-event-view');
+            var $statusButton = $('#tooltip-event-status');
+            var $header = $('#tooltip-event-header');
+            var $data = $('#tooltip-event-name-age');
+            var $time = $('#tooltip-event-time');
+            var $status = $('#tooltip-event-title');
+            var $reason = $('#tooltip-event-reason');
+            var $location = $('#tooltip-event-location');
+
+            var calendar = $('#demo-meal-planner').mobiscroll().eventcalendar({
+                view: {
+                    timeline: {
+                        type: 'week',
+                        eventList: true,
+                        startDay: 1,
+                        endDay: 0
+                    }
+                },
+                resources: types,
+                dragToCreate: false,
+                dragToResize: false,
+                dragToMove: true,
+                clickToCreate: true,
+                extendDefaultEvent: function (ev) {
+                    return {
+                        title: 'New meal',
+                        allDay: true
+                    };
+                },
+                onEventCreate: function (args, inst) {
+                    // store temporary event
+                    console.log("view create")
+                },
+                renderResource: function (resource) {
+                    return '<div class="md-meal-planner-cont">' +
+                        '<div class="md-meal-planner-title" style="color:' + resource.color + '">' +
+                        '<span class="md-meal-planner-icon">' + resource.icon + '</span>' + resource.name + '</div>' +
+                        '</div>';
+                },
+                renderScheduleEventContent: function (args) {
+                    var event = args.original;
+                    console.log(typeof event.start)
+                    return '<div class="md-meal-planner-event">' +
+                        '<div class="md-meal-planner-event-title">' + event.title + '</div>' +
+                        '<div class="md-meal-planner-event-desc">' + event.start.toString().split("T")[1] + "-" + event.end.toString().split("T")[1] + '</div>' +
+                        '</div>';
+                },
+                showEventTooltip: false,
+                onEventHoverIn: function (args, inst) {
+                    var event = args.event;
+                    var resource = types.find(function (dr) {
+                        return dr.id == event.resource
+                    });
+                    var time = formatDate('hh:mm A', new Date(event.start)) + ' - ' + formatDate('hh:mm A', new Date(event.end));
+                    var button = {};
+
+                    currentEvent = event;
+
+                    if (event.confirmed) {
+                        button.text = 'Cancel appointment';
+                        button.type = 'warning';
+                    } else {
+                        button.text = 'Confirm appointment';
+                        button.type = 'success';
+                    }
+
+                    $header.css('background-color', resource.color);
+                    $data.text(event.title);
+                    $time.text(time);
+
+                    $status.text(event.id)
+                    $reason.text(event.employee);
+                    $location.text(event.client);
+
+                    $statusButton.text(button.text);
+                    $statusButton.mobiscroll('setOptions', {color: button.type});
+
+                    clearTimeout(timer);
+                    timer = null;
+
+                    tooltip.setOptions({anchor: args.domEvent.target});
+                    tooltip.open();
+                },
+                onEventHoverOut: function (args) {
+                    if (!timer) {
+                        timer = setTimeout(function () {
+                            tooltip.close();
+                        }, 200);
+                    }
+                },
+                onEventClick: function (event, inst) {
+                    tooltip.open();
+                },
+                onPageLoading: function (event, inst) {
+
+                    $.getJSON('{% url 'admins:admins-api:shift-list' %}', function (data) {
+                        var events = [];
+
+                        console.log(data)
+
+                        for (var i = 0; i < data.length; i++) {
+                            var event = data[i];
+
+                            events.push({
+                                id: event.shift.id,
+                                client: event.shift.client.name,
+                                employee: event.shift.employee.user.username,
+                                title: event.shift.site.name,
+                                start: event.shift_date + "T" + event.shift.start_time,
+                                end: event.shift_date + "T" + event.shift.end_time,
+                                resource: event.shift.employee == null ? 0 : event.shift.employee.id
+                            });
+                        }
+
+                        inst.setEvents(events);
+                        mobiscroll.toast({
+                            message: 'shifts are updated'
+                        });
+                    }, 'jsonp');
+                }
+            }).mobiscroll('getInst');
+
+            var tooltip = $tooltip.mobiscroll().popup({
+                display: 'anchored',
+                touchUi: false,
+                showOverlay: false,
+                contentPadding: false,
+                closeOnOverlayClick: false,
+                width: 350
+            }).mobiscroll('getInst');
+
+            $tooltip.mouseenter(function (ev) {
+                if (timer) {
+                    clearTimeout(timer);
+                    timer = null;
+                }
             });
 
-            $(function () {
-                var calendar;
-                var popup;
-                var range;
-                var oldShift;
-                var tempShift;
-                var deleteShift;
-                var formatDate = mobiscroll.util.datetime.formatDate;
-                var $notes = $('#employee-shifts-notes');
-                var $deleteButton = $('#employee-shifts-delete');
-
-                // DATA OBJECTS
-                var staff = [
-                    {
-                        id: '0',
-                        name: 'Not assigned',
-                        color: 'red',
-                        title: 'Shifts are not assigned',
-                        img: 'https://img.icons8.com/fluency/48/000000/remove-user-male.png'
-                    }
-                ]
-                {% for object in employees %}
-                    staff.push({
-                        id: '{{ object.id }}',
-                        name: '{{ object }}',
-                        color: 'green',
-                        title: 'Employee',
-                        img: 'https://img.icons8.com/color/48/000000/blocked-account-male.png'
-
-                    });
-                {% endfor %}
-                var invalid = [];
-
-                // CALENDER ENV
-                calendar = $('#demo-employee-shifts-calendar').mobiscroll().eventcalendar({
-                    view: {
-                        timeline: {
-                            type: 'day',
-                            eventList: true,
-                        }
-                    },
-                    height: 800,
-                    dragToCreate: false,
-                    dragToResize: false,
-                    dragToMove: true,
-                    clickToCreate: true,
-                    resources: staff,
-                    {#invalid: invalid,#}
-                    onEventCreate: function (args, inst) {
-                        // store temporary event
-                        tempShift = args.event;
-                        setTimeout(function () {
-                            createAddPopup(args);
-                        }, 100);
-                    },
-                    onEventClick: function (args, inst) {
-                        oldShift = $.extend({}, args.event);
-                        tempShift = args.event;
-
-                        if (!popup.isVisible()) {
-                            createEditPopup(args);
-                        }
-                    },
-
-                    renderHeader: function () {
-                        return '<div mbsc-calendar-nav></div>' +
-                            '<div class="md-shift-header-controls">' +
-                            '<select id="shift-management-select">' +
-                            '<option value="day">Day</option>' +
-                            '<option value="week" selected>Week</option>' +
-                            '<option value="month">Month</option>' +
-                            '</select>' +
-                            '</div>' +
-                            '<div mbsc-calendar-prev></div>' +
-                            '<div mbsc-calendar-today></div>' +
-                            '<div mbsc-calendar-next></div>';
-                    },
-                    renderResource: function (resource) {
-                        return '<div class="employee-shifts-cont">' +
-                            '<div class="employee-shifts-name">' + resource.name + '</div>' +
-                            '<div class="employee-shifts-title">' + resource.title + '</div>' +
-                            '<img class="employee-shifts-avatar" src="' + resource.img + '"/>' +
-                            '</div>';
-                    },
-                    onPageLoading: function (event, inst) {
-                        var year = event.firstDay.getFullYear(),
-                            month = event.firstDay.getMonth(),
-                            day = event.firstDay.getDate();
-
-                        $.getJSON('{% url 'admins:admins-api:shift-list' %}', function (data) {
-                            var events = [];
-
-                            console.log(data)
-
-                            for (var i = 0; i < data.length; i++) {
-                                var event = data[i];
-
-                                {#let start = (event.shift.start_time).split(":")#}
-                                {#let end = (event.shift.start_time).split(":")#}
-
-                                events.push({
-                                    id: event.shift.id,
-                                    title: event.shift.start_time + " : " + event.shift.end_time,
-                                    start: event.shift_date + "T" + event.shift.start_time,
-                                    end: event.shift_date + "T" + event.shift.end_time,
-                                    resource: event.shift.employee == null ? 0 : event.shift.employee.id
-                                });
-                            }
-
-                            inst.setEvents(events);
-                            mobiscroll.toast({
-                                message: 'shifts are updated'
-                            });
-                        }, 'jsonp');
-                    }
-                }).mobiscroll('getInst');
-
-                $('#shift-management-select').mobiscroll().select({
-                    inputElement: document.getElementById('shift-management-view'),
-                    touchUi: false,
-                    onChange: function (event, inst) {
-                        if (event.value == 'day') {
-                            calendar.setOptions({
-                                view: {
-                                    timeline: {
-                                        type: 'day',
-                                        eventList: true
-                                    }
-                                }
-                            });
-                        } else if (event.value == 'month') {
-                            calendar.setOptions({
-                                view: {
-                                    timeline: {
-                                        type: 'month',
-                                        eventList: true
-                                    }
-                                }
-                            });
-                        } else {
-                            calendar.setOptions({
-                                view: {
-                                    timeline: {
-                                        type: 'week',
-                                        eventList: true,
-                                        startDay: 1,
-                                        endDay: 0
-                                    }
-                                }
-                            });
-                        }
-                    }
-                });
-
-
-                // POPUP: CREATE
-                function createAddPopup(args) {
-                    // hide delete button inside add popup
-                    $deleteButton.hide();
-                    deleteShift = true;
-                    restoreShift = false;
-
-                    // set popup header text and buttons for adding
-                    popup.setOptions({
-                        headerText: '<div>New shift</div><div class="employee-shifts-day">' +
-                            formatDate('DDDD', new Date(tempShift.start)) + ' ' + formatDate('DD MMMM YYYY', new Date(tempShift.start)) + '</div>',
-                        buttons: [
-                            'cancel',
-                            {
-                                text: 'Add',
-                                keyCode: 'enter',
-                                handler: function () {
-                                    {#calendar.updateEvent(tempShift);#}
-                                    {#deleteShift = false;#}
-                                    popup.close();
-                                    window.location = "{% url 'admins:shift-add' %}"
-
-                                },
-                                cssClass: 'mbsc-popup-button-primary'
-                            }
-                        ]
-                    });
-                    // fill popup with a new event data
-                    range.setVal([tempShift.start, tempShift.end]);
-
-                    popup.open();
-                }
-
-                // POPUP: CREATEUPDATE
-                function createEditPopup(args) {
-
-                    var ev = args.event;
-                    var resource = staff.find(function (r) {
-                        return r.id == ev.resource
-                    });
-
-                    var headerText = '<div>Edit ' + resource.name + '\'s hours</div><div class="employee-shifts-day">' +
-                        formatDate('DDDD', new Date(ev.start)) + ' ' + formatDate('DD MMMM YYYY', new Date(ev.start)) + '</div>';
-
-                    // show delete button inside edit popup
-                    $deleteButton.show();
-
-                    deleteShift = false;
-                    restoreShift = true;
-
-                    // // set popup header text and buttons for editing
-                    popup.setOptions({
-                        headerText: headerText,
-                        buttons: [
-                            'cancel',
-                            {
-                                text: 'View',
-                                keyCode: 'enter',
-                                handler: function () {
-                                    var date = range.getVal();
-
-                                    // update event with the new properties on save button click
-                                    /*
-                                    calendar.updateEvent({
-                                        id: ev.id,
-                                        title: formatDate('HH:mm', date[0]) + ' - ' + formatDate('HH:mm', date[1] ? date[1] : date[0]),
-                                        notes: $notes.val(),
-                                        start: date[0],
-                                        end: date[1] ? date[1] : date[0],
-                                        resource: resource.id,
-                                        color: resource.color,
-                                    });
-
-                                    restoreShift = false;
-                                    * */
-                                    window.location = "/a/shift/" + ev.id + "/change/";
-                                    popup.close();
-                                },
-                                cssClass: 'mbsc-popup-button-primary'
-                            }
-                        ]
-                    });
-
-                    // fill popup with the selected event data
-                    $notes.mobiscroll('getInst').value = ev.notes || '';
-                    range.setVal([ev.start, ev.end]);
-
-                    popup.open();
-                }
-
-                popup = $('#demo-employee-shifts-popup').mobiscroll().popup({
-                    display: 'bottom',
-                    contentPadding: false,
-                    fullScreen: true,
-                    onClose: function () {
-                        if (deleteShift) {
-                            calendar.removeEvent(tempShift);
-                        } else if (restoreShift) {
-                            calendar.updateEvent(oldShift);
-                        }
-                    },
-                    responsive: {
-                        medium: {
-                            display: 'center',
-                            width: 400,
-                            fullScreen: false,
-                            touchUi: false,
-                            showOverlay: false
-                        }
-                    }
-                }).mobiscroll('getInst');
-                range = $('#demo-employee-shifts-date').mobiscroll().datepicker({
-                    controls: ['time'],
-                    select: 'range',
-                    display: 'anchored',
-                    showRangeLabels: false,
-                    touchUi: false,
-                    startInput: '#employee-shifts-start',
-                    endInput: '#employee-shifts-end',
-                    stepMinute: 30,
-                    timeWheels: '|h:mm A|',
-                    onChange: function (args) {
-                        var date = args.value;
-
-                        // update shift's start/end date
-                        tempShift.start = date[0];
-                        tempShift.end = date[1] ? date[1] : date[0];
-                        tempShift.title = formatDate('HH:mm', date[0]) + ' - ' + formatDate('HH:mm', date[1] ? date[1] : date[0]);
-                    }
-                }).mobiscroll('getInst');
-                $notes.on('change', function (ev) {
-                    // update current event's title
-                    tempShift.notes = ev.target.value;
-                });
-                $deleteButton.on('click', function () {
-                    // delete current event on button click
-                    calendar.removeEvent(tempShift);
-
-                    // save a local reference to the deleted event
-                    var deletedShift = tempShift;
-
-                    popup.close();
-
-                    mobiscroll.snackbar({
-                        button: {
-                            action: function () {
-                                calendar.addEvent(deletedShift);
-                            },
-                            text: 'Undo'
-                        },
-                        duration: 10000,
-                        message: 'Shift deleted'
-                    });
-                });
-
+            $tooltip.mouseleave(function (ev) {
+                timer = setTimeout(function () {
+                    tooltip.close();
+                }, 200);
             });
+
+            $statusButton.on('click', function (ev) {
+                tooltip.close();
+                currentEvent.confirmed = !currentEvent.confirmed;
+                calendar.updateEvent(currentEvent);
+
+                mobiscroll.toast({
+                    message: 'Appointment ' + (currentEvent.confirmed ? 'confirmed' : 'canceled')
+                });
+            });
+
+            $fileButton.on('click', function (ev) {
+                tooltip.close();
+
+                window.location = "/a/shift/" + currentEvent.id + "/"
+            });
+
+            /*
+            $deleteButton.on('click', function (ev) {
+                calendar.removeEvent(currentEvent);
+
+                tooltip.close();
+
+                mobiscroll.toast({
+                    message: 'Appointment deleted'
+                });
+            });
+            * */
+
 
         });
+
     </script>
 {% endblock %}
