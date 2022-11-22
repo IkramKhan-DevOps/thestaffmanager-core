@@ -30,68 +30,70 @@
 </head>
 <body>
 
-{# HEADER #}
-{% block base_header %}
-    {% include 'core/include/header.html' %}
-{% endblock %}
+{% block dont_include_details %}
+    {# HEADER #}
+    {% block base_header %}
+        {% include 'core/include/header.html' %}
+    {% endblock %}
 
-{# HEADING #}
-<div class="page-wrapper-img">
-    <div class="page-wrapper-img-inner">
+    {# HEADING #}
+    <div class="page-wrapper-img">
+        <div class="page-wrapper-img-inner">
 
-        {% block base_subhead %}
-            {% include 'core/include/subhead.html' %}
-        {% endblock %}
+            {% block base_subhead %}
+                {% include 'core/include/subhead.html' %}
+            {% endblock %}
 
-        {# RIGHT SIDE #}
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="page-title-box">
-                    <div class="float-right align-item-center mt-2">
-                        {% block base_subhead_button %}
+            {# RIGHT SIDE #}
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="page-title-box">
+                        <div class="float-right align-item-center mt-2">
+                            {% block base_subhead_button %}
 
-                        {% endblock %}
-                    </div>
-                    <h4 class="page-title mb-2">
-                        <i class="mdi mdi-monitor mr-2"></i>
-                        {% block base_subhead_heading %}
-                            Dashboard
-                        {% endblock base_subhead_heading %}
-                    </h4>
-                    <div class="text-light">
-                        <p class="m-0">
-                            {% block base_subhead_paragraph %}
+                            {% endblock %}
+                        </div>
+                        <h4 class="page-title mb-2">
+                            <i class="mdi mdi-monitor mr-2"></i>
+                            {% block base_subhead_heading %}
+                                Dashboard
+                            {% endblock base_subhead_heading %}
+                        </h4>
+                        <div class="text-light">
+                            <p class="m-0">
+                                {% block base_subhead_paragraph %}
 
-                            {% endblock base_subhead_paragraph %}
-                        </p>
+                                {% endblock base_subhead_paragraph %}
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-{# NAVIGATION #}
-<div class="page-wrapper">
-    <div class="page-wrapper-inner">
+    {# NAVIGATION #}
+    <div class="page-wrapper">
+        <div class="page-wrapper-inner">
 
-        {% block base_nav_left %}
-            {% include 'admins/include/navbar_left.html' %}
-        {% endblock %}
+            {% block base_nav_left %}
+                {% include 'admins/include/navbar_left.html' %}
+            {% endblock %}
 
-        <div class="page-content">
-            <div class="container-fluid">
+            <div class="page-content">
+                <div class="container-fluid">
 
-                {% include 'core/include/messages.html' %}
+                    {% include 'core/include/messages.html' %}
 
-                {% block base_content %}
+                    {% block base_content %}
 
-                {% endblock %}
+                    {% endblock %}
+                </div>
             </div>
-        </div>
 
+        </div>
     </div>
-</div>
+{% endblock %}
 
 
 {# GLOBAL SCRIPTS #}

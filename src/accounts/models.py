@@ -29,6 +29,11 @@ class User(AbstractUser):
             return Employee.objects.get_or_create(user=self)
         return None
 
+    def get_user_name(self):
+        if self.first_name or self.last_name:
+            return self.first_name + " " + self.last_name
+        return self.username
+
     def get_user_documents(self):
         return UserDocument.objects.filter(user=self)
 

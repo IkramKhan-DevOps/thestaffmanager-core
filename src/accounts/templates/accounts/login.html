@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block base_title %}
-    Student | Login
+    Login
 {% endblock %}
 
 
@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-6 text-right"><a
-                                        href="{% url 'accounts:forget-password' %}"
+                                        href="{% url 'account_reset_password' %}"
                                         class="text-muted font-13"><i class="mdi mdi-lock"></i> Forgot your
                                     password?</a>
                                 </div>

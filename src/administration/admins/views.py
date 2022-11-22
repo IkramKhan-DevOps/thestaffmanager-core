@@ -22,12 +22,13 @@ from .models import (
 import calendar
 import datetime
 
+from ...accounts.decorators import admin_protected
 from ...accounts.models import User, UserDocument
 
 """ MAIN """
 
 
-@method_decorator([login_required, never_cache], name='dispatch')
+@method_decorator([admin_protected, never_cache], name='dispatch')
 class ScheduleView(TemplateView):
     template_name = 'admins/schedule.html'
 
@@ -81,7 +82,7 @@ class ScheduleView(TemplateView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class DashboardView(TemplateView):
     template_name = 'admins/dashboard.html'
 
@@ -91,12 +92,12 @@ class DashboardView(TemplateView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class PositionListView(ListView):
     queryset = Position.objects.all()
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class PositionDetailView(DetailView):
     model = Position
 
@@ -105,21 +106,21 @@ class PositionDetailView(DetailView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class PositionCreateView(CreateView):
     model = Position
     fields = '__all__'
     success_url = reverse_lazy('admins:position-list')
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class PositionUpdateView(UpdateView):
     model = Position
     fields = '__all__'
     success_url = reverse_lazy('admins:position-list')
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class PositionDeleteView(DeleteView):
     model = Position
     success_url = reverse_lazy('admins:position-list')
@@ -128,7 +129,7 @@ class PositionDeleteView(DeleteView):
 """ STUDENT CLASS """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class UserListView(ListView):
     queryset = User.objects.all()
     template_name = 'admins/user_list.html'
@@ -147,7 +148,7 @@ class UserListView(ListView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class UserStaffCreateView(CreateView):
     model = User
     form_class = UserCreationForm
@@ -159,7 +160,7 @@ class UserStaffCreateView(CreateView):
         return super().form_valid(form)
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class UserEmployeeCreateView(CreateView):
     model = User
     form_class = UserCreationForm
@@ -172,7 +173,7 @@ class UserEmployeeCreateView(CreateView):
         return super().form_valid(form)
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class UserUpdateView(UpdateView):
     model = User
     fields = ['profile_image', 'first_name', 'last_name', 'email', 'username', 'is_employee', 'is_active']
@@ -187,14 +188,14 @@ class UserUpdateView(UpdateView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class UserDeleteView(DeleteView):
     model = User
     template_name = 'admins/client_confirm_delete.html'
     success_url = reverse_lazy('admins:user-list')
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class UserDetailView(DetailView):
     model = User
     template_name = 'admins/user_detail.html'
@@ -207,7 +208,7 @@ class UserDetailView(DetailView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class UserPasswordResetView(View):
     model = User
     template_name = 'admins/user_password_change.html'
@@ -243,7 +244,7 @@ class UserEmployeeUpdateView(View):
         return redirect("admins:user-update", pk)
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class UserDocumentCreateView(View):
 
     def post(self, request, pk, *args, **kwargs):
@@ -258,7 +259,7 @@ class UserDocumentCreateView(View):
         return redirect("admins:user-update", pk)
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class UserDocumentDeleteView(DeleteView):
     model = UserDocument
     template_name = 'admins/userdocument_confirm_delete.html'
@@ -270,7 +271,7 @@ class UserDocumentDeleteView(DeleteView):
 """ CLIENTS and CONTACTS """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ClientListView(ListView):
     queryset = Client.objects.all()
     paginate_by = 50
@@ -288,7 +289,7 @@ class ClientListView(ListView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ClientDetailView(DetailView):
     model = Client
 
@@ -297,21 +298,21 @@ class ClientDetailView(DetailView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ClientCreateView(CreateView):
     model = Client
     fields = '__all__'
     success_url = reverse_lazy('admins:client-list')
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ClientUpdateView(UpdateView):
     model = Client
     fields = '__all__'
     success_url = reverse_lazy('admins:client-list')
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ClientDeleteView(DeleteView):
     model = Client
     success_url = reverse_lazy('admins:client-list')
@@ -320,7 +321,7 @@ class ClientDeleteView(DeleteView):
 """ SITES """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class SiteListView(ListView):
     queryset = Site.objects.all()
     paginate_by = 50
@@ -338,7 +339,7 @@ class SiteListView(ListView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class SiteDetailView(DetailView):
     model = Site
 
@@ -347,21 +348,21 @@ class SiteDetailView(DetailView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class SiteCreateView(CreateView):
     model = Site
     fields = '__all__'
     success_url = reverse_lazy('admins:site-list')
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class SiteUpdateView(UpdateView):
     model = Site
     fields = '__all__'
     success_url = reverse_lazy('admins:site-list')
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class SiteDeleteView(DeleteView):
     model = Site
     success_url = reverse_lazy('admins:site-list')
@@ -370,7 +371,7 @@ class SiteDeleteView(DeleteView):
 """ SHIFTS """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ShiftListView(ListView):
     model = Shift
     paginate_by = 50
@@ -388,7 +389,7 @@ class ShiftListView(ListView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ShiftDetailView(DetailView):
     model = Shift
 
@@ -398,7 +399,7 @@ class ShiftDetailView(DetailView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ShiftCreateView(CreateView):
     model = Shift
     fields = '__all__'
@@ -408,7 +409,7 @@ class ShiftCreateView(CreateView):
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ShiftUpdateView(UpdateView):
     model = Shift
     fields = '__all__'
@@ -438,7 +439,7 @@ class ShiftUpdateView(UpdateView):
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ShiftDeleteView(DeleteView):
     model = Shift
     success_url = reverse_lazy('admins:shift-list')
@@ -447,7 +448,7 @@ class ShiftDeleteView(DeleteView):
 """ SHIFT DAY """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ShiftDayUpdateView(UpdateView):
     model = ShiftDay
     fields = [
@@ -459,7 +460,7 @@ class ShiftDayUpdateView(UpdateView):
         return reverse_lazy('admins:shift-detail', args=[self.object.shift.pk])
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ShiftDayDeleteView(DeleteView):
     model = ShiftDay
     success_url = reverse_lazy('admins:shift-list')
@@ -471,12 +472,12 @@ class ShiftDayDeleteView(DeleteView):
 """ ReportTypeS """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ReportTypeListView(ListView):
     queryset = ReportType.objects.all()
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ReportTypeDetailView(DetailView):
     model = ReportType
 
@@ -485,21 +486,21 @@ class ReportTypeDetailView(DetailView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ReportTypeCreateView(CreateView):
     model = ReportType
     fields = '__all__'
     success_url = reverse_lazy('admins:report-type-list')
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ReportTypeUpdateView(UpdateView):
     model = ReportType
     fields = '__all__'
     success_url = reverse_lazy('admins:report-type-list')
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ReportTypeDeleteView(DeleteView):
     model = ReportType
     success_url = reverse_lazy('admins:report-type-list')
@@ -508,12 +509,12 @@ class ReportTypeDeleteView(DeleteView):
 """ OTHER """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ShiftsView(TemplateView):
     template_name = 'admins/construction.html'
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
@@ -533,7 +534,7 @@ class TimeClockView(ListView):
         return context
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class AbsencesView(TemplateView):
     template_name = 'admins/construction.html'
 
@@ -541,27 +542,27 @@ class AbsencesView(TemplateView):
 """ --------------------------------------------- """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class AuditLogView(TemplateView):
     template_name = 'admins/construction.html'
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class LiveChatView(TemplateView):
     template_name = 'admins/construction.html'
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class CasesView(TemplateView):
     template_name = 'admins/construction.html'
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class CallsView(TemplateView):
     template_name = 'admins/construction.html'
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class PipelineView(TemplateView):
     template_name = 'admins/construction.html'
 
@@ -569,26 +570,26 @@ class PipelineView(TemplateView):
 """ --------------------------------------------- """
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ReportsView(TemplateView):
     template_name = 'admins/construction.html'
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ShiftNotesView(TemplateView):
     template_name = 'admins/construction.html'
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class ChargesBreakView(TemplateView):
     template_name = 'admins/construction.html'
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class PayRunReportView(TemplateView):
     template_name = 'admins/construction.html'
 
 
-@method_decorator(login_required, name='dispatch')
+@method_decorator(admin_protected, name='dispatch')
 class HealthView(TemplateView):
     template_name = 'admins/construction.html'
