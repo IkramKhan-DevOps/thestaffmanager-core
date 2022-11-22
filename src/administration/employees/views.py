@@ -1,10 +1,13 @@
 import datetime
 
+from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView, ListView, DetailView, UpdateView
 
+from src.accounts.decorators import employee_protected
 from src.administration.admins.models import Shift
 
 
+@method_decorator(employee_protected, name='dispatch')
 class DashboardView(TemplateView):
     template_name = 'employees/dashboard.html'
 
@@ -14,6 +17,7 @@ class DashboardView(TemplateView):
         return context
 
 
+@method_decorator(employee_protected, name='dispatch')
 class ShiftListView(ListView):
     template_name = 'employees/shift_list.html'
 
@@ -21,6 +25,7 @@ class ShiftListView(ListView):
         return Shift.objects.filter(employee__user=self.request.user)
 
 
+@method_decorator(employee_protected, name='dispatch')
 class ShiftDetailView(DetailView):
     model = Shift
     template_name = 'employees/shift_detail.html'
