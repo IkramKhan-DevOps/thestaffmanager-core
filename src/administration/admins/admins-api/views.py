@@ -8,8 +8,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 
-from src.administration.admins.models import Shift, ShiftDay
-from .serializers import ShiftDaySerializer
+from src.administration.admins.models import Shift, ShiftDay, Site, Client
+from .serializers import ShiftDaySerializer, SiteSerializer
 
 
 class ShiftListAPIView(ListAPIView):
@@ -120,4 +120,15 @@ class ChangeTimesAPI(APIView):
 
         context['message'] = f"Times changed successfully"
         return Response(status=HTTP_200_OK, data=context)
+
+
+class SiteByClientListView(ListAPIView):
+    queryset = ShiftDay.objects.all()
+    serializer_class = SiteSerializer
+    permission_classes = [IsAdminUser]
+
+    def get_queryset(self):
+        client = get_object_or_404(Client, pk=self.kwargs['pk'])
+        return Site.objects.filter(client=client)
+
 
