@@ -46,7 +46,7 @@ INSTALLED_APPS = [
 
     # SYSTEM APPS
     'src.accounts',
-    'src.administration.staff',
+    'src.administration.employees',
     'src.administration.admins',
 
     # NOTIFICATIONS APPS

@@ -23,7 +23,7 @@ urlpatterns = [
 urlpatterns += [
     path('accounts/', include('src.accounts.urls', namespace='accounts')),
     path('a/', include('src.administration.admins.urls', namespace='admins')),
-    path('s/', include('src.administration.staff.urls', namespace='staffs')),
+    path('c/', include('src.administration.employees.urls', namespace='employees')),
     path('', home_view, name='home')
 ]
 

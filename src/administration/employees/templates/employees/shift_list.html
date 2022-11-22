@@ -1,0 +1,80 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block base_title %}Admins | Shifts{% endblock %}
+{% block base_subhead_heading %}Shifts{% endblock %}
+{% block base_subhead_paragraph %}Your available shifts list.{% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0 card-title"><b>Your shifts</b></p>
+                </div>
+                <div class="card-body">
+
+                    {% if object_list %}
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Qty</th>
+                                    <th>Client</th>
+                                    <th>Charge Rate</th>
+                                    <th>Pay Rate</th>
+                                    <th>Days</th>
+                                    <th>-</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for object in object_list %}
+                                    <tr>
+                                        <td>{{ object.get_job_type_display }}</td>
+                                        <td>{{ object.start_date }}</td>
+                                        <td>{{ object.end_date }}</td>
+                                        <td>{{ object.start_time }}</td>
+                                        <td>{{ object.end_time }}</td>
+                                        <td>{{ object.quantity }}</td>
+                                        <td>{{ object.client.name }}</td>
+                                        <td>{{ object.charge_rate }}</td>
+                                        <td>{{ object.pay_rate }}</td>
+                                        <td>{{ object.shiftday_set.count }}</td>
+                                        <th>
+                                            <a href="{% url 'employees:shift-detail' object.pk %}">
+                                                <i class="fa fa-eye"></i>
+                                            </a>
+                                        </th>
+                                    </tr>
+                                {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    {% else %}
+                        <p class="mb-0 text-danger">
+                            <b>
+                                <i class="fa fa-exclamation-circle"></i>
+                                No objects available
+                            </b>
+                        </p>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

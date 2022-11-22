@@ -1,4 +1,4 @@
-{% if request.user.is_superuser %}
+{% if not request.user.is_superuser %}
     <div class="left-sidenav">
         <ul class="metismenu left-sidenav-menu" id="side-nav">
             <li class="menu-title">General</li>
@@ -98,6 +98,24 @@
                 </a>
             </li>
 
+        </ul>
+    </div>
+{% else %}
+    <div class="left-sidenav">
+        <ul class="metismenu left-sidenav-menu" id="side-nav">
+
+            <li>
+                <a href="{% url 'employees:dashboard' %}">
+                    <i class="mdi mdi-view-dashboard"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'employees:shift-list' %}">
+                    <i class="mdi mdi-view-array"></i>
+                    <span>Shifts</span>
+                </a>
+            </li>
         </ul>
     </div>
 {% endif %}
