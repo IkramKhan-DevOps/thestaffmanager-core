@@ -36,7 +36,7 @@ class UserCustomAdmin(admin.ModelAdmin):
             'fields': ('profile_image', 'first_name', 'last_name', 'email', 'phone_number')
         }),
         ('Access Control', {
-            'fields': ('is_active', 'is_staff', 'is_superuser'),
+            'fields': ('is_active', 'is_staff', 'is_superuser', 'is_employee'),
         }),
         ('Permissions', {
             'fields': ('groups', 'user_permissions'),
