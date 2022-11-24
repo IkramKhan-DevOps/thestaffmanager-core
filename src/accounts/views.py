@@ -33,7 +33,7 @@ class LoginView(View):
                 if request.user.is_superuser:
                     return redirect('admins:dashboard')
                 else:
-                    return redirect('staffs:dashboard')
+                    return redirect('employees:dashboard')
         return render(request, template_name='accounts/login.html', context={'form': form})
 
 
