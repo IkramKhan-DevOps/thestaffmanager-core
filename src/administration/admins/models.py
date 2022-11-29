@@ -210,7 +210,7 @@ class Shift(models.Model):
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)
     employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="employee")
 
-    quantity = models.PositiveIntegerField(default=1)
+    # quantity = models.PositiveIntegerField(default=1)
     pay_rate = models.FloatField(default=0)
     charge_rate = models.FloatField(default=0)
     extra_charges = models.FloatField(default=0)
@@ -234,14 +234,17 @@ class Shift(models.Model):
         return llist
 
 
+
+def
 class ShiftDay(models.Model):
     """
     TODO: UPDATE
-    add > employee here to ? shift can be assigned to someone else
-    add > shift_start_time
-    add > shift_end_time
-    add > shift_start_date
-    add > shift_end_date
+    add    > employee here to ? shift can be assigned to someone else
+    add    > shift_start_time
+    add    > shift_end_time
+    add    > shift_start_date
+    add    > shift_end_date
+    remove > shift, worked and extra hours
     """
 
     STATUS_CHOICE = (
@@ -255,13 +258,16 @@ class ShiftDay(models.Model):
     clock_in = models.DateTimeField(null=True, blank=True)
     clock_out = models.DateTimeField(null=True, blank=True)
 
-    shift_hours = models.PositiveIntegerField(default=0)
-    worked_hours = models.PositiveIntegerField(default=0)
-
-    extra_hours = models.IntegerField(default=0)
-
     shift_date = models.DateField()
     shift_end_date = models.DateField()
+
+    shift_time = models.TimeField(null=True, blank=True)
+    shift_end_time = models.TimeField(null=True, blank=True)
+
+    shift_hours = models.PositiveIntegerField(default=0)
+    worked_hours = models.PositiveIntegerField(default=0)
+    extra_hours = models.IntegerField(default=0)
+
     status = models.CharField(max_length=3, default="awa", choices=STATUS_CHOICE)
 
     class Meta:
@@ -269,6 +275,10 @@ class ShiftDay(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
+    @property
+    def default_date(self):
+        return self.shift.start_time
 
     def save(self, *args, **kwargs):
         """
