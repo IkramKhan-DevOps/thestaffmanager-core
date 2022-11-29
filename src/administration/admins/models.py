@@ -8,20 +8,20 @@ from django.dispatch import receiver
 from src.accounts.models import User, Employee
 
 from faker import Faker
+
 fake = Faker()
 
 
 class Position(models.Model):
-
     name = models.CharField(max_length=255)
     card_color = ColorField()
     charge_rate = models.FloatField()
-    pay_rate = models.FloatField()
+    pay_rate = models.FloatField(help_text="Please provide payments")
 
     is_active = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['-id']
         verbose_name_plural = "Positions"
 
     def __str__(self):
@@ -42,7 +42,6 @@ class Position(models.Model):
 
 
 class Client(models.Model):
-
     name = models.CharField(max_length=255)
     parent_client = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     xero_contact_name = models.CharField(
@@ -183,17 +182,23 @@ class Site(models.Model):
 
 
 class Shift(models.Model):
+    """
+    TODO: UPDATE
+    1. quantity : not required
+    2. job_type : data changed
+    3. on_create: on shift create > create history record
+    """
+
     JOB_TYPE_CHOICE = (
-        ('shift', 'Shift'),
-        ('response', 'Response'),
+        ('o', 'Open'),
+        ('p', 'Pattern'),
     )
     REPEAT_POLICY_TYPE = (
         ('r', 'Regular'),
         ('w', 'Weekly repeat'),
         ('d', 'Selected Dates'),
     )
-
-    job_type = models.CharField(default='shift', choices=JOB_TYPE_CHOICE, max_length=50)
+    job_type = models.CharField(default='p', choices=JOB_TYPE_CHOICE, max_length=1)
 
     start_date = models.DateField()
     end_date = models.DateField()
@@ -202,11 +207,10 @@ class Shift(models.Model):
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    # TODO:NOTE: on response type position is not required
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)
-    quantity = models.PositiveIntegerField(default=1)
-
     employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="employee")
+
+    quantity = models.PositiveIntegerField(default=1)
     pay_rate = models.FloatField(default=0)
     charge_rate = models.FloatField(default=0)
     extra_charges = models.FloatField(default=0)
@@ -225,13 +229,21 @@ class Shift(models.Model):
         return ShiftDay.objects.filter(shift=self)
 
     def get_week_shifts_status(self):
-
         llist = []
         [llist.append(True) if str(x) in self.week_days else llist.append(False) for x in range(7)]
         return llist
 
 
 class ShiftDay(models.Model):
+    """
+    TODO: UPDATE
+    add > employee here to ? shift can be assigned to someone else
+    add > shift_start_time
+    add > shift_end_time
+    add > shift_start_date
+    add > shift_end_date
+    """
+
     STATUS_CHOICE = (
         ('awa', 'Awaiting'),
         ('run', 'Running'),
@@ -292,4 +304,3 @@ class ShiftDay(models.Model):
                 self.save()
 
         return self.status
-
