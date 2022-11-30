@@ -201,7 +201,7 @@ class Shift(models.Model):
     job_type = models.CharField(default='p', choices=JOB_TYPE_CHOICE, max_length=1)
 
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(null=False, blank=True)
     start_time = models.TimeField()
     end_time = models.TimeField()
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
@@ -234,8 +234,6 @@ class Shift(models.Model):
         return llist
 
 
-
-def
 class ShiftDay(models.Model):
     """
     TODO: UPDATE
@@ -276,10 +274,6 @@ class ShiftDay(models.Model):
     def __str__(self):
         return str(self.pk)
 
-    @property
-    def default_date(self):
-        return self.shift.start_time
-
     def save(self, *args, **kwargs):
         """
         :start       --- get start datetime from (shift_date + shift_start_time)
@@ -287,6 +281,15 @@ class ShiftDay(models.Model):
         :total hours --- end - start
         """
 
+        # ON CREATE :: shift_times and shift_dates are equal to parent
+        # if self._state.adding and self.shift_date:
+        #     self.shift_time = self.shift.start_time
+        #     self.shift_end_time = self.shift.end_time
+        #     self.shift_date = self.shift.start_date
+        #     self.shift_end_time = self.shift.end_date
+
+        # BOTH (ON-CREATE + ON-UPDATE)
+        # IF CHANGES IN END - DATE
         if self.shift_date:
             start = datetime.combine(self.shift_date, self.shift.start_time)
             end = datetime.combine(self.shift_date, self.shift.end_time)

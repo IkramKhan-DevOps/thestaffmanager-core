@@ -42,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div id="div_repeat_policy" class="card">
                     <div class="card-body border-bottom">
                         <p class="mb-0 card-title">Repeat Policy</p>
                     </div>
@@ -219,6 +219,7 @@
         $(document).ready(function () {
 
             let customize = $("#customize");
+            let div_repeat_policy = $("#div_repeat_policy");
             let weekly_div = $("#weekly");
             let regular_div = $("#regular");
             let dates_div = $("#selected_dates");
@@ -233,6 +234,10 @@
 
             $('#id_repeat_policy').change(function () {
                 update_ui($(this).val())
+            });
+
+            $('#id_job_type').change(function () {
+                show_form($(this).val());
             });
 
             $('#id_start_date').datetimepicker({
@@ -300,6 +305,26 @@
 
             function init() {
                 update_ui(repeat_policy);
+            }
+
+            function show_form(shift_type) {
+                if(shift_type === 'o'){
+                    show_open_form()
+                }else{
+                    show_pattern_form()
+                }
+            }
+
+            function show_open_form() {
+                div_repeat_policy.hide();
+                $('#div_id_end_date').hide();
+                $('#div_id_repeat_policy').hide();
+            }
+
+            function show_pattern_form() {
+                div_repeat_policy.show();
+                $('#div_id_end_date').show();
+                $('#div_id_repeat_policy').show();
             }
 
         })

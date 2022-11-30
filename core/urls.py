@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.shortcuts import redirect, render
 from django.urls import path, include, re_path
 
+from . import settings
 from .settings import MEDIA_ROOT, STATIC_ROOT
 from django.views.static import serve
 
@@ -35,3 +36,10 @@ urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
 ]
+
+# if settings.DEBUG:
+#     import debug_toolbar
+#     urlpatterns += [
+#         path('__debug__/', include(debug_toolbar.urls)),
+#     ]
+
