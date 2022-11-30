@@ -95,9 +95,15 @@
                                 <tbody>
                                 {% for shift_day in object.get_shifts.all %}
                                     <tr>
-                                        <td>{{ shift_day.employee.user.get_user_name }}</td>
-                                        <td><i class="fa fa-play text-success"></i> {{ shift_day.shift_date }}<br><i class="fa fa-pause text-danger"></i> {{ shift_day.shift_end_date }}</td>
-                                        <td><i class="fa fa-play text-success"></i> {{ shift_day.shift_time }}<br><i class="fa fa-pause text-danger"></i> {{ shift_day.shift_end_time }}</td>
+                                        <td>
+                                            <b>
+                                                <a href="{% url 'admins:user-detail' shift_day.employee.user.pk %}">
+                                                    {{ shift_day.employee.user.get_user_name }}
+                                                </a>
+                                            </b>
+                                        </td>
+                                        <td>{{ shift_day.shift_date }}<br>{{ shift_day.shift_end_date }}</td>
+                                        <td>{{ shift_day.shift_time }}<br>{{ shift_day.shift_end_time }}</td>
                                         <td>{{ shift_day.clock_in }}</td>
                                         <td>{{ shift_day.clock_out }}</td>
                                         <td>
