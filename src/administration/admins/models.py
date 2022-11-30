@@ -225,6 +225,14 @@ class Shift(models.Model):
     def __str__(self):
         return str(self.pk)
 
+    def save(self, *args, **kwargs):
+        """
+        LOGIC 1 :: if job_type == open >> set last_date to first_date
+        """
+        if self.job_type == 'o' and self.start_date:
+            self.end_date = self.start_date
+        super(Shift, self).save(*args, **kwargs)
+
     def get_shifts(self):
         return ShiftDay.objects.filter(shift=self)
 
@@ -255,6 +263,7 @@ class ShiftDay(models.Model):
 
     clock_in = models.DateTimeField(null=True, blank=True)
     clock_out = models.DateTimeField(null=True, blank=True)
+    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="employee")
 
     shift_date = models.DateField()
     shift_end_date = models.DateField()
@@ -282,11 +291,11 @@ class ShiftDay(models.Model):
         """
 
         # ON CREATE :: shift_times and shift_dates are equal to parent
-        # if self._state.adding and self.shift_date:
-        #     self.shift_time = self.shift.start_time
-        #     self.shift_end_time = self.shift.end_time
-        #     self.shift_date = self.shift.start_date
-        #     self.shift_end_time = self.shift.end_date
+        if self._state.adding and self.shift_date:
+            self.shift_time = self.shift.start_time
+            self.shift_end_time = self.shift.end_time
+            self.shift_date = self.shift.start_date
+            self.shift_end_date = self.shift.end_date
 
         # BOTH (ON-CREATE + ON-UPDATE)
         # IF CHANGES IN END - DATE

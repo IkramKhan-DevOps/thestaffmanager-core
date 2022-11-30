@@ -15,7 +15,7 @@ from .views import (
     ScheduleView, ShiftsView, TimeClockView, AbsencesView,
     PayRunReportView, ShiftNotesView, ChargesBreakView, ReportsView, HealthView, ShiftListView, ShiftDetailView,
     ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
-    UserEmployeeUpdateView
+    UserEmployeeUpdateView, ShiftCustomCreateView
 )
 
 app_name = 'admins'
@@ -103,4 +103,8 @@ urlpatterns += [
 
 urlpatterns += [
     path('api/', include('src.administration.admins.admins-api.urls', namespace='admins-api'))
+]
+
+urlpatterns += [
+    path('ccs/', ShiftCustomCreateView.as_view(), name="ccs")
 ]

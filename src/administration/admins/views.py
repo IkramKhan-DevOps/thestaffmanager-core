@@ -416,6 +416,21 @@ class ShiftCreateView(CreateView):
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 
+class ShiftCustomCreateView(View):
+    template_name = "admins/shift_custom_create_form.html"
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            'employees': Employee.objects.all(),
+            'positions': Position.objects.all(),
+            'clients': Client.objects.all()
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+
 @method_decorator(admin_protected, name='dispatch')
 class ShiftUpdateView(UpdateView):
     """
@@ -426,7 +441,10 @@ class ShiftUpdateView(UpdateView):
     2. validation() on shift create check for possible clash
     """
     model = Shift
-    fields = '__all__'
+    fields = [
+        'start_date', 'end_date', 'start_time', 'end_time', 'client', 'site', 'position', 'employee',
+        'pay_rate', 'charge_rate', 'extra_charges', 'repeat_policy'
+    ]
     previous_shift = None
 
     def dispatch(self, request, *args, **kwargs):

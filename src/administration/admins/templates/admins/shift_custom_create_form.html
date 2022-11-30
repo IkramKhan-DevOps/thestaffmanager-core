@@ -1,0 +1,217 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block base_title %}admins | CCS {% endblock %}
+{% block base_subhead_heading %}CCS {% endblock %}
+{% block base_subhead_paragraph %}CCS FORM{% endblock %}
+
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:shift-list' %}"><i class="fa fa-arrow-left"></i> View Shifts</a>
+{% endblock %}
+
+{% block base_css %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+{% endblock %}
+
+
+{% block base_content %}
+
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+            <div class="card">
+
+                <div class="card-body border-bottom">
+                    <p class="mb-0 card-title">
+                        <b>Shift Details</b>
+                    </p>
+                </div>
+                <div class="card-body">
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="end_date">Start Date</label>
+                                <input type="text" class="form-control" id="id_start_date"
+                                       placeholder="00-00-0000" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="start_date">End Date</label>
+                                <input type="text" class="form-control" id="id_end_date"
+                                       placeholder="00-00-0000" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="end_time">Start Time</label>
+                                <input type="text" class="form-control" id="id_start_time"
+                                       placeholder="00:00" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="start_time">End Time</label>
+                                <input type="text" class="form-control" id="id_end_time"
+                                       placeholder="00:00" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-4 mb-3">
+                                <label for="id_pay_rate">Pay Rate</label>
+                                <input type="text" class="form-control" id="id_pay_rate"
+                                       value="0" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="id_charge_rate">Charge Rate</label>
+                                <input type="text" class="form-control" id="id_charge_rate"
+                                       value="0" required>
+                            </div>
+                            <div class="col-md-4 mb-3">
+                                <label for="id_extra_charges">Extra Charges</label>
+                                <input type="text" class="form-control" id="id_extra_charges"
+                                       value="0" required>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_employee">Employee</label>
+                                <select id="id_employee" name="employee" class="form-control">
+                                    <option>-- select employees --</option>
+                                    {% for employee in employees %}
+                                        <option value="{{ employee.id }}">{{ employee.user.username }}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_position">Position</label>
+                                <select id="id_position" name="position" class="form-control">
+                                    <option value> -- select position --</option>
+                                    {% for position in positions %}
+                                        <option value="{{ position.id }}">{{ position.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_client">Client</label>
+                                <select id="id_client" name="client" class="form-control">
+                                    <option>-- select clients --</option>
+                                    {% for client in clients %}
+                                        <option value="{{ client.id }}">{{ client.name }}</option>
+                                    {% endfor %}
+
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="id_site">Site</label>
+                                <select id="id_site" name="site" class="form-control">
+                                    <option value> -- select site --</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <label>Select Your Shift Repeat Policy</label>
+                            </div>
+                                <div class="col-sm-12">
+                                    <div class="form-check-inline my-1">
+                                        <div class="custom-control custom-radio mr-2">
+                                            <input type="radio" id="id_repeat_policy1" name="id_repeat_policy"
+                                                   class="custom-control-input">
+                                            <label class="custom-control-label" for="id_repeat_policy1">
+                                                Regular Repeat
+                                            </label>
+                                        </div>
+                                        <div class="custom-control custom-radio mr-2">
+                                            <input type="radio" id="id_repeat_policy2" name="id_repeat_policy"
+                                                   class="custom-control-input">
+                                            <label class="custom-control-label" for="id_repeat_policy2">
+                                                Weekly Repeat
+                                            </label>
+                                        </div>
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="id_repeat_policy3" name="id_repeat_policy"
+                                                   class="custom-control-input">
+                                            <label class="custom-control-label" for="id_repeat_policy3">
+                                                Selected Dates Only
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block base_internal_scripts %}
+    <script src="{% static 'core/plugins/repeater/jquery.repeater.min.js' %}"></script>
+    <script src="{% static 'core/pages/jquery.form-repeater.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block base_external_scripts %}
+
+    <script>
+        $(document).ready(function () {
+            $('#id_start_date').datetimepicker({
+                format: 'Y-m-d',
+                timepicker: false,
+            });
+            $('#id_end_date').datetimepicker({
+                format: 'Y-m-d',
+                timepicker: false,
+            });
+
+            $('#id_start_time').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+            $('#id_end_time').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            let client_options = $('#id_client')
+            let site_options = $('#id_site')
+            const empty_html = "<option value>-- select site --</option>"
+
+            client_options.change(function (event) {
+                site_options.html('')
+                let format_html = empty_html;
+                let value = $(this).val();
+                if (value !== undefined && value != null && value > 0) {
+                    $.get('/a/api/client/' + value + '/sites/', function (data, status) {
+                        if (status === 'success') {
+                            for (const datum of data) {
+                                format_html += `<option value='${datum.id}'>${datum.name}</option>`;
+                            }
+                        }
+                        site_options.append(format_html);
+                    });
+                } else {
+                    site_options.html(empty_html);
+                }
+            });
+
+        })
+    </script>
+
+{% endblock %}

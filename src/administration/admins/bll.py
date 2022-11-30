@@ -1,7 +1,7 @@
 import calendar
 import datetime
 
-from src.administration.admins.models import ShiftDay
+from src.administration.admins.models import ShiftDay, Shift
 
 
 # GET DATES: between (start - end) according to policy.
@@ -79,37 +79,33 @@ def shifts_create_update_logic(shift, is_create, previous_shift, refresh, *args)
 
 # STEP1: input request with (create/update) - (policy-type)
 def shifts_create_update(shift, post, is_create=True, refresh=False, previous_shift=None):
+    # if shift policy is regular
+    if shift.repeat_policy == 'r':
+        shifts_create_update_logic(shift, is_create, previous_shift, refresh)
 
-    if shift.job_type == 'o':
-        pass
-    else:
-        # if shift policy is regular
-        if shift.repeat_policy == 'r':
-            shifts_create_update_logic(shift, is_create, previous_shift, refresh)
+    # if shift policy is week
+    elif shift.repeat_policy == 'w':
+        shifts_create_update_logic(
+            shift, is_create, previous_shift, refresh,
+            post.get('monday'), post.get('tuesday'), post.get('wednesday'), post.get('thursday'),
+            post.get('friday'),
+            post.get('saturday'), post.get('sunday')
+        )
 
-        # if shift policy is week
-        elif shift.repeat_policy == 'w':
-            shifts_create_update_logic(
-                shift, is_create, previous_shift, refresh,
-                post.get('monday'), post.get('tuesday'), post.get('wednesday'), post.get('thursday'),
-                post.get('friday'),
-                post.get('saturday'), post.get('sunday')
-            )
+    # if shift policy is dates
+    elif shift.repeat_policy == 'd':
+        date_index_names = []
+        date_index_values = []
 
-        # if shift policy is dates
-        elif shift.repeat_policy == 'd':
-            date_index_names = []
-            date_index_values = []
+        # get keys first then names
+        [date_index_names.append(key) if "car" in key else None for key, name in post.items()]
+        [date_index_values.append(post[f'{name}']) for name in date_index_names]
 
-            # get keys first then names
-            [date_index_names.append(key) if "car" in key else None for key, name in post.items()]
-            [date_index_values.append(post[f'{name}']) for name in date_index_names]
+        # if difference in length
+        if len(date_index_values) != ShiftDay.objects.filter(shift=shift).count():
+            refresh = True
 
-            # if difference in length
-            if len(date_index_values) != ShiftDay.objects.filter(shift=shift).count():
-                refresh = True
-
-            shifts_create_update_logic(shift, is_create, previous_shift, refresh, date_index_values)
+        shifts_create_update_logic(shift, is_create, previous_shift, refresh, date_index_values)
 
 
 def get_shift_days_dict(shift):
@@ -124,39 +120,3 @@ def get_shift_days_dict(shift):
         for day in days:
             pass
         context['days'].append({'name': 'day', 'on': True})
-
-
-"""
-SHIFT CREATE NEW LOGICS
-"""
-
-
-class ShiftDLL:
-    def __init__(
-            self, pk, shift_type, start_date, end_date, start_time, end_time, client, site, position, employee,
-            pay_rate, charge_rate, extra_charges, week_days
-    ):
-        self.pk = pk
-        self.type = shift_type
-        self.start_date = start_date
-        self.end_date = end_date
-        self.start_time = start_time
-        self.end_time = end_time
-        self.client = client
-        self.site = site
-        self.position = position
-        self.employee = employee
-        self.pay_rate = pay_rate
-        self.charge_rate = charge_rate
-        self.extra_charges = extra_charges
-        self.week_days = week_days
-
-    def save(self):
-        pass
-
-    def update(self, shift_id):
-        pass
-
-
-def shifts_cross_auth(shift_type='o', repeat_policy=None, is_create=True):
-    pass
