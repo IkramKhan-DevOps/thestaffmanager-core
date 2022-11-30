@@ -30,6 +30,7 @@ class User(AbstractUser):
         return None
 
     def get_user_name(self):
+        print(self.username)
         if self.first_name or self.last_name:
             return self.first_name + " " + self.last_name
         return self.username

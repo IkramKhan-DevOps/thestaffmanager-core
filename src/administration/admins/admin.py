@@ -6,12 +6,13 @@ from .models import (
 
 
 class ShiftDayAdmin(admin.ModelAdmin):
-    list_display = ['shift', 'shift_date']
+    list_display = ['shift', 'employee', 'shift_date', 'shift_end_date', 'clock_in', 'clock_out']
 
 
 class ShiftAdmin(admin.ModelAdmin):
-    list_display = ['id', 'start_date', 'end_date', 'start_time', 'end_time', 'client', 'pay_rate', 'charge_rate',
-                    'week_days']
+    list_display = [
+        'id', 'start_date', 'end_date', 'start_time', 'end_time', 'client', 'employee', 'pay_rate', 'charge_rate'
+    ]
 
 
 admin.site.register(Position)

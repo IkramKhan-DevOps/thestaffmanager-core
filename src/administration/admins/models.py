@@ -261,9 +261,11 @@ class ShiftDay(models.Model):
     )
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE)
 
-    clock_in = models.DateTimeField(null=True, blank=True)
-    clock_out = models.DateTimeField(null=True, blank=True)
-    employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="employee")
+    clock_in = models.TimeField(null=True, blank=True)
+    clock_out = models.TimeField(null=True, blank=True)
+    employee = models.ForeignKey(
+        Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="employee_for_shift"
+    )
 
     shift_date = models.DateField()
     shift_end_date = models.DateField()
@@ -296,6 +298,7 @@ class ShiftDay(models.Model):
             self.shift_end_time = self.shift.end_time
             self.shift_date = self.shift.start_date
             self.shift_end_date = self.shift.end_date
+            self.employee = self.shift.employee
 
         # BOTH (ON-CREATE + ON-UPDATE)
         # IF CHANGES IN END - DATE
@@ -311,9 +314,9 @@ class ShiftDay(models.Model):
                 self.shift_end_date = self.shift_date
                 self.shift_hours = round((end - start).total_seconds() / 3600)
 
-            if self.clock_out and self.clock_in:
-                self.worked_hours = round((self.clock_out - self.clock_in).total_seconds() / 3600)
-                self.extra_hours = self.worked_hours - self.shift_hours
+            # if self.clock_out and self.clock_in:
+            #     self.worked_hours = round((self.clock_out - self.clock_in).total_seconds() / 3600)
+            #     self.extra_hours = self.worked_hours - self.shift_hours
 
         super(ShiftDay, self).save(*args, **kwargs)
 

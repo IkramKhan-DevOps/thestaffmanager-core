@@ -484,7 +484,7 @@ class ShiftDeleteView(DeleteView):
 class ShiftDayUpdateView(UpdateView):
     model = ShiftDay
     fields = [
-        'shift_date', 'shift_end_date', 'clock_in', 'clock_out',
+        'employee', 'clock_in', 'clock_out',
         'shift_hours', 'worked_hours', 'extra_hours', 'status'
     ]
 

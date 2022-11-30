@@ -20,11 +20,7 @@
                         {% if object.employee %}
                             <b>
                                 <a href="{% url 'admins:user-update' object.employee.user.pk %}">
-                                    {% if object.employee.user.get_full_name %}
-                                        {{ object.employee.user.get_full_name }}
-                                    {% else %}
-                                        {{ object.employee.user.username }}
-                                    {% endif %}
+                                        {{ object.employee.user.get_user_name }}
                                 </a>
                             </b>
                         {% else %}
@@ -84,10 +80,11 @@
                             <table class="table table-hover">
                                 <thead class="thead-light">
                                 <tr>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th>Shift Time</th>
-                                    <th>Billed Time</th>
+                                    <th>Employee</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
                                     <th>Shift Hours</th>
                                     <th>Active Hours</th>
                                     <th>Extra Hours</th>
@@ -96,31 +93,32 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for object in object.get_shifts %}
+                                {% for shift_day in object.get_shifts.all %}
                                     <tr>
-                                        <td>{{ object.shift_date }}</td>
-                                        <td>{{ object.shift_end_date }}</td>
-                                        <td>{{ object.shift.start_time }}</td>
-                                        <td>{{ object.shift.end_time }}</td>
+                                        <td>{{ shift_day.employee.user.get_user_name }}</td>
+                                        <td><i class="fa fa-play text-success"></i> {{ shift_day.shift_date }}<br><i class="fa fa-pause text-danger"></i> {{ shift_day.shift_end_date }}</td>
+                                        <td><i class="fa fa-play text-success"></i> {{ shift_day.shift_time }}<br><i class="fa fa-pause text-danger"></i> {{ shift_day.shift_end_time }}</td>
+                                        <td>{{ shift_day.clock_in }}</td>
+                                        <td>{{ shift_day.clock_out }}</td>
                                         <td>
-                                            {{ object.shift_hours }}
+                                            {{ shift_day.shift_hours }}
                                         </td>
                                         <td>
-                                            {{ object.worked_hours }}
+                                            {{ shift_day.worked_hours }}
                                         </td>
                                         <td>
-                                            {{ object.extra_hours }}
+                                            {{ shift_day.extra_hours }}
                                         </td>
-                                        <td id="btn-div-{{ object.pk }}">
-                                            {% if object.get_shift_action == "awa" %}
+                                        <td id="btn-div-{{ shift_day.pk }}">
+                                            {% if shift_day.get_shift_action == "awa" %}
                                                 <span class="badge badge-light">
                                                     <i class="mdi mdi-exclamation"></i> Awaiting
                                                 </span>
-                                            {% elif object.get_shift_action == "run" %}
+                                            {% elif shift_day.get_shift_action == "run" %}
                                                 <span class="badge badge-primary">
                                                     <i class="mdi mdi-run"></i> Running
                                                 </span>
-                                            {% elif object.get_shift_action == "com" %}
+                                            {% elif shift_day.get_shift_action == "com" %}
                                                 <span class="badge badge-success">
                                                     <i class="mdi mdi-call-missed"></i> completed
                                                 </span>
@@ -132,7 +130,7 @@
                                         </td>
                                     <td>
                                         <b>
-                                            <a href="{% url 'admins:shift-day-update' object.pk %}">
+                                            <a href="{% url 'admins:shift-day-update' shift_day.pk %}">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </b>
