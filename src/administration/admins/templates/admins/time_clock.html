@@ -73,15 +73,17 @@
                                                 {% if current_status == "completed" %}
                                                     <span class="badge badge-success">{{ current_status }}</span>
                                                 {% elif current_status == "running" %}
-                                                    <span class="badge badge-">{{ current_status }}</span>
+                                                    <span class="badge badge-primary">{{ current_status }}</span>
                                                 {% elif current_status == "over time" %}
-                                                    <span class="badge badge-">{{ current_status }}</span>
+                                                    <span class="badge badge-warning">{{ current_status }}</span>
                                                 {% elif current_status == "awaiting" %}
-                                                    <span class="badge badge-">{{ current_status }}</span>
-                                                {% elif current_status == "running" %}
-                                                    <span class="badge badge-">{{ current_status }}</span>
-                                                {% else %}
+                                                    <span class="badge badge-info">{{ current_status }}</span>
+                                                {% elif current_status == "late" %}
+                                                    <span class="badge badge-warning">{{ current_status }}</span>
+                                                {% elif current_status == "absent" %}
                                                     <span class="badge badge-dark">{{ current_status }}</span>
+                                                {% else %}
+                                                    <span class="badge badge-danger">{{ current_status }}</span>
                                                 {% endif %}
                                             {% endwith %}
                                         </td>
