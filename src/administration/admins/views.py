@@ -401,6 +401,13 @@ class ShiftDetailView(DetailView):
 
 @method_decorator(admin_protected, name='dispatch')
 class ShiftCreateView(CreateView):
+    """
+    TODO: update
+    1. job type   : job type in [open, pattern]
+       pattern   :: if pattern all fields are required
+       open      :: if open only shift can be created inside shift day, not required fields [end_date, week_days, repeat policy]
+    2. validation() on shift create check for possible clash
+    """
     model = Shift
     fields = '__all__'
 
@@ -409,10 +416,35 @@ class ShiftCreateView(CreateView):
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 
+class ShiftCustomCreateView(View):
+    template_name = "admins/shift_custom_create_form.html"
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            'employees': Employee.objects.all(),
+            'positions': Position.objects.all(),
+            'clients': Client.objects.all()
+        }
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        pass
+
+
 @method_decorator(admin_protected, name='dispatch')
 class ShiftUpdateView(UpdateView):
+    """
+    TODO: Update
+    1. job type: job type in [open, pattern]
+       pattern :: if pattern all fields are required
+       open    :: if open only shift can be created inside shift day, not required fields [end_date, week_days, repeat policy]
+    2. validation() on shift create check for possible clash
+    """
     model = Shift
-    fields = '__all__'
+    fields = [
+        'start_date', 'end_date', 'start_time', 'end_time', 'client', 'site', 'position', 'employee',
+        'pay_rate', 'charge_rate', 'extra_charges', 'repeat_policy'
+    ]
     previous_shift = None
 
     def dispatch(self, request, *args, **kwargs):
@@ -452,8 +484,7 @@ class ShiftDeleteView(DeleteView):
 class ShiftDayUpdateView(UpdateView):
     model = ShiftDay
     fields = [
-        'shift_date', 'shift_end_date', 'clock_in', 'clock_out',
-        'shift_hours', 'worked_hours', 'extra_hours', 'status'
+        'employee', 'clock_in', 'clock_out', 'status'
     ]
 
     def get_success_url(self):

@@ -20,11 +20,7 @@
                         {% if object.employee %}
                             <b>
                                 <a href="{% url 'admins:user-update' object.employee.user.pk %}">
-                                    {% if object.employee.user.get_full_name %}
-                                        {{ object.employee.user.get_full_name }}
-                                    {% else %}
-                                        {{ object.employee.user.username }}
-                                    {% endif %}
+                                    {{ object.employee.user.get_user_name }}
                                 </a>
                             </b>
                         {% else %}
@@ -67,9 +63,8 @@
                         </div>
                         <div class="col">
                             <h1><i class="fa fa-calendar-check"></i></h1>
-                            <p class="mb-0 small">Qty and shift Days</p>
-                            <p class="mb-0"><b>{{ object.quantity }}</b><br>
-                                ({{ object.shiftday_set.count }})
+                            <p class="mb-0 small">shift Days</p>
+                            <p class="mb-0"><b>{{ object.shiftday_set.count }}</b>
                             </p>
                         </div>
                     </div>
@@ -82,67 +77,75 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive" id="table">
-                            <table class="table table-hover">
-                                <thead class="thead-light">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Status</th>
+                                <th>Employee</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Clock In</th>
+                                <th>Clock Out</th>
+                                <th>Shift Hours</th>
+                                <th>Active Hours</th>
+                                <th>Extra Hours</th>
+                                <th>-</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for shift_day in object.get_shifts.all %}
                                 <tr>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th>Shift Time</th>
-                                    <th>Billed Time</th>
-                                    <th>Shift Hours</th>
-                                    <th>Active Hours</th>
-                                    <th>Extra Hours</th>
-                                    <th>Status</th>
-                                    <th>-</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for object in object.get_shifts %}
-                                    <tr>
-                                        <td>{{ object.shift_date }}</td>
-                                        <td>{{ object.shift_end_date }}</td>
-                                        <td>{{ object.shift.start_time }}</td>
-                                        <td>{{ object.shift.end_time }}</td>
-                                        <td>
-                                            {{ object.shift_hours }}
-                                        </td>
-                                        <td>
-                                            {{ object.worked_hours }}
-                                        </td>
-                                        <td>
-                                            {{ object.extra_hours }}
-                                        </td>
-                                        <td id="btn-div-{{ object.pk }}">
-                                            {% if object.get_shift_action == "awa" %}
-                                                <span class="badge badge-light">
-                                                    <i class="mdi mdi-exclamation"></i> Awaiting
-                                                </span>
-                                            {% elif object.get_shift_action == "run" %}
-                                                <span class="badge badge-primary">
-                                                    <i class="mdi mdi-run"></i> Running
-                                                </span>
-                                            {% elif object.get_shift_action == "com" %}
-                                                <span class="badge badge-success">
-                                                    <i class="mdi mdi-call-missed"></i> completed
-                                                </span>
+                                    <td>
+                                        {% with current_status=shift_day.get_current_status %}
+                                            {% if current_status == "completed" %}
+                                                <span class="badge badge-success">{{ current_status }}</span>
+                                            {% elif current_status == "running" %}
+                                                <span class="badge badge-primary">{{ current_status }}</span>
+                                            {% elif current_status == "over time" %}
+                                                <span class="badge badge-warning">{{ current_status }}</span>
+                                            {% elif current_status == "awaiting" %}
+                                                <span class="badge badge-info">{{ current_status }}</span>
+                                            {% elif current_status == "late" %}
+                                                <span class="badge badge-warning">{{ current_status }}</span>
+                                            {% elif current_status == "absent" %}
+                                                <span class="badge badge-dark">{{ current_status }}</span>
                                             {% else %}
-                                                <span class="badge badge-danger">
-                                                    <i class="mdi mdi-call-missed"></i> Missed
-                                                </span>
+                                                <span class="badge badge-danger">{{ current_status }}</span>
                                             {% endif %}
-                                        </td>
+                                        {% endwith %}
+                                    </td>
                                     <td>
                                         <b>
-                                            <a href="{% url 'admins:shift-day-update' object.pk %}">
+                                            <a href="{% url 'admins:user-detail' shift_day.employee.user.pk %}">
+                                                {{ shift_day.employee.user.get_user_name }}
+                                            </a>
+                                        </b>
+                                    </td>
+                                    <td>{{ shift_day.shift_date }}<br>{{ shift_day.shift_end_date }}</td>
+                                    <td>{{ shift_day.shift_time|date:"G:i" }}<br>{{ shift_day.shift_end_time|date:"G:i" }}</td>
+                                    <td>{{ shift_day.clock_in|date:"G:i" }}</td>
+                                    <td>{{ shift_day.clock_out|date:"G:i" }}</td>
+                                    <td>
+                                        {{ shift_day.get_shift_hours }}
+                                    </td>
+                                    <td>
+                                        {{ shift_day.get_active_hours }}
+                                    </td>
+                                    <td>
+                                        {{ shift_day.get_extra_hours }}
+                                    </td>
+                                    <td>
+                                        <b>
+                                            <a href="{% url 'admins:shift-day-update' shift_day.pk %}">
                                                 <i class="fa fa-eye"></i>
                                             </a>
                                         </b>
                                     </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -229,7 +232,8 @@
                         <p class="mb-0 card-title"><b>Regular Shifts</b></p>
                     </div>
                     <div class="card-body border-bottom">
-                        Shifts are of regular type means each day is included as a shift day from <code>start data</code> to <code>end date</code>
+                        Shifts are of regular type means each day is included as a shift day from <code>start
+                        data</code> to <code>end date</code>
                     </div>
                 </div>
             {% endif %}

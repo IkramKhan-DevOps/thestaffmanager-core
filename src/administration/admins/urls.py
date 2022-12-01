@@ -1,4 +1,6 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
+
+from core import settings
 from .views import (
     DashboardView,
     PositionListView, PositionDeleteView, PositionCreateView, PositionUpdateView, PositionDetailView,
@@ -13,7 +15,7 @@ from .views import (
     ScheduleView, ShiftsView, TimeClockView, AbsencesView,
     PayRunReportView, ShiftNotesView, ChargesBreakView, ReportsView, HealthView, ShiftListView, ShiftDetailView,
     ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
-    UserEmployeeUpdateView
+    UserEmployeeUpdateView, ShiftCustomCreateView
 )
 
 app_name = 'admins'
@@ -101,4 +103,8 @@ urlpatterns += [
 
 urlpatterns += [
     path('api/', include('src.administration.admins.admins-api.urls', namespace='admins-api'))
+]
+
+urlpatterns += [
+    path('ccs/', ShiftCustomCreateView.as_view(), name="ccs")
 ]

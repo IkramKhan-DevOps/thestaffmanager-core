@@ -8,20 +8,20 @@ from django.dispatch import receiver
 from src.accounts.models import User, Employee
 
 from faker import Faker
+
 fake = Faker()
 
 
 class Position(models.Model):
-
     name = models.CharField(max_length=255)
     card_color = ColorField()
     charge_rate = models.FloatField()
-    pay_rate = models.FloatField()
+    pay_rate = models.FloatField(help_text="Please provide payments")
 
     is_active = models.BooleanField(default=False)
 
     class Meta:
-        ordering = ['id']
+        ordering = ['-id']
         verbose_name_plural = "Positions"
 
     def __str__(self):
@@ -42,7 +42,6 @@ class Position(models.Model):
 
 
 class Client(models.Model):
-
     name = models.CharField(max_length=255)
     parent_client = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     xero_contact_name = models.CharField(
@@ -183,30 +182,35 @@ class Site(models.Model):
 
 
 class Shift(models.Model):
+    """
+    TODO: UPDATE
+    1. quantity : not required
+    2. job_type : data changed
+    3. on_create: on shift create > create history record
+    """
+
     JOB_TYPE_CHOICE = (
-        ('shift', 'Shift'),
-        ('response', 'Response'),
+        ('o', 'Open'),
+        ('p', 'Pattern'),
     )
     REPEAT_POLICY_TYPE = (
         ('r', 'Regular'),
         ('w', 'Weekly repeat'),
         ('d', 'Selected Dates'),
     )
-
-    job_type = models.CharField(default='shift', choices=JOB_TYPE_CHOICE, max_length=50)
+    job_type = models.CharField(default='p', choices=JOB_TYPE_CHOICE, max_length=1)
 
     start_date = models.DateField()
-    end_date = models.DateField()
+    end_date = models.DateField(null=False, blank=True)
     start_time = models.TimeField()
     end_time = models.TimeField()
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
-    # TODO:NOTE: on response type position is not required
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)
-    quantity = models.PositiveIntegerField(default=1)
-
     employee = models.ForeignKey(Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="employee")
+
+    # quantity = models.PositiveIntegerField(default=1)
     pay_rate = models.FloatField(default=0)
     charge_rate = models.FloatField(default=0)
     extra_charges = models.FloatField(default=0)
@@ -221,17 +225,34 @@ class Shift(models.Model):
     def __str__(self):
         return str(self.pk)
 
+    def save(self, *args, **kwargs):
+        """
+        LOGIC 1 :: if job_type == open >> set last_date to first_date
+        """
+        if self.job_type == 'o' and self.start_date:
+            self.end_date = self.start_date
+        super(Shift, self).save(*args, **kwargs)
+
     def get_shifts(self):
         return ShiftDay.objects.filter(shift=self)
 
     def get_week_shifts_status(self):
-
         llist = []
         [llist.append(True) if str(x) in self.week_days else llist.append(False) for x in range(7)]
         return llist
 
 
 class ShiftDay(models.Model):
+    """
+    TODO: UPDATE
+    add    > employee here to ? shift can be assigned to someone else
+    add    > shift_start_time
+    add    > shift_end_time
+    add    > shift_start_date
+    add    > shift_end_date
+    remove > shift, worked and extra hours
+    """
+
     STATUS_CHOICE = (
         ('awa', 'Awaiting'),
         ('run', 'Running'),
@@ -240,16 +261,18 @@ class ShiftDay(models.Model):
     )
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE)
 
-    clock_in = models.DateTimeField(null=True, blank=True)
-    clock_out = models.DateTimeField(null=True, blank=True)
-
-    shift_hours = models.PositiveIntegerField(default=0)
-    worked_hours = models.PositiveIntegerField(default=0)
-
-    extra_hours = models.IntegerField(default=0)
+    clock_in = models.TimeField(null=True, blank=True)
+    clock_out = models.TimeField(null=True, blank=True)
+    employee = models.ForeignKey(
+        Employee, on_delete=models.SET_NULL, null=True, blank=True, related_name="employee_for_shift"
+    )
 
     shift_date = models.DateField()
     shift_end_date = models.DateField()
+
+    shift_time = models.TimeField(null=True, blank=True)
+    shift_end_time = models.TimeField(null=True, blank=True)
+
     status = models.CharField(max_length=3, default="awa", choices=STATUS_CHOICE)
 
     class Meta:
@@ -265,31 +288,100 @@ class ShiftDay(models.Model):
         :total hours --- end - start
         """
 
+        # ON CREATE :: shift_times and shift_dates are equal to parent
+        if self._state.adding and self.shift_date:
+            self.shift_time = self.shift.start_time
+            self.shift_end_time = self.shift.end_time
+            self.employee = self.shift.employee
+
+        # BOTH (ON-CREATE + ON-UPDATE)
+        # IF CHANGES IN END - DATE
         if self.shift_date:
             start = datetime.combine(self.shift_date, self.shift.start_time)
             end = datetime.combine(self.shift_date, self.shift.end_time)
 
             if start > end:
                 self.shift_end_date = self.shift_date + timedelta(days=1)
-                end = datetime.combine(self.shift_end_date, self.shift.end_time)
-                self.shift_hours = round((end - start).total_seconds() / 3600)
             else:
                 self.shift_end_date = self.shift_date
-                self.shift_hours = round((end - start).total_seconds() / 3600)
-
-            if self.clock_out and self.clock_in:
-                self.worked_hours = round((self.clock_out - self.clock_in).total_seconds() / 3600)
-                self.extra_hours = self.worked_hours - self.shift_hours
 
         super(ShiftDay, self).save(*args, **kwargs)
 
-    def get_shift_action(self):
-        if self.shift_date <= datetime.today().date():
-            pass
-        else:
-            if not self.status == self.STATUS_CHOICE[3][0]:
-                self.status = self.STATUS_CHOICE[3][0]
-                self.save()
+    def get_current_status(self):
+        """
+        1. Awaiting ::
+           IF (start_date + start_time) > current time
+        2. Late ::
+           IF (start_date + start_time) <= now
+           IF (end_date + start_time) >= now
+           IF (not clocked in)
+        3. Running ::
+           IF (clocked in)
+           IF (not clocked out)
+           IF (end_date + end_time) <= now
+        4. Overtime ::
+           IF (clocked in)
+           IF (not clocked out)
+           IF (end_date + end_time) > now
+        4. Completed ::
+           IF (clocked out)
 
-        return self.status
+        :return status :
+        """
+        sd = datetime.combine(self.shift_date, self.shift_time)
+        ed = datetime.combine(self.shift_end_date, self.shift_end_time)
+        nd = datetime.now()
 
+        # BEFORE START
+        if nd < sd:
+            return "awaiting"
+
+        # AFTER END
+        if nd > ed:
+
+            # IF USER CLOCKED OUT
+            if self.clock_out:
+                return "completed"
+
+            # IF USER NOT CLOCKED OUT
+            else:
+
+                # IF USER CLOCKED IN
+                if self.clock_in:
+                    return "overtime"
+
+                # IF USER NOT CLOCKED IN
+                else:
+                    return "absent"
+
+        # IN BETWEEN
+        if sd <= nd <= ed:
+
+            # IF USER CLOCKED IN
+            if self.clock_in:
+                return "running"
+
+            # IF USER NOT CLOCKED IN
+            else:
+                return "late"
+
+        return "clash"
+
+    def get_shift_hours(self):
+        start = datetime.combine(self.shift_date, self.shift_time)
+        end = datetime.combine(self.shift_end_date, self.shift_end_time)
+        return round((end - start).total_seconds() / 3600)
+
+    def get_active_hours(self):
+        if self.clock_in and self.clock_out:
+            start = datetime.combine(self.shift_date, self.clock_in)
+            end = datetime.combine(self.shift_end_date, self.clock_out)
+            return round((end - start).total_seconds() / 3600)
+        return 0
+
+    def get_extra_hours(self):
+        if self.clock_in and self.clock_out:
+            required = datetime.combine(self.shift_end_date, self.shift_end_time) - datetime.combine(self.shift_date, self.shift_time)
+            active = datetime.combine(self.shift_end_date, self.clock_out) - datetime.combine(self.shift_date, self.clock_in)
+            return round((active - required).total_seconds() / 3600)
+        return 0

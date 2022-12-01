@@ -18,22 +18,22 @@
 
         <div class="col-12">
             <div class="card">
-            <div class="card-body border-bottom">
-                <form method="get">
-                <div class="input-group mb-3">
-                    {{ filter_form }}
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
-                        <a href="{% url 'admins:shift-list' %}" class="btn btn-danger" type="submit">
-                            <i class="fa fa-brush"></i>
-                        </a>
-                    </div>
-                </div>
-            </form>
+                <div class="card-body border-bottom">
+                    <form method="get">
+                        <div class="input-group mb-3">
+                            {{ filter_form }}
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                <a href="{% url 'admins:shift-list' %}" class="btn btn-danger" type="submit">
+                                    <i class="fa fa-brush"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </form>
 
-            </div>
+                </div>
                 <div class="card-body">
                     {% if object_list %}
 
@@ -46,7 +46,6 @@
                                     <th>End Date</th>
                                     <th>Start Time</th>
                                     <th>End Time</th>
-                                    <th>Qty</th>
                                     <th>Client</th>
                                     <th>Employee</th>
                                     <th>Charge Rate</th>
@@ -64,14 +63,13 @@
                                         <td>{{ object.end_date }}</td>
                                         <td>{{ object.start_time }}</td>
                                         <td>{{ object.end_time }}</td>
-                                        <td>{{ object.quantity }}</td>
                                         <td>{{ object.client.name }}</td>
                                         <td>
                                             {% if object.employee %}
                                                 <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
-                                                <b>
-                                                    {{ object.employee }}
-                                                </b>
+                                                    <b>
+                                                        {{ object.employee.user.get_user_name }}
+                                                    </b>
                                                 </a>
                                             {% else %}
                                                 <b class="text-danger">
@@ -97,45 +95,45 @@
 
                         <ul class="pagination pagination-rounded justify-content-center mt-3 pb-1">
 
-                    {% if object_list.has_previous %}
+                            {% if object_list.has_previous %}
 
-                        <li class="page-item">
-                            <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
-                               class="page-link">
-                                <i class="mdi mdi-chevron-left"></i>
-                            </a>
-                        </li>
+                                <li class="page-item">
+                                    <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
+                                       class="page-link">
+                                        <i class="mdi mdi-chevron-left"></i>
+                                    </a>
+                                </li>
 
-                        <li class="page-item">
-                            <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
-                               class="page-link"> {{ object_list.previous_page_number }}
-                            </a>
-                        </li>
+                                <li class="page-item">
+                                    <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
+                                       class="page-link"> {{ object_list.previous_page_number }}
+                                    </a>
+                                </li>
 
-                    {% endif %}
+                            {% endif %}
 
-                    {#                    <li class="page-item"><a href="/" class="page-link">1</a></li>#}
-                    <li class="page-item active">
-                        <a href="#" class="page-link">{{ object_list.number }}</a>
-                    </li>
+                            {#                    <li class="page-item"><a href="/" class="page-link">1</a></li>#}
+                            <li class="page-item active">
+                                <a href="#" class="page-link">{{ object_list.number }}</a>
+                            </li>
 
-                    {% if object_list.has_next %}
+                            {% if object_list.has_next %}
 
-                        <li class="page-item">
-                            <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
-                               class="page-link"> {{ object_list.next_page_number }}
-                            </a>
-                        </li>
+                                <li class="page-item">
+                                    <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
+                                       class="page-link"> {{ object_list.next_page_number }}
+                                    </a>
+                                </li>
 
-                        <li class="page-item">
-                            <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
-                               class="page-link">
-                                <i class="mdi mdi-chevron-right"></i>
-                            </a>
-                        </li>
-                    {% endif %}
+                                <li class="page-item">
+                                    <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
+                                       class="page-link">
+                                        <i class="mdi mdi-chevron-right"></i>
+                                    </a>
+                                </li>
+                            {% endif %}
 
-                </ul>
+                        </ul>
 
                     {% else %}
                         <p class="mb-0 text-danger">

@@ -1,7 +1,7 @@
 import calendar
 import datetime
 
-from src.administration.admins.models import ShiftDay
+from src.administration.admins.models import ShiftDay, Shift
 
 
 # GET DATES: between (start - end) according to policy.
@@ -55,7 +55,7 @@ def shifts_update_in(dates, shift, previous_shift, refresh):
     if shift.start_date == previous_shift.start_date and shift.end_date == previous_shift.end_date and \
             shift.repeat_policy == previous_shift.repeat_policy and shift.week_days == previous_shift.week_days:
         if refresh:
-            print("Changes required")
+            print("Changes required ... ")
             ShiftDay.objects.filter(shift=shift).delete()
             [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
         else:
@@ -63,7 +63,9 @@ def shifts_update_in(dates, shift, previous_shift, refresh):
     else:
         print("changes required")
         ShiftDay.objects.filter(shift=shift).delete()
-        [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
+        for _date in dates:
+            print(_date)
+            ShiftDay.objects.create(shift_date=_date, shift=shift)
 
 
 # STEP3: if request for create
@@ -87,7 +89,8 @@ def shifts_create_update(shift, post, is_create=True, refresh=False, previous_sh
     elif shift.repeat_policy == 'w':
         shifts_create_update_logic(
             shift, is_create, previous_shift, refresh,
-            post.get('monday'), post.get('tuesday'), post.get('wednesday'), post.get('thursday'), post.get('friday'),
+            post.get('monday'), post.get('tuesday'), post.get('wednesday'), post.get('thursday'),
+            post.get('friday'),
             post.get('saturday'), post.get('sunday')
         )
 

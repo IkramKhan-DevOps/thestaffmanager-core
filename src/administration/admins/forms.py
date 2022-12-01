@@ -1,6 +1,7 @@
 from django.forms import ModelForm
 
 from src.accounts.models import User, Employee, UserDocument
+from src.administration.admins.models import Shift
 
 
 class UserProfileForm(ModelForm):
@@ -35,3 +36,4 @@ class EmployeeForm(ModelForm):
         fields = [
             'employee_id', 'employee_type', 'is_internal_employee'
         ]
+

@@ -19,6 +19,7 @@
 
 {% block base_content %}
 
+
     <div class="row justify-content-center">
         <div class="col-sm-6">
 
@@ -41,7 +42,7 @@
                     </div>
                 </div>
 
-                <div class="card">
+                <div id="div_policies" class="card">
                     <div class="card-body border-bottom">
                         <p class="mb-0 card-title">Repeat Policy</p>
                     </div>
@@ -217,21 +218,31 @@
     <script>
         $(document).ready(function () {
 
-            let customize = $("#customize");
+            let policies_div = $("#div_policies");
+            let repeat_policy_div = $("#div_id_repeat_policy");
+            let end_date_div = $("#div_id_end_date");
+            let end_date_field = $("#id_end_date");
+
             let weekly_div = $("#weekly");
             let regular_div = $("#regular");
             let dates_div = $("#selected_dates");
             let client_options = $('#id_client')
             let site_options = $('#id_site')
+
             const empty_html = "<option value>--------</option>"
 
             let create = {% if object %} false {% else %} true {% endif %};
             let repeat_policy = "{{ object.repeat_policy }}";
+            let job_type = "{{ object.job_type }}";
 
             init();
 
             $('#id_repeat_policy').change(function () {
                 update_ui($(this).val())
+            });
+
+            $('#id_job_type').change(function () {
+                show_form($(this).val());
             });
 
             $('#id_start_date').datetimepicker({
@@ -272,6 +283,7 @@
             });
 
             function update_ui(action) {
+
                 switch (action) {
                     case 'w':
                         weekly_div.show();
@@ -295,10 +307,31 @@
                         weekly_div.hide();
                         dates_div.hide();
                 }
+
             }
 
             function init() {
+                if (!create && job_type === 'o'){
+                    $('#id_job_type').hide();
+                   show_open_form();
+                }
                 update_ui(repeat_policy);
+            }
+
+            function show_form(shift_type) { shift_type === "o" ? show_open_form() : show_pattern_form() }
+
+            function show_open_form() {
+                repeat_policy_div.hide();
+                policies_div.hide()
+                {#end_date_field.attr("disabled", true);#}
+                end_date_div.hide();
+            }
+
+            function show_pattern_form() {
+                repeat_policy_div.show();
+                policies_div.show();
+                {#end_date_field.attr("disabled", false);#}
+                end_date_div.show();
             }
 
         })

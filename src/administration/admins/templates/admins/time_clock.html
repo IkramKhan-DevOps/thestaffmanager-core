@@ -5,14 +5,30 @@
 {% block base_title %}Time Clock{% endblock %}
 {% block base_subhead_heading %} Time Clock {% endblock %}
 
+{% block base_css %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+{% endblock %}
 
 {% block base_content %}
+
+    {# TODO: UPDATE #}
+    {# 1 - editable clock-in clock-out #}
+    {# 2 - advance filters see examples  #}
+
+    {# IF NOT CLOCK IN  -- LATE #}
+    {# IF time cin-sout -- RUNNING #}
+    {# IF NOT CLOCK OUT -- OVERTIME #}
+    {# IF CLOCK OUT     -- APPROVE #}
+    {# IF APPROVED      -- APPROVED BY #}
 
     <div class="row">
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
                     <div id="news-feed-index-table" data-livecount="0">
+                        {% csrf_token %}
 
                         <form method="get">
                             <div class="input-group">
@@ -36,21 +52,42 @@
                             <table class="table table-hover">
                                 <thead class="thead-light">
                                 <tr>
+                                    <th>Status</th>
                                     <th>Shift</th>
                                     <th>Employee</th>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th>Shift Time</th>
-                                    <th>Billed Time</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
                                     <th>Shift Hours</th>
                                     <th>Active Hours</th>
                                     <th>Extra Hours</th>
-                                    <th>Status</th>
+                                    <th>Action</th>
+                                    <th>-</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for object in object_list %}
-                                    <tr>
+                                    <tr id="row_{{ object.pk }}">
+                                        <td>
+                                            {% with current_status=object.get_current_status %}
+                                                {% if current_status == "completed" %}
+                                                    <span class="badge badge-success">{{ current_status }}</span>
+                                                {% elif current_status == "running" %}
+                                                    <span class="badge badge-primary">{{ current_status }}</span>
+                                                {% elif current_status == "over time" %}
+                                                    <span class="badge badge-warning">{{ current_status }}</span>
+                                                {% elif current_status == "awaiting" %}
+                                                    <span class="badge badge-info">{{ current_status }}</span>
+                                                {% elif current_status == "late" %}
+                                                    <span class="badge badge-warning">{{ current_status }}</span>
+                                                {% elif current_status == "absent" %}
+                                                    <span class="badge badge-dark">{{ current_status }}</span>
+                                                {% else %}
+                                                    <span class="badge badge-danger">{{ current_status }}</span>
+                                                {% endif %}
+                                            {% endwith %}
+                                        </td>
                                         <td>
                                             <b>
                                                 <a href="{% url 'admins:shift-detail' object.shift.pk %}">
@@ -65,40 +102,54 @@
                                                 </a>
                                             </b>
                                         </td>
-                                        <td>{{ object.shift_date }}</td>
-                                        <td>{{ object.shift_end_date }}</td>
-                                        <td>{{ object.shift.start_time }}</td>
-                                        <td>{{ object.shift.end_time }}</td>
-                                        <td>
-                                            {{ object.shift_hours }}
+                                        <td>{{ object.shift_date }} <br> {{ object.shift_end_date }}</td>
+                                        <td>{{ object.shift.start_time|date:"G:i" }}
+                                            - {{ object.shift.end_time|date:"G:i" }}</td>
+                                        {#                                    {{ my_time.time|date:"G:i:s" }}#}
+                                        <td style="width: 100px">
+                                            <input class="custom_clock_in_class" type="text"
+                                                   id="id_clock_in" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_in|date:"G:i" }}">
+                                        </td>
+                                        <td style="width: 100px">
+                                            <input class="custom_clock_out_class" type="text"
+                                                   id="id_clock_out" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_out|date:"G:i" }}">
                                         </td>
                                         <td>
-                                            {{ object.worked_hours }}
+                                            {{ object.get_shift_hours }}
                                         </td>
                                         <td>
-                                            {{ object.extra_hours }}
+                                            {{ object.get_active_hours }}
+                                        </td>
+                                        <td>
+                                            {{ object.get_extra_hours }}
                                         </td>
                                         <td id="btn-div-{{ object.pk }}">
-                                            {% if object.get_shift_action == "awa" %}
-                                                <button type="button" id="status_change_btn" data-action="run"
-                                                        data-id="{{ object.pk }}" class="btn btn-sm btn-primary">
-                                                    <i class="fa fa-clock"></i> Clock In
-                                                </button>
-                                            {% elif object.get_shift_action == "run" %}
-                                                <button type="button" class="btn btn-sm btn-warning"
-                                                        id="status_change_btn" data-action="com"
-                                                        data-id="{{ object.pk }}">
-                                                    <i class="fa fa-clock"></i> Clock Out
-                                                </button>
-                                            {% elif object.get_shift_action == "com" %}
-                                                <span class="badge badge-success">
-                                                    <i class="mdi mdi-call-missed"></i> completed
-                                                </span>
-                                            {% else %}
-                                                <span class="badge badge-danger">
-                                                    <i class="mdi mdi-call-missed"></i> Missed
-                                                </span>
-                                            {% endif %}
+                                            {% with current_status=object.get_current_status %}
+                                                {% if not object.clock_in %}
+                                                    <button type="button" id="btn_clock_in_{{ object.pk }}"
+                                                            data-action="in"
+                                                            data-id="{{ object.pk }}"
+                                                            class="btn btn-sm btn-primary custom_btn_clock_in"
+                                                    >
+                                                        <i class="fa fa-clock"></i> Clock In
+                                                    </button>
+                                                {% elif not object.clock_out %}
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-warning custom_btn_clock_out"
+                                                            id="btn_clock_in_{{ object.pk }}" data-action="out"
+                                                            data-id="{{ object.pk }}">
+                                                        <i class="fa fa-clock"></i> Clock Out
+                                                    </button>
+                                                {% else %}
+                                                    <b>{{ current_status }}</b>
+                                                {% endif %}
+                                            {% endwith %}
+                                        </td>
+                                        <td>
+                                            <b><a href="{% url 'admins:shift-day-update' object.pk %}"><i
+                                                    class="fa fa-eye"></i></a></b>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -139,9 +190,69 @@
 
 {% endblock %}
 
+
+{% block base_internal_scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+{% endblock %}
+
 {% block base_external_scripts %}
     <script>
         $(document).ready(function () {
+
+            $('body #id_clock_in').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+
+            $('body #id_clock_out').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+
+            $('body .custom_btn_clock_in').click(function (event) {
+                event.preventDefault();
+
+                let shift_day_id = $(this).data('id');
+                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/a/api/shift-day/" + shift_day_id + "/clock/in/",
+                    data: {
+                        start_time: start_time,
+                        end_time: end_time,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    dataType: 'application/json',
+                }).then(function (data, status) {
+                    console.log(status);
+                });
+                location.reload();
+            })
+
+            $('body .custom_btn_clock_out').click(function (event) {
+                event.preventDefault();
+
+                let shift_day_id = $(this).data('id');
+                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/a/api/shift-day/" + shift_day_id + "/clock/out/",
+                    data: {
+                        start_time: start_time,
+                        end_time: end_time,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    dataType: 'application/json',
+                }).then(function (data, status) {
+                    console.log(status);
+                });
+                location.reload();
+            })
 
             $('label').hide();
             $('input').addClass('form-control');
