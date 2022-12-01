@@ -5,6 +5,11 @@
 {% block base_title %}Time Clock{% endblock %}
 {% block base_subhead_heading %} Time Clock {% endblock %}
 
+{% block base_css %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+{% endblock %}
 
 {% block base_content %}
 
@@ -46,21 +51,24 @@
                             <table class="table table-hover">
                                 <thead class="thead-light">
                                 <tr>
+                                    <th>Status</th>
                                     <th>Shift</th>
                                     <th>Employee</th>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th>Shift Time</th>
-                                    <th>Billed Time</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Clock In</th>
+                                    <th>Clock Out</th>
                                     <th>Shift Hours</th>
                                     <th>Active Hours</th>
                                     <th>Extra Hours</th>
-                                    <th>Status</th>
+                                    <th>Action</th>
+                                    <th>-</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for object in object_list %}
                                     <tr>
+                                        <td>-</td>
                                         <td>
                                             <b>
                                                 <a href="{% url 'admins:shift-detail' object.shift.pk %}">
@@ -75,10 +83,14 @@
                                                 </a>
                                             </b>
                                         </td>
-                                        <td>{{ object.shift_date }}</td>
-                                        <td>{{ object.shift_end_date }}</td>
-                                        <td>{{ object.shift.start_time }}</td>
-                                        <td>{{ object.shift.end_time }}</td>
+                                        <td>{{ object.shift_date }} - {{ object.shift_end_date }}</td>
+                                        <td>{{ object.shift.start_time|date:"G:i" }}
+                                            - {{ object.shift.end_time|date:"G:i" }}</td>
+                                        {#                                    {{ my_time.time|date:"G:i:s" }}#}
+                                        <td style="width: 100px"><input type="text" id="id_clock_in"
+                                                                        value="{{ object.clock_in|date:"G:i" }}"></td>
+                                        <td style="width: 100px"><input type="text" id="id_clock_out"
+                                                                        value="{{ object.clock_out|date:"G:i" }}"></td>
                                         <td>
                                             {{ object.shift_hours }}
                                         </td>
@@ -109,6 +121,10 @@
                                                     <i class="mdi mdi-call-missed"></i> Missed
                                                 </span>
                                             {% endif %}
+                                        </td>
+                                        <td>
+                                            <b><a href="{% url 'admins:shift-day-update' object.pk %}"><i
+                                                    class="fa fa-eye"></i></a></b>
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -149,9 +165,25 @@
 
 {% endblock %}
 
+
+{% block base_internal_scripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+{% endblock %}
+
 {% block base_external_scripts %}
     <script>
         $(document).ready(function () {
+
+            $('body #id_clock_in').datetimepicker({
+                datepicker: false,
+                format: 'H:i'
+            });
+
+            $('body #id_clock_out').datetimepicker({
+                datepicker: false,
+                format: 'H:i'
+            });
 
             $('label').hide();
             $('input').addClass('form-control');

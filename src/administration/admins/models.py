@@ -320,12 +320,43 @@ class ShiftDay(models.Model):
 
         super(ShiftDay, self).save(*args, **kwargs)
 
-    def get_shift_action(self):
-        if self.shift_date <= datetime.today().date():
-            pass
-        else:
-            if not self.status == self.STATUS_CHOICE[3][0]:
-                self.status = self.STATUS_CHOICE[3][0]
-                self.save()
+    def get_current_status(self):
+        """
+        1. Awaiting ::
+           IF (start_date + start_time) > current time
+        2. Late ::
+           IF (start_date + start_time) <= now
+           IF (end_date + start_time) >= now
+           IF (not clocked in)
+        3. Running ::
+           IF (clocked in)
+           IF (not clocked out)
+           IF (end_date + end_time) <= now
+        4. Overtime ::
+           IF (clocked in)
+           IF (not clocked out)
+           IF (end_date + end_time) > now
+        4. Completed ::
+           IF (clocked out)
 
-        return self.status
+        :return status :
+        """
+        start_datetime = datetime.combine(self.shift_date, self.shift_time)
+        end_datetime = datetime.combine(self.shift_end_date, self.shift_end_time)
+
+        if self.clock_out:
+            return "Completed"
+
+        if self.clock_in and not self.clock_out:
+            if end_datetime >= datetime.now():
+                return "Running"
+            else:
+                return "Over Time"
+
+        if start_datetime <= datetime.now() <= end_datetime:
+            return "Running"
+
+        if start_datetime > datetime.now():
+            return "Awaiting"
+
+        return "Clash"
