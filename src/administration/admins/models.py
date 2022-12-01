@@ -292,8 +292,6 @@ class ShiftDay(models.Model):
         if self._state.adding and self.shift_date:
             self.shift_time = self.shift.start_time
             self.shift_end_time = self.shift.end_time
-            self.shift_date = self.shift.start_date
-            self.shift_end_date = self.shift.end_date
             self.employee = self.shift.employee
 
         # BOTH (ON-CREATE + ON-UPDATE)
@@ -357,7 +355,7 @@ class ShiftDay(models.Model):
                     return "absent"
 
         # IN BETWEEN
-        if sd <= nd >= ed:
+        if sd <= nd <= ed:
 
             # IF USER CLOCKED IN
             if self.clock_in:

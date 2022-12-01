@@ -67,7 +67,7 @@
                                 </thead>
                                 <tbody>
                                 {% for object in object_list %}
-                                    <tr>
+                                    <tr id="row_{{ object.pk }}">
                                         <td>
                                             {% with current_status=object.get_current_status %}
                                                 {% if current_status == "completed" %}
@@ -105,10 +105,16 @@
                                         <td>{{ object.shift.start_time|date:"G:i" }}
                                             - {{ object.shift.end_time|date:"G:i" }}</td>
                                         {#                                    {{ my_time.time|date:"G:i:s" }}#}
-                                        <td style="width: 100px"><input type="text" id="id_clock_in"
-                                                                        value="{{ object.clock_in|date:"G:i" }}"></td>
-                                        <td style="width: 100px"><input type="text" id="id_clock_out"
-                                                                        value="{{ object.clock_out|date:"G:i" }}"></td>
+                                        <td style="width: 100px">
+                                            <input class="custom_clock_in_class" type="text"
+                                                   id="id_clock_in" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_in|date:"G:i" }}">
+                                        </td>
+                                        <td style="width: 100px">
+                                            <input class="custom_clock_out_class" type="text"
+                                                   id="id_clock_out" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_out|date:"G:i" }}">
+                                        </td>
                                         <td>
                                             {{ object.get_shift_hours }}
                                         </td>
@@ -119,26 +125,27 @@
                                             {{ object.get_extra_hours }}
                                         </td>
                                         <td id="btn-div-{{ object.pk }}">
-                                            {% if object.get_shift_action == "awa" %}
-                                                <button type="button" id="status_change_btn" data-action="run"
-                                                        data-id="{{ object.pk }}" class="btn btn-sm btn-primary">
+                                         {% with current_status=object.get_current_status %}
+                                            {% if current_status == "awaiting" or current_status == "late" %}
+                                                <button type="button" id="btn_clock_in_{{ object.pk }}"
+                                                        data-action="in"
+                                                        data-id="{{ object.pk }}"
+                                                        class="btn btn-sm btn-primary custom_btn_clock_in"
+                                                >
                                                     <i class="fa fa-clock"></i> Clock In
                                                 </button>
-                                            {% elif object.get_shift_action == "run" %}
-                                                <button type="button" class="btn btn-sm btn-warning"
-                                                        id="status_change_btn" data-action="com"
+                                            {% elif current_status == "running" or current_status == "over time" %}
+                                                <button type="button" class="btn btn-sm btn-warning custom_btn_clock_out"
+                                                        id="btn_clock_in_{{ object.pk }}" data-action="out"
                                                         data-id="{{ object.pk }}">
                                                     <i class="fa fa-clock"></i> Clock Out
                                                 </button>
-                                            {% elif object.get_shift_action == "com" %}
-                                                <span class="badge badge-success">
-                                                    <i class="mdi mdi-call-missed"></i> completed
-                                                </span>
+                                            {% elif current_status == "completed" %}
+                                                    Accepted
                                             {% else %}
-                                                <span class="badge badge-danger">
-                                                    <i class="mdi mdi-call-missed"></i> Missed
-                                                </span>
+                                                -
                                             {% endif %}
+                                         {% endwith %}
                                         </td>
                                         <td>
                                             <b><a href="{% url 'admins:shift-day-update' object.pk %}"><i
@@ -202,6 +209,14 @@
                 datepicker: false,
                 format: 'H:i'
             });
+
+            $('body .custom_btn_clock_in').click(function (event) {
+                alert("clock in")
+            })
+
+            $('body .custom_btn_clock_out').click(function (event) {
+                alert("clock out")
+            })
 
             $('label').hide();
             $('input').addClass('form-control');

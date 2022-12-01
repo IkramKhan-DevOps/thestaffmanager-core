@@ -484,8 +484,7 @@ class ShiftDeleteView(DeleteView):
 class ShiftDayUpdateView(UpdateView):
     model = ShiftDay
     fields = [
-        'employee', 'clock_in', 'clock_out',
-        'shift_hours', 'worked_hours', 'extra_hours', 'status'
+        'employee', 'clock_in', 'clock_out', 'status'
     ]
 
     def get_success_url(self):
