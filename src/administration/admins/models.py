@@ -341,22 +341,44 @@ class ShiftDay(models.Model):
 
         :return status :
         """
-        start_datetime = datetime.combine(self.shift_date, self.shift_time)
-        end_datetime = datetime.combine(self.shift_end_date, self.shift_end_time)
+        sd = datetime.combine(self.shift_date, self.shift_time)
+        ed = datetime.combine(self.shift_end_date, self.shift_end_time)
+        nd = datetime.now()
 
-        if self.clock_out:
-            return "Completed"
+        # BEFORE START
+        if nd < sd:
+            return "awaiting"
 
-        if self.clock_in and not self.clock_out:
-            if end_datetime >= datetime.now():
-                return "Running"
+        # AFTER END
+        if nd > ed:
+
+            # IF USER CLOCKED OUT
+            if self.clock_out:
+                return "completed"
+
+            # IF USER NOT CLOCKED OUT
             else:
-                return "Over Time"
 
-        if start_datetime <= datetime.now() <= end_datetime:
-            return "Running"
+                # IF USER CLOCKED IN
+                if self.clock_in:
+                    return "overtime"
 
-        if start_datetime > datetime.now():
-            return "Awaiting"
+                # IF USER NOT CLOCKED IN
+                else:
+                    return "absent"
 
-        return "Clash"
+        # IN BETWEEN
+        if sd <= nd >= ed:
+
+            # IF USER CLOCKED IN
+            if self.clock_in:
+                return "running"
+
+            # IF USER NOT CLOCKED IN
+            else:
+                return "late"
+
+        return "clash"
+
+
+
