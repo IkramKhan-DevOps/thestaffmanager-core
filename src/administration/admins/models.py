@@ -273,10 +273,6 @@ class ShiftDay(models.Model):
     shift_time = models.TimeField(null=True, blank=True)
     shift_end_time = models.TimeField(null=True, blank=True)
 
-    shift_hours = models.PositiveIntegerField(default=0)
-    worked_hours = models.PositiveIntegerField(default=0)
-    extra_hours = models.IntegerField(default=0)
-
     status = models.CharField(max_length=3, default="awa", choices=STATUS_CHOICE)
 
     class Meta:
@@ -308,15 +304,8 @@ class ShiftDay(models.Model):
 
             if start > end:
                 self.shift_end_date = self.shift_date + timedelta(days=1)
-                end = datetime.combine(self.shift_end_date, self.shift.end_time)
-                self.shift_hours = round((end - start).total_seconds() / 3600)
             else:
                 self.shift_end_date = self.shift_date
-                self.shift_hours = round((end - start).total_seconds() / 3600)
-
-            # if self.clock_out and self.clock_in:
-            #     self.worked_hours = round((self.clock_out - self.clock_in).total_seconds() / 3600)
-            #     self.extra_hours = self.worked_hours - self.shift_hours
 
         super(ShiftDay, self).save(*args, **kwargs)
 
@@ -380,5 +369,21 @@ class ShiftDay(models.Model):
 
         return "clash"
 
+    def get_shift_hours(self):
+        start = datetime.combine(self.shift_date, self.shift_time)
+        end = datetime.combine(self.shift_end_date, self.shift_end_time)
+        return round((end - start).total_seconds() / 3600)
 
+    def get_active_hours(self):
+        if self.clock_in and self.clock_out:
+            start = datetime.combine(self.shift_date, self.clock_in)
+            end = datetime.combine(self.shift_end_date, self.clock_out)
+            return round((end - start).total_seconds() / 3600)
+        return 0
 
+    def get_extra_hours(self):
+        if self.clock_in and self.clock_out:
+            required = datetime.combine(self.shift_end_date, self.shift_end_time) - datetime.combine(self.shift_date, self.shift_time)
+            active = datetime.combine(self.shift_end_date, self.clock_out) - datetime.combine(self.shift_date, self.clock_in)
+            return round((active - required).total_seconds() / 3600)
+        return 0

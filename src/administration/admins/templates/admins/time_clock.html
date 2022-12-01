@@ -110,13 +110,13 @@
                                         <td style="width: 100px"><input type="text" id="id_clock_out"
                                                                         value="{{ object.clock_out|date:"G:i" }}"></td>
                                         <td>
-                                            {{ object.shift_hours }}
+                                            {{ object.get_shift_hours }}
                                         </td>
                                         <td>
-                                            {{ object.worked_hours }}
+                                            {{ object.get_active_hours }}
                                         </td>
                                         <td>
-                                            {{ object.extra_hours }}
+                                            {{ object.get_extra_hours }}
                                         </td>
                                         <td id="btn-div-{{ object.pk }}">
                                             {% if object.get_shift_action == "awa" %}

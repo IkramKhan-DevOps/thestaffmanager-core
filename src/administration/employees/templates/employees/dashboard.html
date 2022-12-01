@@ -103,8 +103,6 @@
                                     <th>Start Time</th>
                                     <th>End Time</th>
                                     <th>Client</th>
-                                    <th>Charge Rate</th>
-                                    <th>Pay Rate</th>
                                     <th>Days</th>
                                     <th>-</th>
                                 </tr>
@@ -119,8 +117,6 @@
                                         <td>{{ object.start_time }}</td>
                                         <td>{{ object.end_time }}</td>
                                         <td>{{ object.client.name }}</td>
-                                        <td>{{ object.charge_rate }}</td>
-                                        <td>{{ object.pay_rate }}</td>
                                         <td>{{ object.shiftday_set.count }}</td>
                                         <th>
                                             <a href="{% url 'employees:shift-detail' object.pk %}">

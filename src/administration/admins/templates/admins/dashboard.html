@@ -284,13 +284,13 @@
                                         <td>{{ object.shift.start_time }}</td>
                                         <td>{{ object.shift.end_time }}</td>
                                         <td>
-                                            {{ object.shift_hours }}
+                                            {{ object.get_shift_hours }}
                                         </td>
                                         <td>
-                                            {{ object.worked_hours }}
+                                            {{ object.get_active_hours }}
                                         </td>
                                         <td>
-                                            {{ object.extra_hours }}
+                                            {{ object.get_extra_hours }}
                                         </td>
                                         <td id="btn-div-{{ object.pk }}">
                                             {% if object.get_shift_action == "awa" %}

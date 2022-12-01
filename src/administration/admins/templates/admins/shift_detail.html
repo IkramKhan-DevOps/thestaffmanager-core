@@ -107,13 +107,13 @@
                                         <td>{{ shift_day.clock_in }}</td>
                                         <td>{{ shift_day.clock_out }}</td>
                                         <td>
-                                            {{ shift_day.shift_hours }}
+                                            {{ shift_day.get_shift_hours }}
                                         </td>
                                         <td>
-                                            {{ shift_day.worked_hours }}
+                                            {{ shift_day.get_active_hours }}
                                         </td>
                                         <td>
-                                            {{ shift_day.extra_hours }}
+                                            {{ shift_day.get_extra_hours }}
                                         </td>
                                         <td id="btn-div-{{ shift_day.pk }}">
                                             {% if shift_day.get_shift_action == "awa" %}
