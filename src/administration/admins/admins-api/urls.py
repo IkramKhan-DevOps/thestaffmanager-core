@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import ChangeTimesAPI, ShiftListAPIView, ShiftDayStatusChange, SiteByClientListView
+from .views import ChangeTimesAPI, ShiftListAPIView, ShiftDayStatusChange, SiteByClientListView, ShiftDayClockUpdateView
 
 app_name = 'admins-api'
 urlpatterns = [
@@ -10,5 +10,10 @@ urlpatterns = [
         'shift-day/<int:pk>/status/<str:status>/change/',
         ShiftDayStatusChange.as_view(),
         name="shift-day-status-change"
+    ),
+    path(
+        'shift-day/<int:pk>/clock/<str:action>/',
+        ShiftDayClockUpdateView.as_view(),
+        name="shift-day-clock-change"
     )
 ]

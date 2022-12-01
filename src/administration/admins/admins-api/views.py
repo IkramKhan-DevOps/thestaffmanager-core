@@ -18,6 +18,32 @@ class ShiftListAPIView(ListAPIView):
     permission_classes = [IsAdminUser]
 
 
+class ShiftDayClockUpdateView(APIView):
+
+    def post(self, request, pk, action, *args, **kwargs):
+        shift_day = get_object_or_404(ShiftDay, pk=pk)
+        if action not in ['in', 'out']:
+            return Response(status=HTTP_400_BAD_REQUEST, data={"message": "Action is wrong"})
+
+        start_time = request.POST.get('start_time')
+        end_time = request.POST.get('end_time')
+
+        if action == 'in':
+            if start_time:
+                shift_day.clock_in = start_time
+            else:
+                shift_day.clock_in = datetime.now().time()
+        else:
+            if end_time:
+                shift_day.clock_out = end_time
+            else:
+                shift_day.clock_out = timezone.now().time()
+
+        shift_day.save()
+
+        return Response(status=HTTP_200_OK, data={"message": "Times updated"})
+
+
 class ShiftDayStatusChange(APIView):
 
     def get(self, request, pk, status, *args, **kwargs):
@@ -130,5 +156,3 @@ class SiteByClientListView(ListAPIView):
     def get_queryset(self):
         client = get_object_or_404(Client, pk=self.kwargs['pk'])
         return Site.objects.filter(client=client)
-
-

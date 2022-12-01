@@ -28,6 +28,7 @@
             <div class="card">
                 <div class="card-body">
                     <div id="news-feed-index-table" data-livecount="0">
+                        {% csrf_token %}
 
                         <form method="get">
                             <div class="input-group">
@@ -125,27 +126,28 @@
                                             {{ object.get_extra_hours }}
                                         </td>
                                         <td id="btn-div-{{ object.pk }}">
-                                         {% with current_status=object.get_current_status %}
-                                            {% if current_status == "awaiting" or current_status == "late" %}
-                                                <button type="button" id="btn_clock_in_{{ object.pk }}"
-                                                        data-action="in"
-                                                        data-id="{{ object.pk }}"
-                                                        class="btn btn-sm btn-primary custom_btn_clock_in"
-                                                >
-                                                    <i class="fa fa-clock"></i> Clock In
-                                                </button>
-                                            {% elif current_status == "running" or current_status == "over time" %}
-                                                <button type="button" class="btn btn-sm btn-warning custom_btn_clock_out"
-                                                        id="btn_clock_in_{{ object.pk }}" data-action="out"
-                                                        data-id="{{ object.pk }}">
-                                                    <i class="fa fa-clock"></i> Clock Out
-                                                </button>
-                                            {% elif current_status == "completed" %}
+                                            {% with current_status=object.get_current_status %}
+                                                {% if current_status == "awaiting" or current_status == "late" %}
+                                                    <button type="button" id="btn_clock_in_{{ object.pk }}"
+                                                            data-action="in"
+                                                            data-id="{{ object.pk }}"
+                                                            class="btn btn-sm btn-primary custom_btn_clock_in"
+                                                    >
+                                                        <i class="fa fa-clock"></i> Clock In
+                                                    </button>
+                                                {% elif current_status == "running" or current_status == "over time" %}
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-warning custom_btn_clock_out"
+                                                            id="btn_clock_in_{{ object.pk }}" data-action="out"
+                                                            data-id="{{ object.pk }}">
+                                                        <i class="fa fa-clock"></i> Clock Out
+                                                    </button>
+                                                {% elif current_status == "completed" %}
                                                     Accepted
-                                            {% else %}
-                                                -
-                                            {% endif %}
-                                         {% endwith %}
+                                                {% else %}
+                                                    -
+                                                {% endif %}
+                                            {% endwith %}
                                         </td>
                                         <td>
                                             <b><a href="{% url 'admins:shift-day-update' object.pk %}"><i
@@ -202,20 +204,54 @@
 
             $('body #id_clock_in').datetimepicker({
                 datepicker: false,
-                format: 'H:i'
+                format: 'H:i:s'
             });
 
             $('body #id_clock_out').datetimepicker({
                 datepicker: false,
-                format: 'H:i'
+                format: 'H:i:s'
             });
 
             $('body .custom_btn_clock_in').click(function (event) {
-                alert("clock in")
+                let shift_day_id = $(this).data('id');
+                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/a/api/shift-day/" + shift_day_id + "/clock/in/",
+                    data: {
+                        start_time: start_time,
+                        end_time: end_time,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    dataType: 'application/json',
+                    success: function (results) {
+                        console.log(results)
+                        location.reload();
+                    }
+                });
             })
 
             $('body .custom_btn_clock_out').click(function (event) {
-                alert("clock out")
+                let shift_day_id = $(this).data('id');
+                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/a/api/shift-day/" + shift_day_id + "/clock/out/",
+                    data: {
+                        start_time: start_time,
+                        end_time: end_time,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    dataType: 'application/json',
+                    success: function (results) {
+                        console.log(results)
+                        location.reload();
+                    }
+                });
             })
 
             $('label').hide();
