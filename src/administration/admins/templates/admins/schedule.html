@@ -183,33 +183,47 @@
 
                         <div id="demo-meal-planner" class="md-meal-planner-calendar"></div>
 
+                        {# SHIFT DETAIL MODEL DESIGN START #}
                         <div id="custom-event-tooltip-popup" class="md-tooltip">
                             <div id="tooltip-event-header" class="md-tooltip-header">
                                 <span id="tooltip-event-name-age" class="md-tooltip-name-age"></span>
                                 <span id="tooltip-event-time" class="md-tooltip-time"></span>
                             </div>
                             <div class="md-tooltip-info p-4">
-                                <div class="md-tooltip-title">ID:
-                                    <span id="tooltip-event-title" class="md-tooltip-status md-tooltip-text"></span>
-                                </div>
+                                <div class="row text-center">
 
-                                <div class="md-tooltip-title">Employee:
-                                    <span id="tooltip-event-reason" class="md-tooltip-reason md-tooltip-text"></span>
-                                </div>
-                                <div class="md-tooltip-title">Client:
-                                    <span id="tooltip-event-location"
-                                          class="md-tooltip-location md-tooltip-text"></span>
+                                    <div class="col">
+                                        <h3 class="mb-0">
+                                            <i class="fa fa-check-double"></i>
+                                        </h3>
+                                        <p class="mb-0"><b>Shift ID</b></p>
+                                        <p class="mb-0 text-muted" id="tooltip-event-title">256154</p>
+                                    </div>
+                                    <div class="col">
+                                        <h3 class="mb-0">
+                                            <i class="fa fa-user-cog"></i>
+                                        </h3>
+                                        <p class="mb-0"><b>Employee</b></p>
+                                        <p class="mb-0 text-muted" id="tooltip-event-reason">Ikram Khan</p>
+                                    </div>
+
+                                    <div class="col">
+                                        <h3 class="mb-0">
+                                            <i class="fa fa-campground"></i>
+                                        </h3>
+                                        <p class="mb-0"><b>Client</b></p>
+                                        <p class="mb-0 text-muted" id="tooltip-event-location">Pepsi Co</p>
+                                    </div>
                                 </div>
                                 <button id="tooltip-event-view" mbsc-button data-color="success"
-                                        class="md-tooltip-view-button">View Shift Details
+                                        class="btn btn-block">Update Shift
                                 </button>
-                                {#                                <button id="tooltip-event-delete" mbsc-button data-color="danger" data-variant="outline"#}
-                                {#                                        class="md-tooltip-delete-button">Delete appointment#}
-                                {#                                </button>#}
                             </div>
                         </div>
-                        <div id="demo-custom-event-tooltip"></div>
 
+
+                        <div id="demo-custom-event-tooltip"></div>
+                        {# SHIFT DETAIL MODEL DESIGN END #}
 
                     </div>
                 </div>
@@ -297,7 +311,7 @@
                 },
                 onEventCreate: function (args, inst) {
                     // store temporary event
-                    console.log("view create")
+
                 },
                 renderResource: function (resource) {
                     return '<div class="md-meal-planner-cont">' +
@@ -426,20 +440,9 @@
                 window.location = "/a/shift/" + currentEvent.id + "/"
             });
 
-            /*
-            $deleteButton.on('click', function (ev) {
-                calendar.removeEvent(currentEvent);
-
-                tooltip.close();
-
-                mobiscroll.toast({
-                    message: 'Appointment deleted'
-                });
-            });
-            * */
-
 
         });
+
 
     </script>
 {% endblock %}
