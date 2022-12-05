@@ -122,3 +122,14 @@ def get_shift_days_dict(shift):
         for day in days:
             pass
         context['days'].append({'name': 'day', 'on': True})
+
+
+def shifts_validations(employee, start_date, end_date, start_time, end_time):
+    """
+    :param employee   >> shift is linked to
+    :param start_date >> new shift start_date
+    :param end_date   >> new shift_end_date
+    :param start_time >> new shift start_time
+    :param end_time   >> new shift end_time
+    :return:
+    """
