@@ -124,12 +124,87 @@ def get_shift_days_dict(shift):
         context['days'].append({'name': 'day', 'on': True})
 
 
-def shifts_validations(employee, start_date, end_date, start_time, end_time):
+
+""" -------------------------------------------------------------------------------------------------------- """
+
+
+def get_dates_only(start, end, repeat_policy, *args):
     """
+    :param shift:
+    :param start: form where to start dates
+    :param end: from where to end dates
+    :param repeat_policy: how dates are captured
+    :param args: extra info (selected dates - week dates etc)
+    :return:
+    """
+
+    delta = end - start
+    days = []
+
+    # CHECK FOR WEEK DAYS - REPEAT
+    if repeat_policy == 'w':
+
+        # GETTING INDEXES
+        args = list(args[0])
+        days_in_count = []
+        count = 0
+
+        for x in args:
+            if x == 'on':
+                days_in_count.append(count)
+            count += 1
+
+        for i in range(delta.days + 1):
+
+            _date = start + datetime.timedelta(days=i)
+            if _date.weekday() in days_in_count:
+                days.append(_date)
+
+    # IF NOT WEEK NEITHER DATES
+    elif repeat_policy == 'd':
+        [days.append(datetime.datetime.strptime(x, '%Y-%m-%d')) for x in args[0][0]]
+    else:
+        days = [start + datetime.timedelta(days=i) for i in range(delta.days + 1)]
+
+    return days
+
+
+def is_shifts_pattern_valid(employee, start_date, end_date, start_time, end_time, job_type=None, repeat_policy=None, *args):
+    """
+    :param repeat_policy:
+    :param job_type:
     :param employee   >> shift is linked to
     :param start_date >> new shift start_date
     :param end_date   >> new shift_end_date
     :param start_time >> new shift start_time
     :param end_time   >> new shift end_time
     :return:
+
+    LOGIC
+    =====
+    S1. get dates between start and end_dates for all [week, regular or dates]
+    S2. get shift days where (shift_date >= start_date and shift_date <= end_date)
+    s3. filter if shift_days contains s1 values
     """
+
+    # S1, S2, S3
+    dates = get_dates_only(start_date, end_date, repeat_policy, *args)
+    shift_days = ShiftDay.objects.filter(shift_date__gte=start_date, shift_end_date__lte=end_date, employee=employee)
+    if shift_days.filter(shift_date__in=dates):
+        return True
+    return True
+
+
+def is_shift_valid(employee, shift_date, start_time, end_time):
+    """
+    :param employee:
+    :param shift_date:
+    :param start_time:
+    :param end_time:
+    :return:
+    """
+    shift_days = ShiftDay.objects.filter(shift_date=shift_date, employee=employee)
+    if shift_days:
+        return False
+    return True
+
