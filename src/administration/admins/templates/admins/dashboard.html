@@ -255,7 +255,7 @@
     </div>
 
     <div class="row">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-body border-bottom">
                     <p class="mb-0"><b>Active Shifts Today</b></p>
@@ -266,58 +266,53 @@
                             <table class="table table-hover">
                                 <thead class="thead-light">
                                 <tr>
-                                    <th>Start</th>
-                                    <th>End</th>
-                                    <th>Shift Time</th>
-                                    <th>Billed Time</th>
-                                    <th>Shift Hours</th>
-                                    <th>Active Hours</th>
-                                    <th>Extra Hours</th>
                                     <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Hours</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 {% for object in shifts_days %}
                                     <tr>
-                                        <td>{{ object.shift_date }}</td>
-                                        <td>{{ object.shift_end_date }}</td>
-                                        <td>{{ object.shift.start_time }}</td>
-                                        <td>{{ object.shift.end_time }}</td>
                                         <td>
-                                            {{ object.get_shift_hours }}
+                                            {% with current_status=object.get_current_status %}
+                                                {% if current_status == "completed" %}
+                                                    <span class="badge badge-success">{{ current_status }}</span>
+                                                {% elif current_status == "running" %}
+                                                    <span class="badge badge-primary">{{ current_status }}</span>
+                                                {% elif current_status == "over time" %}
+                                                    <span class="badge badge-warning">{{ current_status }}</span>
+                                                {% elif current_status == "awaiting" %}
+                                                    <span class="badge badge-info">{{ current_status }}</span>
+                                                {% elif current_status == "late" %}
+                                                    <span class="badge badge-warning">{{ current_status }}</span>
+                                                {% elif current_status == "absent" %}
+                                                    <span class="badge badge-dark">{{ current_status }}</span>
+                                                {% else %}
+                                                    <span class="badge badge-danger">{{ current_status }}</span>
+                                                {% endif %}
+                                            {% endwith %}
+                                        </td>
+                                        <td>{{ object.shift_date }} <br> {{ object.shift_end_date }}</td>
+                                        <td>{{ object.shift.start_time|date:"G:i" }}
+                                            - {{ object.shift.end_time|date:"G:i" }}
                                         </td>
                                         <td>
-                                            {{ object.get_active_hours }}
-                                        </td>
-                                        <td>
-                                            {{ object.get_extra_hours }}
-                                        </td>
-                                        <td id="btn-div-{{ object.pk }}">
-                                            {% if object.get_shift_action == "awa" %}
-                                                <button type="button" id="status_change_btn" data-action="run"
-                                                        data-id="{{ object.pk }}" class="btn btn-sm btn-primary">
-                                                    <i class="fa fa-clock"></i> Clock In
-                                                </button>
-                                            {% elif object.get_shift_action == "run" %}
-                                                <button type="button" class="btn btn-sm btn-warning"
-                                                        id="status_change_btn" data-action="com"
-                                                        data-id="{{ object.pk }}">
-                                                    <i class="fa fa-clock"></i> Clock Out
-                                                </button>
-                                            {% elif object.get_shift_action == "com" %}
-                                                <span class="badge badge-success">
-                                                    <i class="mdi mdi-call-missed"></i> completed
-                                                </span>
-                                            {% else %}
-                                                <span class="badge badge-danger">
-                                                    <i class="mdi mdi-call-missed"></i> Missed
-                                                </span>
-                                            {% endif %}
+                                            <i class="fa fa-clock text-primary"></i><b> {{ object.get_shift_hours }}</b>&nbsp;&nbsp;&nbsp;
+                                            <i class="fa fa-check-circle text-success"></i><b> {{ object.get_active_hours }}</b>&nbsp;&nbsp;&nbsp;
+                                            <i class="fa fa-exclamation-circle text-danger"></i><b> {{ object.get_extra_hours }}</b>
                                         </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
+                            <p class="mb-0 text-primary">
+                                <b>
+                                    <a href="{% url 'admins:time-clock' %}?shift_date=today&shift__employee__user__username=">View
+                                        More..</a>
+                                </b>
+                            </p>
                         </div>
                     {% else %}
                         <p class="mb-0 text-danger">
@@ -330,13 +325,95 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+                    <div id="chart"></div>
+                </div>
+            </div>
+        </div>
     </div>
 
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0"><b>Activities</b></p>
+                </div>
+                <div class="card-body">
+                    {% if shifts_days %}
+                        <div class="table-responsive" id="table">
+                            <table class="table table-hover table-borderless">
+                                <tbody>
+                                {% for object in '1234567789'|make_list %}
+                                    <tr>
+                                    <th><i class="fa fa-clock"></i></th>
+                                    <td>Notification</td>
+                                    <td>Mark I</td>
+                                    <td>clocked in 30 mins ago</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% else %}
+                        <p class="mb-0 text-danger">
+                            <b>
+                                <i class="fa fa-exclamation-circle"></i>
+                                No activity recorded
+                            </b>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block base_internal_scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 {% endblock %}
 
 {% block base_external_scripts %}
     <script>
         $(document).ready(function () {
+
+            var options = {
+                series: [{
+                    name: "Active Shifts",
+                    data: [10, 41, 35, 51, 49, 62, 69]
+                }],
+                chart: {
+                    height: 395,
+                    type: 'line',
+                    zoom: {
+                        enabled: false
+                    }
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    curve: 'straight'
+                },
+                title: {
+                    text: 'Active Shifts - WEEK',
+                    align: 'left'
+                },
+                grid: {
+                    row: {
+                        colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+                        opacity: 0.5
+                    },
+                },
+                xaxis: {
+                    categories: ['01', '02', '03', '04', '05', '06', '07'],
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
 
             $('#table #status_change_btn').on("click", function (event) {
                 const id = $(this).attr('data-id')

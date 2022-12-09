@@ -9,5 +9,6 @@ django-colorfield
 Faker
 django-resized
 django-filter
-
+python-decouple
+django-environ
 # python -m pip install --upgrade Pillow >>> install pillow with this
