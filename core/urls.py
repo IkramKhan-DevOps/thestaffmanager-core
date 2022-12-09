@@ -11,11 +11,17 @@ def home_view(request):
     return redirect('accounts:login')
 
 
-def handler404(request, exception, template_name='404.html'):
-    return render(request, template_name)
+def handler404(request, *args, **kwargs):
+    return render(request, "404.html")
+
+
+def handler500(request, *args, **kwargs):
+    return render(request, "500.html")
 
 
 handler404 = handler404
+handler500 = handler500
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,10 +42,3 @@ urlpatterns += [
     re_path(r'^media/(?P<path>.*)$', serve, {'document_root': MEDIA_ROOT}),
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
 ]
-
-# if settings.DEBUG:
-#     import debug_toolbar
-#     urlpatterns += [
-#         path('__debug__/', include(debug_toolbar.urls)),
-#     ]
-
