@@ -327,43 +327,11 @@
         </div>
         <div class="col-sm-6">
             <div class="card">
+                <div class="card-body border-bottom">
+                    <p class="mb-0"><b>This Week</b></p>
+                </div>
                 <div class="card-body">
                     <div id="chart"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-6">
-            <div class="card">
-                <div class="card-body border-bottom">
-                    <p class="mb-0"><b>Activities</b></p>
-                </div>
-                <div class="card-body">
-                    {% if shifts_days %}
-                        <div class="table-responsive" id="table">
-                            <table class="table table-hover table-borderless">
-                                <tbody>
-                                {% for object in '1234567789'|make_list %}
-                                    <tr>
-                                    <th><i class="fa fa-clock"></i></th>
-                                    <td>Notification</td>
-                                    <td>Mark I</td>
-                                    <td>clocked in 30 mins ago</td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="mb-0 text-danger">
-                            <b>
-                                <i class="fa fa-exclamation-circle"></i>
-                                No activity recorded
-                            </b>
-                        </p>
-                    {% endif %}
                 </div>
             </div>
         </div>
@@ -396,10 +364,6 @@
                 },
                 stroke: {
                     curve: 'straight'
-                },
-                title: {
-                    text: 'Active Shifts - WEEK',
-                    align: 'left'
                 },
                 grid: {
                     row: {
