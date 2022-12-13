@@ -4,10 +4,11 @@ from colorfield.fields import ColorField
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-
-from src.accounts.models import User, Employee
-
+from django.contrib.auth import get_user_model
+from src.accounts.models import Employee
 from faker import Faker
+User = get_user_model()
+
 
 fake = Faker()
 

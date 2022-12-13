@@ -1,7 +1,9 @@
 from django.forms import ModelForm
 
-from src.accounts.models import User, Employee, UserDocument
-from src.administration.admins.models import Shift
+from src.accounts.models import Employee, UserDocument
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 class UserProfileForm(ModelForm):
@@ -35,5 +37,23 @@ class EmployeeForm(ModelForm):
         model = Employee
         fields = [
             'employee_id', 'employee_type', 'is_internal_employee'
+        ]
+
+
+class EmployeeUserCreateForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = [
+            'username', 'email', 'password1', 'password2'
+        ]
+
+
+class StaffUserCreateForm(UserCreationForm):
+
+    class Meta:
+        model = User
+        fields = [
+            'username', 'email', 'password1', 'password2'
         ]
 
