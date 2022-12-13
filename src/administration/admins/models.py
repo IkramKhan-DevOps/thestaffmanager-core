@@ -59,8 +59,6 @@ class Country(models.Model):
 
 
 class Client(models.Model):
-    # TODO: update
-    # change client models
     name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15, null=True, blank=True)
     email = models.EmailField(null=True, blank=True)
@@ -73,7 +71,10 @@ class Client(models.Model):
     Post_code = models.CharField(max_length=255, null=True, blank=True)
     country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.SET_NULL)
 
-    is_active = models.BooleanField(default=False, help_text="Only active countries will be visible to all users except admins")
+    is_active = models.BooleanField(
+        default=False,
+        help_text="Only active countries will be visible to all users except admins"
+    )
 
     class Meta:
         ordering = ['id']

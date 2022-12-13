@@ -40,7 +40,7 @@
                                 {% if not object.email %}
                                     <b class="text-danger"><a href="#" class="text-danger">-</a></b>
                                 {% else %}
-                                    <b><a href="mail:{{ object.email }}">{{ object.email }}</a></b>
+                                    <b><a href="mailto:{{ object.email }}">{{ object.email }}</a></b>
                                 {% endif %}
                             </p>
                         </div>
@@ -65,7 +65,7 @@
                                 {% if not object.website %}
                                     <b><a href="#" class="text-danger">-</a></b>
                                 {% else %}
-                                    <b><a href="{{ object.website }}">{{ object.website }}</a></b>
+                                    <b><a href="{{ object.website }}" target="_blank">{{ object.website }}</a></b>
                                 {% endif %}
                             </p>
                         </div>
