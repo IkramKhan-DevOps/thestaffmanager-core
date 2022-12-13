@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Client,  Site, Position,
-    ReportType, Employee, ShiftDay, Shift
+    ReportType, Employee, ShiftDay, Shift, Country
 )
 
 
@@ -15,10 +15,17 @@ class ShiftAdmin(admin.ModelAdmin):
     ]
 
 
-admin.site.register(Position)
-admin.site.register(Client)
-admin.site.register(ReportType)
+class CountryAdmin(admin.ModelAdmin):
+    list_display = [
+        'name', 'language', 'currency', 'time_zone', 'phone_code', 'is_active'
+    ]
+
+
 admin.site.register(Site)
-admin.site.register(Shift, ShiftAdmin)
-admin.site.register(ShiftDay, ShiftDayAdmin)
+admin.site.register(Client)
+admin.site.register(Position)
 admin.site.register(Employee)
+admin.site.register(ReportType)
+admin.site.register(Shift, ShiftAdmin)
+admin.site.register(Country, CountryAdmin)
+admin.site.register(ShiftDay, ShiftDayAdmin)

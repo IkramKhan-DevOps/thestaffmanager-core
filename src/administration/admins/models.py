@@ -43,11 +43,11 @@ class Position(models.Model):
 
 
 class Country(models.Model):
-    name = models.CharField(max_length=255, unique=True),
-    language = models.CharField(max_length=50, null=True, blank=True),
-    currency = models.CharField(max_length=50, null=True, blank=True),
-    time_zone = models.CharField(max_length=100, null=True, blank=True),
-    phone_code = models.CharField(max_length=50, null=True, blank=True),
+    name = models.CharField(max_length=255, unique=True)
+    language = models.CharField(max_length=50, null=True, blank=True)
+    currency = models.CharField(max_length=50, null=True, blank=True)
+    time_zone = models.CharField(max_length=100, null=True, blank=True)
+    phone_code = models.CharField(max_length=50, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     class Meta:

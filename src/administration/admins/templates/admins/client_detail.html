@@ -3,7 +3,7 @@
 
 {% block base_title %}admins | {{ object.name }}{% endblock %}
 {% block base_subhead_heading %} {{ object.name }}{% endblock %}
-{% block base_subhead_paragraph %}{{ object.name }} - {{ object.xero_contact_name }}{% endblock %}
+{% block base_subhead_paragraph %}{{ object.name }} Profile{% endblock %}
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:client-list' %}"><i class="fa fa-arrow-left"></i> Clients</a>
 {% endblock %}
