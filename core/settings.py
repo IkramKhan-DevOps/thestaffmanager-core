@@ -148,8 +148,8 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = env('EMAIL_USE_TLS')
 EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_HOST_USER = "donald.duck0762@gmail.com"
+EMAIL_HOST_PASSWORD = "iblqezaitfuxxbfg"
 EMAIL_PORT = env('EMAIL_PORT')
 DEFAULT_FROM_EMAIL = "Support-Team <support@thestaffmanager.com>"
 

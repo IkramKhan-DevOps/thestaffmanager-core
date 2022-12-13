@@ -4,7 +4,7 @@ from django.core import serializers
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.forms import UserCreationForm, AdminPasswordChangeForm
+from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -15,15 +15,17 @@ from django.views.generic import (
 
 from .bll import shifts_create_update_logic, shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
-from .forms import EmployeeForm, UserDocumentForm
+from .forms import EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee,
 )
 import calendar
 import datetime
 
-from ...accounts.decorators import admin_protected
-from ...accounts.models import User, UserDocument
+from src.accounts.decorators import admin_protected
+from src.accounts.models import UserDocument
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 """ MAIN """
 
@@ -89,6 +91,7 @@ class DashboardView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
         context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
+        print(User.objects.get(pk=self.request.user.pk))
         return context
 
 
@@ -151,7 +154,7 @@ class UserListView(ListView):
 @method_decorator(admin_protected, name='dispatch')
 class UserStaffCreateView(CreateView):
     model = User
-    form_class = UserCreationForm
+    form_class = StaffUserCreateForm
     template_name = 'admins/user_create_form.html'
     success_url = reverse_lazy('admins:user-list')
 
@@ -163,12 +166,11 @@ class UserStaffCreateView(CreateView):
 @method_decorator(admin_protected, name='dispatch')
 class UserEmployeeCreateView(CreateView):
     model = User
-    form_class = UserCreationForm
+    form_class = EmployeeUserCreateForm
     template_name = 'admins/user_create_form.html'
     success_url = reverse_lazy('admins:user-list')
 
     def form_valid(self, form):
-        form.instance.is_staff = True
         form.instance.is_employee = True
         return super().form_valid(form)
 
