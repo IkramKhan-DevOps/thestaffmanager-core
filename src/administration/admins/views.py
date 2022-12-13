@@ -17,7 +17,7 @@ from .bll import shifts_create_update_logic, shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
 from .forms import EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm
 from .models import (
-    Position, Client, Site, ReportType, Shift, ShiftDay, Employee,
+    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country,
 )
 import calendar
 import datetime
@@ -127,6 +127,31 @@ class PositionUpdateView(UpdateView):
 class PositionDeleteView(DeleteView):
     model = Position
     success_url = reverse_lazy('admins:position-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class CountryListView(ListView):
+    queryset = Country.objects.all()
+
+
+@method_decorator(admin_protected, name='dispatch')
+class CountryCreateView(CreateView):
+    model = Country
+    fields = '__all__'
+    success_url = reverse_lazy('admins:country-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class CountryUpdateView(UpdateView):
+    model = Country
+    fields = '__all__'
+    success_url = reverse_lazy('admins:country-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class CountryDeleteView(DeleteView):
+    model = Country
+    success_url = reverse_lazy('admins:country-list')
 
 
 """ STUDENT CLASS """

@@ -58,13 +58,17 @@
                                         <td>{{ object.email }}</td>
                                         <td>
                                             {% if object.is_superuser %}
-                                                <b class="text-primary"><i class="fa fa-user-cog"></i> Admin</b>
+                                                <b class="text-danger"><i class="fa fa-user-cog"></i> Admin</b>
                                             {% else %}
                                                 {% if object.is_staff %}
+                                                    <b class="text-danger"><i class="fa fa-user-cog"></i>
+                                                        Staff
+                                                    </b>
+                                                {% elif object.is_employee %}
                                                     <b class="text-success"><i class="fa fa-user-check"></i>
-                                                        Co-ordinator</b>
+                                                        Employee</b>
                                                 {% else %}
-                                                    <b class="text-secondary"><i class="fa fa-times-circle"></i>
+                                                    <b class="text-secondary"><i class="fa fa-exclamation-circle"></i>
                                                         Undefined</b>
                                                 {% endif %}
                                             {% endif %}

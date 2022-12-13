@@ -1,0 +1,78 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_title %}Admins | Countries{% endblock %}
+{% block base_subhead_heading %}Countries{% endblock %}
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:country-add' %}">
+        <i class="fa fa-plus"></i> New Country
+    </a>
+{% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    {% if object_list %}
+
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Language</th>
+                                    <th>Currency</th>
+                                    <th>Time Zone</th>
+                                    <th>Phone Code</th>
+                                    <th>Active</th>
+                                    <th>-</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                {% for object in object_list %}
+                                    <tr>
+                                        <td>{{ object.name }}</td>
+                                        <td>{{ object.language }}</td>
+                                        <td>{{ object.currency }}</td>
+                                        <td>{{ object.time_zone }}</td>
+                                        <td>{{ object.phone_code }}</td>
+                                        <td>
+                                            {% if object.is_active %}
+                                                <b class="text-success"><i class="fa fa-check-circle"></i></b>
+                                            {% else %}
+                                                <b class="text-danger"><i class="fa fa-times-circle"></i></b>
+                                            {% endif %}
+                                        </td>
+                                        <th>
+                                            <a href="{% url 'admins:country-update' object.pk %}">
+                                                <i class="fa fa-edit"></i>
+                                            </a> |
+                                            <a href="{% url 'admins:country-delete' object.pk %}" class="text-danger">
+                                                <i class="fa fa-trash"></i>
+                                            </a>
+                                        </th>
+                                    </tr>
+                                {% endfor %}
+
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    {% else %}
+                        <p class="mb-0 text-danger">
+                            <b>
+                                <i class="fa fa-exclamation-circle"></i>
+                                No objects available
+                            </b>
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
