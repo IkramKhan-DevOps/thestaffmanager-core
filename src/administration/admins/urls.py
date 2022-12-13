@@ -15,7 +15,8 @@ from .views import (
     ScheduleView, ShiftsView, TimeClockView, AbsencesView,
     PayRunReportView, ShiftNotesView, ChargesBreakView, ReportsView, HealthView, ShiftListView, ShiftDetailView,
     ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
-    UserEmployeeUpdateView, ShiftCustomCreateView
+    UserEmployeeUpdateView, ShiftCustomCreateView, CountryListView, CountryCreateView, CountryUpdateView,
+    CountryDeleteView
 )
 
 app_name = 'admins'
@@ -47,6 +48,13 @@ urlpatterns += [
     path('position/<int:pk>/', PositionDetailView.as_view(), name='position-detail'),
     path('position/<int:pk>/change/', PositionUpdateView.as_view(), name='position-update'),
     path('position/<int:pk>/delete/', PositionDeleteView.as_view(), name='position-delete'),
+]
+
+urlpatterns += [
+    path('country/', CountryListView.as_view(), name='country-list'),
+    path('country/add/', CountryCreateView.as_view(), name='country-add'),
+    path('country/<int:pk>/change/', CountryUpdateView.as_view(), name='country-update'),
+    path('country/<int:pk>/delete/', CountryDeleteView.as_view(), name='country-delete'),
 ]
 
 urlpatterns += [
