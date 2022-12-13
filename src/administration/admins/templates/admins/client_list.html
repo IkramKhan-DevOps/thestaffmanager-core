@@ -38,8 +38,12 @@
                                 <thead class="thead-light">
                                 <tr>
                                     <th>Name</th>
-                                    <th>Parent Client</th>
-                                    <th>Xero Contact Name</th>
+                                    <th>Phone</th>
+                                    <th>Email</th>
+                                    <th>Registration</th>
+                                    <th>VAT</th>
+                                    <th>Website</th>
+                                    <th>Is Active</th>
                                     <th>-</th>
                                 </tr>
                                 </thead>
@@ -48,8 +52,18 @@
                                 {% for object in object_list %}
                                     <tr>
                                         <td>{{ object.name }}</td>
-                                        <td>{{ object.parent_client }}</td>
-                                        <td>{{ object.xero_contact_name }}</td>
+                                        <td>{{ object.phone }}</td>
+                                        <td>{{ object.email }}</td>
+                                        <td>{{ object.registration_number }}</td>
+                                        <td>{{ object.vat_number }}</td>
+                                        <td>{{ object.website }}</td>
+                                        <td>
+                                            {% if object.is_active %}
+                                                <b class="text-success"><i class="fa fa-check-circle"></i></b>
+                                            {% else %}
+                                                <b class="text-danger"><i class="fa fa-times-circle"></i></b>
+                                            {% endif %}
+                                        </td>
                                         <th>
                                             <a href="{% url 'admins:client-detail' object.pk %}">
                                                 <i class="fa fa-eye"></i>

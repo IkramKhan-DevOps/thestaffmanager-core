@@ -14,6 +14,71 @@
     <div class="row">
         <div class="col-sm-12">
             <div class="card">
+
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-star"></i></p>
+                            <p class="mb-0 text-center"><b>Name</b></p>
+                            <p class="mb-0 text-center">{{ object.name }}</p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-phone"></i></p>
+                            <p class="mb-0 text-center"><b>Phone</b></p>
+                            <p class="mb-0 text-center">
+                                {% if not object.phone %}
+                                    <b class="text-danger"><a href="#" class="text-danger">-</a></b>
+                                {% else %}
+                                    <b><a href="tel:{{ object.phone }}">{{ object.phone }}</a></b>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-inbox"></i></p>
+                            <p class="mb-0 text-center"><b>Email</b></p>
+                            <p class="mb-0 text-center">
+                                {% if not object.email %}
+                                    <b class="text-danger"><a href="#" class="text-danger">-</a></b>
+                                {% else %}
+                                    <b><a href="mail:{{ object.email }}">{{ object.email }}</a></b>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-barcode"></i></p>
+                            <p class="mb-0 text-center"><b>Registration</b></p>
+                            <p class="mb-0 text-center">
+                                {{ object.registration_number }}
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class="fa fa-comment"></i></p>
+                            <p class="mb-0 text-center"><b>VAT</b></p>
+                            <p class="mb-0 text-center">
+                                {{ object.vat_number }}
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class=" fa fa-globe"></i></p>
+                            <p class="mb-0 text-center"><b>Website</b></p>
+                            <p class="mb-0 text-center">
+                                {% if not object.website %}
+                                    <b><a href="#" class="text-danger">-</a></b>
+                                {% else %}
+                                    <b><a href="{{ object.website }}">{{ object.website }}</a></b>
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col">
+                            <p class="mb-0 text-center h3"><i class=" fa fa-map"></i></p>
+                            <p class="mb-0 text-center"><b>Address</b></p>
+                            <p class="mb-0 text-center">
+                                {{ object.address }} - {{ object.city }} - {{ object.country }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card-body">
                     <ul class="nav nav-tabs" role="tablist">
                         <li class="nav-item">

@@ -42,14 +42,38 @@ class Position(models.Model):
         print()
 
 
-class Client(models.Model):
-    name = models.CharField(max_length=255)
-    parent_client = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
-    xero_contact_name = models.CharField(
-        max_length=255, verbose_name='Xero Contact Name - must exactly match the value specified in Xero'
-    )
+class Country(models.Model):
+    name = models.CharField(max_length=255, unique=True),
+    language = models.CharField(max_length=50, null=True, blank=True),
+    currency = models.CharField(max_length=50, null=True, blank=True),
+    time_zone = models.CharField(max_length=100, null=True, blank=True),
+    phone_code = models.CharField(max_length=50, null=True, blank=True),
+    is_active = models.BooleanField(default=True)
 
-    is_active = models.BooleanField(default=False)
+    class Meta:
+        verbose_name_plural = "Countries"
+        ordering = ['-id']
+
+    def __str__(self):
+        return self.name
+
+
+class Client(models.Model):
+    # TODO: update
+    # change client models
+    name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=15, null=True, blank=True)
+    email = models.EmailField(null=True, blank=True)
+
+    registration_number = models.CharField(null=True, blank=True, max_length=255)
+    vat_number = models.CharField(null=True, blank=True, max_length=255)
+    website = models.URLField(null=True, blank=True)
+    address = models.CharField(max_length=1000, null=True, blank=True)
+    city = models.CharField(max_length=1000, null=True, blank=True, verbose_name="City/Town")
+    Post_code = models.CharField(max_length=255, null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True, on_delete=models.SET_NULL)
+
+    is_active = models.BooleanField(default=False, help_text="Only active countries will be visible to all users except admins")
 
     class Meta:
         ordering = ['id']

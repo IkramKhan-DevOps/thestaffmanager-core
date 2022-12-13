@@ -25,12 +25,13 @@ class UserFilter(django_filters.FilterSet):
 
 
 class ClientFilter(django_filters.FilterSet):
-    name = django_filters.CharFilter(widget=TextInput(attrs={'placeholder': 'name'}), lookup_expr='icontains')
-    xero_contact_name = django_filters.CharFilter(widget=TextInput(attrs={'placeholder': 'xero contact name'}), lookup_expr='icontains')
+    name = django_filters.CharFilter(widget=TextInput(attrs={'placeholder': 'Name'}), lookup_expr='icontains')
+    phone = django_filters.CharFilter(widget=TextInput(attrs={'placeholder': 'Phone'}), lookup_expr='icontains')
+    email = django_filters.CharFilter(widget=TextInput(attrs={'placeholder': 'Email'}), lookup_expr='icontains')
 
     class Meta:
         model = Client
-        fields = {'is_active'}
+        fields = {'is_active', 'country'}
 
 
 class SiteFilter(django_filters.FilterSet):
