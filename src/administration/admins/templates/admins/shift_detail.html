@@ -120,6 +120,8 @@
                                                 <a href="{% url 'admins:user-detail' shift_day.employee.user.pk %}">
                                                     {{ shift_day.employee.user.get_user_name }}
                                                 </a>
+                                            {% else %}
+                                                <b class="text-danger">NOT ASSIGNED</b>
                                             {% endif %}
                                         </b>
                                     </td>
