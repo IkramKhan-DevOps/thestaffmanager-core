@@ -92,7 +92,7 @@ class Client(models.Model):
         print("- CLIENTS: build")
         for x in range(loop):
             Client.objects.create(
-                name=fake.bs(), xero_contact_name=fake.isbn10()
+                name=fake.bs(), registration_number=fake.isbn10()
             )
             print(f"---- Client: {x} faked.")
         print("- END ")
@@ -227,7 +227,7 @@ class Shift(models.Model):
     job_type = models.CharField(default='p', choices=JOB_TYPE_CHOICE, max_length=1)
 
     start_date = models.DateField()
-    end_date = models.DateField(null=False, blank=True)
+    end_date = models.DateField(null=True, blank=True)
     start_time = models.TimeField()
     end_time = models.TimeField()
     client = models.ForeignKey(Client, on_delete=models.CASCADE)
@@ -255,7 +255,7 @@ class Shift(models.Model):
         """
         LOGIC 1 :: if job_type == open >> set last_date to first_date
         """
-        if self.job_type == 'o' and self.start_date:
+        if self.job_type == 'o' or not self.end_date:
             self.end_date = self.start_date
         super(Shift, self).save(*args, **kwargs)
 
