@@ -299,8 +299,6 @@ class ShiftDay(models.Model):
     shift_time = models.TimeField(null=True, blank=True)
     shift_end_time = models.TimeField(null=True, blank=True)
 
-    status = models.CharField(max_length=3, default="awa", choices=STATUS_CHOICE)
-
     class Meta:
         verbose_name_plural = "Shift Days"
 
