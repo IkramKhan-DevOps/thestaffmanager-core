@@ -92,7 +92,7 @@ class Client(models.Model):
         print("- CLIENTS: build")
         for x in range(loop):
             Client.objects.create(
-                name=fake.bs(), xero_contact_name=fake.isbn10()
+                name=fake.bs(), registration_number=fake.isbn10()
             )
             print(f"---- Client: {x} faked.")
         print("- END ")
