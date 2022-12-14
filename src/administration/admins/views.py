@@ -203,7 +203,7 @@ class UserEmployeeCreateView(CreateView):
 @method_decorator(admin_protected, name='dispatch')
 class UserUpdateView(UpdateView):
     model = User
-    fields = ['profile_image', 'first_name', 'last_name', 'email', 'username', 'is_employee', 'is_active']
+    fields = ['profile_image', 'first_name', 'last_name', 'email', 'username', 'is_staff', 'is_employee', 'is_active']
     template_name = 'admins/user_form.html'
     success_url = reverse_lazy('admins:user-list')
 
@@ -515,7 +515,7 @@ class ShiftDeleteView(DeleteView):
 class ShiftDayUpdateView(UpdateView):
     model = ShiftDay
     fields = [
-        'employee', 'clock_in', 'clock_out', 'status'
+        'employee', 'clock_in', 'clock_out'
     ]
 
     def get_success_url(self):
@@ -581,7 +581,7 @@ class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
     def get_queryset(self):
-        return ShiftDay.objects.all().order_by('status', '-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
+        return ShiftDay.objects.all().order_by('-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
 
     def get_context_data(self, **kwargs):
         context = super(TimeClockView, self).get_context_data(**kwargs)
