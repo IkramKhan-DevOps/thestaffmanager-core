@@ -400,7 +400,6 @@
                     $.getJSON('{% url 'admins:admins-api:shift-list' %}', function (data) {
                         var events = [];
 
-                        console.log(data)
 
                         for (var i = 0; i < data.length; i++) {
                             var event = data[i];
@@ -408,7 +407,7 @@
                             events.push({
                                 id: event.shift.id,
                                 client: event.shift.client.name,
-                                employee: event.shift.employee.user.username,
+                                employee: event.shift.employee == null ? '-' : event.shift.employee.user.username,
                                 title: event.shift.site.name,
                                 start: event.shift_date + "T" + event.shift.start_time,
                                 end: event.shift_date + "T" + event.shift.end_time,
@@ -417,6 +416,8 @@
                         }
 
                         inst.setEvents(events);
+                        console.log(events);
+
                         mobiscroll.toast({
                             message: 'shifts are updated'
                         });
