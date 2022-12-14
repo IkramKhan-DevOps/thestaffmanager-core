@@ -116,13 +116,16 @@
                                     </td>
                                     <td>
                                         <b>
-                                            <a href="{% url 'admins:user-detail' shift_day.employee.user.pk %}">
-                                                {{ shift_day.employee.user.get_user_name }}
-                                            </a>
+                                            {% if shift_day.employee %}
+                                                <a href="{% url 'admins:user-detail' shift_day.employee.user.pk %}">
+                                                    {{ shift_day.employee.user.get_user_name }}
+                                                </a>
+                                            {% endif %}
                                         </b>
                                     </td>
                                     <td>{{ shift_day.shift_date }}<br>{{ shift_day.shift_end_date }}</td>
-                                    <td>{{ shift_day.shift_time|date:"G:i" }}<br>{{ shift_day.shift_end_time|date:"G:i" }}</td>
+                                    <td>{{ shift_day.shift_time|date:"G:i" }}<br>{{ shift_day.shift_end_time|date:"G:i" }}
+                                    </td>
                                     <td>{{ shift_day.clock_in|date:"G:i" }}</td>
                                     <td>{{ shift_day.clock_out|date:"G:i" }}</td>
                                     <td>
