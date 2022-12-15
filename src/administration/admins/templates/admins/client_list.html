@@ -53,14 +53,14 @@
                                         {% if not object.phone %}
                                             <b class="text-danger"><a href="#" class="text-danger">-</a></b>
                                         {% else %}
-                                            <b><a href="tel:{{ object.phone }}">{{ object.phone }}</a></b>
+                                            <a href="tel:{{ object.phone }}">{{ object.phone }}</a>
                                         {% endif %}
                                     </td>
                                     <td>
                                         {% if not object.email %}
                                             <b class="text-danger"><a href="#" class="text-danger">-</a></b>
                                         {% else %}
-                                            <b><a href="mailto:{{ object.email }}">{{ object.email }}</a></b>
+                                            <a href="mailto:{{ object.email }}">{{ object.email }}</a>
                                         {% endif %}
                                     </td>
                                     <td>{{ object.registration_number }}</td>
@@ -69,14 +69,26 @@
                                         {% if not object.website %}
                                             <b class="text-danger"><a href="#" class="text-danger">-</a></b>
                                         {% else %}
-                                            <b><a href="{{ object.website }}" target="_blank"><i
-                                                    class="fa fa-link"></i> Visit</a></b>
+                                            <b><a href="{{ object.website }}" target="_blank">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     class="icon icon-tabler icon-tabler-world" width="24" height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                     fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <circle cx="12" cy="12" r="9"></circle>
+                                                    <line x1="3.6" y1="9" x2="20.4" y2="9"></line>
+                                                    <line x1="3.6" y1="15" x2="20.4" y2="15"></line>
+                                                    <path d="M11.5 3a17 17 0 0 0 0 18"></path>
+                                                    <path d="M12.5 3a17 17 0 0 1 0 18"></path>
+                                                </svg>
+                                            </a></b>
                                         {% endif %}
                                     </td>
                                     <td>
                                         {% if object.is_active %}
                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                 class="icon icon-tabler icon-tabler-check text-success" width="24" height="24"
+                                                 class="icon icon-tabler icon-tabler-check text-success" width="24"
+                                                 height="24"
                                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                  stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -84,7 +96,8 @@
                                             </svg>
                                         {% else %}
                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                 class="icon icon-tabler icon-tabler-x text-danger" width="24" height="24"
+                                                 class="icon icon-tabler icon-tabler-x text-danger" width="24"
+                                                 height="24"
                                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                  stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -113,37 +126,37 @@
                         </table>
                     </div>
 
-                {% else %}
-                    <div class="card-body">
-                        <p class="text-danger"><b>No objects available</b></p>
-                    </div>
-                {% endif %}
-
-                <div class="card-footer border-top">
-                    <ul class="pagination">
-                        {% if object_list.has_previous %}
-                            <li>
+                    <div class="card-body ">
+                        <ul class="pagination">
+                            {% if object_list.has_previous %}
+                                <li>
                             <span>
                                 <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
                                     Previous
                                 </a>
                             </span>
+                                </li>
+                            {% endif %}
+                            <li class="">
+                                <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
                             </li>
-                        {% endif %}
-                        <li class="">
-                            <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
-                        </li>
-                        {% if object_list.has_next %}
-                            <li>
+                            {% if object_list.has_next %}
+                                <li>
                             <span>
                                 <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
                                     Next
                                 </a>
                             </span>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+
+                {% else %}
+                    <div class="card-body">
+                        <p class="text-danger mb-0"><b>No objects available</b></p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>

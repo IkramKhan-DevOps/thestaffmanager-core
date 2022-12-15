@@ -47,7 +47,7 @@
                         <span class="navbar-toggler-icon"></span>
                     </button>
                     <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                        <a href=".">
+                        <a href="{% url 'accounts:login' %}">
                             <img src="{% static 'required/images/logo-staff-dark-ver-500.png' %}" width="110"
                                  height="32" alt="Tabler"
                                  class="navbar-brand-image">
@@ -301,6 +301,25 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
+                                    <a class="nav-link"
+                                       href="{% url 'admins:shift-list' %}">
+                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="icon icon-tabler icon-tabler-stretching" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <circle cx="16" cy="5" r="1"></circle>
+                                            <path d="M5 20l5 -.5l1 -2"></path>
+                                            <path d="M18 20v-5h-5.5l2.5 -6.5l-5.5 1l1.5 2"></path>
+                                        </svg>
+                                    </span>
+                                        <span class="nav-link-title">
+                                        Shifts
+                                    </span>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
                                     <a class="nav-link" href="{% url 'admins:client-list' %}">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -375,8 +394,10 @@
                                     </span>
                                     </a>
                                     <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="{% url 'admins:country-list' %}">Countries</a>
                                         <a class="dropdown-item" href="{% url 'admins:position-list' %}">Positions</a>
-                                        <a class="dropdown-item" href="{% url 'admins:country-list' %}">Positions</a>
+                                        <a class="dropdown-item" href="{% url 'admins:report-type-list' %}">Report
+                                            Categories</a>
                                     </div>
                                 </li>
                             </ul>
