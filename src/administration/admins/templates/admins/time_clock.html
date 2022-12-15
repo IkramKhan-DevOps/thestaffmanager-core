@@ -45,7 +45,6 @@
                             </div>
                         </form>
 
-                        </p>
                         <hr>
 
                         <div class="table-responsive" id="table">
@@ -97,9 +96,13 @@
                                         </td>
                                         <td>
                                             <b>
-                                                <a href="{% url 'admins:user-detail' object.shift.employee.user.pk %}">
-                                                    {{ object.shift.employee }}
-                                                </a>
+                                                {% if shift_day.employee %}
+                                                    <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
+                                                        {{ object.employee.user.get_user_name }}
+                                                    </a>
+                                                {% else %}
+                                                    <b class="text-danger">NOT ASSIGNED</b>
+                                                {% endif %}
                                             </b>
                                         </td>
                                         <td>{{ object.shift_date }} <br> {{ object.shift_end_date }}</td>
