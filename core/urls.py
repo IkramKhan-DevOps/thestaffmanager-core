@@ -24,7 +24,6 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('', TemplateView.as_view(template_name='base.html')),
     # path('', include('src.website.urls', namespace="website")),
     path('accounts/', include('src.accounts.urls', namespace='accounts')),
     path('a/', include('src.administration.admins.urls', namespace='admins')),
