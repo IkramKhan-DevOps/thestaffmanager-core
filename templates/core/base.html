@@ -261,24 +261,6 @@
                             <ul class="navbar-nav">
 
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{% url 'admins:dashboard' %}">
-                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
-                                        <svg xmlns="http://www.w3.org/2000/svg"
-                                             class="icon icon-tabler icon-tabler-home-2" width="24" height="24"
-                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                             stroke-linecap="round" stroke-linejoin="round">
-                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                             <polyline points="5 12 3 12 12 3 21 12 19 12"></polyline>
-                                             <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7"></path>
-                                            <rect x="10" y="12" width="4" height="4"></rect>
-                                        </svg>
-                                    </span>
-                                        <span class="nav-link-title">
-                                        Home
-                                    </span>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link" href="{% url 'admins:schedule' %}">
                                     <span class="nav-link-icon d-md-none d-lg-inline-block">
                                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -422,7 +404,7 @@
                             </div>
 
                             <div class="col-auto ms-auto d-print-none">
-                                <div class="btn-list">
+                                <div class="btn-list" style="padding-right: 15px;">
                                     {% block base_subhead_button %}
 
                                     {% endblock %}
@@ -560,12 +542,9 @@
 
 
     {# GLOBAL SCRIPTS #}
-    <script src="{% static 'admin/libs/apexcharts/dist/apexcharts.min.js' %}?1668287865" defer></script>
-    <script src="{% static 'admin/libs/jsvectormap/dist/js/jsvectormap.min.js' %}?1668287865" defer></script>
-    <script src="{% static 'admin/libs/jsvectormap/dist/maps/world.js' %}?1668287865" defer></script>
-    <script src="{% static 'admin/libs/jsvectormap/dist/maps/world-merc.js' %}?1668287865" defer></script>
 
     <!-- Tabler Core -->
+    <script src="https://code.jquery.com/jquery-3.6.2.slim.min.js"></script>
     <script src="{% static 'admin/js/tabler.min.js' %}?1668287865" defer></script>
     <script src="{% static 'admin/js/demo.min.js' %}?1668287865" defer></script>
     {# INTERNAL SCRIPTS #}
