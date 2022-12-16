@@ -4,6 +4,9 @@
 
 {% block base_title %}Time Clock{% endblock %}
 {% block base_subhead_heading %} Time Clock {% endblock %}
+{% block base_subhead_paragraph %}
+    Shifts time clock contains clockin clock out and other required information
+{% endblock %}
 
 {% block base_css %}
     <link rel="stylesheet"
@@ -121,22 +124,37 @@
                                             {% endif %}
                                         </b>
                                     </td>
-                                    <td>{{ object.shift_date }} <br> {{ object.shift_end_date }}</td>
+                                    <td>{{ object.shift_date }} - {{ object.shift_end_date }}</td>
                                     <td>{{ object.shift.start_time|date:"G:i" }}
                                         - {{ object.shift.end_time|date:"G:i" }}
                                     </td>
                                     {#                                    {{ my_time.time|date:"G:i:s" }}#}
                                     <td style="width: 100px">
-                                        <input class="custom_clock_in_class" type="text"
-                                               id="id_clock_in" data-id="{{ object.pk }}"
-                                               value="{{ object.clock_in|date:"G:i" }}"
-                                        >
+                                        {% if object.clock_in and object.clock_in|date:"G:i" != object.shift_time|date:"G:i" %}
+                                            <input class="custom_clock_in_class border-danger bg-danger-lt" type="text"
+                                                   id="id_clock_in" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_in|date:"G:i" }}"
+                                            >
+                                        {% else %}
+                                            <input class="custom_clock_in_class border" type="text"
+                                                   id="id_clock_in" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_in|date:"G:i" }}"
+                                            >
+                                        {% endif %}
                                     </td>
                                     <td style="width: 100px">
-                                        <input class="custom_clock_out_class" type="text"
-                                               id="id_clock_out" data-id="{{ object.pk }}"
-                                               value="{{ object.clock_out|date:"G:i" }}"
-                                        >
+
+                                        {% if object.clock_out and object.clock_out|date:"G:i" != object.shift_end_time|date:"G:i" %}
+                                            <input class="custom_clock_out_class border-danger bg-danger-lt" type="text"
+                                                   id="id_clock_out" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_out|date:"G:i" }}"
+                                            >
+                                        {% else %}
+                                            <input class="custom_clock_out_class" type="text"
+                                                   id="id_clock_out" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_out|date:"G:i" }}"
+                                            >
+                                        {% endif %}
                                     </td>
                                     <td>
                                         <b>
