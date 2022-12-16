@@ -82,25 +82,24 @@
                             </thead>
                             <tbody>
                             {% for object in object_list %}
-                                <tr id="row_{{ object.pk }}">
+                                {% with current_status=object.get_current_status %}
+                                    <tr id="row_{{ object.pk }}">
                                     <td>
-                                        {% with current_status=object.get_current_status %}
-                                            {% if current_status == "completed" %}
-                                                <span class="badge bg-success-lt">{{ current_status }}</span>
-                                            {% elif current_status == "running" %}
-                                                <span class="badge bg-primary-lt">{{ current_status }}</span>
-                                            {% elif current_status == "overtime" %}
-                                                <span class="badge bg-yellow-lt">{{ current_status }}</span>
-                                            {% elif current_status == "awaiting" %}
-                                                <span class="badge bg-purple-lt">{{ current_status }}</span>
-                                            {% elif current_status == "late" %}
-                                                <span class="badge bg-danger-lt">{{ current_status }}</span>
-                                            {% elif current_status == "absent" %}
-                                                <span class="badge bg-dark-lt">{{ current_status }}</span>
-                                            {% else %}
-                                                <span class="badge bg-secondary-lt">{{ current_status }}</span>
-                                            {% endif %}
-                                        {% endwith %}
+                                        {% if current_status == "completed" %}
+                                            <span class="badge bg-success-lt">{{ current_status }}</span>
+                                        {% elif current_status == "running" %}
+                                            <span class="badge bg-primary-lt">{{ current_status }}</span>
+                                        {% elif current_status == "overtime" %}
+                                            <span class="badge bg-yellow-lt">{{ current_status }}</span>
+                                        {% elif current_status == "awaiting" %}
+                                            <span class="badge bg-purple-lt">{{ current_status }}</span>
+                                        {% elif current_status == "late" %}
+                                            <span class="badge bg-danger-lt">{{ current_status }}</span>
+                                        {% elif current_status == "absent" %}
+                                            <span class="badge bg-dark-lt">{{ current_status }}</span>
+                                        {% else %}
+                                            <span class="badge bg-secondary-lt">{{ current_status }}</span>
+                                        {% endif %}
                                     </td>
                                     <td>
                                         <b>
@@ -130,7 +129,7 @@
                                     </td>
                                     {#                                    {{ my_time.time|date:"G:i:s" }}#}
                                     <td style="width: 100px">
-                                        {% if object.clock_in and object.clock_in|date:"G:i" != object.shift_time|date:"G:i" %}
+                                        {% if not object.is_clock_in_correct %}
                                             <input class="custom_clock_in_class border-danger bg-danger-lt" type="text"
                                                    id="id_clock_in" data-id="{{ object.pk }}"
                                                    value="{{ object.clock_in|date:"G:i" }}"
@@ -144,7 +143,7 @@
                                     </td>
                                     <td style="width: 100px">
 
-                                        {% if object.clock_out and object.clock_out|date:"G:i" != object.shift_end_time|date:"G:i" %}
+                                        {% if not object.is_clock_out_correct %}
                                             <input class="custom_clock_out_class border-danger bg-danger-lt" type="text"
                                                    id="id_clock_out" data-id="{{ object.pk }}"
                                                    value="{{ object.clock_out|date:"G:i" }}"
@@ -235,7 +234,8 @@
                                             </a>
                                         </b>
                                     </td>
-                                </tr>
+                                {% endwith %}
+                            </tr>
                             {% endfor %}
                             </tbody>
                         </table>
@@ -303,7 +303,6 @@
 
             $('body .custom_btn_clock_in').click(function (event) {
                 event.preventDefault();
-                alert("hellow");
 
                 let shift_day_id = $(this).data('id');
                 let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();

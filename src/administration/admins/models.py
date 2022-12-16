@@ -391,6 +391,36 @@ class ShiftDay(models.Model):
 
         return "clash"
 
+    def is_clock_in_correct(self):
+        sd = datetime.combine(self.shift_date, self.shift_time)
+        if self.clock_in:
+            c_in = datetime.combine(self.shift_date, self.clock_in)
+            if c_in.strftime("%I:%M%p") == sd.strftime("%I:%M%p"):
+                return True
+            else:
+                return False
+        else:
+            nd = datetime.now()
+            if sd >= nd:
+                return True
+            else:
+                return False
+
+    def is_clock_out_correct(self):
+        ed = datetime.combine(self.shift_end_date, self.shift_end_time)
+        if self.clock_out:
+            c_out = datetime.combine(self.shift_end_date, self.clock_out)
+            if c_out.strftime("%I:%M%p") == ed.strftime("%I:%M%p"):
+                return True
+            else:
+                return False
+        else:
+            nd = datetime.now()
+            if ed >= nd:
+                return True
+            else:
+                return False
+
     def get_shift_hours(self):
         start = datetime.combine(self.shift_date, self.shift_time)
         end = datetime.combine(self.shift_end_date, self.shift_end_time)
