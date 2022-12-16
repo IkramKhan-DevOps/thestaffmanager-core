@@ -1,6 +1,8 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
+from django.shortcuts import redirect
+from django.views import View
 
 
-class HomePageView(TemplateView):
-    template_name = 'website/home.html'
+class HomeView(View):
+
+    def get(self, request):
+        return redirect("accounts:cross-auth")

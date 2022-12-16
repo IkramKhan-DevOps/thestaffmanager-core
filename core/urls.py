@@ -1,11 +1,9 @@
 from django.contrib import admin
-from django.shortcuts import redirect, render
-from django.urls import path, include, re_path
-from django.views.generic import TemplateView
-
-from . import settings
-from .settings import MEDIA_ROOT, STATIC_ROOT
+from django.shortcuts import render
 from django.views.static import serve
+from django.urls import path, include, re_path
+
+from .settings import MEDIA_ROOT, STATIC_ROOT
 
 
 def handler404(request, *args, **kwargs):
@@ -24,7 +22,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    # path('', include('src.website.urls', namespace="website")),
+    path('', include('src.website.urls', namespace="website")),
     path('accounts/', include('src.accounts.urls', namespace='accounts')),
     path('a/', include('src.administration.admins.urls', namespace='admins')),
     path('c/', include('src.administration.employees.urls', namespace='employees')),

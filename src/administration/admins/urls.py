@@ -1,4 +1,4 @@
-from django.urls import path, include, re_path
+from django.urls import path, include
 
 from core import settings
 from .views import (
