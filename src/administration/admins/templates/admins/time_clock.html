@@ -215,7 +215,13 @@
                                                     <i class="fa fa-clock"></i> Clock Out
                                                 </button>
                                             {% else %}
-                                                <b>{{ current_status }}</b>
+                                                {% if current_status == "completed" %}
+                                                    <b class="text-success">{{ current_status }}</b>
+                                                {% elif current_status == "running" %}
+                                                    <b class="text-azure">{{ current_status }}</b>
+                                                {% else %}
+                                                    <b class="text-dark">{{ current_status }}</b>
+                                                {% endif %}
                                             {% endif %}
                                         {% endwith %}
                                     </td>
@@ -290,6 +296,9 @@
 {% block base_external_scripts %}
     <script>
         $(document).ready(function () {
+
+            $("#id_shift_date option:first").text("-- Start Date --");
+            $("#id_shift_end_date option:first").text("-- End Date --");
 
             $('body #id_clock_in').datetimepicker({
                 datepicker: false,
