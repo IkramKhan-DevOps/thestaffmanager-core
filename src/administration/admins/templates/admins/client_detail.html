@@ -3,153 +3,224 @@
 
 {% block base_title %}admins | {{ object.name }}{% endblock %}
 {% block base_subhead_heading %} {{ object.name }}{% endblock %}
-{% block base_subhead_paragraph %}{{ object.name }} Profile{% endblock %}
+{% block base_subhead_paragraph %}Client profile complete details{% endblock %}
 {% block base_subhead_button %}
-    <a class="btn btn-primary" href="{% url 'admins:client-list' %}"><i class="fa fa-arrow-left"></i> Clients</a>
+    <b>
+        <a class="" href="{% url 'admins:client-list' %}">
+            <i class="fa fa-list"></i> &larr; Clients
+        </a>
+    </b>
 {% endblock %}
 
 
 {% block base_content %}
 
-    <div class="row">
-        <div class="col-sm-12">
+    <div class="row mb-4">
+        <div class="col-sm-8">
+
             <div class="card">
-
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col">
-                            <p class="mb-0 text-center h3"><i class="fa fa-star"></i></p>
-                            <p class="mb-0 text-center"><b>Name</b></p>
-                            <p class="mb-0 text-center">{{ object.name }}</p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-0 text-center h3"><i class="fa fa-phone"></i></p>
-                            <p class="mb-0 text-center"><b>Phone</b></p>
-                            <p class="mb-0 text-center">
-                                {% if not object.phone %}
-                                    <b class="text-danger"><a href="#" class="text-danger">-</a></b>
-                                {% else %}
-                                    <b><a href="tel:{{ object.phone }}">{{ object.phone }}</a></b>
-                                {% endif %}
-                            </p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-0 text-center h3"><i class="fa fa-inbox"></i></p>
-                            <p class="mb-0 text-center"><b>Email</b></p>
-                            <p class="mb-0 text-center">
-                                {% if not object.email %}
-                                    <b class="text-danger"><a href="#" class="text-danger">-</a></b>
-                                {% else %}
-                                    <b><a href="mailto:{{ object.email }}">{{ object.email }}</a></b>
-                                {% endif %}
-                            </p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-0 text-center h3"><i class="fa fa-barcode"></i></p>
-                            <p class="mb-0 text-center"><b>Registration</b></p>
-                            <p class="mb-0 text-center">
-                                {{ object.registration_number }}
-                            </p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-0 text-center h3"><i class="fa fa-comment"></i></p>
-                            <p class="mb-0 text-center"><b>VAT</b></p>
-                            <p class="mb-0 text-center">
-                                {{ object.vat_number }}
-                            </p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-0 text-center h3"><i class=" fa fa-globe"></i></p>
-                            <p class="mb-0 text-center"><b>Website</b></p>
-                            <p class="mb-0 text-center">
-                                {% if not object.website %}
-                                    <b><a href="#" class="text-danger">-</a></b>
-                                {% else %}
-                                    <b><a href="{{ object.website }}" target="_blank">{{ object.website }}</a></b>
-                                {% endif %}
-                            </p>
-                        </div>
-                        <div class="col">
-                            <p class="mb-0 text-center h3"><i class=" fa fa-map"></i></p>
-                            <p class="mb-0 text-center"><b>Address</b></p>
-                            <p class="mb-0 text-center">
-                                {{ object.address }} - {{ object.city }} - {{ object.country }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-body">
-                    <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" data-toggle="tab" href="#sites" role="tab"
-                               aria-selected="true">Sites
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" data-toggle="tab" href="#assets" role="tab" aria-selected="false">
-                                Assets
-                            </a>
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-home-13" class="nav-link active" data-bs-toggle="tab" aria-selected="true"
+                               role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24"
+                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                     stroke-linecap="round" stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                    <path d="M3 12h4l3 8l4 -16l3 8h4"></path>
+                                </svg>
+                                Sites</a>
                         </li>
                     </ul>
+                </div>
+                <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane p-3 active" id="sites" role="tabpanel">
-                            {% if not object.get_sites %}
-                                <p class="mb-0 text-danger">
-                                    Not sites available.
-                                </p>
-                            {% else %}
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Name</th>
-                                            <th>Location</th>
-                                            <th>Display ID</th>
-                                            <th>-</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for site in object.get_sites %}
+                        <div class="tab-pane active show" id="tabs-home-13" role="tabpanel">
+                            <div>
+                                {% if not object.get_sites %}
+                                    <p class="mb-0 text-danger">
+                                        Not sites available.
+                                    </p>
+                                {% else %}
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead class="thead-light">
                                             <tr>
-                                                <td>{{ site.site_id }}</td>
-                                                <td>{{ site.name }}</td>
-                                                <td>{{ site.address_line_1 }}</td>
-                                                <td>{{ site.pk }}</td>
-                                                <td>
-                                                    <b>
-                                                        <a href="{% url 'admins:site-detail' site.pk %}">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                    </b>
-                                                </td>
+                                                <th>ID</th>
+                                                <th>Name</th>
+                                                <th>Location</th>
+                                                <th>Display ID</th>
+                                                <th>-</th>
                                             </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% endif %}
+                                            </thead>
+                                            <tbody>
+                                            {% for site in object.get_sites %}
+                                                <tr>
+                                                    <td>{{ site.site_id }}</td>
+                                                    <td>{{ site.name }}</td>
+                                                    <td>{{ site.address_line_1 }}</td>
+                                                    <td>{{ site.pk }}</td>
+                                                    <td>
+                                                        <b>
+                                                            <a href="{% url 'admins:site-detail' site.pk %}">
+                                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                                     class="icon icon-tabler icon-tabler-eye" width="24"
+                                                                     height="24"
+                                                                     viewBox="0 0 24 24" stroke-width="2"
+                                                                     stroke="currentColor"
+                                                                     fill="none"
+                                                                     stroke-linecap="round" stroke-linejoin="round">
+                                                                    <path stroke="none" d="M0 0h24v24H0z"
+                                                                          fill="none"></path>
+                                                                    <circle cx="12" cy="12" r="2"></circle>
+                                                                    <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                                </svg>
+                                                            </a>
+                                                        </b>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endif %}
+                            </div>
                         </div>
-                        <div class="tab-pane p-3" id="assets" role="tabpanel">
-                            <p class="mb-0 text-danger">
-                                Not implemented yet.
-                            </p>
-                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-sm-4">
+
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="card-title">
+                        More information
+                        <a class="" href="{% url 'admins:client-update' object.pk %}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit" width="24"
+                                 height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                 stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <path d="M7 7h-1a2 2 0 0 0 -2 2v9a2 2 0 0 0 2 2h9a2 2 0 0 0 2 -2v-1"></path>
+                                <path d="M20.385 6.585a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3l8.385 -8.415z"></path>
+                                <path d="M16 5l3 3"></path>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon text-muted" width="24"
+                             height="24"
+                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path>
+                            <path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path>
+                            <line x1="3" y1="6" x2="3" y2="19"></line>
+                            <line x1="12" y1="6" x2="12" y2="19"></line>
+                            <line x1="21" y1="6" x2="21" y2="19"></line>
+                        </svg>
+                        Name: <strong>{{ object.name }}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="icon icon-tabler icon-tabler-phone-calling text-muted"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"></path>
+                            <line x1="15" y1="7" x2="15" y2="7.01"></line>
+                            <line x1="18" y1="7" x2="18" y2="7.01"></line>
+                            <line x1="21" y1="7" x2="21" y2="7.01"></line>
+                        </svg>
+                        Phone: <strong>{{ object.phone }}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="icon icon-tabler icon-tabler-mail-fast text-muted"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M3 7h3"></path>
+                            <path d="M3 11h2"></path>
+                            <path d="M9.02 8.801l-.6 6a2 2 0 0 0 1.99 2.199h7.98a2 2 0 0 0 1.99 -1.801l.6 -6a2 2 0 0 0 -1.99 -2.199h-7.98a2 2 0 0 0 -1.99 1.801z"></path>
+                            <path d="M9.8 7.5l2.982 3.28a3 3 0 0 0 4.238 .202l3.28 -2.982"></path>
+                        </svg>
+                        Email: <strong>{{ object.email }}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="icon icon-tabler icon-tabler-rubber-stamp text-muted"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M21 17.85h-18c0 -4.05 1.421 -4.05 3.79 -4.05c5.21 0 1.21 -4.59 1.21 -6.8a4 4 0 1 1 8 0c0 2.21 -4 6.8 1.21 6.8c2.369 0 3.79 0 3.79 4.05z"></path>
+                            <path d="M5 21h14"></path>
+                        </svg>
+                        Registration: <strong>{{ object.registration_number }}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="icon icon-tabler icon-tabler-message-share text-muted"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M20 11v3a3 3 0 0 1 -3 3h-9l-4 4v-13a3 3 0 0 1 3 -3h7"></path>
+                            <path d="M17 4h4v4"></path>
+                            <path d="M16 9l5 -5"></path>
+                        </svg>
+                        VAT: <strong>{{ object.vat_number }}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="icon icon-tabler icon-tabler-world-upload text-muted"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M21 12a9 9 0 1 0 -9 9"></path>
+                            <path d="M3.6 9h16.8"></path>
+                            <path d="M3.6 15h8.4"></path>
+                            <path d="M11.578 3a17 17 0 0 0 0 18"></path>
+                            <path d="M12.5 3c1.719 2.755 2.5 5.876 2.5 9"></path>
+                            <path d="M18 21v-7m3 3l-3 -3l-3 3"></path>
+                        </svg>
+                        Website: <strong>
+                        {% if not object.website %}
+                            <a href="#" class="text-danger">-</a>
+                        {% else %}
+                            <a href="{{ object.website }}" target="_blank">{{ object.website }}</a>
+                        {% endif %}
+                    </strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-pin text-muted"
+                             width="24"
+                             height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <circle cx="12" cy="11" r="3"></circle>
+                            <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>
+                        </svg>
+                        Address: <strong>{{ object.address }} - {{ object.city }} - {{ object.country }}</strong>
                     </div>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-body">
-                    <a href="{% url 'admins:client-update' object.pk %}" class="btn btn-primary text-white"><i
-                            class="fa fa-edit"></i> Edit Client</a>
-                    <a href="{% url 'admins:client-delete' object.pk %}" class="btn btn-danger text-white"><i
-                            class="fa fa-trash"></i> Delete client</a>
+                    <div class="card-title">Actions</div>
+                    <p class="mb-3 text-muted">
+                        Make sure you want to delete this client permanently, once deleted there is
+                        no way to retrieve user again.
+                    </p>
+                    <a class="btn btn-danger" href="{% url 'admins:client-delete' object.pk %}">
+                        Delete
+                    </a>
                 </div>
             </div>
-        </div>
 
+        </div>
     </div>
 
 {% endblock %}
