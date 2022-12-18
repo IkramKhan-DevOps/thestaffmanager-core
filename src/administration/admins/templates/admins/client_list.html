@@ -2,10 +2,12 @@
 {% load static %}
 {% load custom_tags %}
 {% block base_subtitle %} Clients{% endblock %}
+{% block base_subhead_heading %} Clients &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available clients{% endblock %}
 
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:client-add' %}">
-        <i class="fa fa-plus"></i> New Client
+        Add Client
     </a>
 {% endblock %}
 

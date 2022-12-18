@@ -1,13 +1,13 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_subtitle %}Shift {{ object }}{% endblock %}
-{% block base_subhead_heading %} Shift #{{ object }}{% endblock %}
-{% block base_subhead_paragraph %}Detail down description of Shift #{{ object }}.{% endblock %}
+{% block base_subtitle %}Shift Details{% endblock %}
+{% block base_subhead_heading %}Shift &rAarr; Details {% endblock %}
+{% block base_subhead_paragraph %}Shift detailed view{% endblock %}
 {% block base_subhead_button %}
     <b>
         <a class="" href="{% url 'admins:shift-list' %}">
-            <i class="fa fa-list"></i> &larr; Shifts
+            &larr; Shifts
         </a>
     </b>
 {% endblock %}

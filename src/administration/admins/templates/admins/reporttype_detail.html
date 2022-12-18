@@ -1,9 +1,9 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_title %}admins | {{ object }}{% endblock %}
-{% block base_subhead_heading %}{{ object }}{% endblock %}
-{% block base_subhead_paragraph %}Detail down description of {{ object }}.{% endblock %}
+{% block base_title %}Under Maintenance{% endblock %}
+{% block base_subhead_heading %}Report Type {{ object.name }}{% endblock %}
+{% block base_subhead_paragraph %}Detail down description of {{ object.name }}{% endblock %}
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:position-list' %}"><i class="fa fa-arrow-left"></i> Sites</a>
 {% endblock %}

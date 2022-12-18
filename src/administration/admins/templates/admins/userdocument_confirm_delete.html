@@ -2,12 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block base_title %}Delete {{ object }} {% endblock %}
-{% block base_subhead_heading %}Delete {{ object }} {% endblock %}
+{% block base_subtitle %}Document Delete{% endblock %}
+{% block base_subhead_heading %}Document &rAarr; Delete {% endblock %}
+{% block base_subhead_paragraph %}Delete Document permanently{% endblock %}
 {% block base_subhead_button %}
-    <a class="btn btn-primary" href="{% url 'admins:user-detail' object.user.pk %}">
-        <i class="fa fa-arrow-left"></i> Back to User
-    </a>
+    <a href="{% url 'admins:user-detail' object.user.pk %}">&larr; User</a>
 {% endblock %}
 
 {% block base_content %}

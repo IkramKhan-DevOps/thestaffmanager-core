@@ -2,12 +2,14 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block base_title %}admins | Users{% endblock %}
-{% block base_subhead_heading %}Users{% endblock %}
-{% block base_subhead_paragraph %}List of available users{% endblock %}
+{% block base_subtitle %} Employees{% endblock %}
+{% block base_subhead_heading %} Employees &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available employees{% endblock %}
+
+
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:user-employee-add' %}">
-        <i class="fa fa-plus"></i> New Employee
+        Add Employee
     </a>
 {% endblock %}
 

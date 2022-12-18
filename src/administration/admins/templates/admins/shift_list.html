@@ -2,12 +2,13 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block base_title %}Admins | Shifts{% endblock %}
-{% block base_subhead_heading %}Shifts{% endblock %}
-{% block base_subhead_paragraph %}List of available Shifts.{% endblock %}
+{% block base_subtitle %} Shifts{% endblock %}
+{% block base_subhead_heading %} Shifts &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available shifts{% endblock %}
+
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:shift-add' %}">
-        <i class="fa fa-plus"></i> New Shift
+        Add Shift
     </a>
 {% endblock %}
 

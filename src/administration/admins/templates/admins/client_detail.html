@@ -1,15 +1,13 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_title %}admins | {{ object.name }}{% endblock %}
-{% block base_subhead_heading %} {{ object.name }}{% endblock %}
-{% block base_subhead_paragraph %}Client profile complete details{% endblock %}
+{% block base_subtitle %}Client Details{% endblock %}
+{% block base_subhead_heading %}Client &rAarr; Details {% endblock %}
+{% block base_subhead_paragraph %}Client detailed view{% endblock %}
 {% block base_subhead_button %}
-    <b>
-        <a class="" href="{% url 'admins:client-list' %}">
-            <i class="fa fa-list"></i> &larr; Clients
-        </a>
-    </b>
+    <a href="{% url 'admins:client-list' %}">
+        &larr; Clients
+    </a>
 {% endblock %}
 
 

@@ -1,13 +1,13 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_title %}admins | {{ object }}{% endblock %}
-{% block base_subhead_heading %}{{ object.get_user_name }}{% endblock %}
-{% block base_subhead_paragraph %}Complete profile information{% endblock %}
+{% block base_subtitle %}User Details{% endblock %}
+{% block base_subhead_heading %}User &rAarr; Details {% endblock %}
+{% block base_subhead_paragraph %}User detailed view{% endblock %}
 {% block base_subhead_button %}
     <b>
         <a class="" href="{% url 'admins:user-list' %}">
-            <i class="fa fa-list"></i> &larr; users
+            &larr; users
         </a>
     </b>
 {% endblock %}

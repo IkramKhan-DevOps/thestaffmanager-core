@@ -1,9 +1,15 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_title %}Schedule{% endblock %}
-{% block base_subhead_heading %} Schedule {% endblock %}
+{% block base_subtitle %} Schedule{% endblock %}
+{% block base_subhead_heading %} Schedule &rAarr; Details{% endblock %}
+{% block base_subhead_paragraph %}Details down shifts and scheduling{% endblock %}
 
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:shift-add' %}">
+        Add Shift
+    </a>
+{% endblock %}
 
 {% block base_css %}
 
@@ -151,17 +157,6 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <div class="card-title">
-                        <div class="d-flex justify-content-between">
-                            <h3></h3>
-                            {% csrf_token %}
-                            <span>
-                                    <a href="{% url 'admins:shift-add' %}" class="btn btn-primary">
-                                        Create Shift
-                                    </a>
-                                </span>
-                        </div>
-                    </div>
                     <div id="news-feed-index-table" data-livecount="0">
                         <form action="" method="GET" class="row m-0 mb-2">
                             <div class="col-12 m-0 p-0">

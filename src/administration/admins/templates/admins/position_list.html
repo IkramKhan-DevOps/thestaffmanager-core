@@ -1,11 +1,13 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_title %}Admins | Positions{% endblock %}
-{% block base_subhead_heading %}Positions{% endblock %}
+{% block base_subtitle %} Positions{% endblock %}
+{% block base_subhead_heading %} Positions &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available positions{% endblock %}
+
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:position-add' %}">
-        <i class="fa fa-plus"></i> New Position
+        Add Position
     </a>
 {% endblock %}
 

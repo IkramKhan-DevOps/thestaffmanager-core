@@ -1,11 +1,13 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_title %}Admins | Countries{% endblock %}
-{% block base_subhead_heading %}Countries{% endblock %}
+{% block base_subtitle %} Countries{% endblock %}
+{% block base_subhead_heading %} Countries &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available countries{% endblock %}
+
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:country-add' %}">
-        <i class="fa fa-plus"></i> New Country
+        Add Country
     </a>
 {% endblock %}
 
