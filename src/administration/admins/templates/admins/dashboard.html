@@ -9,6 +9,12 @@
     Dashboard
 {% endblock %}
 
+{% block base_css %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+{% endblock %}
+
 {% block base_content %}
 
     {# TOP STATISTICS #}
@@ -143,75 +149,196 @@
                 </div>
 
                 {% if shifts_days %}
-                    <div class="table-responsive">
-                        <table class="table card-table table-vcenter text-nowrap datatable">
-                            <thead>
+                    <div class="table-responsive" id="table">
+                        <table class="table table-hover card-table table-vcenter text-nowrap datatable">
+                            <thead class="thead-light">
                             <tr>
-                                <th>Type</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Start Time</th>
-                                <th>End Time</th>
-                                <th>Client</th>
+                                <th>Status</th>
+                                <th>Shift</th>
                                 <th>Employee</th>
+                                <th>Date</th>
+                                <th>Time</th>
+                                <th>Clock In</th>
+                                <th>Clock Out</th>
+                                <th>Hours</th>
+                                <th>Action</th>
                                 <th>-</th>
                             </tr>
                             </thead>
                             <tbody>
-
                             {% for object in shifts_days %}
-                                <tr>
+                                {% with current_status=object.get_current_status %}
+                                    <tr id="row_{{ object.pk }}">
                                     <td>
-                                        {% if object.shift.get_job_type_display == "Pattern" %}
-                                            <span class="badge bg-purple-lt">{{ object.shift.get_job_type_display }}</span>
+                                        {% if current_status == "completed" %}
+                                            <span class="badge bg-success-lt">{{ current_status }}</span>
+                                        {% elif current_status == "running" %}
+                                            <span class="badge bg-primary-lt">{{ current_status }}</span>
+                                        {% elif current_status == "overtime" %}
+                                            <span class="badge bg-yellow-lt">{{ current_status }}</span>
+                                        {% elif current_status == "awaiting" %}
+                                            <span class="badge bg-purple-lt">{{ current_status }}</span>
+                                        {% elif current_status == "late" %}
+                                            <span class="badge bg-danger-lt">{{ current_status }}</span>
+                                        {% elif current_status == "absent" %}
+                                            <span class="badge bg-dark-lt">{{ current_status }}</span>
                                         {% else %}
-                                            <span class="badge bg-teal-lt">{{ object.shift.get_job_type_display }}</span>
+                                            <span class="badge bg-secondary-lt">{{ current_status }}</span>
                                         {% endif %}
                                     </td>
-                                    <td>{{ object.shift_date }}</td>
-                                    <td>{{ object.shift_end_date }}</td>
-                                    <td>{{ object.shift_time }}</td>
-                                    <td>{{ object.shift_end_time }}</td>
-                                    <td>{{ object.shift.client.name }}</td>
                                     <td>
-                                        {% if object.employee %}
-                                            <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
-                                                <b>
-                                                    <span class="badge bg-success me-1"></span>
-                                                    {{ object.employee.user.get_user_name }}
-                                                </b>
+                                        <b>
+                                            <a href="{% url 'admins:shift-detail' object.shift.pk %}">
+                                                # {{ object.shift.pk }}
                                             </a>
+                                        </b>
+                                    </td>
+                                    <td>
+                                        <b>
+                                            {% if object.employee %}
+                                                <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
+                                                    <b>
+                                                        <span class="badge bg-primary me-1"></span> {{ object.employee.user.get_user_name }}
+                                                    </b>
+                                                </a>
+                                            {% else %}
+                                                <b class="text-danger">
+                                                    <span class="badge bg-danger me-1"></span> Not Assigned
+                                                </b>
+                                            {% endif %}
+                                        </b>
+                                    </td>
+                                    <td>{{ object.shift_date }} - {{ object.shift_end_date }}</td>
+                                    <td>{{ object.shift.start_time|date:"G:i" }}
+                                        - {{ object.shift.end_time|date:"G:i" }}
+                                    </td>
+                                    {#                                    {{ my_time.time|date:"G:i:s" }}#}
+                                    <td style="width: 100px">
+                                        {% if not object.is_clock_in_correct %}
+                                            <input class="custom_clock_in_class border-danger bg-danger-lt" type="text"
+                                                   id="id_clock_in" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_in|date:"G:i" }}"
+                                            >
                                         {% else %}
-                                            <b class="text-danger">
-                                                <span class="badge bg-danger me-1"></span> Un Assigned
-                                            </b>
+                                            <input class="custom_clock_in_class border" type="text"
+                                                   id="id_clock_in" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_in|date:"G:i" }}"
+                                            >
                                         {% endif %}
                                     </td>
-                                    <th>
-                                        <a href="{% url 'admins:shift-detail' object.shift.pk %}">
+                                    <td style="width: 100px">
+
+                                        {% if not object.is_clock_out_correct %}
+                                            <input class="custom_clock_out_class border-danger bg-danger-lt" type="text"
+                                                   id="id_clock_out" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_out|date:"G:i" }}"
+                                            >
+                                        {% else %}
+                                            <input class="custom_clock_out_class" type="text"
+                                                   id="id_clock_out" data-id="{{ object.pk }}"
+                                                   value="{{ object.clock_out|date:"G:i" }}"
+                                            >
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <b>
                                             <svg xmlns="http://www.w3.org/2000/svg"
-                                                 class="icon icon-tabler icon-tabler-eye" width="24" height="24"
+                                                 class="icon icon-tabler icon-tabler-clock-record" width="24"
+                                                 height="24"
                                                  viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
                                                  stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <circle cx="12" cy="12" r="2"></circle>
-                                                <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                <path d="M20.995 12.3a9 9 0 1 0 -8.683 8.694"></path>
+                                                <path d="M12 7v5l2 2"></path>
+                                                <circle cx="19" cy="19" r="3"></circle>
                                             </svg>
-                                        </a>
-                                    </th>
-                                </tr>
+                                            {{ object.get_shift_hours }}
+                                        </b>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <b>
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 class="icon icon-tabler icon-tabler-clock-play" width="24" height="24"
+                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M12 7v5l2 2"></path>
+                                                <path d="M17 22l5 -3l-5 -3z"></path>
+                                                <path d="M13.017 20.943a9 9 0 1 1 7.831 -7.292"></path>
+                                            </svg>
+                                            {{ object.get_active_hours }}
+                                        </b>
+                                        &nbsp;&nbsp;&nbsp;
+                                        <b>
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 class="icon icon-tabler icon-tabler-clock-pause" width="24" height="24"
+                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <path d="M13 20.94a8.916 8.916 0 0 1 -7.364 -2.576a9 9 0 1 1 15.306 -5.342"></path>
+                                                <path d="M12 7v5l2 2"></path>
+                                                <path d="M17 17v5"></path>
+                                                <path d="M21 17v5"></path>
+                                            </svg>
+                                            {{ object.get_extra_hours }}
+                                        </b>
+                                    </td>
+                                    <td id="btn-div-{{ object.pk }}">
+                                        {% with current_status=object.get_current_status %}
+                                            {% if not object.clock_in %}
+                                                <button type="button" id="btn_clock_in_{{ object.pk }}"
+                                                        data-action="in"
+                                                        data-id="{{ object.pk }}"
+                                                        class="btn btn-sm btn-primary custom_btn_clock_in"
+                                                >
+                                                    <i class="fa fa-clock"></i> Clock In
+                                                </button>
+                                            {% elif not object.clock_out %}
+                                                <button type="button"
+                                                        class="btn btn-sm btn-warning custom_btn_clock_out"
+                                                        id="btn_clock_in_{{ object.pk }}" data-action="out"
+                                                        data-id="{{ object.pk }}">
+                                                    <i class="fa fa-clock"></i> Clock Out
+                                                </button>
+                                            {% else %}
+                                                {% if current_status == "completed" %}
+                                                    <b class="text-success">{{ current_status }}</b>
+                                                {% elif current_status == "running" %}
+                                                    <b class="text-azure">{{ current_status }}</b>
+                                                {% else %}
+                                                    <b class="text-dark">{{ current_status }}</b>
+                                                {% endif %}
+                                            {% endif %}
+                                        {% endwith %}
+                                    </td>
+                                    <td>
+                                        <b>
+                                            <a href="{% url 'admins:shift-day-update' object.pk %}">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     class="icon icon-tabler icon-tabler-eye" width="24" height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                     fill="none"
+                                                     stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <circle cx="12" cy="12" r="2"></circle>
+                                                    <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                </svg>
+                                            </a>
+                                        </b>
+                                    </td>
+                                {% endwith %}
+                            </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     </div>
-
-                    </div>
                 {% else %}
-                    <div class="card-body">
-                        <p class="text-danger"><b>No active shifts available today</b></p>
-                    </div>
-                {% endif %}
 
+                    <div class="card-body">
+                        <p class="text-danger mb-0"><b>No objects available</b></p>
+                    </div>
+
+                {% endif %}
+            </div>
         </div>
     </div>
 
@@ -246,11 +373,71 @@
 
 {% block base_internal_scripts %}
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
 {% endblock %}
 
 {% block base_external_scripts %}
     <script>
         $(document).ready(function () {
+
+            {# INITS #}
+            $('table #id_clock_in').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+
+            $('table #id_clock_out').datetimepicker({
+                datepicker: false,
+                format: 'H:i:s'
+            });
+            $('input').addClass('form-control');
+
+            {# BUTTONS SHIFTS #}
+            $('body .custom_btn_clock_in').click(function (event) {
+                event.preventDefault();
+
+                let shift_day_id = $(this).data('id');
+                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/a/api/shift-day/" + shift_day_id + "/clock/in/",
+                    data: {
+                        start_time: start_time,
+                        end_time: end_time,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    dataType: 'application/json',
+                }).then(function (data, status) {
+                    console.log(status);
+                });
+                location.reload();
+            })
+            $('body .custom_btn_clock_out').click(function (event) {
+                event.preventDefault();
+
+                let shift_day_id = $(this).data('id');
+                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                $.ajax({
+                    type: "POST",
+                    url: "/a/api/shift-day/" + shift_day_id + "/clock/out/",
+                    data: {
+                        start_time: start_time,
+                        end_time: end_time,
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    dataType: 'application/json',
+                }).then(function (data, status) {
+                    console.log(status);
+                });
+                location.reload();
+            })
+
+            {# CHARTS #}
             var shifts_chart_options = {
                 series: [{
                     name: 'Total Shifts',
