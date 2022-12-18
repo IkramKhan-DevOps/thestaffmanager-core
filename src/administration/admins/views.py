@@ -446,7 +446,6 @@ class ShiftCreateView(CreateView):
         return super(ShiftCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        print(self.object.end_date)
         shifts_create_update(self.object, self.request.POST)
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
