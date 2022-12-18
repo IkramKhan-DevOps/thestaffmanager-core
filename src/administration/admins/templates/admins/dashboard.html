@@ -295,14 +295,14 @@
                                                         data-id="{{ object.pk }}"
                                                         class="btn btn-sm btn-primary custom_btn_clock_in"
                                                 >
-                                                    <i class="fa fa-clock"></i> Clock In
+                                                    <i class="fa fa-clock"></i>&nbsp;Clock In
                                                 </button>
                                             {% elif not object.clock_out %}
                                                 <button type="button"
                                                         class="btn btn-sm btn-warning custom_btn_clock_out"
                                                         id="btn_clock_in_{{ object.pk }}" data-action="out"
                                                         data-id="{{ object.pk }}">
-                                                    <i class="fa fa-clock"></i> Clock Out
+                                                    <i class="fa fa-clock"></i>&nbsp;Clock Out
                                                 </button>
                                             {% else %}
                                                 {% if current_status == "completed" %}
