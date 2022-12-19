@@ -39,7 +39,7 @@ class ScheduleView(TemplateView):
             shifts_queryset = ShiftDay.objects.filter(
                 Q(shift_date__month=datetime.date.today().month, shift_date__year=datetime.date.today().year)
             ).values(
-                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift__client__name', 'shift_date',
+                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift_date',
                 'shift__employee', 'shift__employee_id', 'shift__site__name'
             )
 
@@ -58,7 +58,7 @@ class ScheduleView(TemplateView):
                       shift_date__year=datetime.date.today().year)
                 ).values(
                     'id', 'shift_id', 'shift__start_time', 'shift__end_time',
-                    'shift__client__name', 'shift_date'
+                    'shift_date'
                 )
                 _current_year = requested_year
                 _current_month = requested_month if int(requested_month) > 9 else "0" + requested_month
@@ -469,7 +469,7 @@ class ShiftCustomCreateView(View):
 class ShiftUpdateView(UpdateView):
     model = Shift
     fields = [
-        'start_date', 'end_date', 'start_time', 'end_time', 'client', 'site', 'position', 'employee',
+        'start_date', 'end_date', 'start_time', 'end_time', 'site', 'position', 'employee',
         'pay_rate', 'charge_rate', 'extra_charges', 'repeat_policy'
     ]
     previous_shift = None

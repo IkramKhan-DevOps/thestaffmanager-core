@@ -11,7 +11,7 @@ class ShiftFilter(django_filters.FilterSet):
     class Meta:
         model = Shift
         fields = {
-            'client': ['exact'], 'site': ['exact'], 'employee': ['exact']
+            'site': ['exact'], 'employee': ['exact']
         }
 
 

@@ -23,7 +23,7 @@
                                 <th>End Date</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
-                                <th>Client</th>
+                                <th>Site</th>
                                 <th>Days</th>
                                 <th>-</th>
                             </tr>
@@ -45,7 +45,7 @@
                                     <td>{{ object.end_time|date:"G:i" }}</td>
                                     <td>
                                         <a href="#">
-                                            {{ object.client.name }}
+                                            {{ object.site.name }}
                                         </a>
                                     </td>
                                     <td>{{ object.shiftday_set.count }}</td>

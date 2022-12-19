@@ -89,6 +89,12 @@
                         Name: <strong>{{ object.name }}</strong>
                     </div>
                     <div class="mb-2">
+                        <i class="fa fa-building text-muted"></i>
+                        Client: <strong>
+                        <a href="{% url 'admins:client-detail' object.client.pk %}">{{ object.client.name }}</a>
+                    </strong>
+                    </div>
+                    <div class="mb-2">
                         <i class="fa fa-phone-square text-muted"></i>
                         Check Calls: <strong>
                         {% if object.check_calls_enable %}

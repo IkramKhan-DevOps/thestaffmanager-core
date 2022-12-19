@@ -61,7 +61,7 @@
                                 <th>End Date</th>
                                 <th>Start Time</th>
                                 <th>End Time</th>
-                                <th>Client</th>
+                                <th>Site</th>
                                 <th>Employee</th>
                                 <th>Charge Rate</th>
                                 <th>Pay Rate</th>
@@ -85,8 +85,8 @@
                                     <td>{{ object.start_time|date:"G:i" }}</td>
                                     <td>{{ object.end_time|date:"G:i" }}</td>
                                     <td>
-                                        <a href="{% url 'admins:client-detail' object.client.pk %}">
-                                            {{ object.client.name }}
+                                        <a href="{% url 'admins:site-detail' object.site.pk %}">
+                                            {{ object.site.name }}
                                         </a>
                                     </td>
                                     <td>

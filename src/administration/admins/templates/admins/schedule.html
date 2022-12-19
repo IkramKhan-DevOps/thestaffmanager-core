@@ -331,7 +331,6 @@
                 },
                 renderScheduleEventContent: function (args) {
                     var event = args.original;
-                    console.log(typeof event.start)
                     return '<div class="md-meal-planner-event">' +
                         '<div class="md-meal-planner-event-title">' + event.title + '</div>' +
                         '<div class="md-meal-planner-event-desc">' + event.start.toString().split("T")[1] + "-" + event.end.toString().split("T")[1] + '</div>' +
@@ -391,10 +390,8 @@
 
                         for (var i = 0; i < data.length; i++) {
                             var event = data[i];
-
                             events.push({
                                 id: event.shift.id,
-                                client: event.shift.client.name,
                                 employee: event.shift.employee == null ? '-' : event.shift.employee.user.username,
                                 title: event.shift.site.name,
                                 start: event.shift_date + "T" + event.shift.start_time,
@@ -404,7 +401,6 @@
                         }
 
                         inst.setEvents(events);
-                        console.log(events);
 
                         mobiscroll.toast({
                             message: 'shifts are updated'

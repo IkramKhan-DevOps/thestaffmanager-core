@@ -224,7 +224,6 @@ class Shift(models.Model):
     end_date = models.DateField(null=True, blank=True)
     start_time = models.TimeField()
     end_time = models.TimeField()
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)

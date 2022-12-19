@@ -11,7 +11,7 @@ class ShiftDayAdmin(admin.ModelAdmin):
 
 class ShiftAdmin(admin.ModelAdmin):
     list_display = [
-        'id', 'start_date', 'end_date', 'start_time', 'end_time', 'client', 'employee', 'pay_rate', 'charge_rate'
+        'id', 'start_date', 'end_date', 'start_time', 'end_time', 'employee', 'pay_rate', 'charge_rate'
     ]
 
 
