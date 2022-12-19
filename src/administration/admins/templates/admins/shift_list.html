@@ -2,12 +2,13 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block base_title %}Admins | Shifts{% endblock %}
-{% block base_subhead_heading %}Shifts{% endblock %}
-{% block base_subhead_paragraph %}List of available Shifts.{% endblock %}
+{% block base_subtitle %} Shifts{% endblock %}
+{% block base_subhead_heading %} Shifts &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available shifts{% endblock %}
+
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:shift-add' %}">
-        <i class="fa fa-plus"></i> New Shift
+        Add Shift
     </a>
 {% endblock %}
 
@@ -24,127 +25,155 @@
                             {{ filter_form }}
                             <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
-                                    <i class="fa fa-search"></i>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search"
+                                         width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                         stroke="currentColor" fill="none" stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <circle cx="10" cy="10" r="7"></circle>
+                                        <line x1="21" y1="21" x2="15" y2="15"></line>
+                                    </svg>
                                 </button>
                                 <a href="{% url 'admins:shift-list' %}" class="btn btn-danger" type="submit">
-                                    <i class="fa fa-brush"></i>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-paint"
+                                         width="24" height="24" viewBox="0 0 24 24" stroke-width="2"
+                                         stroke="currentColor" fill="none" stroke-linecap="round"
+                                         stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="5" y="3" width="14" height="6" rx="2"></rect>
+                                        <path d="M19 6h1a2 2 0 0 1 2 2a5 5 0 0 1 -5 5l-5 0v2"></path>
+                                        <rect x="10" y="15" width="4" height="6" rx="1"></rect>
+                                    </svg>
                                 </a>
                             </div>
                         </div>
                     </form>
 
                 </div>
-                <div class="card-body">
-                    {% if object_list %}
+                {% if object_list %}
 
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="thead-light">
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Site</th>
+                                <th>Employee</th>
+                                <th>Charge Rate</th>
+                                <th>Pay Rate</th>
+                                <th>Days</th>
+                                <th>-</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for object in object_list %}
                                 <tr>
-                                    <th>Type</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Start Time</th>
-                                    <th>End Time</th>
-                                    <th>Client</th>
-                                    <th>Employee</th>
-                                    <th>Charge Rate</th>
-                                    <th>Pay Rate</th>
-                                    <th>Days</th>
-                                    <th>-</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                {% for object in object_list %}
-                                    <tr>
-                                        <td>{{ object.get_job_type_display }}</td>
-                                        <td>{{ object.start_date }}</td>
-                                        <td>{{ object.end_date }}</td>
-                                        <td>{{ object.start_time }}</td>
-                                        <td>{{ object.end_time }}</td>
-                                        <td>{{ object.client.name }}</td>
-                                        <td>
-                                            {% if object.employee %}
-                                                <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
-                                                    <b>
-                                                        {{ object.employee.user.get_user_name }}
-                                                    </b>
-                                                </a>
-                                            {% else %}
-                                                <b class="text-danger">
-                                                    un assigned
+                                    <td>
+                                        {% if object.get_job_type_display == "Pattern" %}
+                                            <span class="badge bg-purple-lt">{{ object.get_job_type_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-teal-lt">{{ object.get_job_type_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ object.start_date }}</td>
+                                    <td>{{ object.end_date }}</td>
+                                    <td>{{ object.start_time|date:"G:i" }}</td>
+                                    <td>{{ object.end_time|date:"G:i" }}</td>
+                                    <td>
+                                        <a href="{% url 'admins:site-detail' object.site.pk %}">
+                                            {{ object.site.name }}
+                                        </a>
+                                    </td>
+                                    <td>
+                                        {% if object.employee %}
+                                            <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
+                                                <b>
+                                                    <span class="badge bg-success me-1"></span>
+                                                    {{ object.employee.user.get_user_name }}
                                                 </b>
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ object.charge_rate }}</td>
-                                        <td>{{ object.pay_rate }}</td>
-                                        <td>{{ object.shiftday_set.count }}</td>
-                                        <th>
-                                            <a href="{% url 'admins:shift-detail' object.pk %}">
-                                                <i class="fa fa-eye"></i>
                                             </a>
-                                        </th>
-                                    </tr>
-                                {% endfor %}
+                                        {% else %}
+                                            <b class="text-danger">
+                                                <span class="badge bg-danger me-1"></span> Un Assigned
+                                            </b>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ object.charge_rate }}</td>
+                                    <td>{{ object.pay_rate }}</td>
+                                    <td>{{ object.shiftday_set.count }}</td>
+                                    <th>
+                                        <a href="{% url 'admins:shift-detail' object.pk %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 class="icon icon-tabler icon-tabler-eye" width="24" height="24"
+                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <circle cx="12" cy="12" r="2"></circle>
+                                                <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                            </svg>
+                                        </a>
+                                    </th>
+                                </tr>
+                            {% endfor %}
 
 
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                        <ul class="pagination pagination-rounded justify-content-center mt-3 pb-1">
+                    <ul class="pagination pagination-rounded justify-content-center mt-3 pb-1">
 
-                            {% if object_list.has_previous %}
+                        {% if object_list.has_previous %}
 
-                                <li class="page-item">
-                                    <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
-                                       class="page-link">
-                                        <i class="mdi mdi-chevron-left"></i>
-                                    </a>
-                                </li>
-
-                                <li class="page-item">
-                                    <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
-                                       class="page-link"> {{ object_list.previous_page_number }}
-                                    </a>
-                                </li>
-
-                            {% endif %}
-
-                            {#                    <li class="page-item"><a href="/" class="page-link">1</a></li>#}
-                            <li class="page-item active">
-                                <a href="#" class="page-link">{{ object_list.number }}</a>
+                            <li class="page-item">
+                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
+                                   class="page-link">
+                                    <i class="mdi mdi-chevron-left"></i>
+                                </a>
                             </li>
 
-                            {% if object_list.has_next %}
+                            <li class="page-item">
+                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
+                                   class="page-link"> {{ object_list.previous_page_number }}
+                                </a>
+                            </li>
 
-                                <li class="page-item">
-                                    <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
-                                       class="page-link"> {{ object_list.next_page_number }}
-                                    </a>
-                                </li>
+                        {% endif %}
 
-                                <li class="page-item">
-                                    <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
-                                       class="page-link">
-                                        <i class="mdi mdi-chevron-right"></i>
-                                    </a>
-                                </li>
-                            {% endif %}
+                        {#                    <li class="page-item"><a href="/" class="page-link">1</a></li>#}
+                        <li class="page-item active">
+                            <a href="#" class="page-link">{{ object_list.number }}</a>
+                        </li>
 
-                        </ul>
+                        {% if object_list.has_next %}
 
-                    {% else %}
-                        <p class="mb-0 text-danger">
-                            <b>
-                                <i class="fa fa-exclamation-circle"></i>
-                                No objects available
-                            </b>
-                        </p>
-                    {% endif %}
+                            <li class="page-item">
+                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
+                                   class="page-link"> {{ object_list.next_page_number }}
+                                </a>
+                            </li>
 
-                </div>
+                            <li class="page-item">
+                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
+                                   class="page-link">
+                                    <i class="mdi mdi-chevron-right"></i>
+                                </a>
+                            </li>
+                        {% endif %}
+
+                    </ul>
+
+                {% else %}
+                    <div class="card-body">
+                        <p class="text-danger"><b>No shifts available</b></p>
+                    </div>
+                {% endif %}
+
             </div>
         </div>
     </div>

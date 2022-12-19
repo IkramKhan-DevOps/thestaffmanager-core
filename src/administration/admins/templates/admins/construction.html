@@ -1,25 +1,33 @@
-{% extends 'core/base.html' %}
+{% extends 'core/auth_base.html' %}
 {% load static %}
 
-{% block base_title %}Under Construction{% endblock %}
-{% block base_subhead_heading %}Page under Construction{% endblock %}
+{% block base_subtitle %}
+    Under Construction
+{% endblock %}
 
 
-{% block base_content %}
+{% block auth_org %}{% endblock %}
+{% block auth_content %}
 
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="card">
-                <div class="card-body text-center">
-                    <p class="display-1"><i class="fa fa-hammer"></i></p>
-                    <p class="mb-0 card-title text-danger">
-                        <b>EXIMITAS <small>Says.</small></b>
-                    </p>
-
-                    <p class="lead">Sorry for inconvenience the page is under-development.</p>
-                </div>
-            </div>
-        </div>
+    <div class="empty">
+    <div class="empty-img"><img src="{% static 'required/images/under-construction.svg' %}" height="128" alt="">
     </div>
+    <p class="empty-title">Temporarily down for maintenance</p>
+    <p class="empty-subtitle text-muted">
+        Sorry for the inconvenience but we’re performing some maintenance at the moment. We’ll be back online shortly!
+    </p>
+    <div class="empty-action">
+        <a href="/" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                 stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+                <line x1="5" y1="12" x2="11" y2="18"></line>
+                <line x1="5" y1="12" x2="11" y2="6"></line>
+            </svg>
+            Take me home
+        </a>
+    </div>
+</div>
 
 {% endblock %}

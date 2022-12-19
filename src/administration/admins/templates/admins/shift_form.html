@@ -2,12 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block base_title %}admins | Shifts {% endblock %}
-{% block base_subhead_heading %}Shifts {% endblock %}
-{% block base_subhead_paragraph %}Shifts create/update form{% endblock %}
-
+{% block base_subtitle %}Shift Form {% endblock %}
+{% block base_subhead_heading %}Shift &rAarr; Form {% endblock %}
+{% block base_subhead_paragraph %}Shift create/update form{% endblock %}
 {% block base_subhead_button %}
-    <a class="btn btn-primary" href="{% url 'admins:shift-list' %}"><i class="fa fa-arrow-left"></i> View Shifts</a>
+    <a href="{% url 'admins:shift-list' %}">&larr; Shifts</a>
 {% endblock %}
 
 {% block base_css %}

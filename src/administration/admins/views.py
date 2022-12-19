@@ -1,6 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.core import serializers
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
@@ -13,19 +11,16 @@ from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
     CreateView)
 
-from .bll import shifts_create_update_logic, shifts_create_update
+from .bll import shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
 from .forms import EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country,
 )
-import calendar
 import datetime
 
 from src.accounts.decorators import admin_protected
-from src.accounts.models import UserDocument
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from src.accounts.models import UserDocument, User
 
 """ MAIN """
 
@@ -44,7 +39,7 @@ class ScheduleView(TemplateView):
             shifts_queryset = ShiftDay.objects.filter(
                 Q(shift_date__month=datetime.date.today().month, shift_date__year=datetime.date.today().year)
             ).values(
-                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift__client__name', 'shift_date',
+                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift_date',
                 'shift__employee', 'shift__employee_id', 'shift__site__name'
             )
 
@@ -63,7 +58,7 @@ class ScheduleView(TemplateView):
                       shift_date__year=datetime.date.today().year)
                 ).values(
                     'id', 'shift_id', 'shift__start_time', 'shift__end_time',
-                    'shift__client__name', 'shift_date'
+                    'shift_date'
                 )
                 _current_year = requested_year
                 _current_month = requested_month if int(requested_month) > 9 else "0" + requested_month
@@ -85,28 +80,43 @@ class ScheduleView(TemplateView):
 
 
 @method_decorator(admin_protected, name='dispatch')
+class TimeClockView(ListView):
+    template_name = 'admins/time_clock.html'
+
+    def get_queryset(self):
+        return ShiftDay.objects.all().order_by('-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
+
+    def get_context_data(self, **kwargs):
+        context = super(TimeClockView, self).get_context_data(**kwargs)
+        filter_object = ShiftDayFilter(self.request.GET, queryset=self.get_queryset())
+        context['filter_form'] = filter_object.form
+
+        paginator = Paginator(filter_object.qs, 50)
+        page_number = self.request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        context['object_list'] = page_object
+        return context
+
+
+@method_decorator(admin_protected, name='dispatch')
 class DashboardView(TemplateView):
     template_name = 'admins/dashboard.html'
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
         context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
-        print(User.objects.get(pk=self.request.user.pk))
+        context['shifts_all'] = Shift.objects.count()
+        context['sites_all'] = Site.objects.count()
+        context['employees_all'] = Employee.objects.count()
+        context['clients_all'] = Client.objects.count()
+
         return context
 
 
 @method_decorator(admin_protected, name='dispatch')
 class PositionListView(ListView):
     queryset = Position.objects.all()
-
-
-@method_decorator(admin_protected, name='dispatch')
-class PositionDetailView(DetailView):
-    model = Position
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(PositionDetailView, self).get_context_data(**kwargs)
-        return context
 
 
 @method_decorator(admin_protected, name='dispatch')
@@ -232,6 +242,7 @@ class UserDetailView(DetailView):
         if self.object.is_employee:
             context['shifts'] = Shift.objects.filter(employee__user=self.object)
             context['docs'] = UserDocument.objects.filter(user=self.object)
+            context['employee'] = self.object.get_employee_profile()
         return context
 
 
@@ -428,13 +439,6 @@ class ShiftDetailView(DetailView):
 
 @method_decorator(admin_protected, name='dispatch')
 class ShiftCreateView(CreateView):
-    """
-    TODO: update
-    1. job type   : job type in [open, pattern]
-       pattern   :: if pattern all fields are required
-       open      :: if open only shift can be created inside shift day, not required fields [end_date, week_days, repeat policy]
-    2. validation() on shift create check for possible clash
-    """
     model = Shift
     fields = '__all__'
 
@@ -442,7 +446,6 @@ class ShiftCreateView(CreateView):
         return super(ShiftCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        print(self.object.end_date)
         shifts_create_update(self.object, self.request.POST)
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
@@ -464,16 +467,9 @@ class ShiftCustomCreateView(View):
 
 @method_decorator(admin_protected, name='dispatch')
 class ShiftUpdateView(UpdateView):
-    """
-    TODO: Update
-    1. job type: job type in [open, pattern]
-       pattern :: if pattern all fields are required
-       open    :: if open only shift can be created inside shift day, not required fields [end_date, week_days, repeat policy]
-    2. validation() on shift create check for possible clash
-    """
     model = Shift
     fields = [
-        'start_date', 'end_date', 'start_time', 'end_time', 'client', 'site', 'position', 'employee',
+        'start_date', 'end_date', 'start_time', 'end_time', 'site', 'position', 'employee',
         'pay_rate', 'charge_rate', 'extra_charges', 'repeat_policy'
     ]
     previous_shift = None
@@ -540,15 +536,6 @@ class ReportTypeListView(ListView):
 
 
 @method_decorator(admin_protected, name='dispatch')
-class ReportTypeDetailView(DetailView):
-    model = ReportType
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ReportTypeDetailView, self).get_context_data(**kwargs)
-        return context
-
-
-@method_decorator(admin_protected, name='dispatch')
 class ReportTypeCreateView(CreateView):
     model = ReportType
     fields = '__all__'
@@ -568,90 +555,3 @@ class ReportTypeDeleteView(DeleteView):
     success_url = reverse_lazy('admins:report-type-list')
 
 
-""" OTHER """
-
-
-@method_decorator(admin_protected, name='dispatch')
-class ShiftsView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class TimeClockView(ListView):
-    template_name = 'admins/time_clock.html'
-
-    def get_queryset(self):
-        return ShiftDay.objects.all().order_by('-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
-
-    def get_context_data(self, **kwargs):
-        context = super(TimeClockView, self).get_context_data(**kwargs)
-        filter_object = ShiftDayFilter(self.request.GET, queryset=self.get_queryset())
-        context['filter_form'] = filter_object.form
-
-        paginator = Paginator(filter_object.qs, 50)
-        page_number = self.request.GET.get('page')
-        page_object = paginator.get_page(page_number)
-
-        context['object_list'] = page_object
-        return context
-
-
-@method_decorator(admin_protected, name='dispatch')
-class AbsencesView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-""" --------------------------------------------- """
-
-
-@method_decorator(admin_protected, name='dispatch')
-class AuditLogView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class LiveChatView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class CasesView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class CallsView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class PipelineView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-""" --------------------------------------------- """
-
-
-@method_decorator(admin_protected, name='dispatch')
-class ReportsView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class ShiftNotesView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class ChargesBreakView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class PayRunReportView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class HealthView(TemplateView):
-    template_name = 'admins/construction.html'

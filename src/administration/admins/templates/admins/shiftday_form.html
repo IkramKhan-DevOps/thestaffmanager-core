@@ -2,11 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block base_title %}admins | Shift Day {% endblock %}
-{% block base_subhead_heading %}Shift Day {% endblock %}
-
+{% block base_subtitle %}Shift Day Form {% endblock %}
+{% block base_subhead_heading %}Shift Day &rAarr; Form {% endblock %}
+{% block base_subhead_paragraph %}Shift Day create/update form{% endblock %}
 {% block base_subhead_button %}
-    <a class="btn btn-primary" href="{% url 'admins:shift-detail' object.shift.pk %}"><i class="fa fa-arrow-left"></i> Back to Shift</a>
+    <a href="{% url 'admins:shift-detail' object.shift.pk %}">&larr; Shift</a>
 {% endblock %}
 
 {% block base_css %}

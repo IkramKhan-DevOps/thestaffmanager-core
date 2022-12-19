@@ -2,12 +2,13 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block base_title %}Admins | Sites{% endblock %}
-{% block base_subhead_heading %}Sites{% endblock %}
-{% block base_subhead_paragraph %}List of available Sites.{% endblock %}
+{% block base_subtitle %} Sites{% endblock %}
+{% block base_subhead_heading %} Sites &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available sites{% endblock %}
+
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:site-add' %}">
-        <i class="fa fa-plus"></i> New Site
+        Add Site
     </a>
 {% endblock %}
 

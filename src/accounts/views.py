@@ -9,7 +9,7 @@ from django.views import View
 from src.administration.admins.forms import UserProfileForm
 
 
-class LoginView(View):
+class CrossAuth(View):
 
     def get(self, request):
 
@@ -18,6 +18,16 @@ class LoginView(View):
                 return redirect('admins:dashboard')
             else:
                 return redirect('employees:dashboard')
+
+        return redirect("accounts:login")
+
+
+class LoginView(View):
+
+    def get(self, request):
+
+        if request.user.is_authenticated:
+            return redirect("accounts:cross-auth")
 
         form = AuthenticationForm()
         return render(request, template_name='accounts/login.html', context={'form': form})
@@ -30,10 +40,7 @@ class LoginView(View):
             if 'next' in request.POST:
                 return redirect(request.POST.get('next'))
             else:
-                if request.user.is_superuser:
-                    return redirect('admins:dashboard')
-                else:
-                    return redirect('employees:dashboard')
+                return redirect("accounts:cross-auth")
         return render(request, template_name='accounts/login.html', context={'form': form})
 
 

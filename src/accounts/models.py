@@ -26,8 +26,17 @@ class User(AbstractUser):
 
     def get_employee_profile(self):
         if self.is_employee:
-            return Employee.objects.get_or_create(user=self)
+            employee = Employee.objects.filter(user=self)
+            if employee:
+                return employee.first()
+            else:
+                return Employee.objects.create(user=self)
         return None
+
+    def is_first_or_last_name(self):
+        if self.first_name or self.last_name:
+            return True
+        return False
 
     def get_user_name(self):
         if self.first_name or self.last_name:
@@ -36,6 +45,17 @@ class User(AbstractUser):
 
     def get_user_documents(self):
         return UserDocument.objects.filter(user=self)
+
+    def get_name_code(self):
+        name = ""
+        if self.first_name or self.last_name:
+            if self.first_name:
+                name += self.first_name[0]
+            if self.last_name:
+                name += self.last_name[0]
+        else:
+            name = self.username[0:2]
+        return name
 
     def __str__(self):
         return self.username
@@ -52,7 +72,8 @@ class Employee(models.Model):
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     employee_id = models.CharField(max_length=255, null=True, blank=True, help_text="Employee id must be unique")
-    employee_type = models.CharField(max_length=1, choices=EMPLOYEE_TYPE_CHOICE, default='s')
+    type = models.CharField(max_length=1, choices=EMPLOYEE_TYPE_CHOICE, default='s')
+    address = models.CharField(max_length=255, null=True, blank=True)
     is_internal_employee = models.BooleanField(
         default=True
     )

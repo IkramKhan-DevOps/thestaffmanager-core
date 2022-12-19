@@ -3,16 +3,17 @@ from pathlib import Path
 
 import environ
 
-"""__ BASE CONFIGURATIONS __"""
+""" __ BASE CONFIGURATIONS __"""
 env = environ.Env(
     DEBUG=(bool, False)
 )
+MAINTENANCE = False
 BASE_DIR = Path(__file__).resolve().parent.parent
 environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 BASE_URL = env('BASE_URL')
 
 """ __ CORE CONFIGURATIONS __"""
-DEBUG = env('DEBUG')
+DEBUG = True
 SECRET_KEY = env('SECRET_KEY')
 ENVIRONMENT = env('ENVIRONMENT')
 AUTH_USER_MODEL = 'accounts.User'
@@ -46,6 +47,7 @@ INSTALLED_APPS = [
     'src.accounts',
     'src.administration.employees',
     'src.administration.admins',
+    'src.website',
 
     # NOTIFICATIONS APPS
 ]
