@@ -208,12 +208,6 @@ class Site(models.Model):
 
 
 class Shift(models.Model):
-    """
-    TODO: UPDATE
-    1. quantity : not required
-    2. job_type : data changed
-    3. on_create: on shift create > create history record
-    """
 
     JOB_TYPE_CHOICE = (
         ('o', 'Open'),
@@ -269,15 +263,6 @@ class Shift(models.Model):
 
 
 class ShiftDay(models.Model):
-    """
-    TODO: UPDATE
-    add    > employee here to ? shift can be assigned to someone else
-    add    > shift_start_time
-    add    > shift_end_time
-    add    > shift_start_date
-    add    > shift_end_date
-    remove > shift, worked and extra hours
-    """
 
     STATUS_CHOICE = (
         ('awa', 'Awaiting'),
