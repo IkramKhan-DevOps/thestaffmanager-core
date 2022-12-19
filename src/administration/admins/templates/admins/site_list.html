@@ -30,8 +30,6 @@
                         </div>
                     </form>
                 </div>
-
-                <div class="card-body">
                     {% if object_list %}
 
                         <div class="table-responsive">
@@ -72,17 +70,7 @@
                             </table>
                         </div>
 
-                    {% else %}
-                        <p class="mb-0 text-danger">
-                            <b>
-                                <i class="fa fa-exclamation-circle"></i>
-                                No objects available
-                            </b>
-                        </p>
-                    {% endif %}
-                </div>
-
-                <div class="card-body border-top">
+                        <div class="card-body border-top">
                     <ul class="pagination">
                         {% if object_list.has_previous %}
                             <li>
@@ -107,6 +95,13 @@
                         {% endif %}
                     </ul>
                 </div>
+
+                    {% else %}
+                        <div class="card-body">
+                            <p class="text-danger"><b>No shifts available</b></p>
+                        </div>
+                    {% endif %}
+
             </div>
         </div>
     </div>
