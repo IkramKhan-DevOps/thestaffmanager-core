@@ -55,7 +55,7 @@
                                     <td>
                                         <a href="{% url 'admins:user-detail' object.pk %}">{{ object.username }}</a>
                                     </td>
-                                    <td>{{ object.employee }}</td>
+                                    <td>{{ object.first_name }}</td>
                                     <td>{{ object.last_name }}</td>
                                     <td>
                                         {% if object.email %}
@@ -87,25 +87,27 @@
                                         {% if object.is_active %}
                                             <b class="text-success">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
-                                                 class="icon icon-tabler icon-tabler-check text-success" width="24"
-                                                 height="24"
-                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                                 stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <path d="M5 12l5 5l10 -10"></path>
-                                            </svg>
+                                                     class="icon icon-tabler icon-tabler-check text-success" width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                     fill="none"
+                                                     stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M5 12l5 5l10 -10"></path>
+                                                </svg>
                                             </b>
                                         {% else %}
                                             <b class="text-danger">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
-                                                 class="icon icon-tabler icon-tabler-x text-danger" width="24"
-                                                 height="24"
-                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                                 stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <line x1="18" y1="6" x2="6" y2="18"></line>
-                                                <line x1="6" y1="6" x2="18" y2="18"></line>
-                                            </svg>
+                                                     class="icon icon-tabler icon-tabler-x text-danger" width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                     fill="none"
+                                                     stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                </svg>
                                             </b>
                                         {% endif %}
                                     </td>
@@ -113,13 +115,14 @@
                                         <a href="{% url 'admins:user-detail' object.pk %}">
                                             <b class="text-primary">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
-                                                 class="icon icon-tabler icon-tabler-eye" width="24" height="24"
-                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                                 stroke-linecap="round" stroke-linejoin="round">
-                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                <circle cx="12" cy="12" r="2"></circle>
-                                                <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
-                                            </svg>
+                                                     class="icon icon-tabler icon-tabler-eye" width="24" height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                     fill="none"
+                                                     stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <circle cx="12" cy="12" r="2"></circle>
+                                                    <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                </svg>
                                             </b>
                                         </a>
                                     </td>
@@ -130,31 +133,31 @@
                         </table>
                     </div>
 
-                    <div class="card-footer">
-                    <ul class="pagination">
-                        {% if object_list.has_previous %}
-                            <li>
+                    <div class="card-body border-top">
+                        <ul class="pagination">
+                            {% if object_list.has_previous %}
+                                <li>
                             <span>
                                 <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
                                     Previous
                                 </a>
                             </span>
+                                </li>
+                            {% endif %}
+                            <li class="">
+                                <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
                             </li>
-                        {% endif %}
-                        <li class="">
-                            <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
-                        </li>
-                        {% if object_list.has_next %}
-                            <li>
+                            {% if object_list.has_next %}
+                                <li>
                             <span>
                                 <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
                                     Next
                                 </a>
                             </span>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 {% else %}
                     <div class="card-body">
                         <p class="text-danger mb-0"><b>No objects available</b></p>
