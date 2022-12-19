@@ -10,6 +10,16 @@
             &larr; users
         </a>
     </b>
+    <b>
+        <a class="" href="{% url 'admins:user-update' object.pk %}">
+            <i class="fa fa-edit"></i> Edit
+        </a>
+    </b>
+    <b>
+        <a class="" href="{% url 'admins:user-password-reset' object.pk %}">
+            <i class="fa fa-user-secret"></i> Password
+        </a>
+    </b>
 {% endblock %}
 
 {% block base_content %}
@@ -35,16 +45,6 @@
                             -
                         {% endif %}
                         <small class="text-muted">({{ object.username }})</small>
-                        <a href="{% url 'admins:user-update' object.pk %}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-edit-circle"
-                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                 fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M12 15l8.385 -8.415a2.1 2.1 0 0 0 -2.97 -2.97l-8.415 8.385v3h3z"></path>
-                                <path d="M16 5l3 3"></path>
-                                <path d="M9 7.07a7.002 7.002 0 0 0 1 13.93a7.002 7.002 0 0 0 6.929 -5.999"></path>
-                            </svg>
-                        </a>
                     </h3>
                     <p class="text-muted mb-0">
                         {% if object.email %}
@@ -209,7 +209,7 @@
                                 <line x1="12" y1="6" x2="12" y2="19"></line>
                                 <line x1="21" y1="6" x2="21" y2="19"></line>
                             </svg>
-                            Employee ID: <strong>#{{ object.get_employee_profile.employee_id }}</strong>
+                            Employee ID: <strong>#{{ employee.employee_id }}</strong>
                         </div>
                         <div class="mb-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24"
@@ -222,7 +222,7 @@
                                 <line x1="12" y1="12" x2="12" y2="12.01"></line>
                                 <path d="M3 13a20 20 0 0 0 18 0"></path>
                             </svg>
-                            Type: <strong>{{ object.get_employee_profile.type }}</strong>
+                            Type: <strong>{{ employee.type }}</strong>
                         </div>
                         <div class="mb-2">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted"
@@ -232,7 +232,7 @@
                                 <circle cx="12" cy="11" r="3"></circle>
                                 <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>
                             </svg>
-                            Address: <strong>{{ object.get_employee_profile.address }}</strong>
+                            <strong>{{ employee.address }}</strong>
                         </div>
                     </div>
                 </div>

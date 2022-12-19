@@ -26,7 +26,11 @@ class User(AbstractUser):
 
     def get_employee_profile(self):
         if self.is_employee:
-            return Employee.objects.get_or_create(user=self)
+            employee = Employee.objects.filter(user=self)
+            if employee:
+                return employee.first()
+            else:
+                return Employee.objects.create(user=self)
         return None
 
     def is_first_or_last_name(self):

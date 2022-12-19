@@ -1,6 +1,4 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.core import serializers
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
@@ -13,19 +11,16 @@ from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
     CreateView)
 
-from .bll import shifts_create_update_logic, shifts_create_update
+from .bll import shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
 from .forms import EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country,
 )
-import calendar
 import datetime
 
 from src.accounts.decorators import admin_protected
-from src.accounts.models import UserDocument
-from django.contrib.auth import get_user_model
-User = get_user_model()
+from src.accounts.models import UserDocument, User
 
 """ MAIN """
 
@@ -236,6 +231,7 @@ class UserDetailView(DetailView):
         if self.object.is_employee:
             context['shifts'] = Shift.objects.filter(employee__user=self.object)
             context['docs'] = UserDocument.objects.filter(user=self.object)
+            context['employee'] = self.object.get_employee_profile()
         return context
 
 
