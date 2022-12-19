@@ -80,6 +80,26 @@ class ScheduleView(TemplateView):
 
 
 @method_decorator(admin_protected, name='dispatch')
+class TimeClockView(ListView):
+    template_name = 'admins/time_clock.html'
+
+    def get_queryset(self):
+        return ShiftDay.objects.all().order_by('-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
+
+    def get_context_data(self, **kwargs):
+        context = super(TimeClockView, self).get_context_data(**kwargs)
+        filter_object = ShiftDayFilter(self.request.GET, queryset=self.get_queryset())
+        context['filter_form'] = filter_object.form
+
+        paginator = Paginator(filter_object.qs, 50)
+        page_number = self.request.GET.get('page')
+        page_object = paginator.get_page(page_number)
+
+        context['object_list'] = page_object
+        return context
+
+
+@method_decorator(admin_protected, name='dispatch')
 class DashboardView(TemplateView):
     template_name = 'admins/dashboard.html'
 
@@ -97,15 +117,6 @@ class DashboardView(TemplateView):
 @method_decorator(admin_protected, name='dispatch')
 class PositionListView(ListView):
     queryset = Position.objects.all()
-
-
-@method_decorator(admin_protected, name='dispatch')
-class PositionDetailView(DetailView):
-    model = Position
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(PositionDetailView, self).get_context_data(**kwargs)
-        return context
 
 
 @method_decorator(admin_protected, name='dispatch')
@@ -539,15 +550,6 @@ class ReportTypeListView(ListView):
 
 
 @method_decorator(admin_protected, name='dispatch')
-class ReportTypeDetailView(DetailView):
-    model = ReportType
-
-    def get_context_data(self, *, object_list=None, **kwargs):
-        context = super(ReportTypeDetailView, self).get_context_data(**kwargs)
-        return context
-
-
-@method_decorator(admin_protected, name='dispatch')
 class ReportTypeCreateView(CreateView):
     model = ReportType
     fields = '__all__'
@@ -567,90 +569,3 @@ class ReportTypeDeleteView(DeleteView):
     success_url = reverse_lazy('admins:report-type-list')
 
 
-""" OTHER """
-
-
-@method_decorator(admin_protected, name='dispatch')
-class ShiftsView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class TimeClockView(ListView):
-    template_name = 'admins/time_clock.html'
-
-    def get_queryset(self):
-        return ShiftDay.objects.all().order_by('-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
-
-    def get_context_data(self, **kwargs):
-        context = super(TimeClockView, self).get_context_data(**kwargs)
-        filter_object = ShiftDayFilter(self.request.GET, queryset=self.get_queryset())
-        context['filter_form'] = filter_object.form
-
-        paginator = Paginator(filter_object.qs, 50)
-        page_number = self.request.GET.get('page')
-        page_object = paginator.get_page(page_number)
-
-        context['object_list'] = page_object
-        return context
-
-
-@method_decorator(admin_protected, name='dispatch')
-class AbsencesView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-""" --------------------------------------------- """
-
-
-@method_decorator(admin_protected, name='dispatch')
-class AuditLogView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class LiveChatView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class CasesView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class CallsView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class PipelineView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-""" --------------------------------------------- """
-
-
-@method_decorator(admin_protected, name='dispatch')
-class ReportsView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class ShiftNotesView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class ChargesBreakView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class PayRunReportView(TemplateView):
-    template_name = 'admins/construction.html'
-
-
-@method_decorator(admin_protected, name='dispatch')
-class HealthView(TemplateView):
-    template_name = 'admins/construction.html'
