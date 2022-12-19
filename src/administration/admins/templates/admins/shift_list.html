@@ -126,48 +126,31 @@
                         </table>
                     </div>
 
-                    <ul class="pagination pagination-rounded justify-content-center mt-3 pb-1">
-
-                        {% if object_list.has_previous %}
-
-                            <li class="page-item">
-                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
-                                   class="page-link">
-                                    <i class="mdi mdi-chevron-left"></i>
+                    <div class="card-body border-top">
+                        <ul class="pagination">
+                            {% if object_list.has_previous %}
+                                <li>
+                            <span>
+                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
+                                    Previous
                                 </a>
+                            </span>
+                                </li>
+                            {% endif %}
+                            <li class="">
+                                <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
                             </li>
-
-                            <li class="page-item">
-                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}"
-                                   class="page-link"> {{ object_list.previous_page_number }}
+                            {% if object_list.has_next %}
+                                <li>
+                            <span>
+                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
+                                    Next
                                 </a>
-                            </li>
-
-                        {% endif %}
-
-                        {#                    <li class="page-item"><a href="/" class="page-link">1</a></li>#}
-                        <li class="page-item active">
-                            <a href="#" class="page-link">{{ object_list.number }}</a>
-                        </li>
-
-                        {% if object_list.has_next %}
-
-                            <li class="page-item">
-                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
-                                   class="page-link"> {{ object_list.next_page_number }}
-                                </a>
-                            </li>
-
-                            <li class="page-item">
-                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}"
-                                   class="page-link">
-                                    <i class="mdi mdi-chevron-right"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-
-                    </ul>
-
+                            </span>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
                 {% else %}
                     <div class="card-body">
                         <p class="text-danger"><b>No shifts available</b></p>
