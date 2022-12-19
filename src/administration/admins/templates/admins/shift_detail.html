@@ -222,9 +222,13 @@
                             <path d="M16 11l2 2l4 -4"></path>
                         </svg>
                         Employee: <strong>
-                        <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
-                            {{ object.employee.user.get_user_name }}
-                        </a>
+                        {% if object.employee %}
+                            <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
+                                {{ object.employee.user.get_user_name }}
+                            </a>
+                        {% else %}
+                            <b class="text-danger">Not assigned</b>
+                        {% endif %}
                     </strong>
                     </div>
                     <div class="mb-2">
@@ -237,9 +241,13 @@
                             <path d="M12 15h8"></path>
                         </svg>
                         Position: <strong>
-                        <a href="{% url 'admins:position-update' object.position.pk %}">
-                            {{ object.position.name }}
-                        </a>
+                        {% if object.employee %}
+                            <a href="{% url 'admins:position-update' object.position.pk %}">
+                                {{ object.position.name }}
+                            </a>
+                        {% else %}
+                            <b>-</b>
+                        {% endif %}
                     </strong>
                     </div>
                     <div class="mb-2">
