@@ -1,6 +1,4 @@
 from django.urls import path, include
-
-from core import settings
 from .views import (
     DashboardView, ScheduleView, TimeClockView,
     PositionListView, PositionDeleteView, PositionCreateView, PositionUpdateView,

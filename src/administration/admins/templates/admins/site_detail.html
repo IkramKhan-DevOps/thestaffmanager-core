@@ -9,6 +9,11 @@
         <a class="" href="{% url 'admins:site-list' %}">
             &larr; Sites
         </a>
+        <b>
+            <a class="" href="{% url 'admins:site-update' object.pk %}">
+                <i class="fa fa-edit"></i> Edit
+            </a>
+        </b>
     </b>
 {% endblock %}
 
