@@ -2,9 +2,9 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block base_title %}Admins | Shifts{% endblock %}
-{% block base_subhead_heading %}Shifts{% endblock %}
-{% block base_subhead_paragraph %}Your available shifts list.{% endblock %}
+{% block base_subtitle %} Shifts{% endblock %}
+{% block base_subhead_heading %} Shifts &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available shifts{% endblock %}
 
 {% block base_content %}
 
@@ -12,61 +12,68 @@
 
         <div class="col-12">
             <div class="card">
-                <div class="card-body border-bottom">
-                    <p class="mb-0 card-title"><b>Your shifts</b></p>
-                </div>
-                <div class="card-body">
+                {% if object_list %}
 
-                    {% if object_list %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Start Time</th>
+                                <th>End Time</th>
+                                <th>Client</th>
+                                <th>Days</th>
+                                <th>-</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="thead-light">
+                            {% for object in object_list %}
                                 <tr>
-                                    <th>Type</th>
-                                    <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Start Time</th>
-                                    <th>End Time</th>
-                                    <th>Client</th>
-                                    <th>Days</th>
-                                    <th>-</th>
+                                    <td>
+                                        {% if object.get_job_type_display == "Pattern" %}
+                                            <span class="badge bg-purple-lt">{{ object.get_job_type_display }}</span>
+                                        {% else %}
+                                            <span class="badge bg-teal-lt">{{ object.get_job_type_display }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ object.start_date }}</td>
+                                    <td>{{ object.end_date }}</td>
+                                    <td>{{ object.start_time|date:"G:i" }}</td>
+                                    <td>{{ object.end_time|date:"G:i" }}</td>
+                                    <td>
+                                        <a href="#">
+                                            {{ object.client.name }}
+                                        </a>
+                                    </td>
+                                    <td>{{ object.shiftday_set.count }}</td>
+                                    <th>
+                                        <a href="{% url 'employees:shift-detail' object.pk %}">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                 class="icon icon-tabler icon-tabler-eye" width="24" height="24"
+                                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                                 stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <circle cx="12" cy="12" r="2"></circle>
+                                                <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                            </svg>
+                                        </a>
+                                    </th>
                                 </tr>
-                                </thead>
-                                <tbody>
-
-                                {% for object in object_list %}
-                                    <tr>
-                                        <td>{{ object.get_job_type_display }}</td>
-                                        <td>{{ object.start_date }}</td>
-                                        <td>{{ object.end_date }}</td>
-                                        <td>{{ object.start_time }}</td>
-                                        <td>{{ object.end_time }}</td>
-                                        <td>{{ object.client.name }}</td>
-                                        <td>{{ object.shiftday_set.count }}</td>
-                                        <th>
-                                            <a href="{% url 'employees:shift-detail' object.pk %}">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                        </th>
-                                    </tr>
-                                {% endfor %}
+                            {% endfor %}
 
 
-                                </tbody>
-                            </table>
-                        </div>
+                            </tbody>
+                        </table>
+                    </div>
 
-                    {% else %}
-                        <p class="mb-0 text-danger">
-                            <b>
-                                <i class="fa fa-exclamation-circle"></i>
-                                No objects available
-                            </b>
-                        </p>
-                    {% endif %}
-
-                </div>
+                {% else %}
+                    <div class="card-body">
+                        <p class="text-danger"><b>No shifts available</b></p>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
