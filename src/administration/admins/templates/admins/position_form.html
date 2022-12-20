@@ -31,3 +31,11 @@
     </div>
 
 {% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+    $(document).ready(function () {
+        $('input').addClass('my-2');
+    })
+    </script>
+{% endblock %}
