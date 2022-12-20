@@ -42,6 +42,18 @@ class Position(models.Model):
         print()
 
 
+class Department(models.Model):
+    name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = "Departments"
+
+    def __str__(self):
+        return str(self.name)
+
+
 class Country(models.Model):
     name = models.CharField(max_length=255, unique=True)
     language = models.CharField(max_length=50, null=True, blank=True)
@@ -423,3 +435,4 @@ class ShiftDay(models.Model):
             active = datetime.combine(self.shift_end_date, self.clock_out) - datetime.combine(self.shift_date, self.clock_in)
             return round((active - required).total_seconds() / 3600)
         return 0
+

@@ -19,8 +19,11 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 
-from src.accounts.models import User, UserDocument
-
+from src.accounts.models import (\
+    User, UserDocument, Employee, EmployeeAppearance, EmployeeWork, EmployeeIdPass, EmployeeHealth,
+    EmployeeEmergencyContact, EmployeeTraining, EmployeeDocument, EmployeeEducation, EmployeeContract,
+    EmployeeEmployment, EmployeeQualification, EmployeeLanguageSkill
+)
 csrf_protect_m = method_decorator(csrf_protect)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 
@@ -208,4 +211,15 @@ class UserCustomAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserCustomAdmin)
-admin.site.register(UserDocument)
+admin.site.register(EmployeeAppearance)
+admin.site.register(EmployeeWork)
+admin.site.register(EmployeeIdPass)
+admin.site.register(EmployeeHealth)
+admin.site.register(EmployeeEmergencyContact)
+admin.site.register(EmployeeTraining)
+admin.site.register(EmployeeDocument)
+admin.site.register(EmployeeEducation)
+admin.site.register(EmployeeContract)
+admin.site.register(EmployeeEmployment)
+admin.site.register(EmployeeQualification)
+admin.site.register(EmployeeLanguageSkill)

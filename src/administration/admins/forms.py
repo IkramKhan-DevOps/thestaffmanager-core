@@ -36,7 +36,7 @@ class EmployeeForm(ModelForm):
     class Meta:
         model = Employee
         fields = [
-            'employee_id', 'type', 'address', 'is_internal_employee'
+            'employee_id', 'type', 'address'
         ]
 
 
