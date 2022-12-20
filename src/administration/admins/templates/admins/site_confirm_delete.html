@@ -2,11 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block base_title %}Delete {{ object }} {% endblock %}
-{% block base_subhead_heading %}Delete {{ object }} {% endblock %}
-{% block base_subhead_paragraph %}Delete {{ object }} permanently.{% endblock %}
+{% block base_subtitle %}Site Delete{% endblock %}
+{% block base_subhead_heading %}Site &rAarr; Delete {% endblock %}
+{% block base_subhead_paragraph %}Delete Site permanently{% endblock %}
 {% block base_subhead_button %}
-    <a class="btn btn-primary" href="{% url 'admins:site-list' %}"><i class="fa fa-arrow-left"></i> Users</a>
+    <a href="{% url 'admins:site-list' %}">&larr; Sites</a>
 {% endblock %}
 
 {% block base_content %}

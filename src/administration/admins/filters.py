@@ -11,7 +11,7 @@ class ShiftFilter(django_filters.FilterSet):
     class Meta:
         model = Shift
         fields = {
-            'client': ['exact'], 'site': ['exact'], 'employee': ['exact']
+            'site': ['exact'], 'employee': ['exact']
         }
 
 
@@ -46,7 +46,9 @@ class SiteFilter(django_filters.FilterSet):
 
 class ShiftDayFilter(django_filters.FilterSet):
     shift_date = django_filters.DateRangeFilter()
-    shift__employee__user__username = django_filters.CharFilter(lookup_expr='icontains')
+    shift_end_date = django_filters.DateRangeFilter()
+    shift__employee__user__username = django_filters.CharFilter(lookup_expr='icontains', widget=TextInput(attrs={'placeholder': 'Employee'}))
+    shift__shift_id = django_filters.CharFilter(lookup_expr='icontains', widget=TextInput(attrs={'placeholder': 'Shift ID'}))
 
     class Meta:
         model = ShiftDay

@@ -55,16 +55,11 @@ def shifts_update_in(dates, shift, previous_shift, refresh):
     if shift.start_date == previous_shift.start_date and shift.end_date == previous_shift.end_date and \
             shift.repeat_policy == previous_shift.repeat_policy and shift.week_days == previous_shift.week_days:
         if refresh:
-            print("Changes required ... ")
             ShiftDay.objects.filter(shift=shift).delete()
             [ShiftDay.objects.create(shift_date=_date, shift=shift) for _date in dates]
-        else:
-            print("Not changes detected")
     else:
-        print("changes required")
         ShiftDay.objects.filter(shift=shift).delete()
         for _date in dates:
-            print(_date)
             ShiftDay.objects.create(shift_date=_date, shift=shift)
 
 

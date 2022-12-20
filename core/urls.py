@@ -1,14 +1,9 @@
 from django.contrib import admin
-from django.shortcuts import redirect, render
+from django.shortcuts import render
+from django.views.static import serve
 from django.urls import path, include, re_path
 
-from . import settings
 from .settings import MEDIA_ROOT, STATIC_ROOT
-from django.views.static import serve
-
-
-def home_view(request):
-    return redirect('accounts:login')
 
 
 def handler404(request, *args, **kwargs):
@@ -22,16 +17,15 @@ def handler500(request, *args, **kwargs):
 handler404 = handler404
 handler500 = handler500
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
 urlpatterns += [
+    path('', include('src.website.urls', namespace="website")),
     path('accounts/', include('src.accounts.urls', namespace='accounts')),
     path('a/', include('src.administration.admins.urls', namespace='admins')),
     path('c/', include('src.administration.employees.urls', namespace='employees')),
-    path('', home_view, name='home')
 ]
 
 urlpatterns += [

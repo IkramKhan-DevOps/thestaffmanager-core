@@ -1,0 +1,28 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_no_body %}
+    <body class=" border-top-wide border-primary d-flex flex-column">
+    <div class="page page-center">
+        <div class="container container-tight py-2">
+            {% block auth_org %}
+                <div class="text-center mb-4">
+                    <a href="." class="navbar-brand navbar-brand-autodark">
+                        <img src="{% static 'required/images/logo-staff-dark.png' %}" height="100" alt="">
+                    </a>
+                    <p class="mb-0 h1 font-"><b>The Staff Manager</b></p>
+                    <p class="mb-0 text-muted"><b>Workforce management, employee engagement</b></p>
+                </div>
+            {% endblock %}
+            {% block auth_content %}
+
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Tabler Core -->
+    <script src="{% static 'admin/js/tabler.min.js' %}?1668287865" defer></script>
+    <script src="{% static 'admin/js/demo.min.js' %}?1668287865" defer></script>
+
+    </body>
+{% endblock %}

@@ -1,95 +1,107 @@
 {% load static %}
-<div class="topbar">
 
-
-    <nav class="navbar-custom">
-
-
-        {# LOGO HEADER #}
-        <div class="topbar-left">
-            <a href="#" class="logo">
-                {#                <span>#}
-                {#                    <img src="{% static 'core/logo-dark-250.png' %}" alt="logo-large" class="logo-lg">#}
-                {#                </span>#}
-                <span>
-                    <img src="{% static 'core/logo-staff-dark-ver-500.png' %}" alt="logo-small" class="logo-sm">
-                </span>
+<header class="navbar navbar-expand-md navbar-light d-print-none">
+    <div class="container-xl">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+                aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+            <a href="{% url 'accounts:login' %}">
+                <img src="{% static 'required/images/logo-staff-dark.png' %}" width="110"
+                     height="32" alt="Tabler"
+                     class="navbar-brand-image">
             </a>
-        </div>
+        </h1>
 
-        {# OTHER #}
-        <ul class="list-unstyled topbar-nav float-right mb-0">
+        <div class="navbar-nav flex-row order-md-last">
 
-            <li class="dropdown">
-                <a class="nav-link dropdown-toggle arrow-none waves-light waves-effect" data-toggle="dropdown"
-                   href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                    <i class="mdi mdi-bell-outline nav-icon"></i>
-                    <span class="badge badge-danger badge-pill noti-icon-badge">1</span>
+            <div class="d-none d-md-flex">
+
+                {# ENABLE DARK AND LIGHT MODES #}
+                <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                         viewBox="0 0 24 24"
+                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z"/>
+                    </svg>
+                </a>
+                <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode"
+                   data-bs-toggle="tooltip"
+                   data-bs-placement="bottom">
+                    <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24"
+                         viewBox="0 0 24 24"
+                         stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                        <circle cx="12" cy="12" r="4"/>
+                        <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7"/>
+                    </svg>
                 </a>
 
-                {# NOTIFICATIONS #}
-                <div class="dropdown-menu dropdown-menu-right dropdown-lg">
-                    <h6 class="dropdown-item-text">Notifications</h6>
-                    <div class="slimscroll notification-list">
+                {# NOTIFICATIONS ----------------------------- #}
+                {% include 'core/include/notifications.html' %}
+                {# ------------------------------------------- #}
 
-                        <a href="#" class="dropdown-item notify-item active">
-                            <div class="notify-icon bg-success"><i class="mdi mdi-pencil"></i></div>
-                            <p class="notify-details">New Notification<small class="text-muted">
-                                notifications not configured yet.</small>
-                            </p>
-                        </a>
-
-                        {#                        <a href="#" class="dropdown-item notify-item">#}
-                        {#                            <div class="notify-icon bg-warning"><i class="mdi mdi-message"></i></div>#}
-                        {#                            <p class="notify-details">New Teacher Message received#}
-                        {#                                <small class="text-muted">Message from teacher X</small>#}
-                        {#                            </p>#}
-                        {#                        </a>#}
-
-                    </div><!-- All-->
-                    <a href="javascript:void(0);" class="dropdown-item text-center text-primary">
-                        View all <i class="fi-arrow-right"></i>
-                    </a>
-                </div>
-            </li>
-
-            {# PROFILE #}
-            <li class="dropdown">
-                <a class="nav-link dropdown-toggle waves-effect waves-light nav-user" data-toggle="dropdown" href="#"
-                   role="button" aria-haspopup="false" aria-expanded="false">
+            </div>
+            <div class="nav-item dropdown">
+                <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown"
+                   aria-label="Open user menu">
                     {% if request.user.profile_image %}
-                        <img src="{{ request.user.profile_image.url }}" alt="profile-user" class="rounded-circle">
+                        <span class="avatar avatar-sm"
+                              style="background-image: url({{ request.user.profile_image.url }})">
+                                </span>
                     {% else %}
-                        <img src="{% static 'core/no-user.png' %}" alt="profile-user" class="rounded-circle">
+                        <span class="avatar avatar-sm"
+                              style="background-image: url({% static 'required/images/no-image.jpg' %})">
+                                </span>
                     {% endif %}
-                    <span class="ml-1 nav-user-name hidden-sm"><i class="mdi mdi-chevron-down"></i></span>
+
+                    <div class="d-none d-xl-block ps-2">
+                        <div>{{ request.user.get_user_name }}</div>
+                        <div class="mt-1 small text-muted">
+                            {% if request.user.is_superuser %}
+                                Administrator
+                            {% elif request.user.is_staff %}
+                                Staff User
+                            {% elif request.user.is_employee %}
+                                Employee
+                            {% else %}
+                                Undefined
+                            {% endif %}
+                        </div>
+                    </div>
                 </a>
-
-                <div class="dropdown-menu dropdown-menu-right">
-                    <a class="dropdown-item" href="{% url 'accounts:user-change' %}"><i
-                            class="dripicons-user text-muted mr-2"></i> Profile
-                    </a>
-                    <a class="dropdown-item" href="{% url 'accounts:user-password-change' %}"><i
-                            class="dripicons-lock-open text-muted mr-2"></i> Change Password
-                    </a>
+                <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <a href="{% url 'accounts:user-change' %}" class="dropdown-item">Profile</a>
+                    <a href="{% url 'accounts:user-password-change' %}" class="dropdown-item">Change Password</a>
                     <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">
-                        <i class="dripicons-exit text-muted mr-2"></i>Logout
-                    </a>
+                    <a href="{% url 'accounts:logout' %}" class="dropdown-item">Logout</a>
                 </div>
-            </li>
+            </div>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+                <ul class="navbar-nav">
 
-        </ul>
-        <ul class="list-unstyled topbar-nav mb-0">
-            <li>
-                <button class="button-menu-mobile nav-link waves-effect waves-light"><i
-                        class="mdi mdi-menu nav-icon"></i>
-                </button>
-            </li>
+                    {% if request.user.is_superuser %}
+                        {% include 'core/include/admin_header.html' %}
+                    {% else %}
+                        {% if request.user.is_staff %}
+                            {% include 'core/include/staff_header.html' %}
+                        {% else %}
+                            {% include 'core/include/employee_header.html' %}
+                        {% endif %}
+                    {% endif %}
 
-        </ul>
-    </nav>
-
-    <!-- end navbar-->
-</div>
-<!-- Top Bar End -->
+                </ul>
+            </div>
+        </div>
+    </div>
+</header>

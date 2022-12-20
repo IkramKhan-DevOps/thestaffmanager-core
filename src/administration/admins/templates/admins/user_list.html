@@ -2,12 +2,14 @@
 {% load static %}
 {% load custom_tags %}
 
-{% block base_title %}admins | Users{% endblock %}
-{% block base_subhead_heading %}Users{% endblock %}
-{% block base_subhead_paragraph %}List of available users{% endblock %}
+{% block base_subtitle %} Employees{% endblock %}
+{% block base_subhead_heading %} Employees &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available employees{% endblock %}
+
+
 {% block base_subhead_button %}
     <a class="btn btn-primary" href="{% url 'admins:user-employee-add' %}">
-        <i class="fa fa-plus"></i> New Employee
+        Add Employee
     </a>
 {% endblock %}
 
@@ -17,7 +19,7 @@
         <div class="col-12">
             <div class="card">
 
-                <div class="card-body border-bottom">
+                <div class="card-body">
                     <form method="get">
                         <div class="input-group">
                             {{ filter_form }}
@@ -30,110 +32,137 @@
                     </form>
                 </div>
 
-                <div class="card-body">
-                    {% if object_list %}
+                {% if object_list %}
+                    <div class="table-responsive">
+                        <table class="table table-hover card-table table-vcenter text-nowrap datatable">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Username</th>
+                                <th>FirstName</th>
+                                <th>LastName</th>
+                                <th>Email</th>
+                                <th>Type</th>
+                                <th>Joined</th>
+                                <th>Last Login</th>
+                                <th>Status</th>
+                                <th>-</th>
+                            </tr>
+                            </thead>
+                            <tbody>
 
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead class="thead-light">
-                                <tr>
-                                    <th>Username</th>
-                                    <th>FirstName</th>
-                                    <th>LastName</th>
-                                    <th>Email</th>
-                                    <th>Type</th>
-                                    <th>Joined</th>
-                                    <th>Last Login</th>
-                                    <th>Status</th>
-                                    <th>-</th>
+                            {% for object in object_list %}
+                                <tr class="">
+                                    <td>
+                                        <a href="{% url 'admins:user-detail' object.pk %}">{{ object.username }}</a>
+                                    </td>
+                                    <td>{{ object.first_name }}</td>
+                                    <td>{{ object.last_name }}</td>
+                                    <td>
+                                        {% if object.email %}
+                                            <a href="mailto:{{ object.email }}">{{ object.email }}</a>
+                                        {% else %}
+                                            <b class="text-danger">-</b>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if object.is_superuser %}
+                                            <span class="badge bg-danger-lt">Admin</span>
+                                        {% else %}
+                                            {% if object.is_staff %}
+                                                <span class="badge bg-purple-lt">
+                                                    Staff
+                                                </span>
+                                            {% elif object.is_employee %}
+                                                <b class="badge bg-success-lt">
+                                                    Employee</b>
+                                            {% else %}
+                                                <b class="badge bg-warning-lt">
+                                                    Undefined</b>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ object.date_joined }}</td>
+                                    <td>{{ object.last_login }}</td>
+                                    <td>
+                                        {% if object.is_active %}
+                                            <b class="text-success">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     class="icon icon-tabler icon-tabler-check text-success" width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                     fill="none"
+                                                     stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <path d="M5 12l5 5l10 -10"></path>
+                                                </svg>
+                                            </b>
+                                        {% else %}
+                                            <b class="text-danger">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     class="icon icon-tabler icon-tabler-x text-danger" width="24"
+                                                     height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                     fill="none"
+                                                     stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                                </svg>
+                                            </b>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'admins:user-detail' object.pk %}">
+                                            <b class="text-primary">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                     class="icon icon-tabler icon-tabler-eye" width="24" height="24"
+                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                                     fill="none"
+                                                     stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <circle cx="12" cy="12" r="2"></circle>
+                                                    <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                </svg>
+                                            </b>
+                                        </a>
+                                    </td>
                                 </tr>
-                                </thead>
-                                <tbody>
+                            {% endfor %}
 
-                                {% for object in object_list %}
-                                    <tr class="">
-                                        <td>{{ object.username }}</td>
-                                        <td>{{ object.employee }}</td>
-                                        <td>{{ object.last_name }}</td>
-                                        <td>{{ object.email }}</td>
-                                        <td>
-                                            {% if object.is_superuser %}
-                                                <b class="text-danger"><i class="fa fa-user-cog"></i> Admin</b>
-                                            {% else %}
-                                                {% if object.is_staff %}
-                                                    <b class="text-danger"><i class="fa fa-user-cog"></i>
-                                                        Staff
-                                                    </b>
-                                                {% elif object.is_employee %}
-                                                    <b class="text-success"><i class="fa fa-user-check"></i>
-                                                        Employee</b>
-                                                {% else %}
-                                                    <b class="text-secondary"><i class="fa fa-exclamation-circle"></i>
-                                                        Undefined</b>
-                                                {% endif %}
-                                            {% endif %}
-                                        </td>
-                                        <td>{{ object.date_joined }}</td>
-                                        <td>{{ object.last_login }}</td>
-                                        <td>
-                                            {% if object.is_active %}
-                                                <b class="text-success">
-                                                    <i class="fa fa-check-circle"></i>
-                                                </b>
-                                            {% else %}
-                                                <b class="text-danger">
-                                                    <i class="fa fa-times-circle"></i>
-                                                </b>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            <a href="{% url 'admins:user-detail' object.pk %}">
-                                                <b class="text-primary">
-                                                    <i class="fa fa-eye"></i>
-                                                </b>
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
 
-                                </tbody>
-                            </table>
-                        </div>
-                    {% else %}
-                        <p class="mb-0 text-danger">
-                            <b>
-                                <i class="fa fa-exclamation-circle"></i>
-                                No Users available
-                            </b>
-                        </p>
-                    {% endif %}
-                </div>
-
-                <div class="card-body border-top">
-                    <ul class="pagination">
-                        {% if object_list.has_previous %}
-                            <li>
+                    <div class="card-body border-top">
+                        <ul class="pagination">
+                            {% if object_list.has_previous %}
+                                <li>
                             <span>
                                 <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
                                     Previous
                                 </a>
                             </span>
+                                </li>
+                            {% endif %}
+                            <li class="">
+                                <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
                             </li>
-                        {% endif %}
-                        <li class="">
-                            <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
-                        </li>
-                        {% if object_list.has_next %}
-                            <li>
+                            {% if object_list.has_next %}
+                                <li>
                             <span>
                                 <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
                                     Next
                                 </a>
                             </span>
-                            </li>
-                        {% endif %}
-                    </ul>
-                </div>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% else %}
+                    <div class="card-body">
+                        <p class="text-danger mb-0"><b>No objects available</b></p>
+                    </div>
+                {% endif %}
 
             </div>
         </div>

@@ -1,4 +1,4 @@
-{% extends 'core/global_base.html' %}
+{% extends 'core/auth_base.html' %}
 {% load static %}
 
 {% block base_title %}
@@ -6,113 +6,66 @@
 {% endblock %}
 
 
-{% block base_content %}
+{% block auth_content %}
 
-    <div class="vh-100 bg-light">
-        <div class="row justify-content-center pb-4">
-            <div class="col-sm-4 text-center">
+    <div class="card card-md">
+        <div class="card-body">
+            <h2 class="h2 text-center mb-4">Login to your account</h2>
+            <form method="post" autocomplete="off">
+                {% csrf_token %}
 
-                <img
-                        src="{% static 'core/logo-staff-dark.png' %}"
-                        height="100" alt="logo"
-                        class="mt-5 mb-0"
-                >
-                <h2 class="mb-0 font-weight-bolder">The Staff Manager</h2>
-                <p class=" mb-0">Workforce management, employee engagement & expert support</p>
+                {% if form.errors %}
+                    <div class="alert alert-block alert-danger">
+                        {% for field, errors in form.errors.items %}
+                            {% for error in errors %}
+                                {{ error }}
+                            {% endfor %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
-            </div>
-        </div>
-
-        <div class="row justify-content-center">
-            <div class="col-sm-4 pr-0">
-                <div class="card mb-0 shadow-lg ">
-                    <div class="card-body">
-                        <div class="px-3">
-
-                            <form class="form-horizontal my-4" action="" method="post">
-                                {% csrf_token %}
-
-                                {% if form.errors %}
-                                    <div class="alert alert-block alert-danger">
-                                        {% for field, errors in form.errors.items %}
-                                            {% for error in errors %}
-                                                {{ error }}
-                                            {% endfor %}
-                                        {% endfor %}
-                                    </div>
-                                {% endif %}
-
-                                <div class="form-group" id="div_id_username">
-                                    <label for="id_username">Username<span class="asteriskField">*</span></label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon1">
-                                            <i class="mdi mdi-account-outline font-16"></i>
-                                        </span>
-                                        </div>
-                                        <input name="username" autofocus autocapitalize="none" autocomplete="username"
-                                               type="text" class="form-control" id="id_username"
-                                               placeholder="Enter your username">
-                                    </div>
-                                </div>
-
-                                <div class="form-group" id="div_id_password">
-                                    <label for="id_password">Password</label>
-                                    <div class="input-group mb-3">
-                                        <div class="input-group-prepend">
-                                        <span class="input-group-text" id="basic-addon2">
-                                            <i class="mdi mdi-key font-16"></i>
-                                        </span>
-                                        </div>
-                                        <input type="password" class="form-control" id="id_password"
-                                               placeholder="Enter password" name="password"
-                                               autocomplete="current-password">
-                                    </div>
-                                </div>
-                                {% if request.GET.next %}
-                                    <input type="hidden" name="next" value="{{ request.GET.next }}">
-                                {% endif %}
-
-                                <div class="form-group row mt-4">
-                                    <div class="col-sm-6">
-                                        <div class="custom-control custom-checkbox"><input type="checkbox"
-                                                                                           class="custom-control-input"
-                                                                                           id="customControlInline">
-                                            <label
-                                                    class="custom-control-label" for="customControlInline">Remember
-                                                me</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6 text-right"><a
-                                            href="{% url 'account_reset_password' %}"
-                                            class="text-muted font-13"><i class="mdi mdi-lock"></i> Forgot your
-                                        password?</a>
-                                    </div>
-                                </div>
-                                <div class="form-group mb-0 row">
-                                    <div class="col-12 mt-2">
-                                        <button type="submit"
-                                                class="btn btn-primary btn-block waves-effect waves-light">
-                                            Log In <i class="fas fa-sign-in-alt ml-1"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        {#                    <div class="account-social text-center"><h6 class="my-4">Need Help</h6>#}
-                        {##}
-                        {#                    </div>#}
-                        {#                    <div class="m-3 bg-light p-3 text-dark">#}
-                        {#                        <p class="">#}
-                        {#                            <b>Just login with your credentials system#}
-                        {#                                automatically detect your role your redirects you towards your application.</b>#}
-                        {#                        </p>#}
-                        {#                    </div>#}
-
+                {# USERNAME | PASSWORD #}
+                <div class="mb-3">
+                    <label class="form-label">Username/Email</label>
+                    <input name="username" id="id_username" class="form-control" placeholder="your@email.com" autocomplete="off">
+                </div>
+                <div class="mb-2">
+                    <label class="form-label">Password
+                        <span class="form-label-description">
+                            <a href="">I forgot password</a>
+                        </span>
+                    </label>
+                    <div class="input-group input-group-flat">
+                        <input type="password" class="form-control" name="password" id="id_password" placeholder="Your password" autocomplete="off">
+                        <span class="input-group-text">
+                            <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
+                                     stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
+                                     stroke-linejoin="round">
+                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="2"/>
+                                    <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"/>
+                                </svg>
+                            </a>
+                        </span>
                     </div>
                 </div>
-            </div>
-        </div>
 
+                {# BUTTON | TEXTS #}
+                <div class="mb-2">
+                    <label class="form-check">
+                        <input type="checkbox" class="form-check-input"/>
+                        <span class="form-check-label">Remember me on this device</span>
+                    </label>
+                </div>
+                <div class="form-footer">
+                    <button type="submit" class="btn btn-primary w-100">Sign in</button>
+                </div>
+
+            </form>
+        </div>
     </div>
-{% endblock base_content %}
+    <div class="text-center text-muted mt-3">
+        Powered by <b><a href="https://thestaffmanager.com/">The Staff Manager</a></b>
+    </div>
+
+{% endblock %}

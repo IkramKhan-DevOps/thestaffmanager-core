@@ -2,11 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block base_title %}Delete {{ object }} {% endblock %}
-{% block base_subhead_heading %}Delete {{ object }} {% endblock %}
-{% block base_subhead_paragraph %}Delete {{ object }} permanently.{% endblock %}
+{% block base_subtitle %}Client Delete{% endblock %}
+{% block base_subhead_heading %}Client &rAarr; Delete {% endblock %}
+{% block base_subhead_paragraph %}Delete Client permanently{% endblock %}
 {% block base_subhead_button %}
-    <a class="btn btn-primary" href="{% url 'admins:client-list' %}"><i class="fa fa-arrow-left"></i> Users</a>
+    <a href="{% url 'admins:client-list' %}">&larr; Clients</a>
 {% endblock %}
 
 {% block base_content %}
@@ -17,7 +17,7 @@
                 <div class="card-body">
 
                     <form method="post">{% csrf_token %}
-                        <p class="mb-2">Are you sure you want to delete <b class="text-danger">"{{ object }}"</b>?</p>
+                        <p class="mb-2">Are you sure you want to delete <b class="text-danger">"{{ object.name }}"</b>?</p>
                         <input type="submit" class="btn btn-danger" value="Confirm">
                     </form>
 

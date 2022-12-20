@@ -42,6 +42,18 @@ class Position(models.Model):
         print()
 
 
+class Department(models.Model):
+    name = models.CharField(max_length=255)
+    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = "Departments"
+
+    def __str__(self):
+        return str(self.name)
+
+
 class Country(models.Model):
     name = models.CharField(max_length=255, unique=True)
     language = models.CharField(max_length=50, null=True, blank=True)
@@ -208,12 +220,6 @@ class Site(models.Model):
 
 
 class Shift(models.Model):
-    """
-    TODO: UPDATE
-    1. quantity : not required
-    2. job_type : data changed
-    3. on_create: on shift create > create history record
-    """
 
     JOB_TYPE_CHOICE = (
         ('o', 'Open'),
@@ -230,7 +236,6 @@ class Shift(models.Model):
     end_date = models.DateField(null=True, blank=True)
     start_time = models.TimeField()
     end_time = models.TimeField()
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     site = models.ForeignKey(Site, on_delete=models.CASCADE)
 
     position = models.ForeignKey(Position, on_delete=models.SET_NULL, null=True, blank=True)
@@ -269,15 +274,6 @@ class Shift(models.Model):
 
 
 class ShiftDay(models.Model):
-    """
-    TODO: UPDATE
-    add    > employee here to ? shift can be assigned to someone else
-    add    > shift_start_time
-    add    > shift_end_time
-    add    > shift_start_date
-    add    > shift_end_date
-    remove > shift, worked and extra hours
-    """
 
     STATUS_CHOICE = (
         ('awa', 'Awaiting'),
@@ -391,6 +387,36 @@ class ShiftDay(models.Model):
 
         return "clash"
 
+    def is_clock_in_correct(self):
+        sd = datetime.combine(self.shift_date, self.shift_time)
+        if self.clock_in:
+            c_in = datetime.combine(self.shift_date, self.clock_in)
+            if c_in.strftime("%I:%M%p") == sd.strftime("%I:%M%p"):
+                return True
+            else:
+                return False
+        else:
+            nd = datetime.now()
+            if sd >= nd:
+                return True
+            else:
+                return False
+
+    def is_clock_out_correct(self):
+        ed = datetime.combine(self.shift_end_date, self.shift_end_time)
+        if self.clock_out:
+            c_out = datetime.combine(self.shift_end_date, self.clock_out)
+            if c_out.strftime("%I:%M%p") == ed.strftime("%I:%M%p"):
+                return True
+            else:
+                return False
+        else:
+            nd = datetime.now()
+            if ed >= nd:
+                return True
+            else:
+                return False
+
     def get_shift_hours(self):
         start = datetime.combine(self.shift_date, self.shift_time)
         end = datetime.combine(self.shift_end_date, self.shift_end_time)
@@ -409,3 +435,4 @@ class ShiftDay(models.Model):
             active = datetime.combine(self.shift_end_date, self.clock_out) - datetime.combine(self.shift_date, self.clock_in)
             return round((active - required).total_seconds() / 3600)
         return 0
+

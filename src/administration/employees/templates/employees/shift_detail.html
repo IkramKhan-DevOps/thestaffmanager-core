@@ -1,157 +1,254 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
-{% block base_title %}admins | Shift {{ object }}{% endblock %}
-{% block base_subhead_heading %} Shift {{ object }}{% endblock %}
-{% block base_subhead_paragraph %}Detail down description of Shift {{ object }}.{% endblock %}
+{% block base_subtitle %}Shift Details{% endblock %}
+{% block base_subhead_heading %}Shift &rAarr; Details {% endblock %}
+{% block base_subhead_paragraph %}Shift detailed view{% endblock %}
 {% block base_subhead_button %}
-    <a class="btn btn-primary" href="{% url 'employees:shift-list' %}"><i class="fa fa-arrow-left"></i> View shifts</a>
+    <b>
+        <a class="" href="{% url 'employees:shift-list' %}">
+            &larr; Shifts
+        </a>
+    </b>
 {% endblock %}
-
 
 {% block base_content %}
 
-    <div class="row">
-        <div class="col-sm-9">
-            <div class="card">
-                <div class="card-body border-bottom text-center">
-                    <iframe src="https://embed.lottiefiles.com/animation/101467" height="200" class="border-0"></iframe>
-                    <p class="mb-1 text-primary">
-                        <b>{{ object.position.name }}</b>
-                    </p>
-                    <p class="mb-0 text-muted">
-                        <b>({{ object.site.name }})</b>
-                    </p>
-                    <p class="mb-0">
-                        {{ object.start_date }} - {{ object.end_date }}
-                    </p>
-                    <p class="mb-0">
-                        {{ object.start_time }} - {{ object.end_time }}
-                    </p>
-                </div>
-                <div class="card-body">
-                    <div class="row justify-content-center text-center">
-                        <div class="col">
-                            <h1><i class="fa fa-list"></i></h1>
-                            <p class="mb-0 small">Type and Repeat policy</p>
-                            <p class="mb-0">
-                                <b>{{ object.get_job_type_display }} - {{ object.get_repeat_policy_display }}</b></p>
-                        </div>
+    <div class="row mb-4">
 
-                        <div class="col">
-                            <h1><i class="fa fa-building"></i></h1>
-                            <p class="mb-0 small">Client</p>
-                            <p class="mb-0"><b>{{ object.client.name }}</b></p>
-                        </div>
-                        <div class="col">
-                            <h1><i class="fa fa-dollar-sign"></i></h1>
-                            <p class="mb-0 small">Pay</p>
-                            <p class="mb-0"><b>$100</b></p>
-                        </div>
-                        <div class="col">
-                            <h1><i class="fa fa-calendar-check"></i></h1>
-                            <p class="mb-0 small">Shift Days</p>
-                            <p class="mb-0"><b>{{ object.shiftday_set.count }}</b>
-                            </p>
-                        </div>
-                    </div>
+        {# LEFT #}
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="table-responsive" id="table">
+                    <table class="table table-hover card-table table-vcenter text-nowrap datatable">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Hours</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for object_day in object.shiftday_set.all %}
+                            {% with current_status=object_day.get_current_status %}
+                                <tr id="row_{{ object_day.pk }}">
+                                <td>
+                                    {% if current_status == "completed" %}
+                                        <span class="badge bg-success-lt">{{ current_status }}</span>
+                                    {% elif current_status == "running" %}
+                                        <span class="badge bg-primary-lt">{{ current_status }}</span>
+                                    {% elif current_status == "overtime" %}
+                                        <span class="badge bg-yellow-lt">{{ current_status }}</span>
+                                    {% elif current_status == "awaiting" %}
+                                        <span class="badge bg-purple-lt">{{ current_status }}</span>
+                                    {% elif current_status == "late" %}
+                                        <span class="badge bg-danger-lt">{{ current_status }}</span>
+                                    {% elif current_status == "absent" %}
+                                        <span class="badge bg-dark-lt">{{ current_status }}</span>
+                                    {% else %}
+                                        <span class="badge bg-secondary-lt">{{ current_status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ object_day.shift_date }} - {{ object_day.shift_end_date }}</td>
+                                <td>{{ object_day.shift.start_time|date:"G:i" }}
+                                    - {{ object_day.shift.end_time|date:"G:i" }}
+                                </td>
+                                <td>
+                                    <b>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="icon icon-tabler icon-tabler-clock-record" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M20.995 12.3a9 9 0 1 0 -8.683 8.694"></path>
+                                            <path d="M12 7v5l2 2"></path>
+                                            <circle cx="19" cy="19" r="3"></circle>
+                                        </svg>
+                                        {{ object_day.get_shift_hours }}
+                                    </b>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <b>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="icon icon-tabler icon-tabler-clock-play" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M12 7v5l2 2"></path>
+                                            <path d="M17 22l5 -3l-5 -3z"></path>
+                                            <path d="M13.017 20.943a9 9 0 1 1 7.831 -7.292"></path>
+                                        </svg>
+                                        {{ object_day.get_active_hours }}
+                                    </b>
+                                    &nbsp;&nbsp;&nbsp;
+                                    <b>
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="icon icon-tabler icon-tabler-clock-pause" width="24" height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M13 20.94a8.916 8.916 0 0 1 -7.364 -2.576a9 9 0 1 1 15.306 -5.342"></path>
+                                            <path d="M12 7v5l2 2"></path>
+                                            <path d="M17 17v5"></path>
+                                            <path d="M21 17v5"></path>
+                                        </svg>
+                                        {{ object_day.get_extra_hours }}
+                                    </b>
+                                </td>
+                            {% endwith %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-            <div class="card">
-                <div class="card-body border-bottom">
-                    <p class="mb-0"><b>Shift Days</b></p>
-                </div>
-                <div class="card-body">
-                    <div class="table-responsive" id="table">
-                            <table class="table table-hover">
-                            <thead class="thead-light">
-                            <tr>
-                                <th>Status</th>
-                                <th>Employee</th>
-                                <th>Date</th>
-                                <th>Time</th>
-                                <th>Clock In</th>
-                                <th>Clock Out</th>
-                                <th>Shift Hours</th>
-                                <th>Active Hours</th>
-                                <th>Extra Hours</th>
-                                <th>-</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for shift_day in object.get_shifts.all %}
-                                <tr>
-                                    <td>
-                                        {% with current_status=shift_day.get_current_status %}
-                                            {% if current_status == "completed" %}
-                                                <span class="badge badge-success">{{ current_status }}</span>
-                                            {% elif current_status == "running" %}
-                                                <span class="badge badge-primary">{{ current_status }}</span>
-                                            {% elif current_status == "over time" %}
-                                                <span class="badge badge-warning">{{ current_status }}</span>
-                                            {% elif current_status == "awaiting" %}
-                                                <span class="badge badge-info">{{ current_status }}</span>
-                                            {% elif current_status == "late" %}
-                                                <span class="badge badge-warning">{{ current_status }}</span>
-                                            {% elif current_status == "absent" %}
-                                                <span class="badge badge-dark">{{ current_status }}</span>
-                                            {% else %}
-                                                <span class="badge badge-danger">{{ current_status }}</span>
-                                            {% endif %}
-                                        {% endwith %}
-                                    </td>
-                                    <td>
-                                        <b>
-                                            {% if shift_day.employee %}
-                                                <a href="{% url 'admins:user-detail' shift_day.employee.user.pk %}">
-                                                    {{ shift_day.employee.user.get_user_name }}
-                                                </a>
-                                            {% else %}
-                                                <b class="text-danger">NOT ASSIGNED</b>
-                                            {% endif %}
-                                        </b>
-                                    </td>
-                                    <td>{{ shift_day.shift_date }}<br>{{ shift_day.shift_end_date }}</td>
-                                    <td>{{ shift_day.shift_time|date:"G:i" }}<br>{{ shift_day.shift_end_time|date:"G:i" }}
-                                    </td>
-                                    <td>{{ shift_day.clock_in|date:"G:i" }}</td>
-                                    <td>{{ shift_day.clock_out|date:"G:i" }}</td>
-                                    <td>
-                                        {{ shift_day.get_shift_hours }}
-                                    </td>
-                                    <td>
-                                        {{ shift_day.get_active_hours }}
-                                    </td>
-                                    <td>
-                                        {{ shift_day.get_extra_hours }}
-                                    </td>
-                                    <td>
-                                        <b>
-                                            <a href="{% url 'admins:shift-day-update' shift_day.pk %}">
-                                                <i class="fa fa-eye"></i>
-                                            </a>
-                                        </b>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                        </div>
-                </div>
-            </div>
-
         </div>
 
-        <div class="col-sm-3">
+        {# RIGHT #}
+        <div class="col-sm-4">
 
-            {% if object.repeat_policy == 'w' %}
-
-                <div class="card">
-                    <div class="card-body border-bottom">
-                        <p class="mb-0 card-title"><b>Week Days</b></p>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <div class="card-title">
+                        More information
                     </div>
-                    <div class="card-body border-bottom">
+
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-minus"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <rect x="4" y="5" width="16" height="16" rx="2"></rect>
+                            <line x1="16" y1="3" x2="16" y2="7"></line>
+                            <line x1="8" y1="3" x2="8" y2="7"></line>
+                            <line x1="4" y1="11" x2="20" y2="11"></line>
+                            <line x1="10" y1="16" x2="14" y2="16"></line>
+                        </svg>
+                        Date: <strong>{{ object.start_date }} - {{ object.end_date }}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-clock-2" width="24"
+                             height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <rect x="4" y="4" width="16" height="16" rx="1"></rect>
+                            <path d="M12 7v5l3 3"></path>
+                            <path d="M4 12h1"></path>
+                            <path d="M19 12h1"></path>
+                            <path d="M12 19v1"></path>
+                        </svg>
+                        Time: <strong>{{ object.start_time }} - {{ object.end_time }}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-home-heart"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M21 12l-9 -9l-9 9h2v7a2 2 0 0 0 2 2h6"></path>
+                            <path d="M9 21v-6a2 2 0 0 1 2 -2h2c.39 0 .754 .112 1.061 .304"></path>
+                            <path d="M18.994 21.5l2.518 -2.58a1.74 1.74 0 0 0 .004 -2.413a1.627 1.627 0 0 0 -2.346 -.005l-.168 .172l-.168 -.172a1.627 1.627 0 0 0 -2.346 -.004a1.74 1.74 0 0 0 -.004 2.412l2.51 2.59z"></path>
+                        </svg>
+                        Client: <strong>
+                        <a href="#">
+                            {{ object.site.client.name }}
+                        </a>
+                    </strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-backhoe" width="24"
+                             height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <circle cx="4" cy="17" r="2"></circle>
+                            <circle cx="13" cy="17" r="2"></circle>
+                            <line x1="13" y1="19" x2="4" y2="19"></line>
+                            <line x1="4" y1="15" x2="13" y2="15"></line>
+                            <path d="M8 12v-5h2a3 3 0 0 1 3 3v5"></path>
+                            <path d="M5 15v-2a1 1 0 0 1 1 -1h7"></path>
+                            <path d="M21.12 9.88l-3.12 -4.88l-5 5"></path>
+                            <path d="M21.12 9.88a3 3 0 0 1 -2.12 5.12a3 3 0 0 1 -2.12 -.88l4.24 -4.24z"></path>
+                        </svg>
+                        Site: <strong>
+                        <a href="#">
+                            {{ object.site.client.name }}
+                        </a>
+                    </strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-user-check"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                            <path d="M16 11l2 2l4 -4"></path>
+                        </svg>
+                        Employee: <strong>
+                        <a href="#">
+                            {{ object.employee.user.get_user_name }}
+                        </a>
+                    </strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-superhuman"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M16 12l4 3l-8 7l-8 -7l4 -3"></path>
+                            <path d="M12 3l-8 6l8 6l8 -6z"></path>
+                            <path d="M12 15h8"></path>
+                        </svg>
+                        Position: <strong>
+                        <a href="#">
+                            {{ object.position.name }}
+                        </a>
+                    </strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-coin" width="24"
+                             height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1"></path>
+                            <path d="M12 7v10"></path>
+                        </svg>
+                        Pay Rate: <strong>$ {{ object.pay_rate }}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-premium-rights"
+                             width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                             fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <circle cx="12" cy="12" r="9"></circle>
+                            <path d="M13.867 9.75c-.246 -.48 -.708 -.769 -1.2 -.75h-1.334c-.736 0 -1.333 .67 -1.333 1.5c0 .827 .597 1.499 1.333 1.499h1.334c.736 0 1.333 .671 1.333 1.5c0 .828 -.597 1.499 -1.333 1.499h-1.334c-.492 .019 -.954 -.27 -1.2 -.75"></path>
+                            <path d="M12 7v2"></path>
+                            <path d="M12 15v2"></path>
+                        </svg>
+                        Charge Rate: <strong>$ {{ object.charge_rate }}</strong>
+                    </div>
+                    <div class="mb-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-moneybag" width="24"
+                             height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                             stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M9.5 3h5a1.5 1.5 0 0 1 1.5 1.5a3.5 3.5 0 0 1 -3.5 3.5h-1a3.5 3.5 0 0 1 -3.5 -3.5a1.5 1.5 0 0 1 1.5 -1.5z"></path>
+                            <path d="M4 17v-1a8 8 0 1 1 16 0v1a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"></path>
+                        </svg>
+                        Extra Rate: <strong>$ {{ object.extra_charges }}</strong>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <div class="card mb-2">
+                <div class="card-body">
+                    {% if object.repeat_policy == 'w' %}
+                        <div class="card-title">
+                            Week Days
+                        </div>
                         <p class="mb-0">
                             {% if '0' in object.week_days %}
                                 <i class="fa fa-check-circle text-success"></i>
@@ -206,29 +303,31 @@
                                 <i class="fa fa-times-circle text-danger"></i>
                             {% endif %} | Sunday
                         </p>
-                    </div>
-                </div>
 
-            {% elif object.repeat_policy == 'd' %}
-                <div class="card">
-                    <div class="card-body border-bottom">
-                        <p class="mb-0 card-title"><b>Week Days</b></p>
-                    </div>
-                    <div class="card-body border-bottom">
-                        Shifts depends upon some <code>selected dates</code>, you can view the shift days on left/above.
-                    </div>
+                    {% elif object.repeat_policy == 'd' %}
+
+                        <div class="card-title">
+                            Shift Days
+                        </div>
+                        <p class="mb-3 text-muted">
+                            Shifts depends upon some <code>selected dates</code>, you can view the shift days on
+                            left/above.
+
+                        </p>
+                    {% else %}
+                        <div class="card-title">
+                            Regular Days
+                        </div>
+                        <p class="text-muted">
+                            Shifts are of regular type means each day is included as a shift day from <code>start
+                            data</code> to <code>end date</code>
+                        </p>
+                    {% endif %}
                 </div>
-            {% else %}
-                <div class="card">
-                    <div class="card-body border-bottom">
-                        <p class="mb-0 card-title"><b>Regular Shifts</b></p>
-                    </div>
-                    <div class="card-body border-bottom">
-                        Shifts are of regular type means each day is included as a shift day from <code>start data</code> to <code>end date</code>
-                    </div>
-                </div>
-            {% endif %}
+            </div>
+
         </div>
+
     </div>
 
 {% endblock %}
