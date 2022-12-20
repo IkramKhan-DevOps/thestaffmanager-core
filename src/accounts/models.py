@@ -12,6 +12,12 @@ from faker import Faker
 fake = Faker()
 
 
+"""
+python manage.py make migrations accounts -> apps
+python manage.py migrate 
+"""
+
+
 """ MAIN USER """
 
 
