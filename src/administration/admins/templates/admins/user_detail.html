@@ -38,12 +38,12 @@
 
     {# PPOWER HEAD -- ROW #}
     <div class="row mt-4">
-        <div class="col-sm-12">
+        <div class="col-sm-8">
             <div class="card">
                 <div class="card-body">
 
                     <div class="row">
-                        <div class="col">
+                        <div class="col-sm-6">
                             <table>
                                 <tr>
                                     <th>ID</th>
@@ -107,7 +107,7 @@
                             </table>
                         </div>
 
-                        <div class="col">
+                        <div class="col-sm-6">
                             <table>
                                 <tr class="">
                                     <th>Access</th>
@@ -138,6 +138,16 @@
                     </div>
 
                 </div>
+            </div>
+        </div>
+
+    <div class="col-sm-4">
+        <div class="card bg-warning-lt h-100">
+            <div class="card-header">
+                <b class="text-warning">Notes</b>
+            </div>
+            <div class="card-body">
+
             </div>
         </div>
     </div>
@@ -333,15 +343,234 @@
 
                         {# TAB2: expertise #}
                         <div class="tab-pane" id="tabs-expertise" role="tabpanel">
-                            <div>
-                                ...
+
+                            {# QUALIFICATION #}
+                            <div class="mb-4">
+                                <div class="text-right">
+                                    <a href="#"><b>+ Add Qualification</b></a>
+                                </div>
+                                {% if 1 %}
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Type</th>
+                                                <th>Certificate Number</th>
+                                                <th>Expiry Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for sub_object in '1234'|make_list %}
+                                                <tr>
+                                                    <td>#2627829</td>
+                                                    <td>Self Cerified</td>
+                                                    <td>C1383939</td>
+                                                    <td>2022-12-12</td>
+                                                    <td>
+                                                        <a href="#">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <a class="text-danger" href="#">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                    </div>
+                                {% endif %}
                             </div>
+
+                            {# TRAINING #}
+                            <div class="mb-4">
+                                <div class="text-right">
+                                    <a href="#"><b>+ Add Training</b></a>
+                                </div>
+                                {% if not 1 %}
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Type</th>
+                                                <th>Certificate Number</th>
+                                                <th>Expiry Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for sub_object in '1234'|make_list %}
+                                                <tr>
+                                                    <td>#2627829</td>
+                                                    <td>Self Cerified</td>
+                                                    <td>C1383939</td>
+                                                    <td>2022-12-12</td>
+                                                    <td>
+                                                        <a href="#">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <a class="text-danger" href="#">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            {# LNAGUAGE #}
+                            <div class="mb-4">
+                                <div class="text-right">
+                                    <a href="#"><b>+ Add Language</b></a>
+                                </div>
+                                {% if not 1 %}
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Type</th>
+                                                <th>Certificate Number</th>
+                                                <th>Expiry Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for sub_object in '1234'|make_list %}
+                                                <tr>
+                                                    <td>#2627829</td>
+                                                    <td>Self Cerified</td>
+                                                    <td>C1383939</td>
+                                                    <td>2022-12-12</td>
+                                                    <td>
+                                                        <a href="#">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <a class="text-danger" href="#">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                    </div>
+                                {% endif %}
+                            </div>
+
                         </div>
 
                         {# TAB2: Background #}
                         <div class="tab-pane" id="tabs-background" role="tabpanel">
-                            <div>
-                                ...
+                            {# EMPLOYMENT #}
+                            <div class="mb-4">
+                                <div class="text-right">
+                                    <a href="#"><b>+ Add Employment</b></a>
+                                </div>
+                                {% if 1 %}
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Type</th>
+                                                <th>Certificate Number</th>
+                                                <th>Expiry Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for sub_object in '1234'|make_list %}
+                                                <tr>
+                                                    <td>#2627829</td>
+                                                    <td>Self Cerified</td>
+                                                    <td>C1383939</td>
+                                                    <td>2022-12-12</td>
+                                                    <td>
+                                                        <a href="#">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <a class="text-danger" href="#">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                    </div>
+                                {% endif %}
+                            </div>
+
+                            {# EDUCATION #}
+                            <div class="mb-4">
+                                <div class="text-right">
+                                    <a href="#"><b>+ Add Education</b></a>
+                                </div>
+                                {% if not 1 %}
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Type</th>
+                                                <th>Certificate Number</th>
+                                                <th>Expiry Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for sub_object in '1234'|make_list %}
+                                                <tr>
+                                                    <td>#2627829</td>
+                                                    <td>Self Cerified</td>
+                                                    <td>C1383939</td>
+                                                    <td>2022-12-12</td>
+                                                    <td>
+                                                        <a href="#">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <a class="text-danger" href="#">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
 
@@ -415,8 +644,49 @@
 
                         {# TAB2: DOCS #}
                         <div class="tab-pane" id="tabs-docs" role="tabpanel">
-                            <div>
-                                ...
+                            {# EMPLOYMENT #}
+                            <div class="mb-4">
+                                <div class="text-right">
+                                    <a href="#"><b>+ Add Document</b></a>
+                                </div>
+                                {% if 1 %}
+                                    <div class="table-responsive">
+                                        <table class="table table-sm table-hover">
+                                            <thead class="thead-light">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Type</th>
+                                                <th>Certificate Number</th>
+                                                <th>Expiry Date</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for sub_object in '1234'|make_list %}
+                                                <tr>
+                                                    <td>#2627829</td>
+                                                    <td>Self Cerified</td>
+                                                    <td>C1383939</td>
+                                                    <td>2022-12-12</td>
+                                                    <td>
+                                                        <a href="#">
+                                                            <i class="fa fa-edit"></i>
+                                                        </a>
+                                                        <a class="text-danger" href="#">
+                                                            <i class="fa fa-trash"></i>
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% else %}
+                                    <div>
+                                        <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                    </div>
+                                {% endif %}
                             </div>
                         </div>
 
