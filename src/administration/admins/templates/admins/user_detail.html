@@ -86,7 +86,7 @@
                                 </tr>
                                 <tr>
                                     <th>Role</th>
-                                    <td>
+                                    <td>&roarr;
                                         {% if object.is_superuser %}
                                             <span class="badge bg-danger-lt">Admin</span>
                                         {% else %}
@@ -127,11 +127,11 @@
                                 </tr>
                                 <tr>
                                     <th>Created On</th>
-                                    <td class="text-muted"><cite>{{ object.date_joined }}</cite></td>
+                                    <td class="text-muted"><cite>&roarr; {{ object.date_joined }}</cite></td>
                                 </tr>
                                 <tr>
                                     <th>Last Login</th>
-                                    <td class="text-muted"><cite>{{ object.last_login }}</cite></td>
+                                    <td class="text-muted"><cite>&roarr; {{ object.last_login }}</cite></td>
                                 </tr>
                             </table>
                         </div>
@@ -141,13 +141,14 @@
             </div>
         </div>
 
-    <div class="col-sm-4">
-        <div class="card bg-warning-lt h-100">
-            <div class="card-header">
-                <b class="text-warning">Notes</b>
-            </div>
-            <div class="card-body">
+        <div class="col-sm-4">
+            <div class="card bg-warning-lt h-100">
+                <div class="card-header">
+                    <b class="text-warning">Notes</b>
+                </div>
+                <div class="card-body">
 
+                </div>
             </div>
         </div>
     </div>
@@ -160,7 +161,8 @@
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs nav-fill" data-bs-toggle="tabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a href="#tabs-details" class="nav-link active" data-bs-toggle="tab" aria-selected="true"
+                            <a href="#tabs-details" class="nav-link active" data-bs-toggle="tab"
+                               aria-selected="true"
                                role="tab">
                                 <i class="fa fa-home"></i>&nbsp;Details
                             </a>
