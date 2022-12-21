@@ -2,287 +2,434 @@
 {% load static %}
 
 {% block base_subtitle %}User Details{% endblock %}
-{% block base_subhead_heading %}User &rAarr; Details {% endblock %}
-{% block base_subhead_paragraph %}User detailed view{% endblock %}
-{% block base_subhead_button %}
-    <b>
-        <a class="" href="{% url 'admins:user-list' %}">
-            &larr; users
-        </a>
-    </b>
-    <b>
-        <a class="" href="{% url 'admins:user-update' object.pk %}">
-            <i class="fa fa-edit"></i> Edit
-        </a>
-    </b>
-    <b>
-        <a class="" href="{% url 'admins:user-password-reset' object.pk %}">
-            <i class="fa fa-user-secret"></i> Password
-        </a>
-    </b>
-{% endblock %}
-
 {% block base_content %}
 
-    <div class="row mb-4">
-        <div class="col-sm-8">
+    {# TOP HEAD -- BLINKING #}
+    <div class="row align-items-center">
+        <div class="col-auto">
+                <span class="status-indicator status-green status-indicator-animated">
+                  <span class="status-indicator-circle"></span>
+                  <span class="status-indicator-circle"></span>
+                  <span class="status-indicator-circle"></span>
+                </span>
+        </div>
+        <div class="col-auto">
+            <img class="rounded-circle" src="{% static 'required/images/no-image.jpg' %}" height="50">
+        </div>
+        <div class="col">
+            <h2 class="page-title">
+                {{ object.get_user_name }}
+            </h2>
+            <div class="text-muted">
+                <ul class="list-inline list-inline-dots mb-0">
+                    <li class="list-inline-item"><span class="text-green">Active</span></li>
+                    <li class="list-inline-item">Created On: {{ object.date_joined }}</li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-md-auto ms-auto d-print-none">
+            <div class="btn-list">
+                <a href="#" class="text-azure">
+                    <i class="fa fa-edit"></i> Edit
+                </a>
+            </div>
+        </div>
+    </div>
 
-            {# TOP PROFILE #}
-            <div class="card-body p-4 py-5 text-center">
+    {# PPOWER HEAD -- ROW #}
+    <div class="row mt-4">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
 
-                {# HEAD #}
-                <div class="col-sm-12">
-                    {% if not object.profile_image %}
-                        <span class="avatar avatar-xl mb-4 avatar-rounded">{{ object.get_name_code }}</span>
-                    {% else %}
-                        <span class="avatar avatar-xl mb-4 avatar-rounded"
-                              style="background-image: url({{ object.profile_image.url }})"></span>
-                    {% endif %}
-                    <h3 class="mb-0">
-                        {% if object.is_first_or_last_name %}
-                            {{ object.get_user_name }}
-                        {% else %}
-                            -
-                        {% endif %}
-                        <small class="text-muted">({{ object.username }})</small>
-                    </h3>
-                    <p class="text-muted mb-0">
-                        {% if object.email %}
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-mail" width="24"
-                                 height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-                                <polyline points="3 7 12 13 21 7"></polyline>
-                            </svg>
-                            <a href="mailto:{{ object.email }}">
-                                {{ object.email }}
-                            </a>
-                        {% endif %}
-                    </p>
-                    <p class="text-muted mb-0">
-                        {% if object.phone_number %}
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-phone"
-                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                 fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"></path>
-                            </svg>
-                            <a href="tel:{{ object.phone_number }}">
-                                {{ object.phone_number }}
-                            </a>
-                        {% endif %}
-                    </p>
-                    <p class="text-muted mb-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pennant" width="24"
-                             height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                             stroke-linecap="round" stroke-linejoin="round">
-                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                            <line x1="8" y1="21" x2="12" y2="21"></line>
-                            <line x1="10" y1="21" x2="10" y2="3"></line>
-                            <path d="M10 4l9 4l-9 4"></path>
-                        </svg>
-                        {{ object.date_joined }}
-                    </p>
-                    <p class="">
-                        {% if object.is_superuser %}
-                            <span class="badge bg-danger-lt">Admin</span>
-                        {% else %}
-                            {% if object.is_staff %}
-                                <span class="badge bg-purple-lt">
+                    <div class="row">
+                        <div class="col">
+                            <table>
+                                <tr>
+                                    <th>ID</th>
+                                    <td>&roarr; #{{ object.pk }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Username</th>
+                                    <td>&roarr; {{ object.username }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Full Name</th>
+                                    <td>
+                                        &roarr;
+                                        {% if object.is_first_or_last_name %}
+                                            {{ object.get_user_name }}
+                                        {% else %}
+                                            --
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Email</th>
+                                    <td>
+                                        {% if object.email %}
+                                            <a href="mailto:{{ object.email }}">&roarr; {{ object.email }}</a>
+                                        {% else %}
+                                            <a>&roarr; --</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Phone</th>
+                                    <td>
+                                        {% if object.phone_number %}
+                                            <a href="tel:{{ object.phone_number }}">&roarr; {{ object.phone_number }}</a>
+                                        {% else %}
+                                            <a>&roarr; --</a>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Role</th>
+                                    <td>
+                                        {% if object.is_superuser %}
+                                            <span class="badge bg-danger-lt">Admin</span>
+                                        {% else %}
+                                            {% if object.is_staff %}
+                                                <span class="badge bg-purple-lt">
                                                     Staff
                                                 </span>
-                            {% elif object.is_employee %}
-                                <b class="badge bg-success-lt">
-                                    Employee</b>
-                            {% else %}
-                                <b class="badge bg-warning-lt">
-                                    Undefined</b>
-                            {% endif %}
-                        {% endif %}
-                    </p>
+                                            {% elif object.is_employee %}
+                                                <b class="badge bg-success-lt">
+                                                    Employee</b>
+                                            {% else %}
+                                                <b class="badge bg-warning-lt">
+                                                    Undefined</b>
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col">
+                            <table>
+                                <tr class="">
+                                    <th>Access</th>
+                                    <td>
+                                        <label class="form-check form-switch mt-2">
+                                            <input class="form-check-input" type="checkbox" checked>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>2 Step Auth</th>
+                                    <td>
+                                        <label class="form-check form-switch mt-2">
+                                            <input class="form-check-input" type="checkbox" checked>
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Created On</th>
+                                    <td class="text-muted"><cite>{{ object.date_joined }}</cite></td>
+                                </tr>
+                                <tr>
+                                    <th>Last Login</th>
+                                    <td class="text-muted"><cite>{{ object.last_login }}</cite></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
                 </div>
             </div>
+        </div>
+    </div>
+
+    {# TABS AREA #}
+    <div class="row mt-4">
+        <div class="col-sm-12">
 
             <div class="card">
                 <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" role="tablist">
+                    <ul class="nav nav-tabs card-header-tabs nav-fill" data-bs-toggle="tabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <a href="#tabs-home-13" class="nav-link active" data-bs-toggle="tab" aria-selected="true"
-                               role="tab"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2" width="24" height="24"
-                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                     stroke-linecap="round" stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                    <path d="M3 12h4l3 8l4 -16l3 8h4"></path>
-                                </svg>
-                                Shifts</a>
+                            <a href="#tabs-details" class="nav-link active" data-bs-toggle="tab" aria-selected="true"
+                               role="tab">
+                                <i class="fa fa-home"></i>&nbsp;Details
+                            </a>
                         </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-employment" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                               role="tab" tabindex="-1">
+                                <i class="fa fa-briefcase"></i>&nbsp;Employment
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-expertise" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                               role="tab" tabindex="-1">
+                                <i class="fa fa-hammer"></i>&nbsp;Expertise
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-background" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                               role="tab" tabindex="-1">
+                                <i class="fa fa-history"></i>&nbsp;Background
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-hal" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                               role="tab" tabindex="-1">
+                                <i class="fa fa-heart"></i>&nbsp;Health and Look
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-docs" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                               role="tab" tabindex="-1">
+                                <i class="fa fa-pagelines"></i>&nbsp;Docs
+                            </a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#tabs-settings" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                               role="tab" tabindex="-1">
+                                <i class="fa fa-cogs"></i>
+                            </a>
+                        </li>
+
                     </ul>
                 </div>
                 <div class="card-body">
                     <div class="tab-content">
-                        <div class="tab-pane active show" id="tabs-home-13" role="tabpanel">
-                            <div>
-                                {% if shifts %}
 
-                                    <div class="table-responsive">
-                                        <table class="table table-hover">
-                                            <thead class="thead-light">
-                                            <tr>
-                                                <th>Type</th>
-                                                <th>Date</th>
-                                                <th>From</th>
-                                                <th>To</th>
-                                                <th>Client</th>
-                                                <th>-</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
+                        {# TAB1: details #}
+                        <div class="tab-pane active show" id="tabs-details" role="tabpanel">
+                            <div class="row">
 
-                                            {% for object in shifts %}
-                                                <tr>
-                                                    <td>
-                                                        {% if object.get_job_type_display == "Pattern" %}
-                                                            <span class="badge bg-purple-lt">{{ object.get_job_type_display }}</span>
-                                                        {% else %}
-                                                            <span class="badge bg-teal-lt">{{ object.get_job_type_display }}</span>
-                                                        {% endif %}
-                                                    </td>
-                                                    <td>{{ object.start_date }}-{{ object.end_date }}</td>
-                                                    <td>{{ object.start_time|date:"G:i"  }}</td>
-                                                    <td>{{ object.end_time|date:"G:i"  }}</td>
-                                                    <td>{{ object.client.name }}</td>
-                                                    <th>
-                                                        <a href="{% url 'admins:shift-detail' object.pk %}">
-                                                            <svg xmlns="http://www.w3.org/2000/svg"
-                                                                 class="icon icon-tabler icon-tabler-eye" width="24"
-                                                                 height="24"
-                                                                 viewBox="0 0 24 24" stroke-width="2"
-                                                                 stroke="currentColor" fill="none"
-                                                                 stroke-linecap="round" stroke-linejoin="round">
-                                                                <path stroke="none" d="M0 0h24v24H0z"
-                                                                      fill="none"></path>
-                                                                <circle cx="12" cy="12" r="2"></circle>
-                                                                <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
-                                                            </svg>
-                                                        </a>
-                                                    </th>
-                                                </tr>
-                                            {% endfor %}
+                                {# LEFT #}
+                                <div class="col-sm-6">
+                                    <dl class="row">
+                                        <div class="hr-text">
+                                            <span>Personal Details</span>
+                                        </div>
+
+                                        <dt class="col-5">Gender:</dt>
+                                        <dd class="col-7">Male</dd>
+                                        <dt class="col-5">Employee ID:</dt>
+                                        <dd class="col-7">#6217176</dd>
+                                        <dt class="col-5">Type:</dt>
+                                        <dd class="col-7">Holy Knight</dd>
+                                        <dt class="col-5">Nationality:</dt>
+                                        <dd class="col-7">Spartan</dd>
+                                        <dt class="col-5">POB:</dt>
+                                        <dd class="col-7">Sparta</dd>
+
+                                        <dt class="col-5">Date of Birth:</dt>
+                                        <dd class="col-7">01/01/1000 BC</dd>
+                                        <dt class="col-5">City of Birth:</dt>
+                                        <dd class="col-7">Sparta</dd>
+                                        <dt class="col-5">Country of Birth:</dt>
+                                        <dd class="col-7">Greece</dd>
 
 
-                                            </tbody>
-                                        </table>
+                                        <div class="hr-text">
+                                            <span>contact Details</span>
+                                        </div>
+
+                                        <dt class="col-5">Extra contact:</dt>
+                                        <dd class="col-7">+92000000000</dd>
+                                        <dt class="col-5">Address:</dt>
+                                        <dd class="col-7">Spartans Home #1, battles of 200 grounds</dd>
+                                        <dt class="col-5">City/Town:</dt>
+                                        <dd class="col-7">sparta</dd>
+                                        <dt class="col-5">Post Code:</dt>
+                                        <dd class="col-7">010101</dd>
+                                        <dt class="col-5">Country:</dt>
+                                        <dd class="col-7">Greek</dd>
+                                    </dl>
+                                </div>
+
+                                {# RIGHT #}
+                                <div class="col-sm-6">
+                                    <div class="hr-text">
+                                        <span>Departments</span>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-lime-lt">Knight</span>
+                                        <span class="badge bg-lime-lt">Sword</span>
+                                        <span class="badge bg-lime-lt">Arrow</span>
+                                        <span class="badge bg-primary-lt">+ Add more</span>
                                     </div>
 
-                                {% else %}
-                                    <p class="mb-0 text-danger">
-                                        <b>
-                                            <i class="fa fa-exclamation-circle"></i>
-                                            No shifts available
-                                        </b>
-                                    </p>
-                                {% endif %}
+                                    <div class="hr-text">
+                                        <span>Sites</span>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-danger-lt">Knight</span>
+                                        <span class="badge bg-danger-lt">Sword</span>
+                                        <span class="badge bg-danger-lt">Arrow</span>
+                                        <span class="badge bg-danger-lt">Siege</span>
+                                        <span class="badge bg-danger-lt">Castle</span>
+                                        <span class="badge bg-primary-lt">+ Add more</span>
+                                    </div>
+
+                                    <div class="hr-text">
+                                        <span>Positions</span>
+                                    </div>
+                                    <div>
+                                        <span class="badge bg-cyan-lt">King</span>
+                                        <span class="badge bg-cyan-lt">Queen</span>
+                                        <span class="badge bg-cyan-lt">General</span>
+                                        <span class="badge bg-cyan-lt">Clone</span>
+                                        <span class="badge bg-cyan-lt">Soldier</span>
+                                        <span class="badge bg-cyan-lt">Judge</span>
+                                        <span class="badge bg-primary-lt">+ Add more</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        {# TAB2: employment #}
+                        <div class="tab-pane" id="tabs-employment" role="tabpanel">
+                            <div class="row">
+                                {# LEFT #}
+                                <div class="col-sm-6">
+                                    <dl class="row">
+                                        <div class="hr-text">
+                                            <span>Personal Details</span>
+                                        </div>
+
+                                        <dt class="col-5">Gender:</dt>
+                                        <dd class="col-7">Male</dd>
+                                        <dt class="col-5">Employee ID:</dt>
+                                        <dd class="col-7">#6217176</dd>
+                                        <dt class="col-5">Type:</dt>
+                                        <dd class="col-7">Holy Knight</dd>
+                                        <dt class="col-5">Nationality:</dt>
+                                        <dd class="col-7">Spartan</dd>
+                                        <dt class="col-5">POB:</dt>
+                                        <dd class="col-7">Sparta</dd>
+
+                                    </dl>
+                                </div>
+
+                                {# RIGHT #}
+                                <div class="col-sm-6">
+                                    <div class="row">
+                                        <div class="hr-text">
+                                            <span>contact Details</span>
+                                        </div>
+
+                                        <dt class="col-5">Extra contact:</dt>
+                                        <dd class="col-7">+92000000000</dd>
+                                        <dt class="col-5">Address:</dt>
+                                        <dd class="col-7">Spartans Home #1, battles of 200 grounds</dd>
+                                        <dt class="col-5">City/Town:</dt>
+                                        <dd class="col-7">sparta</dd>
+                                        <dt class="col-5">Post Code:</dt>
+                                        <dd class="col-7">010101</dd>
+                                        <dt class="col-5">Country:</dt>
+                                        <dd class="col-7">Greek</dd>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        {# TAB2: expertise #}
+                        <div class="tab-pane" id="tabs-expertise" role="tabpanel">
+                            <div>
+                                ...
+                            </div>
+                        </div>
+
+                        {# TAB2: Background #}
+                        <div class="tab-pane" id="tabs-background" role="tabpanel">
+                            <div>
+                                ...
+                            </div>
+                        </div>
+
+                        {# TAB2: HAL #}
+                        <div class="tab-pane" id="tabs-hal" role="tabpanel">
+
+                            <div class="row">
+                                {# LEFT #}
+                                <div class="col-sm-6">
+                                    <dl class="row">
+                                        <div class="hr-text">
+                                            <span>Appearance Details</span>
+                                        </div>
+
+                                        <dt class="col-5">Gender:</dt>
+                                        <dd class="col-7">Male</dd>
+                                        <dt class="col-5">Employee ID:</dt>
+                                        <dd class="col-7">#6217176</dd>
+                                        <dt class="col-5">Type:</dt>
+                                        <dd class="col-7">Holy Knight</dd>
+                                        <dt class="col-5">Nationality:</dt>
+                                        <dd class="col-7">Spartan</dd>
+                                        <dt class="col-5">POB:</dt>
+                                        <dd class="col-7">Sparta</dd>
+
+                                        <dt class="col-5 mt-4">Gender:</dt>
+                                        <dd class="col-7 mt-4">Male</dd>
+                                        <dt class="col-5">Employee ID:</dt>
+                                        <dd class="col-7">#6217176</dd>
+                                        <dt class="col-5">Type:</dt>
+                                        <dd class="col-7">Holy Knight</dd>
+                                        <dt class="col-5">Nationality:</dt>
+                                        <dd class="col-7">Spartan</dd>
+                                        <dt class="col-5">POB:</dt>
+                                        <dd class="col-7">Sparta</dd>
+
+                                        <dt class="col-5 mt-4">Gender:</dt>
+                                        <dd class="col-7 mt-4">Male</dd>
+                                        <dt class="col-5">Employee ID:</dt>
+                                        <dd class="col-7">#6217176</dd>
+                                        <dt class="col-5">Type:</dt>
+                                        <dd class="col-7">Holy Knight</dd>
+                                        <dt class="col-5">Nationality:</dt>
+                                        <dd class="col-7">Spartan</dd>
+                                        <dt class="col-5">POB:</dt>
+                                        <dd class="col-7">Sparta</dd>
+                                    </dl>
+                                </div>
+
+                                {# RIGHT #}
+                                <div class="col-sm-6">
+                                    <dl class="row">
+                                        <div class="hr-text">
+                                            <span>Health Details</span>
+                                        </div>
+                                        <dt class="col-5">Extra contact:</dt>
+                                        <dd class="col-7">+92000000000</dd>
+                                        <dt class="col-5">Address:</dt>
+                                        <dd class="col-7">Spartans Home #1, battles of 200 grounds</dd>
+                                        <dt class="col-5">City/Town:</dt>
+                                        <dd class="col-7">sparta</dd>
+                                        <dt class="col-5">Post Code:</dt>
+                                        <dd class="col-7">010101</dd>
+                                        <dt class="col-5">Country:</dt>
+                                        <dd class="col-7">Greek</dd>
+                                    </dl>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        {# TAB2: DOCS #}
+                        <div class="tab-pane" id="tabs-docs" role="tabpanel">
+                            <div>
+                                ...
+                            </div>
+                        </div>
+
+                        {# TAB2: SEttings #}
+                        <div class="tab-pane" id="tabs-settings" role="tabpanel">
+                            <div>
+                                ...
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-        </div>
-        <div class="col-sm-4">
-            {% if object.is_employee %}
-
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="card-title">More information</div>
-                        <div class="mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24"
-                                 height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <path d="M3 19a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path>
-                                <path d="M3 6a9 9 0 0 1 9 0a9 9 0 0 1 9 0"></path>
-                                <line x1="3" y1="6" x2="3" y2="19"></line>
-                                <line x1="12" y1="6" x2="12" y2="19"></line>
-                                <line x1="21" y1="6" x2="21" y2="19"></line>
-                            </svg>
-                            Employee ID: <strong>#{{ employee.employee_id }}</strong>
-                        </div>
-                        <div class="mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted" width="24"
-                                 height="24"
-                                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                 stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <rect x="3" y="7" width="18" height="13" rx="2"></rect>
-                                <path d="M8 7v-2a2 2 0 0 1 2 -2h4a2 2 0 0 1 2 2v2"></path>
-                                <line x1="12" y1="12" x2="12" y2="12.01"></line>
-                                <path d="M3 13a20 20 0 0 0 18 0"></path>
-                            </svg>
-                            Type: <strong>{{ employee.get_type_display }}</strong>
-                        </div>
-                        <div class="mb-2">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon me-2 text-muted"
-                                 width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                 fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                <circle cx="12" cy="11" r="3"></circle>
-                                <path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"></path>
-                            </svg>
-                            <strong>{{ employee.address }}</strong>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card mb-2">
-                    <div class="card-body">
-                        <div class="card-title">Documents</div>
-                        <div class="mb-2">
-                            {% if object.get_user_documents %}
-                                {% for doc in object.get_user_documents %}
-
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-news"
-                                         width="24"
-                                         height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                         fill="none"
-                                         stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <path d="M16 6h3a1 1 0 0 1 1 1v11a2 2 0 0 1 -4 0v-13a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1v12a3 3 0 0 0 3 3h11"></path>
-                                        <line x1="8" y1="8" x2="12" y2="8"></line>
-                                        <line x1="8" y1="12" x2="12" y2="12"></line>
-                                        <line x1="8" y1="16" x2="12" y2="16"></line>
-                                    </svg>
-                                    <a href="{{ doc.document_file.url }}" target="_blank">
-                                        {{ doc.document_name }}
-                                    </a>
-                                {% endfor %}
-
-                            {% else %}
-                                <p class="mb-0 text-danger">
-                                    <b>No documents available</b>
-                                </p>
-                            {% endif %}
-                        </div>
-                    </div>
-                </div>
-
-            {% endif %}
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="card-title">Delete User</div>
-                    <p class="mb-2 text-muted">
-                        Make sure you want to delete this user permanently, once deleted there is
-                        no way to retrieve user again.
-                    </p>
-                    <a class="btn btn-danger">
-                        Delete User
-                    </a>
-                </div>
-            </div>
         </div>
     </div>
 
