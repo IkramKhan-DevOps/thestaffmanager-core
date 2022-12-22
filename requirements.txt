@@ -11,4 +11,5 @@ django-resized
 django-filter
 python-decouple
 django-environ
+django-widget-tweaks
 # python -m pip install --upgrade Pillow >>> install pillow with this

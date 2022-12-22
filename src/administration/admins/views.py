@@ -9,11 +9,12 @@ from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
-    CreateView)
+    CreateView, FormView)
+from jsonview.decorators import json_view
 
 from .bll import shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
-from .forms import EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm
+from .forms import EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm, CountryForm
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country,
 )
@@ -142,6 +143,47 @@ class PositionDeleteView(DeleteView):
 @method_decorator(admin_protected, name='dispatch')
 class CountryListView(ListView):
     queryset = Country.objects.all()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CountryListView, self).get_context_data(**kwargs)
+        context['form'] = CountryForm()
+        return context
+
+
+from django.template.context_processors import csrf
+from crispy_forms.utils import render_crispy_form
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class CountryJsonView(View):
+
+    def post(self, request, pk=None, *args, **kwargs):
+
+        # IF Request has ID ==> MEANS UPDATE OR DELETE
+        if pk:
+            instance = get_object_or_404(Country, pk=pk)
+
+            if request.GET.get('action') and request.GET.get('action') == 'DELETE':
+                instance.delete()
+                print("delete")
+                return {'success': True}
+            else:
+                form = CountryForm(instance=instance, data=request.POST)
+
+        # IF request doesn't have any ID
+        else:
+            form = CountryForm(request.POST or None)
+
+        # IF Forms are valid
+        if form.is_valid():
+            form.save(commit=True)
+            return {'success': True}
+
+        # Failure Response
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
+        return {'success': False, 'form_html': form_html}
 
 
 @method_decorator(admin_protected, name='dispatch')

@@ -3,6 +3,9 @@ from django.forms import ModelForm
 from src.accounts.models import Employee, UserDocument
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
+
+from src.administration.admins.models import Country
+
 User = get_user_model()
 
 
@@ -57,3 +60,9 @@ class StaffUserCreateForm(UserCreationForm):
             'username', 'email', 'password1', 'password2'
         ]
 
+
+class CountryForm(ModelForm):
+
+    class Meta:
+        model = Country
+        fields = '__all__'

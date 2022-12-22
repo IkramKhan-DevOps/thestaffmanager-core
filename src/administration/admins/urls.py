@@ -10,7 +10,8 @@ from .views import (
     ShiftDayUpdateView, ShiftDayDeleteView,
     ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
     ShiftListView, ShiftDetailView, ShiftCustomCreateView,
-    CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView
+    CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView,
+    CountryJsonView
 )
 
 app_name = 'admins'
@@ -90,5 +91,7 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('ccs/', ShiftCustomCreateView.as_view(), name="ccs")
+    path('json/country/add/', CountryJsonView.as_view(), name='json_country_add'),
+    path('json/country/<int:pk>/change/', CountryJsonView.as_view(), name='json_country_update'),
+    path('json/country/<int:pk>/delete/', CountryJsonView.as_view(), name='json_country_delete'),
 ]

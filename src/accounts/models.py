@@ -390,8 +390,9 @@ def create_user_save(sender, instance, created, **kwargs):
     :return:
     """
     # IF USER IS NOT EMPLOYEE -- NOW
-    if not instance.is_employee and instance.employee:
-        instance.employee.delete()
+    if not instance.is_employee:
+        if Employee.objects.filter(user=instance):
+            instance.employee.delete()
 
     # IF USER IS NOT EMPLOYEE -- NOW
     else:
