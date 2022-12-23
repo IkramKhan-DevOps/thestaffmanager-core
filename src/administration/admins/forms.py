@@ -1,6 +1,10 @@
 from django.forms import ModelForm
 
-from src.accounts.models import Employee, UserDocument, EmployeeWork, EmployeeIdPass, EmployeeHealth, EmployeeAppearance
+from src.accounts.models import (
+    Employee, UserDocument, EmployeeWork, EmployeeIdPass, EmployeeHealth, EmployeeAppearance,
+    EmployeeContract, EmployeeDocument, EmployeeEducation, EmployeeEmployment, EmployeeQualification, EmployeeTraining,
+    EmployeeLanguageSkill, EmployeeEmergencyContact
+)
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
@@ -101,3 +105,53 @@ class EMPMGMTEmployeeAppearanceForm(ModelForm):
         model = EmployeeAppearance
         fields = '__all__'
 
+
+""" ------ """
+
+
+class EMPMGMTEmployeeContractForm(ModelForm):
+    class Meta:
+        model = EmployeeContract
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeDocumentForm(ModelForm):
+    class Meta:
+        model = EmployeeDocument
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeEducationForm(ModelForm):
+    class Meta:
+        model = EmployeeEducation
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeEmploymentForm(ModelForm):
+    class Meta:
+        model = EmployeeEmployment
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeQualificationForm(ModelForm):
+    class Meta:
+        model = EmployeeQualification
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeTrainingForm(ModelForm):
+    class Meta:
+        model = EmployeeTraining
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeLanguageSkillForm(ModelForm):
+    class Meta:
+        model = EmployeeLanguageSkill
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeEmergencyContactForm(ModelForm):
+    class Meta:
+        model = EmployeeEmergencyContact
+        fields = '__all__'

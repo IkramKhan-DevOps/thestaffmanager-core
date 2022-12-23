@@ -12,4 +12,5 @@ django-filter
 python-decouple
 django-environ
 django-widget-tweaks
+django-jsonview
 # python -m pip install --upgrade Pillow >>> install pillow with this

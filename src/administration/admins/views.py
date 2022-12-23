@@ -16,8 +16,13 @@ from .bll import shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
 from .forms import (
     EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm, CountryForm,
+
     EMPMGMTEmployeeForm, EMPMGMTEmployeeWorkForm, EMPMGMTEmployeeAppearanceForm, EMPMGMTEmployeeHealthForm,
-    EMPMGMTEmployeeIdPassForm
+    EMPMGMTEmployeeIdPassForm,
+
+    EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
+    EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
+    EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm
 )
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country,
@@ -314,7 +319,14 @@ class UserDetailView(DetailView):
             context['employee_language_skills'] = EmployeeLanguageSkill.objects.filter(employee=employee)
             context['employee_emergency_contacts'] = EmployeeEmergencyContact.objects.filter(employee=employee)
 
-            context['employee_form'] =
+            context['employee_contracts'] = EMPMGMTEmployeeContractForm()
+            context['employee_docs'] = EMPMGMTEmployeeEducationForm()
+            context['employee_educations'] = EMPMGMTEmployeeEducationForm()
+            context['employee_employments'] = EMPMGMTEmployeeQualificationForm()
+            context['employee_qualifications'] = EMPMGMTEmployeeQualificationForm()
+            context['employee_trainings'] = EMPMGMTEmployeeTrainingForm()
+            context['employee_language_skills'] = EMPMGMTEmployeeLanguageSkillForm()
+            context['employee_emergency_contacts'] = EMPMGMTEmployeeEmergencyContactForm()
 
         return context
 
