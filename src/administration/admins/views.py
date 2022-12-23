@@ -179,7 +179,6 @@ class CountryJsonView(View):
 
             if request.GET.get('action') and request.GET.get('action') == 'DELETE':
                 instance.delete()
-                print("delete")
                 return {'success': True}
             else:
                 form = CountryForm(instance=instance, data=request.POST)

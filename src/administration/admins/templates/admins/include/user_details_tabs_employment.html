@@ -26,7 +26,9 @@
             {# LNAGUAGE #}
             <div class="mb-4">
                 <div class="text-right">
-                    <a href="#"><b>+ Add Contract</b></a>
+                    <button class="btn btn-sm- btn-primary" id="btn-employee-employment-contract-add">
+                        + Add Contract
+                    </button>
                 </div>
                 {% if employee_contracts %}
                     <div class="table-responsive">
@@ -94,12 +96,41 @@
     </div>
 </div>
 
+<div class="modal" tabindex="-1" id="modal-employee-employment-contract-add">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employment Details Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_contracts_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="model-from-submit-btn" data-action="" data-param="" data-method=""
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
 
         let modal_employee_employment_edit =  $('#modal-employee-employment-edit')
         let btn_employee_employment_edit =  $('#btn-employee-employment-edit')
         btn_employee_employment_edit.click(() => modal_employee_employment_edit.modal('show'));
+
+        let btn_employee_employment_contract_add = $('#btn-employee-employment-contract-add')
+        let modal_employee_employment_contract_add = $('#modal-employee-employment-contract-add')
+        btn_employee_employment_contract_add.click(() => modal_employee_employment_contract_add.modal('show'))
 
     });
 </script>
