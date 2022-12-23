@@ -1,0 +1,107 @@
+{% load static %}
+
+<div class="tab-pane" id="tabs-background" role="tabpanel">
+                        {# EMPLOYMENT #}
+                        <div class="mb-4">
+                            <div class="text-right">
+                                <a href="#"><b>+ Add Employment</b></a>
+                            </div>
+                            {% if employee_employments %}
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>Employer</th>
+                                            <th>Position</th>
+                                            <th>Description</th>
+                                            <th>Contact Person</th>
+                                            <th>Contact Phone</th>
+                                            <th>Date From</th>
+                                            <th>Date To</th>
+                                            <th>Reason For Leaving</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for oobject in employee_employments %}
+                                            <tr>
+                                                <td>{{ oobject.employer }}</td>
+                                                <td>{{ oobject.position }}</td>
+                                                <td>{{ oobject.description }}</td>
+                                                <td>{{ oobject.contact_person }}</td>
+                                                <td>{{ oobject.contact_phone }}</td>
+                                                <td>{{ oobject.date_form }}</td>
+                                                <td>{{ oobject.date_to }}</td>
+                                                <td>{{ oobject.reason_for_leaving }}</td>
+                                                <td>
+                                                    <a href="#">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a class="text-danger" href="#">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div>
+                                    <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {# EDUCATION #}
+                        <div class="mb-4">
+                            <div class="text-right">
+                                <a href="#"><b>+ Add Education</b></a>
+                            </div>
+                            {% if not 1 %}
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>Institution</th>
+                                            <th>Speciality</th>
+                                            <th>Degree Obtained</th>
+                                            <th>City</th>
+                                            <th>Country</th>
+                                            <th>Date Form</th>
+                                            <th>Dte To</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for oobject in '1234'|make_list %}
+                                            <tr>
+                                                <td>{{ oobject.institution }}</td>
+                                                <td>{{ oobject.speciality }}</td>
+                                                <td>{{ oobject.degree_obtained }}</td>
+                                                <td>{{ oobject.city }}</td>
+                                                <td>{{ oobject.country }}</td>
+                                                <td>{{ oobject.date_form }}</td>
+                                                <td>{{ oobject.date_to }}</td>
+                                                <td>
+                                                    <a href="#">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a class="text-danger" href="#">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div>
+                                    <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>

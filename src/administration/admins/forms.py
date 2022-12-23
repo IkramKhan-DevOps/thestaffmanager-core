@@ -1,6 +1,6 @@
 from django.forms import ModelForm
 
-from src.accounts.models import Employee, UserDocument
+from src.accounts.models import Employee, UserDocument, EmployeeWork, EmployeeIdPass, EmployeeHealth, EmployeeAppearance
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
@@ -66,3 +66,38 @@ class CountryForm(ModelForm):
     class Meta:
         model = Country
         fields = '__all__'
+
+
+""" EMPLOYEE FORMS ALL """
+
+
+class EMPMGMTEmployeeForm(ModelForm):
+
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeWorkForm(ModelForm):
+    class Meta:
+        model = EmployeeWork
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeIdPassForm(ModelForm):
+    class Meta:
+        model = EmployeeIdPass
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeHealthForm(ModelForm):
+    class Meta:
+        model = EmployeeHealth
+        fields = '__all__'
+
+
+class EMPMGMTEmployeeAppearanceForm(ModelForm):
+    class Meta:
+        model = EmployeeAppearance
+        fields = '__all__'
+

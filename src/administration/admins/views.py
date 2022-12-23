@@ -14,14 +14,23 @@ from jsonview.decorators import json_view
 
 from .bll import shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
-from .forms import EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm, CountryForm
+from .forms import (
+    EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm, CountryForm,
+    EMPMGMTEmployeeForm, EMPMGMTEmployeeWorkForm, EMPMGMTEmployeeAppearanceForm, EMPMGMTEmployeeHealthForm,
+    EMPMGMTEmployeeIdPassForm
+)
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country,
 )
 import datetime
 
 from src.accounts.decorators import admin_protected
-from src.accounts.models import UserDocument, User
+from src.accounts.models import (
+    UserDocument, User,
+    EmployeeIdPass, EmployeeWork, EmployeeHealth, EmployeeAppearance,
+    EmployeeContract, EmployeeDocument, EmployeeEducation, EmployeeEmployment, EmployeeQualification,
+    EmployeeTraining, EmployeeLanguageSkill, EmployeeEmergencyContact
+)
 
 """ MAIN """
 
@@ -282,9 +291,31 @@ class UserDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
         if self.object.is_employee:
-            context['shifts'] = Shift.objects.filter(employee__user=self.object)
-            context['docs'] = UserDocument.objects.filter(user=self.object)
-            context['employee'] = self.object.get_employee_profile()
+            employee = self.object.get_employee_profile()
+
+            context['employee'] = employee
+            context['employee_id'] = EmployeeIdPass.objects.get_or_create(employee=employee)
+            context['employee_work'] = EmployeeWork.objects.get_or_create(employee=employee)
+            context['employee_health'] = EmployeeHealth.objects.get_or_create(employee=employee)
+            context['employee_appearance'] = EmployeeAppearance.objects.get_or_create(employee=employee)
+
+            context['employee'] = EMPMGMTEmployeeForm(instance=self.object)
+            context['employee_id'] = EMPMGMTEmployeeIdPassForm(instance=self.object)
+            context['employee_work'] = EMPMGMTEmployeeWorkForm(instance=self.object)
+            context['employee_health'] = EMPMGMTEmployeeHealthForm(instance=self.object)
+            context['employee_appearance'] = EMPMGMTEmployeeAppearanceForm(instance=self.object)
+
+            context['employee_contracts'] = EmployeeContract.objects.filter(employee=employee)
+            context['employee_docs'] = EmployeeDocument.objects.filter(employee=employee)
+            context['employee_educations'] = EmployeeEducation.objects.filter(employee=employee)
+            context['employee_employments'] = EmployeeEmployment.objects.filter(employee=employee)
+            context['employee_qualifications'] = EmployeeQualification.objects.filter(employee=employee)
+            context['employee_trainings'] = EmployeeTraining.objects.filter(employee=employee)
+            context['employee_language_skills'] = EmployeeLanguageSkill.objects.filter(employee=employee)
+            context['employee_emergency_contacts'] = EmployeeEmergencyContact.objects.filter(employee=employee)
+
+            context['employee_form'] =
+
         return context
 
 
@@ -595,5 +626,3 @@ class ReportTypeUpdateView(UpdateView):
 class ReportTypeDeleteView(DeleteView):
     model = ReportType
     success_url = reverse_lazy('admins:report-type-list')
-
-

@@ -185,16 +185,16 @@ class EmployeeIdPass(models.Model):
 
 class EmployeeWork(models.Model):
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE)
-    NI_Number = models.CharField(max_length=255, null=True, blank=True)
+    NI_number = models.CharField(max_length=255, null=True, blank=True)
     UTR = models.CharField(max_length=255, null=True, blank=True)
-    Tax_Code = models.CharField(null=True, blank=True, max_length=255)
+    tax_code = models.CharField(null=True, blank=True, max_length=255)
     visa_required = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-employee']
 
     def __str__(self):
-        return f" {self.employee.user.get_user_name()} NI: {self.NI_Number}"
+        return f"{self.employee.user.get_user_name()} NI: {self.NI_number}"
 
 
 class EmployeeEmergencyContact(models.Model):
@@ -358,12 +358,13 @@ class EmployeeAppearance(models.Model):
     waist = models.FloatField(null=True, blank=True)
     chest = models.FloatField(null=True, blank=True)
     hips = models.FloatField(null=True, blank=True)
-    inside_leg_collar = models.FloatField(null=True, blank=True)
+    inside_leg = models.FloatField(null=True, blank=True)
+    collar = models.FloatField(null=True, blank=True)
 
     hair_color = models.CharField(max_length=100, null=True, blank=True)
     eye_color = models.CharField(max_length=100, null=True, blank=True)
     hair_length = models.FloatField(null=True, blank=True)
-    Facial_hair = models.CharField(max_length=100, null=True, blank=True)
+    facial_hair = models.CharField(max_length=100, null=True, blank=True)
 
     t_shirt_size = models.FloatField(null=True, blank=True)
     jacket_size = models.FloatField(null=True, blank=True)

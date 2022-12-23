@@ -1,0 +1,138 @@
+{% load static %}
+
+<div class="tab-pane" id="tabs-expertise" role="tabpanel">
+
+                        {# QUALIFICATION #}
+                        <div class="mb-4">
+                            <div class="text-right">
+                                <a href="#"><b>+ Add Qualification</b></a>
+                            </div>
+                            {% if employee_qualifications %}
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Type</th>
+                                            <th>Certificate Number</th>
+                                            <th>Expiry Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for oobject in employee_qualifications %}
+                                            <tr>
+                                                <td>{{ oobject.pk }}</td>
+                                                <td>{{ oobject.get_type_display }}</td>
+                                                <td>{{ oobject.certificate_number }}</td>
+                                                <td>{{ oobject.expiry_date }}</td>
+                                                <td>
+                                                    <a href="#">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a class="text-danger" href="#">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div>
+                                    <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {# TRAINING #}
+                        <div class="mb-4">
+                            <div class="text-right">
+                                <a href="#"><b>+ Add Training</b></a>
+                            </div>
+                            {% if employee_trainings %}
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Provider</th>
+                                            <th>Course</th>
+                                            <th>Start Date</th>
+                                            <th>End Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for oobject in employee_trainings %}
+                                            <tr>
+                                                <td>#{{ oobject.id }}</td>
+                                                <td>{{ oobject.provider }}</td>
+                                                <td>{{ oobject.course }}</td>
+                                                <td>{{ oobject.start_date }}</td>
+                                                <td>{{ oobject.end_date }}</td>
+                                                <td>
+                                                    <a href="#">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a class="text-danger" href="#">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div>
+                                    <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        {# LNAGUAGE #}
+                        <div class="mb-4">
+                            <div class="text-right">
+                                <a href="#"><b>+ Add Language</b></a>
+                            </div>
+                            {% if employee_language_skills %}
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover">
+                                        <thead class="thead-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Level</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for oobject in employee_language_skills %}
+                                            <tr>
+                                                <td>{{ oobject.name }}</td>
+                                                <td>{{ oobject.level }}</td>
+                                                <td>
+                                                    <a href="#">
+                                                        <i class="fa fa-edit"></i>
+                                                    </a>
+                                                    <a class="text-danger" href="#">
+                                                        <i class="fa fa-trash"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <div>
+                                    <p class="mb-0 text-danger"><b>Information not available</b></p>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
