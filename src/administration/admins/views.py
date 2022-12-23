@@ -304,11 +304,11 @@ class UserDetailView(DetailView):
             context['employee_health'] = EmployeeHealth.objects.get_or_create(employee=employee)
             context['employee_appearance'] = EmployeeAppearance.objects.get_or_create(employee=employee)
 
-            context['employee'] = EMPMGMTEmployeeForm(instance=self.object)
-            context['employee_id'] = EMPMGMTEmployeeIdPassForm(instance=self.object)
-            context['employee_work'] = EMPMGMTEmployeeWorkForm(instance=self.object)
-            context['employee_health'] = EMPMGMTEmployeeHealthForm(instance=self.object)
-            context['employee_appearance'] = EMPMGMTEmployeeAppearanceForm(instance=self.object)
+            context['employee_form'] = EMPMGMTEmployeeForm(instance=self.object)
+            context['employee_id_form'] = EMPMGMTEmployeeIdPassForm(instance=self.object)
+            context['employee_work_form'] = EMPMGMTEmployeeWorkForm(instance=self.object)
+            context['employee_health_form'] = EMPMGMTEmployeeHealthForm(instance=self.object)
+            context['employee_appearance_form'] = EMPMGMTEmployeeAppearanceForm(instance=self.object)
 
             context['employee_contracts'] = EmployeeContract.objects.filter(employee=employee)
             context['employee_docs'] = EmployeeDocument.objects.filter(employee=employee)
@@ -319,14 +319,14 @@ class UserDetailView(DetailView):
             context['employee_language_skills'] = EmployeeLanguageSkill.objects.filter(employee=employee)
             context['employee_emergency_contacts'] = EmployeeEmergencyContact.objects.filter(employee=employee)
 
-            context['employee_contracts'] = EMPMGMTEmployeeContractForm()
-            context['employee_docs'] = EMPMGMTEmployeeEducationForm()
-            context['employee_educations'] = EMPMGMTEmployeeEducationForm()
-            context['employee_employments'] = EMPMGMTEmployeeQualificationForm()
-            context['employee_qualifications'] = EMPMGMTEmployeeQualificationForm()
-            context['employee_trainings'] = EMPMGMTEmployeeTrainingForm()
-            context['employee_language_skills'] = EMPMGMTEmployeeLanguageSkillForm()
-            context['employee_emergency_contacts'] = EMPMGMTEmployeeEmergencyContactForm()
+            context['employee_contracts_form'] = EMPMGMTEmployeeContractForm()
+            context['employee_docs_form'] = EMPMGMTEmployeeEducationForm()
+            context['employee_educations_form'] = EMPMGMTEmployeeEducationForm()
+            context['employee_employments_form'] = EMPMGMTEmployeeQualificationForm()
+            context['employee_qualifications_form'] = EMPMGMTEmployeeQualificationForm()
+            context['employee_trainings_form'] = EMPMGMTEmployeeTrainingForm()
+            context['employee_language_skills_form'] = EMPMGMTEmployeeLanguageSkillForm()
+            context['employee_emergency_contacts_form'] = EMPMGMTEmployeeEmergencyContactForm()
 
         return context
 

@@ -185,8 +185,8 @@ class EmployeeIdPass(models.Model):
 
 class EmployeeWork(models.Model):
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE)
-    NI_number = models.CharField(max_length=255, null=True, blank=True)
-    UTR = models.CharField(max_length=255, null=True, blank=True)
+    ni_number = models.CharField(max_length=255, null=True, blank=True)
+    utr = models.CharField(max_length=255, null=True, blank=True)
     tax_code = models.CharField(null=True, blank=True, max_length=255)
     visa_required = models.BooleanField(default=False)
 

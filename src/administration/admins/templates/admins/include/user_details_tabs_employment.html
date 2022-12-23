@@ -1,2 +1,105 @@
 {% load static %}
+{% load crispy_forms_tags %}
 
+{# TAB2: employment #}
+<div class="tab-pane" id="tabs-employment" role="tabpanel">
+    <div class="row">
+        {# LEFT #}
+        <div class="col-sm-6">
+            <dl class="row">
+                <dt class="col-5">NI number</dt>
+                <dd class="col-7">{{ employee_work.ni_number }}</dd>
+                <dt class="col-5">UTR</dt>
+                <dd class="col-7">{{ employee_work.utr }}</dd>
+                <dt class="col-5">Tax code</dt>
+                <dd class="col-7">{{ employee_work.tax_code }}</dd>
+                <dt class="col-5">Visa required</dt>
+                <dd class="col-7">{{ employee_work.visa_required }}</dd>
+            </dl>
+            <button class="btn btn-outline-secondary" id="btn-employee-employment-edit">
+                <i class="fa fa-edit"></i> Edit
+            </button>
+        </div>
+
+        {# RIGHT #}
+        <div class="col-sm-6">
+            {# LNAGUAGE #}
+            <div class="mb-4">
+                <div class="text-right">
+                    <a href="#"><b>+ Add Contract</b></a>
+                </div>
+                {% if employee_contracts %}
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Type</th>
+                                <th>Start</th>
+                                <th>End</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for oobject in employee_contracts %}
+                                <tr>
+                                    <td>{{ oobject.type }}</td>
+                                    <td>{{ oobject.start }}</td>
+                                    <td>{{ oobject.end }}</td>
+                                    <td>
+                                        <a href="#">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="text-danger" href="#">
+                                            <i class="fa fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div>
+                        <p class="mb-0 text-danger"><b>Information not available</b></p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="modal-employee-employment-edit">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employment Details Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_work_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="model-from-submit-btn" data-action="" data-param="" data-method=""
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        let modal_employee_employment_edit =  $('#modal-employee-employment-edit')
+        let btn_employee_employment_edit =  $('#btn-employee-employment-edit')
+        btn_employee_employment_edit.click(() => modal_employee_employment_edit.modal('show'));
+
+    });
+</script>
