@@ -1,11 +1,14 @@
 {% load static %}
+{% load crispy_forms_tags %}
 
 <div class="tab-pane" id="tabs-expertise" role="tabpanel">
 
     {# QUALIFICATION #}
     <div class="mb-4">
         <div class="text-right">
-            <a href="#"><b>+ Add Qualification</b></a>
+            <button class="btn btn-link" id="employee_qualification_add_btn">
+                + Add Qualification
+            </button>
         </div>
         {% if employee_qualifications %}
             <div class="table-responsive">
@@ -27,12 +30,11 @@
                             <td>{{ oobject.certificate_number }}</td>
                             <td>{{ oobject.expiry_date }}</td>
                             <td>
-                                <a href="#">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a class="text-danger" href="#">
+                                <button class="btn btn-link text-danger btn-sm" id="employee_qualification_delete_btn"
+                                        data-action="{% url 'admins:admins-json:employee_qualification_delete' oobject.pk %}"
+                                        data-method="GET">
                                     <i class="fa fa-trash"></i>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -50,7 +52,9 @@
     {# TRAINING #}
     <div class="mb-4">
         <div class="text-right">
-            <a href="#"><b>+ Add Training</b></a>
+            <button class="btn btn-link" id="employee_training_add_btn">
+                + Add Training
+            </button>
         </div>
         {% if employee_trainings %}
             <div class="table-responsive">
@@ -74,12 +78,11 @@
                             <td>{{ oobject.start_date }}</td>
                             <td>{{ oobject.end_date }}</td>
                             <td>
-                                <a href="#">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a class="text-danger" href="#">
+                                <button class="btn btn-link btn-sm text-danger" id="employee_training_delete_btn"
+                                        data-action="{% url 'admins:admins-json:employee_training_delete' oobject.pk %}"
+                                        data-method="GET">
                                     <i class="fa fa-trash"></i>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -97,7 +100,9 @@
     {# LNAGUAGE #}
     <div class="mb-4">
         <div class="text-right">
-            <a href="#"><b>+ Add Language</b></a>
+            <button class="btn btn-link" id="employee_language_add_btn">
+                + Add Language
+            </button>
         </div>
         {% if employee_language_skills %}
             <div class="table-responsive">
@@ -112,15 +117,14 @@
                     <tbody>
                     {% for oobject in employee_language_skills %}
                         <tr>
-                            <td>{{ oobject.name }}</td>
-                            <td>{{ oobject.level }}</td>
+                            <td>{{ oobject.get_name_display }}</td>
+                            <td>{{ oobject.get_level_display }}</td>
                             <td>
-                                <a href="#">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a class="text-danger" href="#">
+                                <button class="btn btn-link btn-sm text-danger" id="employee_language_delete_btn"
+                                        data-action="{% url 'admins:admins-json:employee_language_delete' oobject.pk %}"
+                                        data-method="GET">
                                     <i class="fa fa-trash"></i>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -136,3 +140,215 @@
     </div>
 
 </div>
+
+<div class="modal" tabindex="-1" id="employee_qualification_add_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Qualification</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_qualifications_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_qualification_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_qualification_add' %}" data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" tabindex="-1" id="employee_language_add_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Language Skill</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_language_skills_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_language_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_language_add' %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal" tabindex="-1" id="employee_training_add_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Employment Appearance Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_trainings_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_training_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_training_add' %}" data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $(document).ready(function () {
+
+        {# QUALIFICATION AREA --------------------------------------------------------------------------------------- #}
+
+        let employee_qualification_add_btn = $('body #employee_qualification_add_btn')
+        let employee_qualification_delete_btn = $('body #employee_qualification_delete_btn')
+        let employee_qualification_submit_btn = $('body #employee_qualification_submit_btn')
+        let employee_qualification_add_model = $('body #employee_qualification_add_model')
+        let employee_qualification_add_form = employee_qualification_add_model.find('form')
+        employee_qualification_add_btn.click(function () {
+            employee_qualification_add_model.modal('show')
+        });
+        employee_qualification_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employee_qualification_add_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_qualification_add_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_qualification_add_form.find('.error-message').show()
+                }
+            });
+        });
+        employee_qualification_delete_btn.click(function () {
+            alert($(this).data('action'))
+            alert($(this).data('method'))
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+
+        {# LANGUAGE AREA -------------------------------------------------------------------------------------------- #}
+
+        let employee_language_add_btn = $('#employee_language_add_btn')
+        let employee_language_delete_btn = $('#employee_language_delete_btn')
+        let employee_language_submit_btn = $('#employee_language_submit_btn')
+        let employee_language_add_model = $('#employee_language_add_model')
+        let employee_language_add_form = employee_language_add_model.find('form')
+        employee_language_add_btn.click(function () {
+            employee_language_add_model.modal('show')
+        });
+        employee_language_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employee_language_add_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_language_add_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_language_add_form.find('.error-message').show()
+                }
+            });
+        });
+        employee_language_delete_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+
+        {# TRAINING AREA -------------------------------------------------------------------------------------------- #}
+
+        let employee_training_add_btn = $('#employee_training_add_btn')
+        let employee_training_delete_btn = $('#employee_training_delete_btn')
+        let employee_training_submit_btn = $('#employee_training_submit_btn')
+        let employee_training_add_model = $('#employee_training_add_model')
+        let employee_training_add_form = employee_training_add_model.find('form')
+        employee_training_add_btn.click(function () {
+            employee_training_add_model.modal('show')
+        });
+        employee_training_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employee_training_add_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_training_add_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_training_add_form.find('.error-message').show()
+                }
+            });
+        });
+        employee_training_delete_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+    });
+</script>

@@ -274,7 +274,7 @@ class EmployeeLanguageSkill(models.Model):
     )
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     name = models.CharField(max_length=5, choices=LANGUAGE_CHOICE)
-    level = models.CharField(max_length=5, choices=LANGUAGE_CHOICE)
+    level = models.CharField(max_length=5, choices=LEVEL_CHOICE)
 
     class Meta:
         ordering = ['-employee']

@@ -1,48 +1,48 @@
 {% load static %}
 
 <div class="tab-pane" id="tabs-docs" role="tabpanel">
-                        {# EMPLOYMENT #}
-                        <div class="mb-4">
-                            <div class="text-right">
-                                <a href="#"><b>+ Add Document</b></a>
-                            </div>
-                            {% if 1 %}
-                                <div class="table-responsive">
-                                    <table class="table table-sm table-hover">
-                                        <thead class="thead-light">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Type</th>
-                                            <th>Certificate Number</th>
-                                            <th>Expiry Date</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for suboobject in '1234'|make_list %}
-                                            <tr>
-                                                <td>#2627829</td>
-                                                <td>Self Cerified</td>
-                                                <td>C1383939</td>
-                                                <td>2022-12-12</td>
-                                                <td>
-                                                    <a href="#">
-                                                        <i class="fa fa-edit"></i>
-                                                    </a>
-                                                    <a class="text-danger" href="#">
-                                                        <i class="fa fa-trash"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
+    {# EMPLOYMENT #}
+    <div class="mb-4">
+        <div class="text-right">
+            <a href="#"><b>+ Add Document</b></a>
+        </div>
+        {% if 1 %}
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>Certificate Number</th>
+                        <th>Expiry Date</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for suboobject in '1234'|make_list %}
+                        <tr>
+                            <td>#2627829</td>
+                            <td>Self Cerified</td>
+                            <td>C1383939</td>
+                            <td>2022-12-12</td>
+                            <td>
+                                <a href="#">
+                                    <i class="fa fa-edit"></i>
+                                </a>
+                                <a class="text-danger" href="#">
+                                    <i class="fa fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
 
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% else %}
-                                <div>
-                                    <p class="mb-0 text-danger"><b>Information not available</b></p>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div>
+                <p class="mb-0 text-danger"><b>Information not available</b></p>
+            </div>
+        {% endif %}
+    </div>
+</div>

@@ -103,6 +103,7 @@ class TimeClockView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(TimeClockView, self).get_context_data(**kwargs)
+
         filter_object = ShiftDayFilter(self.request.GET, queryset=self.get_queryset())
         context['filter_form'] = filter_object.form
 
