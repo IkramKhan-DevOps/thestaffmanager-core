@@ -10,8 +10,7 @@ from .views import (
     ShiftDayUpdateView, ShiftDayDeleteView,
     ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
     ShiftListView, ShiftDetailView, ShiftCustomCreateView,
-    CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView,
-    CountryJsonView
+    CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView
 )
 
 app_name = 'admins'
@@ -87,11 +86,6 @@ urlpatterns += [
 ]
 
 urlpatterns += [
-    path('api/', include('src.administration.admins.admins-api.urls', namespace='admins-api'))
-]
-
-urlpatterns += [
-    path('json/country/add/', CountryJsonView.as_view(), name='json_country_add'),
-    path('json/country/<int:pk>/change/', CountryJsonView.as_view(), name='json_country_update'),
-    path('json/country/<int:pk>/delete/', CountryJsonView.as_view(), name='json_country_delete'),
+    path('api/', include('src.administration.admins.admins-api.urls', namespace='admins-api')),
+    path('json/', include('src.administration.admins.admins-json.urls', namespace='admins-json'))
 ]

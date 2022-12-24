@@ -100,14 +100,17 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form method="post">
+                <form method="post" id="form_employee_details">
                     {% csrf_token %}
                     {{ employee_form|crispy }}
                 </form>
             </div>
             <div class="modal-footer text-left">
-                <button type="button" id="model-from-submit-btn" data-action="" data-param="" data-method=""
-                        class="btn btn-success me-auto">
+                <button type="button" id="btn_employee_details_submit"
+                        data-action="{% url 'admins:admins-json:employee_change' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto"
+                >
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
             </div>
@@ -118,9 +121,31 @@
 <script>
     $(document).ready(function () {
 
-        let modal_employee_details_edit =  $('#modal-employee-details-edit')
-        let btn_employee_details_edit =  $('#btn-employee-details-edit')
-        btn_employee_details_edit.click(() => modal_employee_details_edit.modal('show'));
+        {# GLOBALS #}
+        let modal_employee_details_edit = $('body #modal-employee-details-edit')
+        let form_employee_details = modal_employee_details_edit.find('form')
+        let btn_employee_details_edit = $('body #btn-employee-details-edit')
+        let btn_employee_details_submit = $('body #btn_employee_details_submit')
+
+        {# ACTIONS/EVENTS/METHODS #}
+        btn_employee_details_edit.click(function () {modal_employee_details_edit.modal('show')});
+        btn_employee_details_submit.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: form_employee_details.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        form_employee_details.replaceWith(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    form_employee_details.find('.error-message').show()
+                }
+            });
+        });
 
     });
 </script>

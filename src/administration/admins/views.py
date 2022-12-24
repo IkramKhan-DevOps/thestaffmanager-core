@@ -164,41 +164,6 @@ class CountryListView(ListView):
         return context
 
 
-from django.template.context_processors import csrf
-from crispy_forms.utils import render_crispy_form
-
-
-@method_decorator([admin_protected, json_view], name='dispatch')
-class CountryJsonView(View):
-
-    def post(self, request, pk=None, *args, **kwargs):
-
-        # IF Request has ID ==> MEANS UPDATE OR DELETE
-        if pk:
-            instance = get_object_or_404(Country, pk=pk)
-
-            if request.GET.get('action') and request.GET.get('action') == 'DELETE':
-                instance.delete()
-                return {'success': True}
-            else:
-                form = CountryForm(instance=instance, data=request.POST)
-
-        # IF request doesn't have any ID
-        else:
-            form = CountryForm(request.POST or None)
-
-        # IF Forms are valid
-        if form.is_valid():
-            form.save(commit=True)
-            return {'success': True}
-
-        # Failure Response
-        ctx = {}
-        ctx.update(csrf(request))
-        form_html = render_crispy_form(form, context=ctx)
-        return {'success': False, 'form_html': form_html}
-
-
 @method_decorator(admin_protected, name='dispatch')
 class CountryCreateView(CreateView):
     model = Country
@@ -303,11 +268,11 @@ class UserDetailView(DetailView):
             context['employee_health'] = EmployeeHealth.objects.get_or_create(employee=employee)
             context['employee_appearance'] = EmployeeAppearance.objects.get_or_create(employee=employee)
 
-            context['employee_form'] = EMPMGMTEmployeeForm(instance=self.object)
-            context['employee_id_form'] = EMPMGMTEmployeeIdPassForm(instance=self.object)
-            context['employee_work_form'] = EMPMGMTEmployeeWorkForm(instance=self.object)
-            context['employee_health_form'] = EMPMGMTEmployeeHealthForm(instance=self.object)
-            context['employee_appearance_form'] = EMPMGMTEmployeeAppearanceForm(instance=self.object)
+            context['employee_form'] = EMPMGMTEmployeeForm(instance=employee)
+            context['employee_id_form'] = EMPMGMTEmployeeIdPassForm(instance=employee)
+            context['employee_work_form'] = EMPMGMTEmployeeWorkForm(instance=employee)
+            context['employee_health_form'] = EMPMGMTEmployeeHealthForm(instance=employee)
+            context['employee_appearance_form'] = EMPMGMTEmployeeAppearanceForm(instance=employee)
 
             context['employee_contracts'] = EmployeeContract.objects.filter(employee=employee)
             context['employee_docs'] = EmployeeDocument.objects.filter(employee=employee)
