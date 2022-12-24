@@ -136,9 +136,9 @@ class Employee(models.Model):
     )
 
     # MANY TO MANY
-    sites = models.ManyToManyField('admins.Site')
-    positions = models.ManyToManyField('admins.Position')
-    departments = models.ManyToManyField('admins.Department')
+    sites = models.ManyToManyField('admins.Site', blank=True)
+    positions = models.ManyToManyField('admins.Position', blank=True)
+    departments = models.ManyToManyField('admins.Department', blank=True)
 
     # CHECKS
     driver_license = models.BooleanField(default=False)
@@ -194,7 +194,7 @@ class EmployeeWork(models.Model):
         ordering = ['-employee']
 
     def __str__(self):
-        return f"{self.employee.user.get_user_name()} NI: {self.NI_number}"
+        return f"{self.employee.user.get_user_name()} NI: {self.ni_number}"
 
 
 class EmployeeEmergencyContact(models.Model):

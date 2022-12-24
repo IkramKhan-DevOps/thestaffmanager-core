@@ -262,17 +262,22 @@ class UserDetailView(DetailView):
         if self.object.is_employee:
             employee = self.object.get_employee_profile()
 
+            employee_id, created = EmployeeIdPass.objects.get_or_create(employee=employee)
+            employee_work, created = EmployeeWork.objects.get_or_create(employee=employee)
+            employee_health, created = EmployeeHealth.objects.get_or_create(employee=employee)
+            employee_appearance, created = EmployeeAppearance.objects.get_or_create(employee=employee)
+
             context['employee'] = employee
-            context['employee_id'] = EmployeeIdPass.objects.get_or_create(employee=employee)
-            context['employee_work'] = EmployeeWork.objects.get_or_create(employee=employee)
-            context['employee_health'] = EmployeeHealth.objects.get_or_create(employee=employee)
-            context['employee_appearance'] = EmployeeAppearance.objects.get_or_create(employee=employee)
+            context['employee_id'] = employee_id
+            context['employee_work'] = employee_work
+            context['employee_health'] = employee_health
+            context['employee_appearance'] = employee_appearance
 
             context['employee_form'] = EMPMGMTEmployeeForm(instance=employee)
-            context['employee_id_form'] = EMPMGMTEmployeeIdPassForm(instance=employee)
-            context['employee_work_form'] = EMPMGMTEmployeeWorkForm(instance=employee)
-            context['employee_health_form'] = EMPMGMTEmployeeHealthForm(instance=employee)
-            context['employee_appearance_form'] = EMPMGMTEmployeeAppearanceForm(instance=employee)
+            context['employee_id_form'] = EMPMGMTEmployeeIdPassForm(instance=employee_id)
+            context['employee_work_form'] = EMPMGMTEmployeeWorkForm(instance=employee_work)
+            context['employee_health_form'] = EMPMGMTEmployeeHealthForm(instance=employee_health)
+            context['employee_appearance_form'] = EMPMGMTEmployeeAppearanceForm(instance=employee_appearance)
 
             context['employee_contracts'] = EmployeeContract.objects.filter(employee=employee)
             context['employee_docs'] = EmployeeDocument.objects.filter(employee=employee)
@@ -291,6 +296,7 @@ class UserDetailView(DetailView):
             context['employee_trainings_form'] = EMPMGMTEmployeeTrainingForm()
             context['employee_language_skills_form'] = EMPMGMTEmployeeLanguageSkillForm()
             context['employee_emergency_contacts_form'] = EMPMGMTEmployeeEmergencyContactForm()
+
 
         return context
 

@@ -1,3 +1,4 @@
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template.context_processors import csrf
 from crispy_forms.utils import render_crispy_form
@@ -83,14 +84,14 @@ class EmployeeWorkJsonView(View):
         instance = get_object_or_404(Employee, pk=pk)
         form = EMPMGMTEmployeeWorkForm(instance=instance.employeework, data=request.POST)
 
-        if form.is_valid():
-            form.save(commit=True)
-            return {'success': True}
+        if not form.is_valid():
+            ctx = {}
+            ctx.update(csrf(request))
+            form_html = render_crispy_form(form, context=ctx)
+            return {'success': False, 'form_html': form_html}
 
-        ctx = {}
-        ctx.update(csrf(request))
-        form_html = render_crispy_form(form, context=ctx)
-        return {'success': False, 'form_html': form_html}
+        form.save(commit=True)
+        return {'success': True}
 
 
 @method_decorator([admin_protected, json_view], name='dispatch')
@@ -127,3 +128,58 @@ class EmployeeAppearanceJsonView(View):
         ctx.update(csrf(request))
         form_html = render_crispy_form(form, context=ctx)
         return {'success': False, 'form_html': form_html}
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeContractGenericJsonView(View):
+    instance = None
+    action = None
+    context = {'success': True}
+
+    def get(self, request, pk=None, *args, **kwargs):
+        self.instance = get_object_or_404(EmployeeContract, pk=pk) if pk else None
+        self.action = request.GET.get('action')
+
+        if self.action == "DELETE":
+            self.delete_object(request)
+            return self.context
+
+    def post(self, request, pk=None, *args, **kwargs):
+        context = None
+        self.instance = get_object_or_404(EmployeeContract, pk=pk) if pk else None
+        self.action = request.GET.get('action')
+
+        if self.action == "POST":
+            self.add_object(request)
+            return self.context
+        if self.action == "PUT":
+            self.add_object(request)
+            return self.context
+
+        if not context:
+            raise Http404
+        else:
+            return context
+
+    def add_object(self, request):
+        form = EMPMGMTEmployeeContractForm(data=request.POST)
+        if form.is_valid():
+            form.save(commit=True)
+
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
+        return {'success': False, 'form_html': form_html}
+
+    def update_object(self, request):
+        form = EMPMGMTEmployeeContractForm(data=request.POST, instance=self.instance)
+        if form.is_valid():
+            form.save(commit=True)
+
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
+        return {'success': False, 'form_html': form_html}
+
+    def delete_object(self, request):
+        self.instance.delete()

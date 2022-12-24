@@ -1,7 +1,8 @@
 from django.urls import path
 from .views import (
     CountryJsonView,
-    EmployeeJsonView, EmployeeWorkJsonView, EmployeeHealthJsonView, EmployeeAppearanceJsonView
+    EmployeeJsonView, EmployeeWorkJsonView, EmployeeHealthJsonView, EmployeeAppearanceJsonView,
+    EmployeeContractGenericJsonView
 )
 
 app_name = 'admins-json'
@@ -16,6 +17,15 @@ urlpatterns = [
     path('employee/<int:pk>/health/change/', EmployeeHealthJsonView.as_view(), name="employee_health_change"),
     path(
         'employee/<int:pk>/appearance/change/', EmployeeAppearanceJsonView.as_view(), name="employee_appearance_change"
+    ),
+
+    path(
+        'employee/contract/add/', EmployeeContractGenericJsonView.as_view(),
+        name="employee_contract_add"
+    ),
+    path(
+        'employee/contract/<int:pk>/delete/', EmployeeContractGenericJsonView.as_view(),
+        name="employee_contract_delete"
     ),
 
 ]

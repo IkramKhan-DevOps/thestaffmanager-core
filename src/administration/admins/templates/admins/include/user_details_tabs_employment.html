@@ -16,7 +16,7 @@
                 <dt class="col-5">Visa required</dt>
                 <dd class="col-7">{{ employee_work.visa_required }}</dd>
             </dl>
-            <button class="btn btn-outline-secondary" id="btn-employee-employment-edit">
+            <button class="btn btn-outline-secondary" id="employment_work_edit_button">
                 <i class="fa fa-edit"></i> Edit
             </button>
         </div>
@@ -26,7 +26,7 @@
             {# LNAGUAGE #}
             <div class="mb-4">
                 <div class="text-right">
-                    <button class="btn btn-sm- btn-primary" id="btn-employee-employment-contract-add">
+                    <button class="btn btn-sm- btn-primary" id="employment_contract_add_button">
                         + Add Contract
                     </button>
                 </div>
@@ -48,12 +48,12 @@
                                     <td>{{ oobject.start }}</td>
                                     <td>{{ oobject.end }}</td>
                                     <td>
-                                        <a href="#">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                        <a class="text-danger" href="#">
+                                        <button id="employment_contract_delete_button"
+                                                class="btn btn-danger" data-method="GET"
+                                                data-action="{% url 'admins:admins-json:employee_contract_delete' oobject.pk %}?action=DELETE"
+                                        >
                                             <i class="fa fa-trash"></i>
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                             {% endfor %}
@@ -71,7 +71,7 @@
     </div>
 </div>
 
-<div class="modal" tabindex="-1" id="modal-employee-employment-edit">
+<div class="modal" tabindex="-1" id="employment_work_edit_model">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -87,7 +87,9 @@
             </div>
 
             <div class="modal-footer text-left">
-                <button type="button" id="model-from-submit-btn" data-action="" data-param="" data-method=""
+                <button type="button" id="employment_work_edit_model_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_work_change' employee.pk %}"
+                        data-param="" data-method="POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -96,11 +98,11 @@
     </div>
 </div>
 
-<div class="modal" tabindex="-1" id="modal-employee-employment-contract-add">
+<div class="modal" tabindex="-1" id="employment_contract_add_model">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Employment Details Update</h5>
+                <h5 class="modal-title">Employment Contact</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -112,7 +114,9 @@
             </div>
 
             <div class="modal-footer text-left">
-                <button type="button" id="model-from-submit-btn" data-action="" data-param="" data-method=""
+                <button type="button" id="employment_contract_add_model_submit_btn"
+                        data-method="POST" data-param=""
+                        data-action="{% url 'admins:admins-json:employee_contract_add' %}?action=POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -124,13 +128,74 @@
 <script>
     $(document).ready(function () {
 
-        let modal_employee_employment_edit =  $('#modal-employee-employment-edit')
-        let btn_employee_employment_edit =  $('#btn-employee-employment-edit')
-        btn_employee_employment_edit.click(() => modal_employee_employment_edit.modal('show'));
+        {# EMPLOYEE WORK DETAILS #}
+        let employment_work_edit_button = $('#employment_work_edit_button')
+        let employment_work_edit_model = $('#employment_work_edit_model')
+        let employment_work_edit_model_form = employment_work_edit_model.find('form')
+        let employment_work_edit_model_submit_btn = $('#employment_work_edit_model_submit_btn')
 
-        let btn_employee_employment_contract_add = $('#btn-employee-employment-contract-add')
-        let modal_employee_employment_contract_add = $('#modal-employee-employment-contract-add')
-        btn_employee_employment_contract_add.click(() => modal_employee_employment_contract_add.modal('show'))
+        employment_work_edit_button.click(function () {
+            employment_work_edit_model.modal('show')
+        });
+        employment_work_edit_model_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employment_work_edit_model_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employment_work_edit_model_form.replaceWith(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employment_work_edit_model_form.find('.error-message').show()
+                }
+            });
+        })
+
+        {# EMPLOYEE CONTRACTS #}
+        let employment_contract_add_button = $('#employment_contract_add_button')
+        let employment_contract_delete_button = $('#employment_contract_delete_button')
+        let employment_contract_add_model = $('#employment_contract_add_model')
+        let employment_contract_add_model_form = employment_contract_add_model.find('form')
+        let employment_contract_add_model_submit_btn = $('#employment_contract_add_model_submit_btn')
+
+        employment_contract_add_button.click(function () {
+            employment_contract_add_model.modal('show')
+        });
+        employment_contract_add_model_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employment_contract_add_model_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employment_contract_add_model_form.replaceWith(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employment_contract_add_model_form.find('.error-message').show()
+                }
+            });
+        })
+        employment_contract_delete_button.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    if((data['success'])){
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    console.log()
+                }
+            });
+        })
 
     });
 </script>
