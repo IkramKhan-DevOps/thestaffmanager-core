@@ -7,7 +7,8 @@ from .views import (
     EmployeeLanguageSkillDeleteJsonView, EmployeeEmploymentAddJsonView, EmployeeEmploymentDeleteJsonView,
     EmployeeEducationAddJsonView, EmployeeEducationDeleteJsonView, EmployeeDocumentAddJsonView,
     EmployeeDocumentDeleteJsonView,
-    EmployeeContractDeleteJsonView, EmployeeContractAddJsonView
+    EmployeeContractDeleteJsonView, EmployeeContractAddJsonView, EmployeeSitesUpdateJsonView,
+    EmployeeDepartmentsUpdateJsonView, EmployeePositionsUpdateJsonView
 )
 
 app_name = 'admins-json'
@@ -40,5 +41,9 @@ urlpatterns = [
     path('employee/education/<int:pk>/delete/', EmployeeEducationDeleteJsonView.as_view(), name='employee_education_delete'),
     path('employee/document/add/', EmployeeDocumentAddJsonView.as_view(), name='employee_document_add'),
     path('employee/document/<int:pk>/delete/', EmployeeDocumentDeleteJsonView.as_view(), name='employee_document_delete'),
+
+    path('employee/<int:pk>/sites/change/', EmployeeSitesUpdateJsonView.as_view(), name='employee_sites_update'),
+    path('employee/<int:pk>/departments/change/', EmployeeDepartmentsUpdateJsonView.as_view(), name='employee_departments_update'),
+    path('employee/<int:pk>/positions/change/', EmployeePositionsUpdateJsonView.as_view(), name='employee_positions_update'),
 
 ]

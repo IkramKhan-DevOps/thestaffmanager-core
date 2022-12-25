@@ -25,7 +25,7 @@ from .forms import (
     EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm
 )
 from .models import (
-    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country,
+    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department,
 )
 import datetime
 
@@ -34,7 +34,7 @@ from src.accounts.models import (
     UserDocument, User,
     EmployeeIdPass, EmployeeWork, EmployeeHealth, EmployeeAppearance,
     EmployeeContract, EmployeeDocument, EmployeeEducation, EmployeeEmployment, EmployeeQualification,
-    EmployeeTraining, EmployeeLanguageSkill, EmployeeEmergencyContact
+    EmployeeTraining, EmployeeLanguageSkill, EmployeeEmergencyContact, EmployeeSite
 )
 
 """ MAIN """
@@ -263,10 +263,26 @@ class UserDetailView(DetailView):
         if self.object.is_employee:
             employee = self.object.get_employee_profile()
 
+            employee_sites_list = []
+            employee_positions_list = []
+            employee_department_list = []
+
             employee_id, created = EmployeeIdPass.objects.get_or_create(employee=employee)
             employee_work, created = EmployeeWork.objects.get_or_create(employee=employee)
             employee_health, created = EmployeeHealth.objects.get_or_create(employee=employee)
             employee_appearance, created = EmployeeAppearance.objects.get_or_create(employee=employee)
+
+            context['sites'] = Site.objects.all()
+            context['positions'] = Position.objects.all()
+            context['departments'] = Department.objects.all()
+
+            [employee_sites_list.append(x[0]) for x in employee.sites.all().values_list('pk')]
+            [employee_department_list.append(x[0]) for x in employee.departments.all().values_list('pk')]
+            [employee_positions_list.append(x[0]) for x in employee.positions.all().values_list('pk')]
+
+            context['employee_sites_list'] = employee_sites_list
+            context['employee_positions_list'] = employee_positions_list
+            context['employee_department_list'] = employee_department_list
 
             context['employee'] = employee
             context['employee_id'] = employee_id

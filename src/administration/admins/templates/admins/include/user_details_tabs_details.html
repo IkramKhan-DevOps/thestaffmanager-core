@@ -57,35 +57,37 @@
                 <span>Departments</span>
             </div>
             <div>
-                <span class="badge bg-lime-lt">Knight</span>
-                <span class="badge bg-lime-lt">Sword</span>
-                <span class="badge bg-lime-lt">Arrow</span>
-                <span class="badge bg-primary-lt">+ Add more</span>
+                {% if employee.employeedepartment_set.all %}
+                    {% for oobject in employee.employeedepartment_set.all %}
+                        <span class="badge bg-yellow-lt">{{ oobject.department.name }}</span>
+                    {% endfor %}
+                {% endif %}
+                <span class="badge bg-primary-lt" id="department_update_btn">+ Add more</span>
             </div>
 
             <div class="hr-text">
                 <span>Sites</span>
             </div>
             <div>
-                <span class="badge bg-danger-lt">Knight</span>
-                <span class="badge bg-danger-lt">Sword</span>
-                <span class="badge bg-danger-lt">Arrow</span>
-                <span class="badge bg-danger-lt">Siege</span>
-                <span class="badge bg-danger-lt">Castle</span>
-                <span class="badge bg-primary-lt">+ Add more</span>
+
+                {% if employee.employeesite_set.all %}
+                    {% for oobject in employee.employeesite_set.all %}
+                        <span class="badge bg-danger-lt">{{ oobject.site.name }}</span>
+                    {% endfor %}
+                {% endif %}
+                <span class="badge bg-primary-lt" id="site_update_btn">+ Add more</span>
             </div>
 
             <div class="hr-text">
                 <span>Positions</span>
             </div>
             <div>
-                <span class="badge bg-cyan-lt">King</span>
-                <span class="badge bg-cyan-lt">Queen</span>
-                <span class="badge bg-cyan-lt">General</span>
-                <span class="badge bg-cyan-lt">Clone</span>
-                <span class="badge bg-cyan-lt">Soldier</span>
-                <span class="badge bg-cyan-lt">Judge</span>
-                <span class="badge bg-primary-lt">+ Add more</span>
+                {% if employee.employeeposition_set.all %}
+                    {% for oobject in employee.employeeposition_set.all %}
+                        <span class="badge bg-cyan-lt">{{ oobject.position.name }}</span>
+                    {% endfor %}
+                {% endif %}
+                <span class="badge bg-primary-lt" id="position_update_btn">+ Add more</span>
             </div>
         </div>
 
@@ -118,8 +120,185 @@
     </div>
 </div>
 
+<div class="modal" tabindex="-1" id="site_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employee Sites</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                {% csrf_token %}
+                    {% if sites %}
+                    {% for site in sites %}
+                        <div id="div_id_need_condition" class="form-check">
+                            <input type="checkbox" class="checkboxinput form-check-input"
+                                    {% if site.pk in employee_sites_list %} checked {% endif %}
+                                   name="{{ forloop.counter }}" id="site_{{ forloop.counter }}">
+                            <label for="site_{{ forloop.counter }}" class="form-check-label"> {{ site.name }} </label>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                </form>
+            </div>
+            <div class="modal-footer text-left">
+                <button type="button" id="site_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_sites_update' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto"
+                >
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="department_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employee Departments</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                {% csrf_token %}
+                    {% if departments %}
+                        {% for department in departments %}
+                            <div id="div_id_need_condition" class="form-check">
+                                <input type="checkbox" class="checkboxinput form-check-input"
+                                       {% if department.pk in employee_department_list %} checked {% endif %}
+                                       name="{{ forloop.counter }}" id="department_{{ forloop.counter }}">
+                                <label for="department_{{ forloop.counter }}"
+                                       class="form-check-label"> {{ department.name }} </label>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </form>
+
+            </div>
+            <div class="modal-footer text-left">
+                <button type="button" id="department_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_departments_update' employee.pk %}"
+                        data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto"
+                >
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="position_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employee Positions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    {% csrf_token %}
+                    {% if positions %}
+                        {% for position in positions %}
+                            <div id="div_id_need_condition" class="form-check">
+                                <input type="checkbox" class="checkboxinput form-check-input"
+                                       {% if position.pk in employee_positions_list %} checked {% endif %}
+                                       name="{{ forloop.counter }}" id="position_{{ forloop.counter }}">
+                                <label for="position_{{ forloop.counter }}"
+                                       class="form-check-label"> {{ position.name }} </label>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </form>
+
+            </div>
+            <div class="modal-footer text-left">
+                <button type="button" id="position_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_positions_update' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto"
+                >
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function () {
+
+        let site_model = $('#site_model')
+        let site_form = site_model.find('form')
+        let site_submit_btn = $('#site_submit_btn')
+        let site_update_btn = $('#site_update_btn')
+        site_update_btn.click(function () {
+            site_model.modal('show');
+        })
+        site_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: site_form.serialize(),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    alert(error)
+                }
+            });
+        })
+
+        let department_model = $('#department_model')
+        let department_form = department_model.find('form')
+        let department_submit_btn = $('#department_submit_btn')
+        let department_update_btn = $('#department_update_btn')
+        department_update_btn.click(function () {
+            department_model.modal('show');
+        })
+        department_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: department_form.serialize(),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    alert(error)
+                }
+            });
+        })
+
+        let position_model = $('#position_model')
+        let position_form = position_model.find('form')
+        let position_submit_btn = $('#position_submit_btn')
+        let position_update_btn = $('#position_update_btn')
+        position_update_btn.click(function () {
+            position_model.modal('show');
+        })
+        position_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: position_form.serialize(),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    alert(error)
+                }
+            });
+        })
 
         {# GLOBALS #}
         let modal_employee_details_edit = $('body #modal-employee-details-edit')
@@ -128,7 +307,9 @@
         let btn_employee_details_submit = $('body #btn_employee_details_submit')
 
         {# ACTIONS/EVENTS/METHODS #}
-        btn_employee_details_edit.click(function () {modal_employee_details_edit.modal('show')});
+        btn_employee_details_edit.click(function () {
+            modal_employee_details_edit.modal('show')
+        });
         btn_employee_details_submit.click(function () {
             $.ajax({
                 url: $(this).data('action'),

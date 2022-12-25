@@ -7,7 +7,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from jsonview.decorators import json_view
 from src.accounts.decorators import admin_protected
-from src.accounts.models import Employee
+from src.accounts.models import Employee, EmployeeSite, EmployeeDepartment, EmployeePosition
 from src.administration.admins.forms import (
     CountryForm, EMPMGMTEmployeeForm, EMPMGMTEmployeeWorkForm, EMPMGMTEmployeeAppearanceForm, EMPMGMTEmployeeHealthForm,
     EMPMGMTEmployeeIdPassForm, EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
@@ -295,3 +295,38 @@ class EmployeeContractDeleteJsonView(View):
         instance = get_object_or_404(EmployeeContract, pk=pk)
         instance.delete()
 
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeSitesUpdateJsonView(View):
+
+    def post(self, request, pk):
+        post_dictionary = dict(request.POST)
+        post_dictionary.pop('csrfmiddlewaretoken')
+        employee = get_object_or_404(Employee, pk=pk)
+        EmployeeSite.objects.filter(employee=employee).delete()
+        for value in post_dictionary.keys():
+            EmployeeSite.objects.get_or_create(employee=employee, site_id=int(value))
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeDepartmentsUpdateJsonView(View):
+
+    def post(self, request, pk):
+        post_dictionary = dict(request.POST)
+        post_dictionary.pop('csrfmiddlewaretoken')
+        employee = get_object_or_404(Employee, pk=pk)
+        EmployeeDepartment.objects.filter(employee=employee).delete()
+        for value in post_dictionary.keys():
+            EmployeeDepartment.objects.get_or_create(employee=employee, department_id=int(value))
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeePositionsUpdateJsonView(View):
+
+    def post(self, request, pk):
+        post_dictionary = dict(request.POST)
+        post_dictionary.pop('csrfmiddlewaretoken')
+        employee = get_object_or_404(Employee, pk=pk)
+        EmployeePosition.objects.filter(employee=employee).delete()
+        for value in post_dictionary.keys():
+            EmployeePosition.objects.get_or_create(employee=employee, position_id=int(value))

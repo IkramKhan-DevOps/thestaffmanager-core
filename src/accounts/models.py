@@ -136,9 +136,9 @@ class Employee(models.Model):
     )
 
     # MANY TO MANY
-    sites = models.ManyToManyField('admins.Site', blank=True)
-    positions = models.ManyToManyField('admins.Position', blank=True)
-    departments = models.ManyToManyField('admins.Department', blank=True)
+    sites = models.ManyToManyField('admins.Site', through='EmployeeSite')
+    positions = models.ManyToManyField('admins.Position', through='EmployeePosition')
+    departments = models.ManyToManyField('admins.Department', through='EmployeeDepartment')
 
     # CHECKS
     driver_license = models.BooleanField(default=False)
@@ -378,6 +378,42 @@ class EmployeeAppearance(models.Model):
 
     def __str__(self):
         return f" {self.employee.user.get_user_name()} Appearance"
+
+
+class EmployeeSite(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    site = models.ForeignKey('admins.Site', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Employee Sites"
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.employee.user.get_user_name()} site > {self.site.name}"
+
+
+class EmployeePosition(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    position = models.ForeignKey('admins.Position', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Employee Positions"
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.employee.user.get_user_name()} position > {self.position.name}"
+
+
+class EmployeeDepartment(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    department = models.ForeignKey('admins.Department', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Employee Departments"
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.employee.user.get_user_name()} department > {self.department.name}"
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL, dispatch_uid="create_user_save")

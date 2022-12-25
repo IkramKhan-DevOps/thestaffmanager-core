@@ -19,10 +19,10 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 
-from src.accounts.models import (\
+from src.accounts.models import ( \
     User, UserDocument, Employee, EmployeeAppearance, EmployeeWork, EmployeeIdPass, EmployeeHealth,
     EmployeeEmergencyContact, EmployeeTraining, EmployeeDocument, EmployeeEducation, EmployeeContract,
-    EmployeeEmployment, EmployeeQualification, EmployeeLanguageSkill
+    EmployeeEmployment, EmployeeQualification, EmployeeLanguageSkill, EmployeeSite, EmployeePosition, EmployeeDepartment
 )
 csrf_protect_m = method_decorator(csrf_protect)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
@@ -223,3 +223,6 @@ admin.site.register(EmployeeContract)
 admin.site.register(EmployeeEmployment)
 admin.site.register(EmployeeQualification)
 admin.site.register(EmployeeLanguageSkill)
+admin.site.register(EmployeeSite)
+admin.site.register(EmployeePosition)
+admin.site.register(EmployeeDepartment)
