@@ -102,7 +102,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Employment Contact</h5>
+                <h5 class="modal-title">Employment Contract</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
@@ -116,7 +116,7 @@
             <div class="modal-footer text-left">
                 <button type="button" id="employment_contract_add_model_submit_btn"
                         data-method="POST" data-param=""
-                        data-action="{% url 'admins:admins-json:employee_contract_add' %}?action=POST"
+                        data-action="{% url 'admins:admins-json:employee_contract_add' employee.pk %}"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -144,7 +144,7 @@
                 data: employment_work_edit_model_form.serialize(),
                 success: function (data) {
                     if (!(data['success'])) {
-                        employment_work_edit_model_form.replaceWith(data['form_html']);
+                        employment_work_edit_model_form.html(data['form_html']);
                     } else {
                         location.reload();
                     }
@@ -172,7 +172,7 @@
                 data: employment_contract_add_model_form.serialize(),
                 success: function (data) {
                     if (!(data['success'])) {
-                        employment_contract_add_model_form.replaceWith(data['form_html']);
+                        employment_contract_add_model_form.html(data['form_html']);
                     } else {
                         location.reload();
                     }
@@ -183,13 +183,12 @@
             });
         })
         employment_contract_delete_button.click(function () {
+            alert($(this).data('method'))
             $.ajax({
                 url: $(this).data('action'),
                 type: $(this).data('method'),
                 success: function (data) {
-                    if((data['success'])){
-                        location.reload();
-                    }
+                    location.reload();
                 },
                 error: function (error) {
                     console.log(error)

@@ -136,7 +136,7 @@
                 data: form_employee_details.serialize(),
                 success: function (data) {
                     if (!(data['success'])) {
-                        form_employee_details.replaceWith(data['form_html']);
+                        form_employee_details.html(data['form_html']);
                     } else {
                         location.reload();
                     }

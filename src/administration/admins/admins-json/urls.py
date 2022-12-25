@@ -2,11 +2,12 @@ from django.urls import path
 from .views import (
     CountryJsonView,
     EmployeeJsonView, EmployeeWorkJsonView, EmployeeHealthJsonView, EmployeeAppearanceJsonView,
-    EmployeeContractGenericJsonView, EmployeeQualificationAddJsonView, EmployeeQualificationDeleteJsonView,
+    EmployeeQualificationAddJsonView, EmployeeQualificationDeleteJsonView,
     EmployeeTrainingAddJsonView, EmployeeTrainingDeleteJsonView, EmployeeLanguageSkillAddJsonView,
     EmployeeLanguageSkillDeleteJsonView, EmployeeEmploymentAddJsonView, EmployeeEmploymentDeleteJsonView,
     EmployeeEducationAddJsonView, EmployeeEducationDeleteJsonView, EmployeeDocumentAddJsonView,
-    EmployeeDocumentDeleteJsonView
+    EmployeeDocumentDeleteJsonView,
+    EmployeeContractDeleteJsonView, EmployeeContractAddJsonView
 )
 
 app_name = 'admins-json'
@@ -24,8 +25,8 @@ urlpatterns = [
         'employee/<int:pk>/appearance/change/', EmployeeAppearanceJsonView.as_view(), name="employee_appearance_change"
     ),
 
-    path('employee/contract/add/', EmployeeContractGenericJsonView.as_view(),name="employee_contract_add"),
-    path('employee/contract/<int:pk>/delete/', EmployeeContractGenericJsonView.as_view(),name="employee_contract_delete"),
+    path('employee/<int:pk>/contract/add/', EmployeeContractAddJsonView.as_view(), name="employee_contract_add"),
+    path('employee/contract/<int:pk>/delete/', EmployeeContractDeleteJsonView.as_view(), name="employee_contract_delete"),
 
     path('employee/qualification/add/', EmployeeQualificationAddJsonView.as_view(), name='employee_qualification_add'),
     path('employee/qualification/<int:pk>/delete/', EmployeeQualificationDeleteJsonView.as_view(), name='employee_qualification_delete'),
