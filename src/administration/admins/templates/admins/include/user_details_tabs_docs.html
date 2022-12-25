@@ -1,37 +1,41 @@
 {% load static %}
+{% load crispy_forms_tags %}
 
 <div class="tab-pane" id="tabs-docs" role="tabpanel">
     {# EMPLOYMENT #}
     <div class="mb-4">
         <div class="text-right">
-            <a href="#"><b>+ Add Document</b></a>
+            <button class="btn btn-link" id="employee_document_add_btn">
+                + Add Document
+            </button>
         </div>
-        {% if 1 %}
+        {% if employee_docs %}
             <div class="table-responsive">
                 <table class="table table-sm table-hover">
                     <thead class="thead-light">
                     <tr>
                         <th>ID</th>
-                        <th>Type</th>
-                        <th>Certificate Number</th>
-                        <th>Expiry Date</th>
+                        <th>Upload By</th>
+                        <th>Name</th>
+                        <th>File</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for suboobject in '1234'|make_list %}
+                    {% for oobject in employee_docs %}
                         <tr>
-                            <td>#2627829</td>
-                            <td>Self Cerified</td>
-                            <td>C1383939</td>
-                            <td>2022-12-12</td>
+                            <td>{{ oobbject.pk }}</td>
+                            <td>{{ oobject.uploaded_by }}</td>
+                            <td>{{ oobject.name }}</td>
+                            <td>{{ oobject.file }}</td>
                             <td>
-                                <a href="#">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a class="text-danger" href="#">
+                                <button type="button" id="employee_document_delete_btn"
+                                        data-action="{% url 'admins:admins-json:employee_document_delete' oobject.pk %}"
+                                        data-param=""
+                                        data-method="GET"
+                                        class="btn btn-danger btn-sm me-auto">
                                     <i class="fa fa-trash"></i>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                     {% endfor %}
@@ -46,3 +50,77 @@
         {% endif %}
     </div>
 </div>
+
+<div class="modal" tabindex="-1" id="employee_document_add_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Education</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" id="employee_document_add_form_data" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ employee_docs_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_document_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_document_add' %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let employee_document_add_btn = $('body #employee_document_add_btn')
+        let employee_document_delete_btn = $('body #employee_document_delete_btn')
+        let employee_document_submit_btn = $('body #employee_document_submit_btn')
+        let employee_document_add_model = $('body #employee_document_add_model')
+        let employee_document_add_form = employee_document_add_model.find('form')
+        employee_document_add_btn.click(function () {
+            employee_document_add_model.modal('show')
+        });
+        employee_document_submit_btn.click(function () {
+            console.log(employee_document_add_form)
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: new FormData(document.getElementById('employee_document_add_form_data')),
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_document_add_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_document_add_form.find('.error-message').show()
+                }
+            });
+        });
+        employee_document_delete_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+    });
+</script>

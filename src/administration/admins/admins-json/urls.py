@@ -4,10 +4,13 @@ from .views import (
     EmployeeJsonView, EmployeeWorkJsonView, EmployeeHealthJsonView, EmployeeAppearanceJsonView,
     EmployeeContractGenericJsonView, EmployeeQualificationAddJsonView, EmployeeQualificationDeleteJsonView,
     EmployeeTrainingAddJsonView, EmployeeTrainingDeleteJsonView, EmployeeLanguageSkillAddJsonView,
-    EmployeeLanguageSkillDeleteJsonView
+    EmployeeLanguageSkillDeleteJsonView, EmployeeEmploymentAddJsonView, EmployeeEmploymentDeleteJsonView,
+    EmployeeEducationAddJsonView, EmployeeEducationDeleteJsonView, EmployeeDocumentAddJsonView,
+    EmployeeDocumentDeleteJsonView
 )
 
 app_name = 'admins-json'
+
 urlpatterns = [
 
     path('country/add/', CountryJsonView.as_view(), name='country_add'),
@@ -30,5 +33,11 @@ urlpatterns = [
     path('employee/training/<int:pk>/delete/', EmployeeTrainingDeleteJsonView.as_view(), name='employee_training_delete'),
     path('employee/language/add/', EmployeeLanguageSkillAddJsonView.as_view(), name='employee_language_add'),
     path('employee/language/<int:pk>/delete/', EmployeeLanguageSkillDeleteJsonView.as_view(),name='employee_language_delete'),
+    path('employee/employment/add/', EmployeeEmploymentAddJsonView.as_view(), name='employee_employment_add'),
+    path('employee/employment/<int:pk>/delete/', EmployeeEmploymentDeleteJsonView.as_view(), name='employee_employment_delete'),
+    path('employee/education/add/', EmployeeEducationAddJsonView.as_view(), name='employee_education_add'),
+    path('employee/education/<int:pk>/delete/', EmployeeEducationDeleteJsonView.as_view(), name='employee_education_delete'),
+    path('employee/document/add/', EmployeeDocumentAddJsonView.as_view(), name='employee_document_add'),
+    path('employee/document/<int:pk>/delete/', EmployeeDocumentDeleteJsonView.as_view(), name='employee_document_delete'),
 
 ]

@@ -290,9 +290,9 @@ class UserDetailView(DetailView):
             context['employee_emergency_contacts'] = EmployeeEmergencyContact.objects.filter(employee=employee)
 
             context['employee_contracts_form'] = EMPMGMTEmployeeContractForm()
-            context['employee_docs_form'] = EMPMGMTEmployeeEducationForm()
+            context['employee_docs_form'] = EMPMGMTEmployeeDocumentForm()
             context['employee_educations_form'] = EMPMGMTEmployeeEducationForm()
-            context['employee_employments_form'] = EMPMGMTEmployeeQualificationForm()
+            context['employee_employments_form'] = EMPMGMTEmployeeEmploymentForm()
             context['employee_qualifications_form'] = EMPMGMTEmployeeQualificationForm()
             context['employee_trainings_form'] = EMPMGMTEmployeeTrainingForm()
             context['employee_language_skills_form'] = EMPMGMTEmployeeLanguageSkillForm()

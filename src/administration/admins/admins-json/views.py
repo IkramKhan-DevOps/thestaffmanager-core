@@ -257,3 +257,73 @@ class EmployeeLanguageSkillDeleteJsonView(View):
     def get(self, request, pk):
         instance = get_object_or_404(EmployeeLanguageSkill, pk=pk)
         instance.delete()
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeEmploymentAddJsonView(View):
+
+    def post(self, request):
+        form = EMPMGMTEmployeeEmploymentForm(request.POST)
+        if not form.is_valid():
+            ctx = {}
+            ctx.update(csrf(request))
+            form_html = render_crispy_form(form, context=ctx)
+            return {'success': False, 'form_html': form_html}
+
+        form.save(commit=True)
+        return {'success': True}
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeEmploymentDeleteJsonView(View):
+
+    def get(self, request, pk):
+        instance = get_object_or_404(EmployeeEmployment, pk=pk)
+        instance.delete()
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeEducationAddJsonView(View):
+
+    def post(self, request):
+        form = EMPMGMTEmployeeEducationForm(request.POST)
+        if not form.is_valid():
+            ctx = {}
+            ctx.update(csrf(request))
+            form_html = render_crispy_form(form, context=ctx)
+            return {'success': False, 'form_html': form_html}
+
+        form.save(commit=True)
+        return {'success': True}
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeEducationDeleteJsonView(View):
+
+    def get(self, request, pk):
+        instance = get_object_or_404(EmployeeEducation, pk=pk)
+        instance.delete()
+
+
+@method_decorator([admin_protected, json_view, csrf_exempt], name='dispatch')
+class EmployeeDocumentAddJsonView(View):
+
+    def post(self, request):
+        form = EMPMGMTEmployeeDocumentForm(request.POST, request.FILES)
+        if not form.is_valid():
+            ctx = {}
+            ctx.update(csrf(request))
+            form_html = render_crispy_form(form, context=ctx)
+            return {'success': False, 'form_html': form_html}
+
+        form.save(commit=True)
+        return {'success': True}
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeDocumentDeleteJsonView(View):
+
+    def get(self, request, pk):
+        instance = get_object_or_404(EmployeeDocument, pk=pk)
+        instance.delete()
+
