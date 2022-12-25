@@ -95,42 +95,6 @@ class EmployeeWorkJsonView(View):
 
 
 @method_decorator([admin_protected, json_view], name='dispatch')
-class EmployeeHealthJsonView(View):
-
-    def post(self, request, pk, *args, **kwargs):
-
-        instance = get_object_or_404(Employee, pk=pk)
-        form = EMPMGMTEmployeeHealthForm(instance=instance.employeehealth, data=request.POST)
-
-        if form.is_valid():
-            form.save(commit=True)
-            return {'success': True}
-
-        ctx = {}
-        ctx.update(csrf(request))
-        form_html = render_crispy_form(form, context=ctx)
-        return {'success': False, 'form_html': form_html}
-
-
-@method_decorator([admin_protected, json_view], name='dispatch')
-class EmployeeAppearanceJsonView(View):
-
-    def post(self, request, pk, *args, **kwargs):
-
-        instance = get_object_or_404(Employee, pk=pk)
-        form = EMPMGMTEmployeeAppearanceForm(instance=instance.employeeappearance, data=request.POST)
-
-        if form.is_valid():
-            form.save(commit=True)
-            return {'success': True}
-
-        ctx = {}
-        ctx.update(csrf(request))
-        form_html = render_crispy_form(form, context=ctx)
-        return {'success': False, 'form_html': form_html}
-
-
-@method_decorator([admin_protected, json_view], name='dispatch')
 class EmployeeContractGenericJsonView(View):
     instance = None
     action = None
@@ -327,3 +291,38 @@ class EmployeeDocumentDeleteJsonView(View):
         instance = get_object_or_404(EmployeeDocument, pk=pk)
         instance.delete()
 
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeHealthJsonView(View):
+
+    def post(self, request, pk, *args, **kwargs):
+
+        instance = get_object_or_404(Employee, pk=pk)
+        form = EMPMGMTEmployeeHealthForm(instance=instance.employeehealth, data=request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+            return {'success': True}
+
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
+        return {'success': False, 'form_html': form_html}
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class EmployeeAppearanceJsonView(View):
+
+    def post(self, request, pk, *args, **kwargs):
+
+        instance = get_object_or_404(Employee, pk=pk)
+        form = EMPMGMTEmployeeAppearanceForm(instance=instance.employeeappearance, data=request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+            return {'success': True}
+
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
+        return {'success': False, 'form_html': form_html}

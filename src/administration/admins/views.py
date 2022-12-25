@@ -297,8 +297,6 @@ class UserDetailView(DetailView):
             context['employee_trainings_form'] = EMPMGMTEmployeeTrainingForm()
             context['employee_language_skills_form'] = EMPMGMTEmployeeLanguageSkillForm()
             context['employee_emergency_contacts_form'] = EMPMGMTEmployeeEmergencyContactForm()
-
-
         return context
 
 

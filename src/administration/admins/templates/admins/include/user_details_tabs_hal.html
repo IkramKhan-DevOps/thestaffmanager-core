@@ -52,7 +52,7 @@
                 <dd class="col-7">{{ employee_appearance.shoe_size }}</dd>
             </dl>
 
-            <button class="btn btn-outline-secondary" id="btn-employee-l-edit">
+            <button class="btn btn-outline-secondary" id="employee_a_update_btn">
                 <i class="fa fa-edit"></i> Edit
             </button>
         </div>
@@ -85,7 +85,7 @@
 
             </dl>
 
-            <button class="btn btn-outline-secondary" id="btn-employee-h-edit">
+            <button class="btn btn-outline-secondary" id="employee_h_update_btn">
                 <i class="fa fa-edit"></i> Edit
             </button>
         </div>
@@ -93,7 +93,7 @@
 
 </div>
 
-<div class="modal" tabindex="-1" id="modal-employee-h-edit">
+<div class="modal" tabindex="-1" id="employee_h_update_model">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -109,7 +109,9 @@
             </div>
 
             <div class="modal-footer text-left">
-                <button type="button" id="model-from-submit-btn" data-action="" data-param="" data-method=""
+                <button type="button" id="employee_h_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_health_change' employee.pk %}"
+                        data-param="" data-method="POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -118,7 +120,7 @@
     </div>
 </div>
 
-<div class="modal" tabindex="-1" id="modal-employee-l-edit">
+<div class="modal" tabindex="-1" id="employee_a_update_model">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
 
@@ -135,7 +137,10 @@
             </div>
 
             <div class="modal-footer text-left">
-                <button type="button" id="model-from-submit-btn" data-action="" data-param="" data-method=""
+                <button type="button" id="employee_a_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_appearance_change' employee.pk %}"
+                        data-param=""
+                        data-method="POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -147,5 +152,55 @@
 <script>
     $(document).ready(function () {
 
+        let employee_a_update_btn = $('body #employee_a_update_btn')
+        let employee_a_submit_btn = $('body #employee_a_submit_btn')
+        let employee_a_update_model = $('body #employee_a_update_model')
+        let employee_a_update_form = employee_a_update_model.find('form')
+        employee_a_update_btn.click(function () {
+            employee_a_update_model.modal('show')
+        });
+        employee_a_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employee_a_update_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_a_update_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_a_update_form.find('.error-message').show()
+                }
+            });
+        });
+
+        let employee_h_update_btn = $('body #employee_h_update_btn')
+        let employee_h_submit_btn = $('body #employee_h_submit_btn')
+        let employee_h_update_model = $('body #employee_h_update_model')
+        let employee_h_update_form = employee_h_update_model.find('form')
+        employee_h_update_btn.click(function () {
+            employee_h_update_model.modal('show')
+        });
+        employee_h_submit_btn.click(function () {
+            alert($(this).data('action'))
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employee_h_update_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_h_update_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_h_update_form.find('.error-message').show()
+                }
+            });
+        });
     });
 </script>
