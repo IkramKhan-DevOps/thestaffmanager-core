@@ -102,14 +102,18 @@ class EmployeeWorkJsonView(View):
 @method_decorator([admin_protected, json_view], name='dispatch')
 class EmployeeQualificationAddJsonView(View):
 
-    def post(self, request):
+    def post(self, request, pk):
+        # TODO: make sure to check errors here while using get directly
         form = EMPMGMTEmployeeQualificationForm(request.POST)
+        employee = Employee.objects.get(pk=pk)
+
         if not form.is_valid():
             ctx = {}
             ctx.update(csrf(request))
             form_html = render_crispy_form(form, context=ctx)
             return {'success': False, 'form_html': form_html}
 
+        form.instance.employee = employee
         form.save(commit=True)
         return {'success': True}
 
@@ -125,14 +129,16 @@ class EmployeeQualificationDeleteJsonView(View):
 @method_decorator([admin_protected, json_view], name='dispatch')
 class EmployeeTrainingAddJsonView(View):
 
-    def post(self, request):
+    def post(self, request, pk):
         form = EMPMGMTEmployeeTrainingForm(request.POST)
+        employee = Employee.objects.get(pk=pk)
         if not form.is_valid():
             ctx = {}
             ctx.update(csrf(request))
             form_html = render_crispy_form(form, context=ctx)
             return {'success': False, 'form_html': form_html}
 
+        form.instance.employee = employee
         form.save(commit=True)
         return {'success': True}
 
@@ -148,14 +154,16 @@ class EmployeeTrainingDeleteJsonView(View):
 @method_decorator([admin_protected, json_view], name='dispatch')
 class EmployeeLanguageSkillAddJsonView(View):
 
-    def post(self, request):
+    def post(self, request, pk):
         form = EMPMGMTEmployeeLanguageSkillForm(request.POST)
+        employee = Employee.objects.get(pk=pk)
         if not form.is_valid():
             ctx = {}
             ctx.update(csrf(request))
             form_html = render_crispy_form(form, context=ctx)
             return {'success': False, 'form_html': form_html}
 
+        form.instance.employee = employee
         form.save(commit=True)
         return {'success': True}
 
@@ -171,14 +179,16 @@ class EmployeeLanguageSkillDeleteJsonView(View):
 @method_decorator([admin_protected, json_view], name='dispatch')
 class EmployeeEmploymentAddJsonView(View):
 
-    def post(self, request):
+    def post(self, request, pk):
         form = EMPMGMTEmployeeEmploymentForm(request.POST)
+        employee = Employee.objects.get(pk=pk)
         if not form.is_valid():
             ctx = {}
             ctx.update(csrf(request))
             form_html = render_crispy_form(form, context=ctx)
             return {'success': False, 'form_html': form_html}
 
+        form.instance.employee = employee
         form.save(commit=True)
         return {'success': True}
 
@@ -194,14 +204,16 @@ class EmployeeEmploymentDeleteJsonView(View):
 @method_decorator([admin_protected, json_view], name='dispatch')
 class EmployeeEducationAddJsonView(View):
 
-    def post(self, request):
+    def post(self, request, pk):
         form = EMPMGMTEmployeeEducationForm(request.POST)
+        employee = Employee.objects.get(pk=pk)
         if not form.is_valid():
             ctx = {}
             ctx.update(csrf(request))
             form_html = render_crispy_form(form, context=ctx)
             return {'success': False, 'form_html': form_html}
 
+        form.instance.employee = employee
         form.save(commit=True)
         return {'success': True}
 
@@ -217,14 +229,16 @@ class EmployeeEducationDeleteJsonView(View):
 @method_decorator([admin_protected, json_view, csrf_exempt], name='dispatch')
 class EmployeeDocumentAddJsonView(View):
 
-    def post(self, request):
+    def post(self, request, pk):
         form = EMPMGMTEmployeeDocumentForm(request.POST, request.FILES)
+        employee = Employee.objects.get(pk=pk)
         if not form.is_valid():
             ctx = {}
             ctx.update(csrf(request))
             form_html = render_crispy_form(form, context=ctx)
             return {'success': False, 'form_html': form_html}
 
+        form.instance.employee = employee
         form.save(commit=True)
         return {'success': True}
 
@@ -278,12 +292,15 @@ class EmployeeContractAddJsonView(View):
 
     def post(self, request, pk):
         form = EMPMGMTEmployeeContractForm(request.POST)
+        employee = Employee.objects.get(pk=pk)
+
         if not form.is_valid():
             ctx = {}
             ctx.update(csrf(request))
             form_html = render_crispy_form(form, context=ctx)
             return {'success': False, 'form_html': form_html}
 
+        form.instance.employee = employee
         form.save(commit=True)
         return {'success': True}
 

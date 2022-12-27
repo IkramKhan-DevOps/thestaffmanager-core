@@ -129,7 +129,7 @@
 
             <div class="modal-footer text-left">
                 <button type="button" id="employee_education_submit_btn"
-                        data-action="{% url 'admins:admins-json:employee_education_add' %}" data-param=""
+                        data-action="{% url 'admins:admins-json:employee_education_add' employee.pk %}" data-param=""
                         data-method="POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit
@@ -157,7 +157,7 @@
 
             <div class="modal-footer text-left">
                 <button type="button" id="employee_emp_submit_btn"
-                        data-action="{% url 'admins:admins-json:employee_employment_add' %}" data-param=""
+                        data-action="{% url 'admins:admins-json:employee_employment_add' employee.pk %}" data-param=""
                         data-method="POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit

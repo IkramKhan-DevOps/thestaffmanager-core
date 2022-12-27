@@ -159,7 +159,7 @@
 
             <div class="modal-footer text-left">
                 <button type="button" id="employee_qualification_submit_btn"
-                        data-action="{% url 'admins:admins-json:employee_qualification_add' %}" data-method="POST"
+                        data-action="{% url 'admins:admins-json:employee_qualification_add' employee.pk %}" data-method="POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -187,7 +187,7 @@
 
             <div class="modal-footer text-left">
                 <button type="button" id="employee_language_submit_btn"
-                        data-action="{% url 'admins:admins-json:employee_language_add' %}" data-param=""
+                        data-action="{% url 'admins:admins-json:employee_language_add' employee.pk %}" data-param=""
                         data-method="POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit
@@ -216,7 +216,7 @@
 
             <div class="modal-footer text-left">
                 <button type="button" id="employee_training_submit_btn"
-                        data-action="{% url 'admins:admins-json:employee_training_add' %}" data-method="POST"
+                        data-action="{% url 'admins:admins-json:employee_training_add' employee.pk %}" data-method="POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -272,8 +272,6 @@
             });
         });
         employee_qualification_delete_btn.click(function () {
-            alert($(this).data('action'))
-            alert($(this).data('method'))
             $.ajax({
                 url: $(this).data('action'),
                 type: $(this).data('method'),

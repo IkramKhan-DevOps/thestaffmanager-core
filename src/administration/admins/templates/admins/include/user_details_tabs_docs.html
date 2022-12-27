@@ -69,7 +69,7 @@
 
             <div class="modal-footer text-left">
                 <button type="button" id="employee_document_submit_btn"
-                        data-action="{% url 'admins:admins-json:employee_document_add' %}" data-param=""
+                        data-action="{% url 'admins:admins-json:employee_document_add' employee.pk %}" data-param=""
                         data-method="POST"
                         class="btn btn-success me-auto">
                     <i class="fa fa-check"></i>&nbsp;Submit

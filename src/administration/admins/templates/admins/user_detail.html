@@ -36,8 +36,11 @@
         </div>
         <div class="col-md-auto ms-auto d-print-none">
             <div class="btn-list">
-                <a href="#" class="text-azure">
+                <a href="{% url 'admins:user-update' object.pk %}" class="text-azure">
                     <i class="fa fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'admins:user-password-reset' object.pk %}" class="text-azure">
+                    <i class="fa fa-code"></i> Password Reset
                 </a>
             </div>
         </div>

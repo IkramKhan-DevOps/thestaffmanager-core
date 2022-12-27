@@ -198,7 +198,7 @@ class EmployeeWork(models.Model):
 
 
 class EmployeeEmergencyContact(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
@@ -215,7 +215,7 @@ class EmployeeContract(models.Model):
     EMPLOYEE_TYPE = (
         ('s', 'Standard'),
     )
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     type = models.CharField(max_length=1, choices=EMPLOYEE_TYPE, null=True, blank=True)
     start = models.DateField(help_text="When this Contract starts", null=True, blank=True)
     end = models.DateField(help_text="When this Contact ends", null=True, blank=True)
@@ -232,7 +232,7 @@ class EmployeeQualification(models.Model):
         ('fad', 'First AID'),
         ('sia', 'SIA No'),
     )
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     type = models.CharField(max_length=3, choices=TYPE_CHOICE)
     certificate_number = models.CharField(max_length=255)
     expiry_date = models.DateField()
@@ -245,7 +245,7 @@ class EmployeeQualification(models.Model):
 
 
 class EmployeeTraining(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     provider = models.CharField(max_length=255)
     course = models.CharField(max_length=255)
     start_date = models.DateField()
@@ -272,7 +272,7 @@ class EmployeeLanguageSkill(models.Model):
         ('adv', 'Advance'),
         ('pro', 'Proficient'),
     )
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     name = models.CharField(max_length=5, choices=LANGUAGE_CHOICE)
     level = models.CharField(max_length=5, choices=LEVEL_CHOICE)
 
