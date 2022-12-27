@@ -7,12 +7,12 @@ from django.views import View
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
 from jsonview.decorators import json_view
 from src.accounts.decorators import admin_protected
-from src.accounts.models import Employee, EmployeeSite, EmployeeDepartment, EmployeePosition
+from src.accounts.models import Employee, EmployeeSite, EmployeeDepartment, EmployeePosition, User
 from src.administration.admins.forms import (
     CountryForm, EMPMGMTEmployeeForm, EMPMGMTEmployeeWorkForm, EMPMGMTEmployeeAppearanceForm, EMPMGMTEmployeeHealthForm,
     EMPMGMTEmployeeIdPassForm, EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
     EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
-    EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm
+    EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm, EMPMGMTUserNotesForm
 )
 from src.accounts.models import (
     Employee, EmployeeContract, EmployeeDocument, EmployeeEducation, EmployeeEmployment, EmployeeQualification,
@@ -65,6 +65,23 @@ class EmployeeJsonView(View):
     def post(self, request, pk, *args, **kwargs):
         instance = get_object_or_404(Employee, pk=pk)
         form = EMPMGMTEmployeeForm(instance=instance, data=request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+            return {'success': True}
+
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
+        return {'success': False, 'form_html': form_html}
+
+
+@method_decorator([admin_protected, json_view, csrf_exempt], name='dispatch')
+class UserUpdateJsonView(View):
+
+    def post(self, request, pk, *args, **kwargs):
+        instance = get_object_or_404(User, pk=pk)
+        form = EMPMGMTUserNotesForm(instance=instance, data=request.POST)
 
         if form.is_valid():
             form.save(commit=True)
@@ -238,6 +255,7 @@ class EmployeeDocumentAddJsonView(View):
             form_html = render_crispy_form(form, context=ctx)
             return {'success': False, 'form_html': form_html}
 
+        form.instance.uploaded_by = request.user
         form.instance.employee = employee
         form.save(commit=True)
         return {'success': True}

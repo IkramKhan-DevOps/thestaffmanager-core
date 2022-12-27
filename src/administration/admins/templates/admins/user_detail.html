@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block base_css %}
     <link rel="stylesheet"
@@ -123,7 +124,12 @@
                                     <th>Access</th>
                                     <td>
                                         <label class="form-check form-switch mt-2">
-                                            <input class="form-check-input" type="checkbox" checked>
+                                            {% if object.is_active %}
+                                                <input id="change_is_active" class="form-check-input" type="checkbox"
+                                                       checked>
+                                            {% else %}
+                                                <input id="change_is_active" class="form-check-input" type="checkbox">
+                                            {% endif %}
                                         </label>
                                     </td>
                                 </tr>
@@ -152,12 +158,9 @@
         </div>
 
         <div class="col-sm-4">
-            <div class="card bg-warning-lt h-100">
-                <div class="card-header">
-                    <b class="text-warning">Notes</b>
-                </div>
-                <div class="card-body">
-
+            <div class="card h-100 bg-yellow-lt">
+                <div class="card-body" id="open_notes_model">
+                    {{ object.note|safe }}
                 </div>
             </div>
         </div>
@@ -167,6 +170,33 @@
         {% include 'admins/include/user_detail_tabs.html' %}
     {% endif %}
 
+    <div class="modal" tabindex="-1" id="user_notes_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employment Details Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ user_notes_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="user_notes_submit_btn"
+                        data-action="{% url 'admins:admins-json:user_notes_change' object.pk %}"
+                        data-param="" data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block base_internal_scripts %}
@@ -174,4 +204,39 @@
     <script src="{% static 'core/pages/jquery.form-repeater.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
             integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+{% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+        $(document).ready(function () {
+
+            {# EMPLOYEE WORK DETAILS #}
+        let open_notes_model = $('#open_notes_model')
+        let user_notes_submit_btn = $('#user_notes_submit_btn')
+        let user_notes_model = $('#user_notes_model')
+        let user_notes_form = user_notes_model.find('form')
+
+        open_notes_model.click(function () {
+            user_notes_model.modal('show')
+        });
+        user_notes_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: user_notes_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        user_notes_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    user_notes_form.find('.error-message').show()
+                }
+            });
+        })
+
+        })
+    </script>
 {% endblock %}

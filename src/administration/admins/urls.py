@@ -3,12 +3,11 @@ from .views import (
     DashboardView, ScheduleView, TimeClockView,
     PositionListView, PositionDeleteView, PositionCreateView, PositionUpdateView,
     UserPasswordResetView, UserListView, UserStaffCreateView, UserEmployeeCreateView, UserUpdateView, UserDeleteView,
-    UserEmployeeUpdateView,
     ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView,
     SiteListView, SiteDetailView, SiteUpdateView, SiteDeleteView, SiteCreateView,
     ReportTypeListView, ReportTypeUpdateView, ReportTypeDeleteView, ReportTypeCreateView,
     ShiftDayUpdateView, ShiftDayDeleteView,
-    ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
+    ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView,
     ShiftListView, ShiftDetailView, ShiftCustomCreateView,
     CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView, SubContractorListView,
     SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView,
@@ -95,11 +94,6 @@ urlpatterns += [
     path('user/staff/add/', UserStaffCreateView.as_view(), name='user-staff-add'),
     path('user/employee/add/', UserEmployeeCreateView.as_view(), name='user-employee-add'),
     path('user/<int:pk>/reset/password/', UserPasswordResetView.as_view(), name='user-password-reset'),
-
-    path('user/<int:pk>/employee/change/', UserEmployeeUpdateView.as_view(), name='user-employee-update'),
-    path('user/<int:pk>/document/upload/', UserDocumentCreateView.as_view(), name='user-doc-upload'),
-    path('user/<int:user_pk>/document/<int:pk>/delete/', UserDocumentDeleteView.as_view(), name='user-doc-delete'),
-
 ]
 
 urlpatterns += [

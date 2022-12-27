@@ -14,7 +14,6 @@
                 <table class="table table-sm table-hover">
                     <thead class="thead-light">
                     <tr>
-                        <th>ID</th>
                         <th>Upload By</th>
                         <th>Name</th>
                         <th>File</th>
@@ -24,16 +23,21 @@
                     <tbody>
                     {% for oobject in employee_docs %}
                         <tr>
-                            <td>{{ oobbject.pk }}</td>
                             <td>{{ oobject.uploaded_by }}</td>
                             <td>{{ oobject.name }}</td>
-                            <td>{{ oobject.file }}</td>
+                            <td>
+                                {% if oobject.file %}
+                                    <a href="{{ oobject.file.url }}"><i class="fa fa-file"></i>&nbsp;View File</a>
+                                {% else %}
+                                    <a href="#" class="text-danger"><i class="fa fa-file"></i>Not available</a>
+                                {% endif %}
+                            </td>
                             <td>
                                 <button type="button" id="employee_document_delete_btn"
                                         data-action="{% url 'admins:admins-json:employee_document_delete' oobject.pk %}"
                                         data-param=""
                                         data-method="GET"
-                                        class="btn btn-danger btn-sm me-auto">
+                                        class="btn btn-link btn-sm text-danger">
                                     <i class="fa fa-trash"></i>
                                 </button>
                             </td>

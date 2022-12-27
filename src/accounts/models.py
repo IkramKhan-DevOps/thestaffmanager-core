@@ -27,6 +27,7 @@ class User(AbstractUser):
         help_text='size of logo must be 100*100 and format must be png image file', crop=['middle', 'center']
     )
     phone_number = models.CharField(max_length=30, null=True, blank=True)
+    note = models.TextField(null=True, blank=True, default='')
 
     is_employee = models.BooleanField(default=False, help_text="Designates whether this user is employee")
     is_two_factor_auth = models.BooleanField(default=False, verbose_name="Two Factor Auth")

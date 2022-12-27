@@ -22,7 +22,8 @@ from .forms import (
 
     EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
     EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
-    EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm
+    EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm,
+    EMPMGMTUserNotesForm
 )
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department,
@@ -321,6 +322,7 @@ class UserDetailView(DetailView):
             context['employee_appearance'] = employee_appearance
 
             context['employee_form'] = EMPMGMTEmployeeForm(instance=employee)
+            context['user_notes_form'] = EMPMGMTUserNotesForm(instance=self.object)
             context['employee_id_form'] = EMPMGMTEmployeeIdPassForm(instance=employee_id)
             context['employee_work_form'] = EMPMGMTEmployeeWorkForm(instance=employee_work)
             context['employee_health_form'] = EMPMGMTEmployeeHealthForm(instance=employee_health)
@@ -365,45 +367,6 @@ class UserPasswordResetView(View):
             form.save(commit=True)
             messages.success(request, f"{user.get_full_name()}'s password changed successfully.")
         return render(request, 'admins/user_password_change.html', {'form': form})
-
-
-class UserEmployeeUpdateView(View):
-
-    def post(self, request, pk, *args, **kwargs):
-        user = get_object_or_404(User.objects.filter(is_employee=True), pk=pk)
-        form = EmployeeForm(request.POST, instance=Employee.objects.filter(user=user).first())
-
-        if form.is_valid():
-            form.save(commit=True)
-            messages.success(request, f"User {user.username} profile information updated")
-        else:
-            messages.error(request, "Something is wrong with this request")
-
-        return redirect("admins:user-update", pk)
-
-
-@method_decorator(admin_protected, name='dispatch')
-class UserDocumentCreateView(View):
-
-    def post(self, request, pk, *args, **kwargs):
-        user = get_object_or_404(User, pk=pk)
-        form = UserDocumentForm(request.POST, files=request.FILES)
-        if form.is_valid():
-            form.instance.user = user
-            form.save(commit=True)
-            messages.success(request, f"User {user.username} document added successfully")
-        else:
-            messages.error(request, "Something is Wrong with this request")
-        return redirect("admins:user-update", pk)
-
-
-@method_decorator(admin_protected, name='dispatch')
-class UserDocumentDeleteView(DeleteView):
-    model = UserDocument
-    template_name = 'admins/userdocument_confirm_delete.html'
-
-    def get_success_url(self):
-        return reverse_lazy("admins:user-update", args=[self.kwargs['user_pk']])
 
 
 """ CLIENTS and CONTACTS """

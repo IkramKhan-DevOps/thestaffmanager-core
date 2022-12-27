@@ -125,7 +125,7 @@ class EMPMGMTEmployeeDocumentForm(ModelForm):
     class Meta:
         model = EmployeeDocument
         fields = '__all__'
-        exclude = ['employee']
+        exclude = ['employee', 'uploaded_by']
 
 
 class EMPMGMTEmployeeEducationForm(ModelForm):
@@ -168,3 +168,9 @@ class EMPMGMTEmployeeEmergencyContactForm(ModelForm):
         model = EmployeeEmergencyContact
         fields = '__all__'
         exclude = ['employee']
+
+
+class EMPMGMTUserNotesForm(ModelForm):
+    class Meta:
+        model = User
+        fields = ['note']
