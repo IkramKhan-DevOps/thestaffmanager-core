@@ -1,6 +1,13 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block base_css %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+
+{% endblock %}
+
 {% block base_subtitle %}User Details{% endblock %}
 {% block base_content %}
 
@@ -157,4 +164,11 @@
         {% include 'admins/include/user_detail_tabs.html' %}
     {% endif %}
 
+{% endblock %}
+
+{% block base_internal_scripts %}
+    <script src="{% static 'core/plugins/repeater/jquery.repeater.min.js' %}"></script>
+    <script src="{% static 'core/pages/jquery.form-repeater.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
 {% endblock %}

@@ -170,6 +170,23 @@
 <script>
     $(document).ready(function () {
 
+        $('#employee_education_add_model #id_date_form').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+        $('#employee_education_add_model #id_date_to').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+        $('#employee_emp_add_model #id_date_form').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+        $('#employee_emp_add_model #id_date_to').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
         {# QUALIFICATION AREA --------------------------------------------------------------------------------------- #}
 
         let employee_education_add_btn = $('body #employee_education_add_btn')

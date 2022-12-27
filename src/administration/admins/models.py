@@ -87,7 +87,7 @@ class Country(models.Model):
         print("- COUNTRY: build")
         for x in range(loop):
             Country.objects.create(
-                name=fake.bs()
+                name=fake.country()
             )
             print(f"---- country: {x} faked.")
         print("- END ")
@@ -208,7 +208,6 @@ class Site(models.Model):
 
     @classmethod
     def fake(cls, loop=10):
-        print(fake.country())
         print()
         print("- SITES: build")
         for x in range(loop):

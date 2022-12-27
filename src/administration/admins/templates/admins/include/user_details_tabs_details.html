@@ -130,17 +130,18 @@
             <div class="modal-body">
 
                 <form>
-                {% csrf_token %}
+                    {% csrf_token %}
                     {% if sites %}
-                    {% for site in sites %}
-                        <div id="div_id_need_condition" class="form-check">
-                            <input type="checkbox" class="checkboxinput form-check-input"
-                                    {% if site.pk in employee_sites_list %} checked {% endif %}
-                                   name="{{ forloop.counter }}" id="site_{{ forloop.counter }}">
-                            <label for="site_{{ forloop.counter }}" class="form-check-label"> {{ site.name }} </label>
-                        </div>
-                    {% endfor %}
-                {% endif %}
+                        {% for site in sites %}
+                            <div id="div_id_need_condition" class="form-check">
+                                <input type="checkbox" class="checkboxinput form-check-input"
+                                        {% if site.pk in employee_sites_list %} checked {% endif %}
+                                       name="{{ forloop.counter }}" id="site_{{ forloop.counter }}">
+                                <label for="site_{{ forloop.counter }}"
+                                       class="form-check-label"> {{ site.name }} </label>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
 
                 </form>
             </div>
@@ -167,12 +168,12 @@
             <div class="modal-body">
 
                 <form>
-                {% csrf_token %}
+                    {% csrf_token %}
                     {% if departments %}
                         {% for department in departments %}
                             <div id="div_id_need_condition" class="form-check">
                                 <input type="checkbox" class="checkboxinput form-check-input"
-                                       {% if department.pk in employee_department_list %} checked {% endif %}
+                                        {% if department.pk in employee_department_list %} checked {% endif %}
                                        name="{{ forloop.counter }}" id="department_{{ forloop.counter }}">
                                 <label for="department_{{ forloop.counter }}"
                                        class="form-check-label"> {{ department.name }} </label>
@@ -211,7 +212,7 @@
                         {% for position in positions %}
                             <div id="div_id_need_condition" class="form-check">
                                 <input type="checkbox" class="checkboxinput form-check-input"
-                                       {% if position.pk in employee_positions_list %} checked {% endif %}
+                                        {% if position.pk in employee_positions_list %} checked {% endif %}
                                        name="{{ forloop.counter }}" id="position_{{ forloop.counter }}">
                                 <label for="position_{{ forloop.counter }}"
                                        class="form-check-label"> {{ position.name }} </label>
@@ -236,6 +237,11 @@
 
 <script>
     $(document).ready(function () {
+
+        $('#id_date_of_birth').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
 
         let site_model = $('#site_model')
         let site_form = site_model.find('form')

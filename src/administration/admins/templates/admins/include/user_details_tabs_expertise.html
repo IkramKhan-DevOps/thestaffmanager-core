@@ -229,6 +229,21 @@
 <script>
     $(document).ready(function () {
 
+        $('#id_expiry_date').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
+        $('#id_start_date').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
+        $('#id_end_date').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
         {# QUALIFICATION AREA --------------------------------------------------------------------------------------- #}
 
         let employee_qualification_add_btn = $('body #employee_qualification_add_btn')
