@@ -80,30 +80,35 @@ class EMPMGMTEmployeeForm(ModelForm):
     class Meta:
         model = Employee
         fields = '__all__'
+        exclude = ['user']
 
 
 class EMPMGMTEmployeeWorkForm(ModelForm):
     class Meta:
         model = EmployeeWork
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeIdPassForm(ModelForm):
     class Meta:
         model = EmployeeIdPass
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeHealthForm(ModelForm):
     class Meta:
         model = EmployeeHealth
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeAppearanceForm(ModelForm):
     class Meta:
         model = EmployeeAppearance
         fields = '__all__'
+        exclude = ['employee']
 
 
 """ ------ """
@@ -113,45 +118,53 @@ class EMPMGMTEmployeeContractForm(ModelForm):
     class Meta:
         model = EmployeeContract
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeDocumentForm(ModelForm):
     class Meta:
         model = EmployeeDocument
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeEducationForm(ModelForm):
     class Meta:
         model = EmployeeEducation
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeEmploymentForm(ModelForm):
     class Meta:
         model = EmployeeEmployment
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeQualificationForm(ModelForm):
     class Meta:
         model = EmployeeQualification
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeTrainingForm(ModelForm):
     class Meta:
         model = EmployeeTraining
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeLanguageSkillForm(ModelForm):
     class Meta:
         model = EmployeeLanguageSkill
         fields = '__all__'
+        exclude = ['employee']
 
 
 class EMPMGMTEmployeeEmergencyContactForm(ModelForm):
     class Meta:
         model = EmployeeEmergencyContact
         fields = '__all__'
+        exclude = ['employee']

@@ -333,15 +333,15 @@ class EmployeeEducation(models.Model):
 
 class EmployeeHealth(models.Model):
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE, blank=True)
-    need_condition = models.BooleanField(default=False, help_text="Does the user have a medical condition?")
-    need_carer = models.BooleanField(default=False, help_text="Does the user need to be accompanied by a carer or supporter?")
     is_disabled = models.CharField(default="No", help_text="Disabled no. (if registered disabled)", max_length=255)
     absent_days_in_last_year = models.PositiveIntegerField(default=0, help_text="How many days has the user been absent from work in the last 2 years due to sickness?")
+    additional_comments = models.TextField(null=True, blank=True)
+    other_serious_illness = models.TextField(null=True, blank=True, help_text="Details of any other illness or injuries relevant to the user")
+    need_condition = models.BooleanField(default=False, help_text="Does the user have a medical condition?")
+    need_carer = models.BooleanField(default=False, help_text="Does the user need to be accompanied by a carer or supporter?")
     heart_disease = models.BooleanField(default=False)
     diabetes = models.BooleanField(default=False)
     glasses = models.BooleanField(default=False, verbose_name="Glasses or Contact Lenses")
-    additional_comments = models.TextField(null=True, blank=True)
-    other_serious_illness = models.TextField(null=True, blank=True, help_text="Details of any other illness or injuries relevant to the user")
 
     class Meta:
         ordering = ['-employee']
