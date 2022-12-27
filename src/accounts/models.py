@@ -427,11 +427,11 @@ class SubContractor(models.Model):
 
     street_address = models.CharField(max_length=1000, null=True, blank=True)
     city = models.CharField(max_length=1000, null=True, blank=True)
-    country = models.CharField(max_length=1000, null=True, blank=True)
+    country = models.ForeignKey('admins.Country', on_delete=models.SET_NULL, null=True, blank=True)
     postal_code = models.CharField(max_length=1000, null=True, blank=True)
 
-    positions = models.ManyToManyField('admins.Position', through='SubContractorPosition')
-    departments = models.ManyToManyField('admins.Department', through='SubContractorDepartment')
+    positions = models.ManyToManyField('admins.Position', through='SubContractorPosition', blank=True)
+    departments = models.ManyToManyField('admins.Department', through='SubContractorDepartment', blank=True)
 
     class Meta:
         ordering = ['-id']

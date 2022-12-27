@@ -1,0 +1,33 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block base_subtitle %}Sub Contractor Form {% endblock %}
+{% block base_subhead_heading %}Sub Contractor &rAarr; Form {% endblock %}
+{% block base_subhead_paragraph %}Sub Contractor create/update form{% endblock %}
+{% block base_subhead_button %}
+    <a href="{% url 'admins:sub-contractor-list' %}">&larr; Sub Contractors</a>
+{% endblock %}
+
+
+{% block base_content %}
+
+    <div class="row justify-content-center">
+        <div class="col-sm-6">
+            <div class="card">
+                <div class="card-body">
+
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-check-circle"></i> Submit
+                        </button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -34,7 +34,7 @@ from src.accounts.models import (
     UserDocument, User,
     EmployeeIdPass, EmployeeWork, EmployeeHealth, EmployeeAppearance,
     EmployeeContract, EmployeeDocument, EmployeeEducation, EmployeeEmployment, EmployeeQualification,
-    EmployeeTraining, EmployeeLanguageSkill, EmployeeEmergencyContact, EmployeeSite
+    EmployeeTraining, EmployeeLanguageSkill, EmployeeEmergencyContact, EmployeeSite, SubContractor
 )
 
 """ MAIN """
@@ -623,3 +623,42 @@ class ReportTypeUpdateView(UpdateView):
 class ReportTypeDeleteView(DeleteView):
     model = ReportType
     success_url = reverse_lazy('admins:report-type-list')
+
+
+""" Sub Contractors """
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorListView(ListView):
+    queryset = SubContractor.objects.all()
+    template_name = 'admins/subcontractor_list.html'
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorCreateView(CreateView):
+    model = SubContractor
+    fields = '__all__'
+    template_name = 'admins/subcontractor_form.html'
+    success_url = reverse_lazy('admins:sub-contractor-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorUpdateView(UpdateView):
+    model = SubContractor
+    fields = '__all__'
+    template_name = 'admins/subcontractor_form.html'
+    success_url = reverse_lazy('admins:sub-contractor-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorDetailView(DetailView):
+    model = SubContractor
+    template_name = 'admins/subcontractor_detail.html'
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorDeleteView(DeleteView):
+    model = SubContractor
+    template_name = 'admins/subcontractor_confirm_delete.html'
+    success_url = reverse_lazy('admins:sub-contractor-list')
+

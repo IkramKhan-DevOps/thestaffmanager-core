@@ -10,7 +10,8 @@ from .views import (
     ShiftDayUpdateView, ShiftDayDeleteView,
     ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
     ShiftListView, ShiftDetailView, ShiftCustomCreateView,
-    CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView
+    CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView, SubContractorListView,
+    SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView
 )
 
 app_name = 'admins'
@@ -68,6 +69,14 @@ urlpatterns += [
     path('report-type/add/', ReportTypeCreateView.as_view(), name='report-type-add'),
     path('report-type/<int:pk>/change/', ReportTypeUpdateView.as_view(), name='report-type-update'),
     path('report-type/<int:pk>/delete/', ReportTypeDeleteView.as_view(), name='report-type-delete'),
+]
+
+urlpatterns += [
+    path('sub-contractor/', SubContractorListView.as_view(), name='sub-contractor-list'),
+    path('sub-contractor/add/', SubContractorCreateView.as_view(), name='sub-contractor-add'),
+    path('sub-contractor/<int:pk>/', SubContractorDetailView.as_view(), name='sub-contractor-detail'),
+    path('sub-contractor/<int:pk>/change/', SubContractorUpdateView.as_view(), name='sub-contractor-update'),
+    path('sub-contractor/<int:pk>/delete/', SubContractorDeleteView.as_view(), name='sub-contractor-delete'),
 ]
 
 urlpatterns += [
