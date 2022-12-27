@@ -12,7 +12,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 BASE_URL = env('BASE_URL')
 
 """ __ CORE CONFIGURATIONS __"""
-DEBUG = True
+DEBUG = bool(env('DEBUG'))
 SECRET_KEY = env('SECRET_KEY')
 ENVIRONMENT = env('ENVIRONMENT')
 AUTH_USER_MODEL = 'accounts.User'
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'rest_framework',
     'colorfield',
+    'widget_tweaks',
 
     # SYSTEM APPS
     'src.accounts',

@@ -1,0 +1,130 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="tab-pane" id="tabs-docs" role="tabpanel">
+    {# EMPLOYMENT #}
+    <div class="mb-4">
+        <div class="text-right">
+            <button class="btn btn-link" id="employee_document_add_btn">
+                + Add Document
+            </button>
+        </div>
+        {% if employee_docs %}
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>Upload By</th>
+                        <th>Name</th>
+                        <th>File</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for oobject in employee_docs %}
+                        <tr>
+                            <td>{{ oobject.uploaded_by }}</td>
+                            <td>{{ oobject.name }}</td>
+                            <td>
+                                {% if oobject.file %}
+                                    <a href="{{ oobject.file.url }}"><i class="fa fa-file"></i>&nbsp;View File</a>
+                                {% else %}
+                                    <a href="#" class="text-danger"><i class="fa fa-file"></i>Not available</a>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <button type="button" id="employee_document_delete_btn"
+                                        data-action="{% url 'admins:admins-json:employee_document_delete' oobject.pk %}"
+                                        data-param=""
+                                        data-method="GET"
+                                        class="btn btn-link btn-sm text-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div>
+                <p class="mb-0 text-danger"><b>Information not available</b></p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="employee_document_add_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Education</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" id="employee_document_add_form_data" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ employee_docs_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_document_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_document_add' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let employee_document_add_btn = $('body #employee_document_add_btn')
+        let employee_document_delete_btn = $('body #employee_document_delete_btn')
+        let employee_document_submit_btn = $('body #employee_document_submit_btn')
+        let employee_document_add_model = $('body #employee_document_add_model')
+        let employee_document_add_form = employee_document_add_model.find('form')
+        employee_document_add_btn.click(function () {
+            employee_document_add_model.modal('show')
+        });
+        employee_document_submit_btn.click(function () {
+            console.log(employee_document_add_form)
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: new FormData(document.getElementById('employee_document_add_form_data')),
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_document_add_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_document_add_form.find('.error-message').show()
+                }
+            });
+        });
+        employee_document_delete_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+    });
+</script>

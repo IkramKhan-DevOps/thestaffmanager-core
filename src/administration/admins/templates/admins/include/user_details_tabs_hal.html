@@ -1,0 +1,206 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="tab-pane" id="tabs-hal" role="tabpanel">
+
+    <div class="row">
+        {# LEFT #}
+        <div class="col-sm-6">
+            <dl class="row">
+                <div class="hr-text">
+                    <span>Appearance Details</span>
+                </div>
+
+                <h3 class="">MEASUREMENTS</h3>
+                <dt class="col-5">Height</dt>
+                <dd class="col-7">{{ employee_appearance.height }}</dd>
+                <dt class="col-5">Weight</dt>
+                <dd class="col-7">{{ employee_appearance.weight }}</dd>
+                <dt class="col-5">Bust</dt>
+                <dd class="col-7">{{ employee_appearance.bust }}</dd>
+                <dt class="col-5">Waist</dt>
+                <dd class="col-7">{{ employee_appearance.waist }}</dd>
+                <dt class="col-5">Chest</dt>
+                <dd class="col-7">{{ employee_appearance.chest }}</dd>
+                <dt class="col-5">Hips</dt>
+                <dd class="col-7">{{ employee_appearance.hips }}</dd>
+                <dt class="col-5">Inside leg</dt>
+                <dd class="col-7">{{ employee_appearance.inside_leg }}</dd>
+
+                <h3 class="mt-3">LOOKS</h3>
+                <dt class="col-5">Hair color</dt>
+                <dd class="col-7">{{ employee_appearance.hair_color }}</dd>
+                <dt class="col-5">Eye color</dt>
+                <dd class="col-7">{{ employee_appearance.eye_color }}</dd>
+                <dt class="col-5">Hair length</dt>
+                <dd class="col-7">{{ employee_appearance.hair_length }}</dd>
+                <dt class="col-5">Facial hair</dt>
+                <dd class="col-7">{{ employee_appearance.facial_hair }}</dd>
+
+                <h3 class="mt-3">SIZE</h3>
+                <dt class="col-5">T shirt size</dt>
+                <dd class="col-7">{{ employee_appearance.t_shirt_size }}</dd>
+                <dt class="col-5">Jacket size</dt>
+                <dd class="col-7">{{ employee_appearance.jacket_size }}</dd>
+                <dt class="col-5">Hate size</dt>
+                <dd class="col-7">{{ employee_appearance.hate_size }}</dd>
+                <dt class="col-5">Trouser size</dt>
+                <dd class="col-7">{{ employee_appearance.trouser_size }}</dd>
+                <dt class="col-5">Skirt size</dt>
+                <dd class="col-7">{{ employee_appearance.skirt_size }}</dd>
+                <dt class="col-5">Shoe size</dt>
+                <dd class="col-7">{{ employee_appearance.shoe_size }}</dd>
+            </dl>
+
+            <button class="btn btn-outline-secondary" id="employee_a_update_btn">
+                <i class="fa fa-edit"></i> Edit
+            </button>
+        </div>
+
+        {# RIGHT #}
+        <div class="col-sm-6">
+            <dl class="row">
+                <div class="hr-text">
+                    <span>Health Details</span>
+                </div>
+
+                <dt class="col-5">Need condition</dt>
+                <dd class="col-7">{{ employee_health.need_condition }}</dd>
+                <dt class="col-5">Need carer</dt>
+                <dd class="col-7">{{ employee_health.need_carer }}</dd>
+                <dt class="col-5">Is disabled</dt>
+                <dd class="col-7">{{ employee_health.is_disabled }}</dd>
+                <dt class="col-5">Absent days in last year</dt>
+                <dd class="col-7">{{ employee_health.absent_days_in_last_year }}</dd>
+                <dt class="col-5">Heart disease</dt>
+                <dd class="col-7">{{ employee_health.heart_disease }}</dd>
+                <dt class="col-5">Diabetes</dt>
+                <dd class="col-7">{{ employee_health.diabetes }}</dd>
+                <dt class="col-5">Glasses</dt>
+                <dd class="col-7">{{ employee_health.glasses }}</dd>
+                <dt class="col-5">Additional comments</dt>
+                <dd class="col-7">{{ employee_health.additional_comments }}</dd>
+                <dt class="col-5">Other serious illness</dt>
+                <dd class="col-7">{{ employee_health.other_serious_illness }}</dd>
+
+            </dl>
+
+            <button class="btn btn-outline-secondary" id="employee_h_update_btn">
+                <i class="fa fa-edit"></i> Edit
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<div class="modal" tabindex="-1" id="employee_h_update_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employee Health Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_health_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_h_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_health_change' employee.pk %}"
+                        data-param="" data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="employee_a_update_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Employment Appearance Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_appearance_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_a_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_appearance_change' employee.pk %}"
+                        data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        let employee_a_update_btn = $('body #employee_a_update_btn')
+        let employee_a_submit_btn = $('body #employee_a_submit_btn')
+        let employee_a_update_model = $('body #employee_a_update_model')
+        let employee_a_update_form = employee_a_update_model.find('form')
+        employee_a_update_btn.click(function () {
+            employee_a_update_model.modal('show')
+        });
+        employee_a_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employee_a_update_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_a_update_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_a_update_form.find('.error-message').show()
+                }
+            });
+        });
+
+        let employee_h_update_btn = $('body #employee_h_update_btn')
+        let employee_h_submit_btn = $('body #employee_h_submit_btn')
+        let employee_h_update_model = $('body #employee_h_update_model')
+        let employee_h_update_form = employee_h_update_model.find('form')
+        employee_h_update_btn.click(function () {
+            employee_h_update_model.modal('show')
+        });
+        employee_h_submit_btn.click(function () {
+            alert($(this).data('action'))
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employee_h_update_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_h_update_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_h_update_form.find('.error-message').show()
+                }
+            });
+        });
+    });
+</script>

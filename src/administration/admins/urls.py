@@ -3,14 +3,15 @@ from .views import (
     DashboardView, ScheduleView, TimeClockView,
     PositionListView, PositionDeleteView, PositionCreateView, PositionUpdateView,
     UserPasswordResetView, UserListView, UserStaffCreateView, UserEmployeeCreateView, UserUpdateView, UserDeleteView,
-    UserEmployeeUpdateView,
     ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView,
     SiteListView, SiteDetailView, SiteUpdateView, SiteDeleteView, SiteCreateView,
     ReportTypeListView, ReportTypeUpdateView, ReportTypeDeleteView, ReportTypeCreateView,
     ShiftDayUpdateView, ShiftDayDeleteView,
-    ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
+    ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView,
     ShiftListView, ShiftDetailView, ShiftCustomCreateView,
-    CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView
+    CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView, SubContractorListView,
+    SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView,
+    DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView
 )
 
 app_name = 'admins'
@@ -32,6 +33,13 @@ urlpatterns += [
     path('country/add/', CountryCreateView.as_view(), name='country-add'),
     path('country/<int:pk>/change/', CountryUpdateView.as_view(), name='country-update'),
     path('country/<int:pk>/delete/', CountryDeleteView.as_view(), name='country-delete'),
+]
+
+urlpatterns += [
+    path('department/', DepartmentListView.as_view(), name='department-list'),
+    path('department/add/', DepartmentCreateView.as_view(), name='department-add'),
+    path('department/<int:pk>/change/', DepartmentUpdateView.as_view(), name='department-update'),
+    path('department/<int:pk>/delete/', DepartmentDeleteView.as_view(), name='department-delete'),
 ]
 
 urlpatterns += [
@@ -71,6 +79,14 @@ urlpatterns += [
 ]
 
 urlpatterns += [
+    path('sub-contractor/', SubContractorListView.as_view(), name='sub-contractor-list'),
+    path('sub-contractor/add/', SubContractorCreateView.as_view(), name='sub-contractor-add'),
+    path('sub-contractor/<int:pk>/', SubContractorDetailView.as_view(), name='sub-contractor-detail'),
+    path('sub-contractor/<int:pk>/change/', SubContractorUpdateView.as_view(), name='sub-contractor-update'),
+    path('sub-contractor/<int:pk>/delete/', SubContractorDeleteView.as_view(), name='sub-contractor-delete'),
+]
+
+urlpatterns += [
     path('user/', UserListView.as_view(), name='user-list'),
     path('user/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
     path('user/<int:pk>/change/', UserUpdateView.as_view(), name='user-update'),
@@ -78,17 +94,9 @@ urlpatterns += [
     path('user/staff/add/', UserStaffCreateView.as_view(), name='user-staff-add'),
     path('user/employee/add/', UserEmployeeCreateView.as_view(), name='user-employee-add'),
     path('user/<int:pk>/reset/password/', UserPasswordResetView.as_view(), name='user-password-reset'),
-
-    path('user/<int:pk>/employee/change/', UserEmployeeUpdateView.as_view(), name='user-employee-update'),
-    path('user/<int:pk>/document/upload/', UserDocumentCreateView.as_view(), name='user-doc-upload'),
-    path('user/<int:user_pk>/document/<int:pk>/delete/', UserDocumentDeleteView.as_view(), name='user-doc-delete'),
-
 ]
 
 urlpatterns += [
-    path('api/', include('src.administration.admins.admins-api.urls', namespace='admins-api'))
-]
-
-urlpatterns += [
-    path('ccs/', ShiftCustomCreateView.as_view(), name="ccs")
+    path('api/', include('src.administration.admins.admins-api.urls', namespace='admins-api')),
+    path('json/', include('src.administration.admins.admins-json.urls', namespace='admins-json'))
 ]

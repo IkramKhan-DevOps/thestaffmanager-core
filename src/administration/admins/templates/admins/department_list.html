@@ -1,0 +1,84 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+
+{% block base_subtitle %} Departments{% endblock %}
+{% block base_subhead_heading %} Departments &rAarr; List{% endblock %}
+{% block base_subhead_paragraph %}List of all available Departments{% endblock %}
+
+{% block base_subhead_button %}
+    <a href="{% url 'admins:department-add' %}" class="btn btn-primary">
+        Add Department
+    </a>
+{% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                {% if object_list %}
+
+                    <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="thead-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Active</th>
+                            <th>-</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for object in object_list %}
+                            <tr>
+                                <td>{{ object.name }}</td>
+                                <td>
+                                    {% if object.is_active %}
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="icon icon-tabler icon-tabler-check text-success" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M5 12l5 5l10 -10"></path>
+                                        </svg>
+                                    {% else %}
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                             class="icon icon-tabler icon-tabler-x text-danger" width="24"
+                                             height="24"
+                                             viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                                             stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                    {% endif %}
+                                </td>
+                                <th>
+                                    <a href="{% url 'admins:department-add' %}">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'admins:department-add' %}">
+                                        <i class="fa fa-trash text-danger"></i>
+                                    </a>
+                                </th>
+                            </tr>
+                        {% endfor %}
+
+
+                        </tbody>
+                    </table>
+
+                {% else %}
+                    <div class="card-body">
+                        <p class="text-danger mb-0"><b>No objects available</b></p>
+                    </div>
+                {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -2,20 +2,18 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block base_subtitle %}Password Change{% endblock %}
-{% block base_subhead_heading %}User &rAarr; Password Change {% endblock %}
-{% block base_subhead_paragraph %}There is no way to see user's password but you can reset.{% endblock %}
+{% block base_subtitle %}Department Form {% endblock %}
+{% block base_subhead_heading %}Department &rAarr; Form {% endblock %}
+{% block base_subhead_paragraph %}Department create/update form{% endblock %}
 {% block base_subhead_button %}
-    <b>
-        <a class="" href="{% url 'admins:user-detail' form.user.pk %}">
-            &larr; user
-        </a>
-    </b>
+    <a href="{% url 'admins:department-list' %}">&larr; Countries</a>
 {% endblock %}
+
+
 {% block base_content %}
 
     <div class="row justify-content-center">
-        <div class="col-6">
+        <div class="col-sm-6">
             <div class="card">
                 <div class="card-body">
 

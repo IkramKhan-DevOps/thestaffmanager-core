@@ -1,0 +1,269 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="tab-pane" id="tabs-background" role="tabpanel">
+    {# EMPLOYMENT #}
+    <div class="mb-4">
+        <div class="text-right">
+            <button class="btn btn-link" id="employee_emp_add_btn">
+                + Add Employment
+            </button>
+        </div>
+        {% if employee_employments %}
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>Employer</th>
+                        <th>Position</th>
+                        <th>Description</th>
+                        <th>Contact Person</th>
+                        <th>Contact Phone</th>
+                        <th>Date From</th>
+                        <th>Date To</th>
+                        <th>Reason For Leaving</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for oobject in employee_employments %}
+                        <tr>
+                            <td>{{ oobject.employer }}</td>
+                            <td>{{ oobject.position }}</td>
+                            <td>{{ oobject.description }}</td>
+                            <td>{{ oobject.contact_person }}</td>
+                            <td>{{ oobject.contact_phone }}</td>
+                            <td>{{ oobject.date_form }}</td>
+                            <td>{{ oobject.date_to }}</td>
+                            <td>{{ oobject.reason_for_leaving }}</td>
+                            <td>
+                                <button type="button" id="employee_emp_delete_btn"
+                                        data-action="{% url 'admins:admins-json:employee_employment_delete' oobject.pk %}" data-param=""
+                                        data-method="GET"
+                                        class="btn btn-link btn-sm text-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div>
+                <p class="mb-0 text-danger"><b>Information not available</b></p>
+            </div>
+        {% endif %}
+    </div>
+
+    {# EDUCATION #}
+    <div class="mb-4">
+        <div class="text-right">
+            <button class="btn btn-link" id="employee_education_add_btn">
+                + Add Education
+            </button>
+        </div>
+        {% if employee_educations %}
+            <div class="table-responsive">
+                <table class="table table-sm table-hover">
+                    <thead class="thead-light">
+                    <tr>
+                        <th>Institution</th>
+                        <th>Speciality</th>
+                        <th>Degree Obtained</th>
+                        <th>City</th>
+                        <th>Country</th>
+                        <th>Date Form</th>
+                        <th>Dte To</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for oobject in employee_educations %}
+                        <tr>
+                            <td>{{ oobject.institution }}</td>
+                            <td>{{ oobject.speciality }}</td>
+                            <td>{{ oobject.degree_obtained }}</td>
+                            <td>{{ oobject.city }}</td>
+                            <td>{{ oobject.country }}</td>
+                            <td>{{ oobject.date_form }}</td>
+                            <td>{{ oobject.date_to }}</td>
+                            <td>
+                                <button type="button" id="employee_education_delete_btn"
+                                        data-action="{% url 'admins:admins-json:employee_education_delete' oobject.pk %}" data-param=""
+                                        data-method="GET"
+                                        class="btn btn-link btn-sm text-danger">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div>
+                <p class="mb-0 text-danger"><b>Information not available</b></p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="employee_education_add_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Education</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_educations_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_education_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_education_add' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="employee_emp_add_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Employment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_employments_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_emp_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_employment_add' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#employee_education_add_model #id_date_form').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+        $('#employee_education_add_model #id_date_to').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+        $('#employee_emp_add_model #id_date_form').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+        $('#employee_emp_add_model #id_date_to').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
+        {# QUALIFICATION AREA --------------------------------------------------------------------------------------- #}
+
+        let employee_education_add_btn = $('body #employee_education_add_btn')
+        let employee_education_delete_btn = $('body #employee_education_delete_btn')
+        let employee_education_submit_btn = $('body #employee_education_submit_btn')
+        let employee_education_add_model = $('body #employee_education_add_model')
+        let employee_education_add_form = employee_education_add_model.find('form')
+        employee_education_add_btn.click(function () {
+            employee_education_add_model.modal('show')
+        });
+        employee_education_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employee_education_add_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_education_add_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_education_add_form.find('.error-message').show()
+                }
+            });
+        });
+        employee_education_delete_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+
+        let employee_emp_add_btn = $('body #employee_emp_add_btn')
+        let employee_emp_delete_btn = $('body #employee_emp_delete_btn')
+        let employee_emp_submit_btn = $('body #employee_emp_submit_btn')
+        let employee_emp_add_model = $('body #employee_emp_add_model')
+        let employee_emp_add_form = employee_emp_add_model.find('form')
+        employee_emp_add_btn.click(function () {
+            employee_emp_add_model.modal('show')
+        });
+        employee_emp_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employee_emp_add_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_emp_add_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_emp_add_form.find('.error-message').show()
+                }
+            });
+        });
+        employee_emp_delete_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+    });
+
+</script>
