@@ -416,6 +416,54 @@ class EmployeeDepartment(models.Model):
         return f"{self.employee.user.get_user_name()} department > {self.department.name}"
 
 
+class SubContractor(models.Model):
+
+    name = models.CharField(max_length=255)
+
+    contact_person = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    mobile = models.CharField(max_length=20, null=True, blank=True)
+
+    street_address = models.CharField(max_length=1000, null=True, blank=True)
+    city = models.CharField(max_length=1000, null=True, blank=True)
+    country = models.CharField(max_length=1000, null=True, blank=True)
+    postal_code = models.CharField(max_length=1000, null=True, blank=True)
+
+    positions = models.ManyToManyField('admins.Position', through='SubContractorPosition')
+    departments = models.ManyToManyField('admins.Department', through='SubContractorDepartment')
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = "Sub Contractors"
+
+    def __str__(self):
+        return self.name
+
+
+class SubContractorPosition(models.Model):
+    sub_contractor = models.ForeignKey(SubContractor, on_delete=models.CASCADE)
+    position = models.ForeignKey('admins.Position', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.sub_contractor.name} position > {self.position.name}"
+
+
+class SubContractorDepartment(models.Model):
+    sub_contractor = models.ForeignKey(SubContractor, on_delete=models.CASCADE)
+    department = models.ForeignKey('admins.Department', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Sub Contractor Departments"
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.sub_contractor.name} department > {self.department.name}"
+
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL, dispatch_uid="create_user_save")
 def create_user_save(sender, instance, created, **kwargs):
     """
