@@ -185,6 +185,36 @@ class CountryDeleteView(DeleteView):
     success_url = reverse_lazy('admins:country-list')
 
 
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentListView(ListView):
+    queryset = Department.objects.all()
+
+
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentCreateView(CreateView):
+    model = Department
+    fields = '__all__'
+    success_url = reverse_lazy('admins:department-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentUpdateView(UpdateView):
+    model = Department
+    fields = '__all__'
+    success_url = reverse_lazy('admins:department-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentDetailView(DetailView):
+    model = Department
+
+
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentDeleteView(DeleteView):
+    model = Department
+    success_url = reverse_lazy('admins:department-list')
+
+
 """ STUDENT CLASS """
 
 
@@ -661,4 +691,7 @@ class SubContractorDeleteView(DeleteView):
     model = SubContractor
     template_name = 'admins/subcontractor_confirm_delete.html'
     success_url = reverse_lazy('admins:sub-contractor-list')
+
+
+
 

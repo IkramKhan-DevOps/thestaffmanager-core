@@ -11,7 +11,8 @@ from .views import (
     ShiftCreateView, ShiftUpdateView, ShiftDeleteView, UserDetailView, UserDocumentCreateView, UserDocumentDeleteView,
     ShiftListView, ShiftDetailView, ShiftCustomCreateView,
     CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView, SubContractorListView,
-    SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView
+    SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView,
+    DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView
 )
 
 app_name = 'admins'
@@ -33,6 +34,13 @@ urlpatterns += [
     path('country/add/', CountryCreateView.as_view(), name='country-add'),
     path('country/<int:pk>/change/', CountryUpdateView.as_view(), name='country-update'),
     path('country/<int:pk>/delete/', CountryDeleteView.as_view(), name='country-delete'),
+]
+
+urlpatterns += [
+    path('department/', DepartmentListView.as_view(), name='department-list'),
+    path('department/add/', DepartmentCreateView.as_view(), name='department-add'),
+    path('department/<int:pk>/change/', DepartmentUpdateView.as_view(), name='department-update'),
+    path('department/<int:pk>/delete/', DepartmentDeleteView.as_view(), name='department-delete'),
 ]
 
 urlpatterns += [
