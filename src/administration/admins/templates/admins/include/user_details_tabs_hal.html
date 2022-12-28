@@ -64,19 +64,50 @@
                 </div>
 
                 <dt class="col-5">Need condition</dt>
-                <dd class="col-7">{{ employee_health.need_condition }}</dd>
+                <dd class="col-7">
+                    {% if employee_health.need_condition %}
+                        <b><i class="fa fa-check text-success"></i></b>
+                    {% else %}
+                        <b><i class="fa fa-times text-danger"></i></b>
+                    {% endif %}
+                </dd>
                 <dt class="col-5">Need carer</dt>
-                <dd class="col-7">{{ employee_health.need_carer }}</dd>
+                <dd class="col-7">
+                {% if employee_health.need_carer %}
+                        <b><i class="fa fa-check text-success"></i></b>
+                    {% else %}
+                        <b><i class="fa fa-times text-danger"></i></b>
+                    {% endif %}</dd>
                 <dt class="col-5">Is disabled</dt>
-                <dd class="col-7">{{ employee_health.is_disabled }}</dd>
+                <dd class="col-7">
+
+                </dd>
                 <dt class="col-5">Absent days in last year</dt>
                 <dd class="col-7">{{ employee_health.absent_days_in_last_year }}</dd>
                 <dt class="col-5">Heart disease</dt>
-                <dd class="col-7">{{ employee_health.heart_disease }}</dd>
+                <dd class="col-7">
+                    {% if employee_health.heart_disease %}
+                        <b><i class="fa fa-check text-success"></i></b>
+                    {% else %}
+                        <b><i class="fa fa-times text-danger"></i></b>
+                    {% endif %}
+                </dd>
                 <dt class="col-5">Diabetes</dt>
-                <dd class="col-7">{{ employee_health.diabetes }}</dd>
+                <dd class="col-7">
+                    {% if employee_health.diabetes %}
+                        <b><i class="fa fa-check text-success"></i></b>
+                    {% else %}
+                        <b><i class="fa fa-times text-danger"></i></b>
+                    {% endif %}
+                </dd>
                 <dt class="col-5">Glasses</dt>
-                <dd class="col-7">{{ employee_health.glasses }}</dd>
+                <dd class="col-7">
+                    {% if employee_health.glasses %}
+                        <b><i class="fa fa-check text-success"></i></b>
+                    {% else %}
+                        <b><i class="fa fa-times text-danger"></i></b>
+                    {% endif %}
+                </dd>
                 <dt class="col-5">Additional comments</dt>
                 <dd class="col-7">{{ employee_health.additional_comments }}</dd>
                 <dt class="col-5">Other serious illness</dt>
