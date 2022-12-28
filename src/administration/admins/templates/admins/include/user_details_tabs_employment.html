@@ -6,6 +6,9 @@
     <div class="row">
         {# LEFT #}
         <div class="col-sm-6">
+            <button class="btn btn-primary mb-2" id="employment_work_edit_button">
+                <i class="fa fa-edit"></i> Edit
+            </button>
             <dl class="row">
                 <dt class="col-5">NI number</dt>
                 <dd class="col-7">{{ employee_work.ni_number }}</dd>
@@ -14,52 +17,67 @@
                 <dt class="col-5">Tax code</dt>
                 <dd class="col-7">{{ employee_work.tax_code }}</dd>
                 <dt class="col-5">Visa required</dt>
-                <dd class="col-7">{{ employee_work.visa_required }}</dd>
+                <dd class="col-7">
+                    {% if employee_visa_required %}
+                        <b><i class="fa fa-check text-success"></i></b>
+                    {% else %}
+                        <b><i class="fa fa-times text-danger"></i></b>
+                    {% endif %}
+                </dd>
             </dl>
-            <button class="btn btn-outline-secondary" id="employment_work_edit_button">
-                <i class="fa fa-edit"></i> Edit
-            </button>
         </div>
 
         {# RIGHT #}
         <div class="col-sm-6">
             {# LNAGUAGE #}
-            <div class="mb-4">
-                <div class="text-right">
-                    <button class="btn btn-link" id="employment_contract_add_button">
-                        + Add Contract
-                    </button>
-                </div>
+            <div class="text-right mb-2">
+                <button class="btn btn-primary" id="employment_contract_add_button">
+                    + Add Contract
+                </button>
+            </div>
+            <div>
                 {% if employee_contracts %}
-                    <div class="table-responsive">
-                        <table class="table table-sm table-hover">
-                            <thead class="thead-light">
-                            <tr>
-                                <th>Type</th>
-                                <th>Start</th>
-                                <th>End</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for oobject in employee_contracts %}
-                                <tr>
-                                    <td>{{ oobject.type }}</td>
-                                    <td>{{ oobject.start }}</td>
-                                    <td>{{ oobject.end }}</td>
-                                    <td>
-                                        <button id="employment_contract_delete_button"
-                                                class="btn btn-link btn-sm text-danger" data-method="GET"
-                                                data-action="{% url 'admins:admins-json:employee_contract_delete' oobject.pk %}?action=DELETE"
-                                        >
-                                            <i class="fa fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-
-                            </tbody>
-                        </table>
+                    <div class="row">
+                        {% for contract in employee_contracts %}
+                            <div class="col-sm-6">
+                                <div class="card card-sm">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="bg-azure-lt text-white avatar">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         class="icon icon-tabler icon-tabler-writing" width="24"
+                                                         height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                         stroke="currentColor" fill="none" stroke-linecap="round"
+                                                         stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M20 17v-12c0 -1.121 -.879 -2 -2 -2s-2 .879 -2 2v12l2 2l2 -2z"></path>
+   <path d="M16 7h4"></path>
+   <path d="M18 19h-13a2 2 0 1 1 0 -4h4a2 2 0 1 0 0 -4h-3"></path>
+</svg>
+                                                </span>
+                                            </div>
+                                            <div class="col">
+                                                <div class="font-weight-medium">
+                                                    {{ contract.get_type_display }}
+                                                </div>
+                                                <div class="text-muted">
+                                                    {{ contract.start }} - {{ contract.end }}
+                                                </div>
+                                                <div class="text-Delete">
+                                                    <button class="btn btn-link btn-sm text-danger"
+                                                            data-method="GET"
+                                                            data-action="{% url 'admins:admins-json:employee_contract_delete' contract.pk %}"
+                                                            id="employment_contract_delete_button">
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 {% else %}
                     <div>
@@ -193,7 +211,6 @@
             });
         })
         employment_contract_delete_button.click(function () {
-            alert($(this).data('method'))
             $.ajax({
                 url: $(this).data('action'),
                 type: $(this).data('method'),

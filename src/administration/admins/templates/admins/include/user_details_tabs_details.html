@@ -6,11 +6,13 @@
 
         {# LEFT #}
         <div class="col-sm-6">
+            <div class="mb-2">
+                <button class="btn btn-primary" id="btn-employee-details-edit">
+                    <i class="fa fa-user-check"></i>&nbsp;Update Personal Details
+                </button>
+            </div>
             <dl class="row">
-                <div class="hr-text">
-                    <span>Personal Details</span>
-                </div>
-
+                <h3 class="">Personal Details</h3>
                 <dt class="col-5">Gender:</dt>
                 <dd class="col-7">{{ employee.gender }}</dd>
                 <dt class="col-5">Employee ID:</dt>
@@ -30,9 +32,7 @@
                 <dd class="col-7">{{ employee.country_of_birth }}</dd>
 
 
-                <div class="hr-text">
-                    <span>contact Details</span>
-                </div>
+                <h3 class="mt-4">Contact Details</h3>
 
                 <dt class="col-5">Extra contact:</dt>
                 <dd class="col-7">{{ employee.phone_number_2 }}</dd>
@@ -45,10 +45,6 @@
                 <dt class="col-5">Country:</dt>
                 <dd class="col-7">{{ employee.country }}</dd>
             </dl>
-
-            <button class="btn btn-outline-secondary" id="btn-employee-details-edit">
-                <i class="fa fa-edit"></i> Edit
-            </button>
         </div>
 
         {# RIGHT #}
