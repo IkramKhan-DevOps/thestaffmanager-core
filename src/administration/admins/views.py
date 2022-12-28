@@ -9,8 +9,7 @@ from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
-    CreateView, FormView)
-from jsonview.decorators import json_view
+    CreateView)
 
 from .bll import shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
@@ -32,7 +31,7 @@ import datetime
 
 from src.accounts.decorators import admin_protected
 from src.accounts.models import (
-    UserDocument, User,
+    User,
     EmployeeIdPass, EmployeeWork, EmployeeHealth, EmployeeAppearance,
     EmployeeContract, EmployeeDocument, EmployeeEducation, EmployeeEmployment, EmployeeQualification,
     EmployeeTraining, EmployeeLanguageSkill, EmployeeEmergencyContact, EmployeeSite, SubContractor
@@ -291,6 +290,7 @@ class UserDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
+        context['user_notes_form'] = EMPMGMTUserNotesForm(instance=self.object)
         if self.object.is_employee:
             employee = self.object.get_employee_profile()
 
@@ -322,7 +322,6 @@ class UserDetailView(DetailView):
             context['employee_appearance'] = employee_appearance
 
             context['employee_form'] = EMPMGMTEmployeeForm(instance=employee)
-            context['user_notes_form'] = EMPMGMTUserNotesForm(instance=self.object)
             context['employee_id_form'] = EMPMGMTEmployeeIdPassForm(instance=employee_id)
             context['employee_work_form'] = EMPMGMTEmployeeWorkForm(instance=employee_work)
             context['employee_health_form'] = EMPMGMTEmployeeHealthForm(instance=employee_health)
