@@ -4,54 +4,43 @@
 <div class="tab-pane" id="tabs-docs" role="tabpanel">
     {# EMPLOYMENT #}
     <div class="mb-4">
-        <div class="text-right">
-            <button class="btn btn-link" id="employee_document_add_btn">
+        <div class="text-right mb-2">
+            <button class="btn btn-primary" id="employee_document_add_btn">
                 + Add Document
             </button>
         </div>
-        {% if employee_docs %}
-            <div class="table-responsive">
-                <table class="table table-sm table-hover">
-                    <thead class="thead-light">
-                    <tr>
-                        <th>Upload By</th>
-                        <th>Name</th>
-                        <th>File</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for oobject in employee_docs %}
-                        <tr>
-                            <td>{{ oobject.uploaded_by }}</td>
-                            <td>{{ oobject.name }}</td>
-                            <td>
-                                {% if oobject.file %}
-                                    <a href="{{ oobject.file.url }}"><i class="fa fa-file"></i>&nbsp;View File</a>
-                                {% else %}
-                                    <a href="#" class="text-danger"><i class="fa fa-file"></i>Not available</a>
-                                {% endif %}
-                            </td>
-                            <td>
-                                <button type="button" id="employee_document_delete_btn"
-                                        data-action="{% url 'admins:admins-json:employee_document_delete' oobject.pk %}"
-                                        data-param=""
-                                        data-method="GET"
-                                        class="btn btn-link btn-sm text-danger">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    {% endfor %}
 
-                    </tbody>
-                </table>
+        {% if employee_docs %}
+            <div class="row">
+                {% for oobject in employee_docs %}
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <div class="ribbon bg-red">
+                                <i class="fa fa-trash" id="employee_document_delete_btn"
+                                   data-action="{% url 'admins:admins-json:employee_document_delete' oobject.pk %}"
+                                   data-param=""
+                                   data-method="GET">
+                                </i>
+                            </div>
+                            <div class="card-body text-center">
+                                <h1>
+                                    <a class="text-primary" href="{{ oobject.file.url }}">
+                                        <i class="fa fa-download"></i>
+                                    </a>
+                                </h1>
+                                <h3 class="card-title mb-0">{{ oobject.name }}</h3>
+                                <p class="text-muted">uploaded by: {{ oobject.uploaded_by }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         {% else %}
             <div>
                 <p class="mb-0 text-danger"><b>Information not available</b></p>
             </div>
         {% endif %}
+
     </div>
 </div>
 

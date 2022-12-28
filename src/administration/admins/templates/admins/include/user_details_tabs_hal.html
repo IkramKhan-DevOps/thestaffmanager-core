@@ -6,11 +6,12 @@
     <div class="row">
         {# LEFT #}
         <div class="col-sm-6">
+            <div class="mb-2">
+                <button class="btn btn-primary" id="employee_a_update_btn">
+                    <i class="fa fa-user"></i>&nbsp;Update Appearance Details
+                </button>
+            </div>
             <dl class="row">
-                <div class="hr-text">
-                    <span>Appearance Details</span>
-                </div>
-
                 <h3 class="">MEASUREMENTS</h3>
                 <dt class="col-5">Height</dt>
                 <dd class="col-7">{{ employee_appearance.height }}</dd>
@@ -51,17 +52,15 @@
                 <dt class="col-5">Shoe size</dt>
                 <dd class="col-7">{{ employee_appearance.shoe_size }}</dd>
             </dl>
-
-            <button class="btn btn-outline-secondary" id="employee_a_update_btn">
-                <i class="fa fa-edit"></i> Edit
-            </button>
         </div>
 
         {# RIGHT #}
         <div class="col-sm-6">
             <dl class="row">
-                <div class="hr-text">
-                    <span>Health Details</span>
+                <div class="mb-2">
+                    <button class="btn btn-primary" id="employee_h_update_btn">
+                        <i class="fa fa-heartbeat"></i>&nbsp;Update Health Details
+                    </button>
                 </div>
 
                 <dt class="col-5">Need condition</dt>
@@ -82,12 +81,7 @@
                 <dd class="col-7">{{ employee_health.additional_comments }}</dd>
                 <dt class="col-5">Other serious illness</dt>
                 <dd class="col-7">{{ employee_health.other_serious_illness }}</dd>
-
             </dl>
-
-            <button class="btn btn-outline-secondary" id="employee_h_update_btn">
-                <i class="fa fa-edit"></i> Edit
-            </button>
         </div>
     </div>
 
