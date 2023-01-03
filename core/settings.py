@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'rest_framework',
     'colorfield',
+    'widget_tweaks',
 
     # SYSTEM APPS
     'src.accounts',

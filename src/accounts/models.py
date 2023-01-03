@@ -12,6 +12,12 @@ from faker import Faker
 fake = Faker()
 
 
+"""
+python manage.py make migrations accounts -> apps
+python manage.py migrate 
+"""
+
+
 """ MAIN USER """
 
 
@@ -21,6 +27,7 @@ class User(AbstractUser):
         help_text='size of logo must be 100*100 and format must be png image file', crop=['middle', 'center']
     )
     phone_number = models.CharField(max_length=30, null=True, blank=True)
+    note = models.TextField(null=True, blank=True, default='')
 
     is_employee = models.BooleanField(default=False, help_text="Designates whether this user is employee")
     is_two_factor_auth = models.BooleanField(default=False, verbose_name="Two Factor Auth")
@@ -130,9 +137,9 @@ class Employee(models.Model):
     )
 
     # MANY TO MANY
-    sites = models.ManyToManyField('admins.Site')
-    positions = models.ManyToManyField('admins.Position')
-    departments = models.ManyToManyField('admins.Department')
+    sites = models.ManyToManyField('admins.Site', through='EmployeeSite')
+    positions = models.ManyToManyField('admins.Position', through='EmployeePosition')
+    departments = models.ManyToManyField('admins.Department', through='EmployeeDepartment')
 
     # CHECKS
     driver_license = models.BooleanField(default=False)
@@ -179,20 +186,20 @@ class EmployeeIdPass(models.Model):
 
 class EmployeeWork(models.Model):
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE)
-    NI_Number = models.CharField(max_length=255, null=True, blank=True)
-    UTR = models.CharField(max_length=255, null=True, blank=True)
-    Tax_Code = models.CharField(null=True, blank=True, max_length=255)
+    ni_number = models.CharField(max_length=255, null=True, blank=True)
+    utr = models.CharField(max_length=255, null=True, blank=True)
+    tax_code = models.CharField(null=True, blank=True, max_length=255)
     visa_required = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['-employee']
 
     def __str__(self):
-        return f" {self.employee.user.get_user_name()} NI: {self.NI_Number}"
+        return f"{self.employee.user.get_user_name()} NI: {self.ni_number}"
 
 
 class EmployeeEmergencyContact(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
@@ -209,7 +216,7 @@ class EmployeeContract(models.Model):
     EMPLOYEE_TYPE = (
         ('s', 'Standard'),
     )
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     type = models.CharField(max_length=1, choices=EMPLOYEE_TYPE, null=True, blank=True)
     start = models.DateField(help_text="When this Contract starts", null=True, blank=True)
     end = models.DateField(help_text="When this Contact ends", null=True, blank=True)
@@ -226,7 +233,7 @@ class EmployeeQualification(models.Model):
         ('fad', 'First AID'),
         ('sia', 'SIA No'),
     )
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     type = models.CharField(max_length=3, choices=TYPE_CHOICE)
     certificate_number = models.CharField(max_length=255)
     expiry_date = models.DateField()
@@ -239,7 +246,7 @@ class EmployeeQualification(models.Model):
 
 
 class EmployeeTraining(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     provider = models.CharField(max_length=255)
     course = models.CharField(max_length=255)
     start_date = models.DateField()
@@ -266,9 +273,9 @@ class EmployeeLanguageSkill(models.Model):
         ('adv', 'Advance'),
         ('pro', 'Proficient'),
     )
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     name = models.CharField(max_length=5, choices=LANGUAGE_CHOICE)
-    level = models.CharField(max_length=5, choices=LANGUAGE_CHOICE)
+    level = models.CharField(max_length=5, choices=LEVEL_CHOICE)
 
     class Meta:
         ordering = ['-employee']
@@ -327,15 +334,15 @@ class EmployeeEducation(models.Model):
 
 class EmployeeHealth(models.Model):
     employee = models.OneToOneField(Employee, on_delete=models.CASCADE, blank=True)
-    need_condition = models.BooleanField(default=False, help_text="Does the user have a medical condition?")
-    need_carer = models.BooleanField(default=False, help_text="Does the user need to be accompanied by a carer or supporter?")
     is_disabled = models.CharField(default="No", help_text="Disabled no. (if registered disabled)", max_length=255)
     absent_days_in_last_year = models.PositiveIntegerField(default=0, help_text="How many days has the user been absent from work in the last 2 years due to sickness?")
+    additional_comments = models.TextField(null=True, blank=True)
+    other_serious_illness = models.TextField(null=True, blank=True, help_text="Details of any other illness or injuries relevant to the user")
+    need_condition = models.BooleanField(default=False, help_text="Does the user have a medical condition?")
+    need_carer = models.BooleanField(default=False, help_text="Does the user need to be accompanied by a carer or supporter?")
     heart_disease = models.BooleanField(default=False)
     diabetes = models.BooleanField(default=False)
     glasses = models.BooleanField(default=False, verbose_name="Glasses or Contact Lenses")
-    additional_comments = models.TextField(null=True, blank=True)
-    other_serious_illness = models.TextField(null=True, blank=True, help_text="Details of any other illness or injuries relevant to the user")
 
     class Meta:
         ordering = ['-employee']
@@ -352,12 +359,13 @@ class EmployeeAppearance(models.Model):
     waist = models.FloatField(null=True, blank=True)
     chest = models.FloatField(null=True, blank=True)
     hips = models.FloatField(null=True, blank=True)
-    inside_leg_collar = models.FloatField(null=True, blank=True)
+    inside_leg = models.FloatField(null=True, blank=True)
+    collar = models.FloatField(null=True, blank=True)
 
     hair_color = models.CharField(max_length=100, null=True, blank=True)
     eye_color = models.CharField(max_length=100, null=True, blank=True)
     hair_length = models.FloatField(null=True, blank=True)
-    Facial_hair = models.CharField(max_length=100, null=True, blank=True)
+    facial_hair = models.CharField(max_length=100, null=True, blank=True)
 
     t_shirt_size = models.FloatField(null=True, blank=True)
     jacket_size = models.FloatField(null=True, blank=True)
@@ -373,6 +381,90 @@ class EmployeeAppearance(models.Model):
         return f" {self.employee.user.get_user_name()} Appearance"
 
 
+class EmployeeSite(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    site = models.ForeignKey('admins.Site', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Employee Sites"
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.employee.user.get_user_name()} site > {self.site.name}"
+
+
+class EmployeePosition(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    position = models.ForeignKey('admins.Position', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Employee Positions"
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.employee.user.get_user_name()} position > {self.position.name}"
+
+
+class EmployeeDepartment(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    department = models.ForeignKey('admins.Department', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Employee Departments"
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.employee.user.get_user_name()} department > {self.department.name}"
+
+
+class SubContractor(models.Model):
+
+    name = models.CharField(max_length=255)
+
+    contact_person = models.CharField(max_length=255)
+    email = models.EmailField()
+    phone = models.CharField(max_length=20, null=True, blank=True)
+    mobile = models.CharField(max_length=20, null=True, blank=True)
+
+    street_address = models.CharField(max_length=1000, null=True, blank=True)
+    city = models.CharField(max_length=1000, null=True, blank=True)
+    country = models.ForeignKey('admins.Country', on_delete=models.SET_NULL, null=True, blank=True)
+    postal_code = models.CharField(max_length=1000, null=True, blank=True)
+
+    positions = models.ManyToManyField('admins.Position', through='SubContractorPosition', blank=True)
+    departments = models.ManyToManyField('admins.Department', through='SubContractorDepartment', blank=True)
+
+    class Meta:
+        ordering = ['-id']
+        verbose_name_plural = "Sub Contractors"
+
+    def __str__(self):
+        return self.name
+
+
+class SubContractorPosition(models.Model):
+    sub_contractor = models.ForeignKey(SubContractor, on_delete=models.CASCADE)
+    position = models.ForeignKey('admins.Position', on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.sub_contractor.name} position > {self.position.name}"
+
+
+class SubContractorDepartment(models.Model):
+    sub_contractor = models.ForeignKey(SubContractor, on_delete=models.CASCADE)
+    department = models.ForeignKey('admins.Department', on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural = "Sub Contractor Departments"
+        ordering = ['-id']
+
+    def __str__(self):
+        return f"{self.sub_contractor.name} department > {self.department.name}"
+
+
 @receiver(post_save, sender=settings.AUTH_USER_MODEL, dispatch_uid="create_user_save")
 def create_user_save(sender, instance, created, **kwargs):
     """
@@ -384,8 +476,9 @@ def create_user_save(sender, instance, created, **kwargs):
     :return:
     """
     # IF USER IS NOT EMPLOYEE -- NOW
-    if not instance.is_employee and instance.employee:
-        instance.employee.delete()
+    if not instance.is_employee:
+        if Employee.objects.filter(user=instance):
+            instance.employee.delete()
 
     # IF USER IS NOT EMPLOYEE -- NOW
     else:

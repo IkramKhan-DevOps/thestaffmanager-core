@@ -1,0 +1,119 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="tab-pane" id="tabs-docs" role="tabpanel">
+    {# EMPLOYMENT #}
+    <div class="mb-4">
+        <div class="text-right mb-2">
+            <button class="btn btn-primary" id="employee_document_add_btn">
+                + Add Document
+            </button>
+        </div>
+
+        {% if employee_docs %}
+            <div class="row">
+                {% for oobject in employee_docs %}
+                    <div class="col-sm-3">
+                        <div class="card">
+                            <div class="ribbon bg-red">
+                                <i class="fa fa-trash" id="employee_document_delete_btn"
+                                   data-action="{% url 'admins:admins-json:employee_document_delete' oobject.pk %}"
+                                   data-param=""
+                                   data-method="GET">
+                                </i>
+                            </div>
+                            <div class="card-body text-center">
+                                <h1>
+                                    <a class="text-primary" href="{{ oobject.file.url }}">
+                                        <i class="fa fa-download"></i>
+                                    </a>
+                                </h1>
+                                <h3 class="card-title mb-0">{{ oobject.name }}</h3>
+                                <p class="text-muted">uploaded by: {{ oobject.uploaded_by }}</p>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div>
+                <p class="mb-0 text-danger"><b>Information not available</b></p>
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="employee_document_add_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Add Education</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post" id="employee_document_add_form_data" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ employee_docs_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employee_document_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_document_add' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        let employee_document_add_btn = $('body #employee_document_add_btn')
+        let employee_document_delete_btn = $('body #employee_document_delete_btn')
+        let employee_document_submit_btn = $('body #employee_document_submit_btn')
+        let employee_document_add_model = $('body #employee_document_add_model')
+        let employee_document_add_form = employee_document_add_model.find('form')
+        employee_document_add_btn.click(function () {
+            employee_document_add_model.modal('show')
+        });
+        employee_document_submit_btn.click(function () {
+            console.log(employee_document_add_form)
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: new FormData(document.getElementById('employee_document_add_form_data')),
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employee_document_add_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employee_document_add_form.find('.error-message').show()
+                }
+            });
+        });
+        employee_document_delete_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        });
+    });
+</script>

@@ -53,69 +53,6 @@
         </div>
 
         <div class="col-6">
-
-            {% if object.is_employee %}
-                {# EMPLOYEE INFORMATION #}
-                <div class="card">
-                    <div class="card-body border-bottom">
-                        <p class="mb-0 card-title">
-                            <b>Employee Information</b>
-                        </p>
-                    </div>
-                    <div class="card-body">
-
-                        <form method="post" action="{% url 'admins:user-employee-update' object.pk %}">
-                            {% csrf_token %}
-                            {{ employee_form|crispy }}
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-check-circle"></i> Submit
-                            </button>
-                        </form>
-
-                    </div>
-                </div>
-
-                {# EMPLOYEE DOCUMENT #}
-                <div class="card">
-                    <div class="card-body border-bottom">
-                        <p class="mb-0 card-title">
-                            <b>Employee Documents</b>
-                        </p>
-                    </div>
-                    <div class="card-body">
-
-                        {% if object.get_user_documents %}
-                            <p><b>List of available documents</b></p>
-                            <ol>
-                                {% for document in object.get_user_documents %}
-                                    <li>
-                                        <b><a href="{% url 'admins:user-doc-delete' object.pk document.pk %}"
-                                              class="text-danger">
-                                            <i class="fa fa-trash"></i> Remove
-                                        </a></b> |
-                                        <b><a href="{{ document.document_file.url }}">{{ document.document_name }}</a></b>
-                                    </li>
-                                {% endfor %}
-                            </ol>
-                        {% else %}
-                            <p class="text-danger mb-0"><b>No documents found for this user.</b></p>
-                        {% endif %}
-
-                    </div>
-                    <div class="card-body border-top">
-                        <form method="post" action="{% url 'admins:user-doc-upload' object.pk %}"
-                              enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ document_form|crispy }}
-                            <button type="submit" class="btn btn-primary">
-                                <i class="fa fa-check-circle"></i> Submit
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            {% endif %}
-
-            {#  #}
             <div class="card border border-danger">
                 <div class="card-body border-bottom bg-danger">
                     <p class="mb-0 card-title text-white">
@@ -129,7 +66,7 @@
                         user again.
                     </p>
                     <a class="btn btn-danger text-white" href="{% url 'admins:user-delete' object.pk %}">
-                        <i class="fa fa-trash"></i> Remove
+                        <i class="fa fa-trash"></i>&nbsp;&nbsp;Remove
                     </a>
                 </div>
             </div>

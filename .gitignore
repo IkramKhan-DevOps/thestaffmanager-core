@@ -133,6 +133,9 @@ migrations/
 /assets
 assets/
 
+/media
+media/
+
 .idea/
 /.idea
 .idea

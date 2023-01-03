@@ -13,14 +13,29 @@ from django.views.generic import (
 
 from .bll import shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
-from .forms import EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm
+from .forms import (
+    EmployeeForm, UserDocumentForm, EmployeeUserCreateForm, StaffUserCreateForm, CountryForm,
+
+    EMPMGMTEmployeeForm, EMPMGMTEmployeeWorkForm, EMPMGMTEmployeeAppearanceForm, EMPMGMTEmployeeHealthForm,
+    EMPMGMTEmployeeIdPassForm,
+
+    EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
+    EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
+    EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm,
+    EMPMGMTUserNotesForm
+)
 from .models import (
-    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country,
+    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department,
 )
 import datetime
 
 from src.accounts.decorators import admin_protected
-from src.accounts.models import UserDocument, User
+from src.accounts.models import (
+    User,
+    EmployeeIdPass, EmployeeWork, EmployeeHealth, EmployeeAppearance,
+    EmployeeContract, EmployeeDocument, EmployeeEducation, EmployeeEmployment, EmployeeQualification,
+    EmployeeTraining, EmployeeLanguageSkill, EmployeeEmergencyContact, EmployeeSite, SubContractor
+)
 
 """ MAIN """
 
@@ -88,6 +103,7 @@ class TimeClockView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(TimeClockView, self).get_context_data(**kwargs)
+
         filter_object = ShiftDayFilter(self.request.GET, queryset=self.get_queryset())
         context['filter_form'] = filter_object.form
 
@@ -143,6 +159,11 @@ class PositionDeleteView(DeleteView):
 class CountryListView(ListView):
     queryset = Country.objects.all()
 
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CountryListView, self).get_context_data(**kwargs)
+        context['form'] = CountryForm()
+        return context
+
 
 @method_decorator(admin_protected, name='dispatch')
 class CountryCreateView(CreateView):
@@ -162,6 +183,36 @@ class CountryUpdateView(UpdateView):
 class CountryDeleteView(DeleteView):
     model = Country
     success_url = reverse_lazy('admins:country-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentListView(ListView):
+    queryset = Department.objects.all()
+
+
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentCreateView(CreateView):
+    model = Department
+    fields = '__all__'
+    success_url = reverse_lazy('admins:department-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentUpdateView(UpdateView):
+    model = Department
+    fields = '__all__'
+    success_url = reverse_lazy('admins:department-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentDetailView(DetailView):
+    model = Department
+
+
+@method_decorator(admin_protected, name='dispatch')
+class DepartmentDeleteView(DeleteView):
+    model = Department
+    success_url = reverse_lazy('admins:department-list')
 
 
 """ STUDENT CLASS """
@@ -239,10 +290,60 @@ class UserDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
+        context['user_notes_form'] = EMPMGMTUserNotesForm(instance=self.object)
         if self.object.is_employee:
-            context['shifts'] = Shift.objects.filter(employee__user=self.object)
-            context['docs'] = UserDocument.objects.filter(user=self.object)
-            context['employee'] = self.object.get_employee_profile()
+            employee = self.object.get_employee_profile()
+
+            employee_sites_list = []
+            employee_positions_list = []
+            employee_department_list = []
+
+            employee_id, created = EmployeeIdPass.objects.get_or_create(employee=employee)
+            employee_work, created = EmployeeWork.objects.get_or_create(employee=employee)
+            employee_health, created = EmployeeHealth.objects.get_or_create(employee=employee)
+            employee_appearance, created = EmployeeAppearance.objects.get_or_create(employee=employee)
+
+            context['sites'] = Site.objects.all()
+            context['positions'] = Position.objects.all()
+            context['departments'] = Department.objects.all()
+
+            [employee_sites_list.append(x[0]) for x in employee.sites.all().values_list('pk')]
+            [employee_department_list.append(x[0]) for x in employee.departments.all().values_list('pk')]
+            [employee_positions_list.append(x[0]) for x in employee.positions.all().values_list('pk')]
+
+            context['employee_sites_list'] = employee_sites_list
+            context['employee_positions_list'] = employee_positions_list
+            context['employee_department_list'] = employee_department_list
+
+            context['employee'] = employee
+            context['employee_id'] = employee_id
+            context['employee_work'] = employee_work
+            context['employee_health'] = employee_health
+            context['employee_appearance'] = employee_appearance
+
+            context['employee_form'] = EMPMGMTEmployeeForm(instance=employee)
+            context['employee_id_form'] = EMPMGMTEmployeeIdPassForm(instance=employee_id)
+            context['employee_work_form'] = EMPMGMTEmployeeWorkForm(instance=employee_work)
+            context['employee_health_form'] = EMPMGMTEmployeeHealthForm(instance=employee_health)
+            context['employee_appearance_form'] = EMPMGMTEmployeeAppearanceForm(instance=employee_appearance)
+
+            context['employee_contracts'] = EmployeeContract.objects.filter(employee=employee)
+            context['employee_docs'] = EmployeeDocument.objects.filter(employee=employee)
+            context['employee_educations'] = EmployeeEducation.objects.filter(employee=employee)
+            context['employee_employments'] = EmployeeEmployment.objects.filter(employee=employee)
+            context['employee_qualifications'] = EmployeeQualification.objects.filter(employee=employee)
+            context['employee_trainings'] = EmployeeTraining.objects.filter(employee=employee)
+            context['employee_language_skills'] = EmployeeLanguageSkill.objects.filter(employee=employee)
+            context['employee_emergency_contacts'] = EmployeeEmergencyContact.objects.filter(employee=employee)
+
+            context['employee_contracts_form'] = EMPMGMTEmployeeContractForm()
+            context['employee_docs_form'] = EMPMGMTEmployeeDocumentForm()
+            context['employee_educations_form'] = EMPMGMTEmployeeEducationForm()
+            context['employee_employments_form'] = EMPMGMTEmployeeEmploymentForm()
+            context['employee_qualifications_form'] = EMPMGMTEmployeeQualificationForm()
+            context['employee_trainings_form'] = EMPMGMTEmployeeTrainingForm()
+            context['employee_language_skills_form'] = EMPMGMTEmployeeLanguageSkillForm()
+            context['employee_emergency_contacts_form'] = EMPMGMTEmployeeEmergencyContactForm()
         return context
 
 
@@ -265,45 +366,6 @@ class UserPasswordResetView(View):
             form.save(commit=True)
             messages.success(request, f"{user.get_full_name()}'s password changed successfully.")
         return render(request, 'admins/user_password_change.html', {'form': form})
-
-
-class UserEmployeeUpdateView(View):
-
-    def post(self, request, pk, *args, **kwargs):
-        user = get_object_or_404(User.objects.filter(is_employee=True), pk=pk)
-        form = EmployeeForm(request.POST, instance=Employee.objects.filter(user=user).first())
-
-        if form.is_valid():
-            form.save(commit=True)
-            messages.success(request, f"User {user.username} profile information updated")
-        else:
-            messages.error(request, "Something is wrong with this request")
-
-        return redirect("admins:user-update", pk)
-
-
-@method_decorator(admin_protected, name='dispatch')
-class UserDocumentCreateView(View):
-
-    def post(self, request, pk, *args, **kwargs):
-        user = get_object_or_404(User, pk=pk)
-        form = UserDocumentForm(request.POST, files=request.FILES)
-        if form.is_valid():
-            form.instance.user = user
-            form.save(commit=True)
-            messages.success(request, f"User {user.username} document added successfully")
-        else:
-            messages.error(request, "Something is Wrong with this request")
-        return redirect("admins:user-update", pk)
-
-
-@method_decorator(admin_protected, name='dispatch')
-class UserDocumentDeleteView(DeleteView):
-    model = UserDocument
-    template_name = 'admins/userdocument_confirm_delete.html'
-
-    def get_success_url(self):
-        return reverse_lazy("admins:user-update", args=[self.kwargs['user_pk']])
 
 
 """ CLIENTS and CONTACTS """
@@ -553,5 +615,45 @@ class ReportTypeUpdateView(UpdateView):
 class ReportTypeDeleteView(DeleteView):
     model = ReportType
     success_url = reverse_lazy('admins:report-type-list')
+
+
+""" Sub Contractors """
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorListView(ListView):
+    queryset = SubContractor.objects.all()
+    template_name = 'admins/subcontractor_list.html'
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorCreateView(CreateView):
+    model = SubContractor
+    fields = '__all__'
+    template_name = 'admins/subcontractor_form.html'
+    success_url = reverse_lazy('admins:sub-contractor-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorUpdateView(UpdateView):
+    model = SubContractor
+    fields = '__all__'
+    template_name = 'admins/subcontractor_form.html'
+    success_url = reverse_lazy('admins:sub-contractor-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorDetailView(DetailView):
+    model = SubContractor
+    template_name = 'admins/subcontractor_detail.html'
+
+
+@method_decorator(admin_protected, name='dispatch')
+class SubContractorDeleteView(DeleteView):
+    model = SubContractor
+    template_name = 'admins/subcontractor_confirm_delete.html'
+    success_url = reverse_lazy('admins:sub-contractor-list')
+
+
 
 

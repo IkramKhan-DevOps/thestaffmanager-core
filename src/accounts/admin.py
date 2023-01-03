@@ -19,11 +19,13 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
 
-from src.accounts.models import (\
+from src.accounts.models import (
+    SubContractor, SubContractorPosition, SubContractorDepartment,
     User, UserDocument, Employee, EmployeeAppearance, EmployeeWork, EmployeeIdPass, EmployeeHealth,
     EmployeeEmergencyContact, EmployeeTraining, EmployeeDocument, EmployeeEducation, EmployeeContract,
-    EmployeeEmployment, EmployeeQualification, EmployeeLanguageSkill
+    EmployeeEmployment, EmployeeQualification, EmployeeLanguageSkill, EmployeeSite, EmployeePosition, EmployeeDepartment
 )
+
 csrf_protect_m = method_decorator(csrf_protect)
 sensitive_post_parameters_m = method_decorator(sensitive_post_parameters())
 
@@ -33,8 +35,8 @@ class UserCustomAdmin(admin.ModelAdmin):
     change_user_password_template = None
     fieldsets = (
         (None, {
-             'fields': ('username', 'password')
-         }),
+            'fields': ('username', 'password')
+        }),
         ('Personal info', {
             'fields': ('profile_image', 'first_name', 'last_name', 'email', 'phone_number')
         }),
@@ -86,12 +88,12 @@ class UserCustomAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         return [
-            path(
-                '<id>/password/',
-                self.admin_site.admin_view(self.user_change_password),
-                name='auth_user_password_change',
-            ),
-        ] + super().get_urls()
+                   path(
+                       '<id>/password/',
+                       self.admin_site.admin_view(self.user_change_password),
+                       name='auth_user_password_change',
+                   ),
+               ] + super().get_urls()
 
     def lookup_allowed(self, lookup, value):
         # Don't allow lookups involving passwords.
@@ -223,3 +225,9 @@ admin.site.register(EmployeeContract)
 admin.site.register(EmployeeEmployment)
 admin.site.register(EmployeeQualification)
 admin.site.register(EmployeeLanguageSkill)
+admin.site.register(EmployeeSite)
+admin.site.register(EmployeePosition)
+admin.site.register(EmployeeDepartment)
+admin.site.register(SubContractor)
+admin.site.register(SubContractorDepartment)
+admin.site.register(SubContractorPosition)

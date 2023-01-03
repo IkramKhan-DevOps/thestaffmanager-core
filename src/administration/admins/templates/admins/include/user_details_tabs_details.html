@@ -1,0 +1,334 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+<div class="tab-pane active show" id="tabs-details" role="tabpanel">
+    <div class="row">
+
+        {# LEFT #}
+        <div class="col-sm-6">
+            <div class="mb-2">
+                <button class="btn btn-primary" id="btn-employee-details-edit">
+                    <i class="fa fa-user-check"></i>&nbsp;Update Personal Details
+                </button>
+            </div>
+            <dl class="row">
+                <h3 class="">Personal Details</h3>
+                <dt class="col-5">Gender:</dt>
+                <dd class="col-7">{{ employee.gender }}</dd>
+                <dt class="col-5">Employee ID:</dt>
+                <dd class="col-7">{{ employee.employee_id }}</dd>
+                <dt class="col-5">Type:</dt>
+                <dd class="col-7">{{ employee.get_type_display }}</dd>
+                <dt class="col-5">Nationality:</dt>
+                <dd class="col-7">{{ employee.nationality }}</dd>
+                <dt class="col-5">POB:</dt>
+                <dd class="col-7">{{ employee.pob }}</dd>
+
+                <dt class="col-5">Date of Birth:</dt>
+                <dd class="col-7">{{ employee.date_of_birth }}</dd>
+                <dt class="col-5">City of Birth:</dt>
+                <dd class="col-7">{{ employee.city_of_birth }}</dd>
+                <dt class="col-5">Country of Birth:</dt>
+                <dd class="col-7">{{ employee.country_of_birth }}</dd>
+
+
+                <h3 class="mt-4">Contact Details</h3>
+
+                <dt class="col-5">Extra contact:</dt>
+                <dd class="col-7">{{ employee.phone_number_2 }}</dd>
+                <dt class="col-5">Address:</dt>
+                <dd class="col-7">{{ employee.address }}</dd>
+                <dt class="col-5">City/Town:</dt>
+                <dd class="col-7">{{ employee.city }}</dd>
+                <dt class="col-5">Post Code:</dt>
+                <dd class="col-7">{{ employee.post_code }}</dd>
+                <dt class="col-5">Country:</dt>
+                <dd class="col-7">{{ employee.country }}</dd>
+            </dl>
+        </div>
+
+        {# RIGHT #}
+        <div class="col-sm-6">
+            <div class="hr-text">
+                <span>Departments</span>
+            </div>
+            <div>
+                {% if employee.employeedepartment_set.all %}
+                    {% for oobject in employee.employeedepartment_set.all %}
+                        <span class="badge bg-yellow-lt">{{ oobject.department.name }}</span>
+                    {% endfor %}
+                {% endif %}
+                <span class="badge bg-primary-lt" id="department_update_btn">+ Add more</span>
+            </div>
+
+            <div class="hr-text">
+                <span>Sites</span>
+            </div>
+            <div>
+
+                {% if employee.employeesite_set.all %}
+                    {% for oobject in employee.employeesite_set.all %}
+                        <span class="badge bg-danger-lt">{{ oobject.site.name }}</span>
+                    {% endfor %}
+                {% endif %}
+                <span class="badge bg-primary-lt" id="site_update_btn">+ Add more</span>
+            </div>
+
+            <div class="hr-text">
+                <span>Positions</span>
+            </div>
+            <div>
+                {% if employee.employeeposition_set.all %}
+                    {% for oobject in employee.employeeposition_set.all %}
+                        <span class="badge bg-cyan-lt">{{ oobject.position.name }}</span>
+                    {% endfor %}
+                {% endif %}
+                <span class="badge bg-primary-lt" id="position_update_btn">+ Add more</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="modal-employee-details-edit">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employee Details Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="form_employee_details">
+                    {% csrf_token %}
+                    {{ employee_form|crispy }}
+                </form>
+            </div>
+            <div class="modal-footer text-left">
+                <button type="button" id="btn_employee_details_submit"
+                        data-action="{% url 'admins:admins-json:employee_change' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto"
+                >
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="site_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employee Sites</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    {% csrf_token %}
+                    {% if sites %}
+                        {% for site in sites %}
+                            <div id="div_id_need_condition" class="form-check">
+                                <input type="checkbox" class="checkboxinput form-check-input"
+                                        {% if site.pk in employee_sites_list %} checked {% endif %}
+                                       name="{{ forloop.counter }}" id="site_{{ forloop.counter }}">
+                                <label for="site_{{ forloop.counter }}"
+                                       class="form-check-label"> {{ site.name }} </label>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                </form>
+            </div>
+            <div class="modal-footer text-left">
+                <button type="button" id="site_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_sites_update' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto"
+                >
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="department_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employee Departments</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    {% csrf_token %}
+                    {% if departments %}
+                        {% for department in departments %}
+                            <div id="div_id_need_condition" class="form-check">
+                                <input type="checkbox" class="checkboxinput form-check-input"
+                                        {% if department.pk in employee_department_list %} checked {% endif %}
+                                       name="{{ forloop.counter }}" id="department_{{ forloop.counter }}">
+                                <label for="department_{{ forloop.counter }}"
+                                       class="form-check-label"> {{ department.name }} </label>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </form>
+
+            </div>
+            <div class="modal-footer text-left">
+                <button type="button" id="department_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_departments_update' employee.pk %}"
+                        data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto"
+                >
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="position_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employee Positions</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+
+                <form>
+                    {% csrf_token %}
+                    {% if positions %}
+                        {% for position in positions %}
+                            <div id="div_id_need_condition" class="form-check">
+                                <input type="checkbox" class="checkboxinput form-check-input"
+                                        {% if position.pk in employee_positions_list %} checked {% endif %}
+                                       name="{{ forloop.counter }}" id="position_{{ forloop.counter }}">
+                                <label for="position_{{ forloop.counter }}"
+                                       class="form-check-label"> {{ position.name }} </label>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </form>
+
+            </div>
+            <div class="modal-footer text-left">
+                <button type="button" id="position_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_positions_update' employee.pk %}" data-param=""
+                        data-method="POST"
+                        class="btn btn-success me-auto"
+                >
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#id_date_of_birth').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
+        let site_model = $('#site_model')
+        let site_form = site_model.find('form')
+        let site_submit_btn = $('#site_submit_btn')
+        let site_update_btn = $('#site_update_btn')
+        site_update_btn.click(function () {
+            site_model.modal('show');
+        })
+        site_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: site_form.serialize(),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    alert(error)
+                }
+            });
+        })
+
+        let department_model = $('#department_model')
+        let department_form = department_model.find('form')
+        let department_submit_btn = $('#department_submit_btn')
+        let department_update_btn = $('#department_update_btn')
+        department_update_btn.click(function () {
+            department_model.modal('show');
+        })
+        department_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: department_form.serialize(),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    alert(error)
+                }
+            });
+        })
+
+        let position_model = $('#position_model')
+        let position_form = position_model.find('form')
+        let position_submit_btn = $('#position_submit_btn')
+        let position_update_btn = $('#position_update_btn')
+        position_update_btn.click(function () {
+            position_model.modal('show');
+        })
+        position_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: position_form.serialize(),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    alert(error)
+                }
+            });
+        })
+
+        {# GLOBALS #}
+        let modal_employee_details_edit = $('body #modal-employee-details-edit')
+        let form_employee_details = modal_employee_details_edit.find('form')
+        let btn_employee_details_edit = $('body #btn-employee-details-edit')
+        let btn_employee_details_submit = $('body #btn_employee_details_submit')
+
+        {# ACTIONS/EVENTS/METHODS #}
+        btn_employee_details_edit.click(function () {
+            modal_employee_details_edit.modal('show')
+        });
+        btn_employee_details_submit.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: form_employee_details.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        form_employee_details.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    form_employee_details.find('.error-message').show()
+                }
+            });
+        });
+
+    });
+</script>

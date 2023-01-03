@@ -1,0 +1,85 @@
+{% load static %}
+
+{# TABS AREA #}
+<div class="row mt-4">
+    <div class="col-sm-12">
+
+        <div class="card">
+            <div class="card-header">
+                <ul class="nav nav-tabs card-header-tabs nav-fill" data-bs-toggle="tabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-details" class="nav-link active" data-bs-toggle="tab"
+                           aria-selected="true"
+                           role="tab">
+                            <i class="fa fa-home"></i>&nbsp;Details
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-employment" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                           role="tab" tabindex="-1">
+                            <i class="fa fa-briefcase"></i>&nbsp;Employment
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-expertise" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                           role="tab" tabindex="-1">
+                            <i class="fa fa-hammer"></i>&nbsp;Expertise
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-background" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                           role="tab" tabindex="-1">
+                            <i class="fa fa-history"></i>&nbsp;Background
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-hal" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                           role="tab" tabindex="-1">
+                            <i class="fa fa-heart"></i>&nbsp;Health and Look
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-docs" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                           role="tab" tabindex="-1">
+                            <i class="fa fa-pagelines"></i>&nbsp;Docs
+                        </a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#tabs-settings" class="nav-link " data-bs-toggle="tab" aria-selected="false"
+                           role="tab" tabindex="-1">
+                            <i class="fa fa-cogs"></i>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content">
+
+                    {# TAB1: details #}
+                    {% include 'admins/include/user_details_tabs_details.html' %}
+
+                    {# TAB2: employment #}
+                    {% include 'admins/include/user_details_tabs_employment.html' %}
+
+                    {# TAB2: expertise #}
+                    {% include 'admins/include/user_details_tabs_expertise.html' %}
+
+                    {# TAB2: Background #}
+                    {% include 'admins/include/user_details_tabs_background.html' %}
+
+                    {# TAB2: HAL #}
+                    {% include 'admins/include/user_details_tabs_hal.html' %}
+
+                    {# TAB2: DOCS #}
+                    {% include 'admins/include/user_details_tabs_docs.html' %}
+
+                    {# TAB2: SEttings #}
+                    {% include 'admins/include/user_details_tabs_settings.html' %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

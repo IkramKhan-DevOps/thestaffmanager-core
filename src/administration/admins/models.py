@@ -7,15 +7,15 @@ from django.dispatch import receiver
 from django.contrib.auth import get_user_model
 from src.accounts.models import Employee
 from faker import Faker
+
+
 User = get_user_model()
-
-
 fake = Faker()
 
 
 class Position(models.Model):
     name = models.CharField(max_length=255)
-    card_color = ColorField()
+    card_color = ColorField(default='#FFFFFF')
     charge_rate = models.FloatField()
     pay_rate = models.FloatField(help_text="Please provide payments")
 
@@ -29,7 +29,7 @@ class Position(models.Model):
         return str(self.name)
 
     @classmethod
-    def fake_position(cls, loop=10):
+    def fake(cls, loop=10):
         print()
         print("- POSITIONS: build")
         for x in range(loop):
@@ -53,6 +53,18 @@ class Department(models.Model):
     def __str__(self):
         return str(self.name)
 
+    @classmethod
+    def fake(cls, loop=10):
+        print()
+        print("- DEPARTMENT: build")
+        for x in range(loop):
+            Department.objects.create(
+                name=fake.job(), is_active=True
+            )
+            print(f"---- department: {x} faked.")
+        print("- END ")
+        print()
+
 
 class Country(models.Model):
     name = models.CharField(max_length=255, unique=True)
@@ -68,6 +80,18 @@ class Country(models.Model):
 
     def __str__(self):
         return self.name
+
+    @classmethod
+    def fake(cls, loop=10):
+        print()
+        print("- COUNTRY: build")
+        for x in range(loop):
+            Country.objects.create(
+                name=fake.country()
+            )
+            print(f"---- country: {x} faked.")
+        print("- END ")
+        print()
 
 
 class Client(models.Model):
@@ -99,7 +123,7 @@ class Client(models.Model):
         return Site.objects.filter(client=self)
 
     @classmethod
-    def fake_client(cls, loop=10):
+    def fake(cls, loop=10):
         print()
         print("- CLIENTS: build")
         for x in range(loop):
@@ -123,7 +147,7 @@ class ReportType(models.Model):
         return str(self.name)
 
     @classmethod
-    def fake_report_type(cls, loop=10):
+    def fake(cls, loop=10):
         print()
         print("- REPORT TYPE: build")
         for x in range(loop):
@@ -183,8 +207,7 @@ class Site(models.Model):
         return str(self.name)
 
     @classmethod
-    def fake_site(cls, loop=10):
-        print(fake.country())
+    def fake(cls, loop=10):
         print()
         print("- SITES: build")
         for x in range(loop):

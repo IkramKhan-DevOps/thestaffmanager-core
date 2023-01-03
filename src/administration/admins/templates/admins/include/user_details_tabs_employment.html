@@ -1,0 +1,227 @@
+{% load static %}
+{% load crispy_forms_tags %}
+
+{# TAB2: employment #}
+<div class="tab-pane" id="tabs-employment" role="tabpanel">
+    <div class="row">
+        {# LEFT #}
+        <div class="col-sm-6">
+            <button class="btn btn-primary mb-2" id="employment_work_edit_button">
+                <i class="fa fa-edit"></i> Edit
+            </button>
+            <dl class="row">
+                <dt class="col-5">NI number</dt>
+                <dd class="col-7">{{ employee_work.ni_number }}</dd>
+                <dt class="col-5">UTR</dt>
+                <dd class="col-7">{{ employee_work.utr }}</dd>
+                <dt class="col-5">Tax code</dt>
+                <dd class="col-7">{{ employee_work.tax_code }}</dd>
+                <dt class="col-5">Visa required</dt>
+                <dd class="col-7">
+                    {% if employee_visa_required %}
+                        <b><i class="fa fa-check text-success"></i></b>
+                    {% else %}
+                        <b><i class="fa fa-times text-danger"></i></b>
+                    {% endif %}
+                </dd>
+            </dl>
+        </div>
+
+        {# RIGHT #}
+        <div class="col-sm-6">
+            {# LNAGUAGE #}
+            <div class="text-right mb-2">
+                <button class="btn btn-primary" id="employment_contract_add_button">
+                    + Add Contract
+                </button>
+            </div>
+            <div>
+                {% if employee_contracts %}
+                    <div class="row">
+                        {% for contract in employee_contracts %}
+                            <div class="col-sm-6">
+                                <div class="card card-sm">
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <span class="bg-azure-lt text-white avatar">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                         class="icon icon-tabler icon-tabler-writing" width="24"
+                                                         height="24" viewBox="0 0 24 24" stroke-width="2"
+                                                         stroke="currentColor" fill="none" stroke-linecap="round"
+                                                         stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M20 17v-12c0 -1.121 -.879 -2 -2 -2s-2 .879 -2 2v12l2 2l2 -2z"></path>
+   <path d="M16 7h4"></path>
+   <path d="M18 19h-13a2 2 0 1 1 0 -4h4a2 2 0 1 0 0 -4h-3"></path>
+</svg>
+                                                </span>
+                                            </div>
+                                            <div class="col">
+                                                <div class="font-weight-medium">
+                                                    {{ contract.get_type_display }}
+                                                </div>
+                                                <div class="text-muted">
+                                                    {{ contract.start }} - {{ contract.end }}
+                                                </div>
+                                                <div class="text-Delete">
+                                                    <button class="btn btn-link btn-sm text-danger"
+                                                            data-method="GET"
+                                                            data-action="{% url 'admins:admins-json:employee_contract_delete' contract.pk %}"
+                                                            id="employment_contract_delete_button">
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div>
+                        <p class="mb-0 text-danger"><b>Information not available</b></p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="employment_work_edit_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employment Details Update</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_work_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employment_work_edit_model_submit_btn"
+                        data-action="{% url 'admins:admins-json:employee_work_change' employee.pk %}"
+                        data-param="" data-method="POST"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" tabindex="-1" id="employment_contract_add_model">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Employment Contract</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ employee_contracts_form|crispy }}
+                </form>
+            </div>
+
+            <div class="modal-footer text-left">
+                <button type="button" id="employment_contract_add_model_submit_btn"
+                        data-method="POST" data-param=""
+                        data-action="{% url 'admins:admins-json:employee_contract_add' employee.pk %}"
+                        class="btn btn-success me-auto">
+                    <i class="fa fa-check"></i>&nbsp;Submit
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+
+        $('#id_start').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
+        $('#id_end').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
+        {# EMPLOYEE WORK DETAILS #}
+        let employment_work_edit_button = $('#employment_work_edit_button')
+        let employment_work_edit_model = $('#employment_work_edit_model')
+        let employment_work_edit_model_form = employment_work_edit_model.find('form')
+        let employment_work_edit_model_submit_btn = $('#employment_work_edit_model_submit_btn')
+
+        employment_work_edit_button.click(function () {
+            employment_work_edit_model.modal('show')
+        });
+        employment_work_edit_model_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employment_work_edit_model_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employment_work_edit_model_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employment_work_edit_model_form.find('.error-message').show()
+                }
+            });
+        })
+
+        {# EMPLOYEE CONTRACTS #}
+        let employment_contract_add_button = $('#employment_contract_add_button')
+        let employment_contract_delete_button = $('#employment_contract_delete_button')
+        let employment_contract_add_model = $('#employment_contract_add_model')
+        let employment_contract_add_model_form = employment_contract_add_model.find('form')
+        let employment_contract_add_model_submit_btn = $('#employment_contract_add_model_submit_btn')
+
+        employment_contract_add_button.click(function () {
+            employment_contract_add_model.modal('show')
+        });
+        employment_contract_add_model_submit_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: employment_contract_add_model_form.serialize(),
+                success: function (data) {
+                    if (!(data['success'])) {
+                        employment_contract_add_model_form.html(data['form_html']);
+                    } else {
+                        location.reload();
+                    }
+                },
+                error: function () {
+                    employment_contract_add_model_form.find('.error-message').show()
+                }
+            });
+        })
+        employment_contract_delete_button.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (error) {
+                    console.log(error)
+                }
+            });
+        })
+
+    });
+</script>

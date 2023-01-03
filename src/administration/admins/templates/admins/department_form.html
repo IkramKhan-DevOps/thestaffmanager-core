@@ -2,11 +2,11 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
-{% block base_subtitle %}Position Form {% endblock %}
-{% block base_subhead_heading %}Position &rAarr; Form {% endblock %}
-{% block base_subhead_paragraph %}Position create/update form{% endblock %}
+{% block base_subtitle %}Department Form {% endblock %}
+{% block base_subhead_heading %}Department &rAarr; Form {% endblock %}
+{% block base_subhead_paragraph %}Department create/update form{% endblock %}
 {% block base_subhead_button %}
-    <a href="{% url 'admins:position-list' %}">&larr; Positions</a>
+    <a href="{% url 'admins:department-list' %}">&larr; Countries</a>
 {% endblock %}
 
 
@@ -30,13 +30,4 @@
         </div>
     </div>
 
-{% endblock %}
-
-{% block base_external_scripts %}
-    <script>
-    $(document).ready(function () {
-        $('input').addClass('my-2');
-        $('#id_card_color').attr('type', 'color')
-    })
-    </script>
 {% endblock %}
