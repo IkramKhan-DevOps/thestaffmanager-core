@@ -154,7 +154,7 @@ class Employee(models.Model):
         return self.user.username
 
     @classmethod
-    def fake_employees(cls, loop=10):
+    def fake_employees(cls, loop=30):
         print()
         print("- EMPLOYEES: build")
         for x in range(loop):
