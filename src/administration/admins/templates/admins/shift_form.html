@@ -1,6 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
 {% block base_subtitle %}Shift Form {% endblock %}
 {% block base_subhead_heading %}Shift &rAarr; Form {% endblock %}
@@ -20,7 +21,7 @@
 
 
     <div class="row justify-content-center">
-        <div class="col-sm-6">
+        <div class="col-sm-8">
 
 
             <form method="post" id="form">
@@ -32,12 +33,143 @@
                         <iframe src="https://embed.lottiefiles.com/animation/7448" height="200"
                                 class="border-0"></iframe>
                     </div>
-
-                    {% csrf_token %}
                     <div class="card-body">
+                                            <div class="row row-cards">
+                     <div class="col-md-10">
+                            <div class="mb-3">
+                                {{form.job_type.label}}
+                                {% render_field form.job_type class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.job_type.help_text}}</small>
+                                {% for error in form.job_type.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div> <div class="col-md-3">
+                            <div class="mb-3">
+                                {{form.start_date.label}}
+                                {% render_field form.start_date class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.start_date.help_text}}</small>
+                                {% for error in form.job_type.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div> <div class="col-md-3">
+                            <div class="mb-3">
+                                {{form.end_date.label}}
+                                {% render_field form.end_date class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.end_date.help_text}}</small>
+                                {% for error in form.end_date.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div><div class="col-md-3">
+                            <div class="mb-3">
+                                {{form.start_time.label}}
+                                {% render_field form.start_time class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.start_time.help_text}}</small>
+                                {% for error in form.start_time.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div> <div class="col-md-3">
+                            <div class="mb-3">
+                                {{form.end_date.label}}
+                                {% render_field form.end_time class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.end_time.help_text}}</small>
+                                {% for error in form.end_time.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div><div class="col-md-4">
+                            <div class="mb-3">
+                                {{form.site.label}}
+                                {% render_field form.site class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.site.help_text}}</small>
+                                {% for error in form.site.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div> <div class="col-md-4">
+                            <div class="mb-3">
+                                {{form.position.label}}
+                                {% render_field form.position class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.position.help_text}}</small>
+                                {% for error in form.position.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div><div class="col-md-4">
+                            <div class="mb-3">
+                                {{form.employee.label}}
+                                {% render_field form.employee class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.employee.help_text}}</small>
+                                {% for error in form.employee.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div> <div class="col-md-4">
+                            <div class="mb-3">
+                                {{form.pay_rate.label}}
+                                {% render_field form.pay_rate class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.pay_rate.help_text}}</small>
+                                {% for error in form.pay_rate.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div><div class="col-md-4">
+                            <div class="mb-3">
+                                {{form.charge_rate.label}}
+                                {% render_field form.charge_rate class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.charge_rate.help_text}}</small>
+                                {% for error in form.charge_rate.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div><div class="col-md-4">
+                            <div class="mb-3">
+                                {{form.extra_charges.label}}
+                                {% render_field form.extra_charges class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.extra_charges.help_text}}</small>
+                                {% for error in form.extra_charges.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div><div class="col-md-4">
+                            <div class="mb-3">
+                                {{form.repeat_policy.label}}
+                                {% render_field form.repeat_policy class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.repeat_policy.help_text}}</small>
+                                {% for error in form.repeat_policy.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor %}
+                            </div>
+                        </div>
 
-                        {{ form|crispy }}
-
+                    </div>
                     </div>
                 </div>
 

@@ -1,37 +1,167 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load widget_tweaks %}
 {% load crispy_forms_tags %}
 
 {% block base_subtitle %}Client Form {% endblock %}
 {% block base_subhead_heading %}Client &rAarr; Form {% endblock %}
 {% block base_subhead_paragraph %}Client create/update form{% endblock %}
 {% block base_subhead_button %}
-    <a href="{% url 'admins:client-list' %}">&larr; Clients</a>
+<a href="{% url 'admins:client-list' %}">&larr; Clients</a>
 {% endblock %}
 
 
 {% block base_content %}
 
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body">
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div class="card">
+            <div class="card-body">
 
-                    <div class="text-center">
-                        <iframe src="https://embed.lottiefiles.com/animation/98936" height="200" class="border-0"></iframe>
-                    </div>
-
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-check-circle"></i> Submit
-                        </button>
-                    </form>
-
+                <div class="text-center">
+                    <iframe class="border-0" height="200" src="https://embed.lottiefiles.com/animation/98936"></iframe>
                 </div>
+                <form method="post">
+                    {% csrf_token %}
+                    {{form.non_field_errors}}
+                    <div class="row row-cards">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{form.name.label}}
+                                {% render_field form.name class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.registration.help_text}}</small>
+                                {% for error in form.name.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor%}
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{form.phone.label}}
+                                {% render_field form.phone class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.phone.help_text}}</small>
+
+                                {% for error in form.phone.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor%}
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{form.registration_number.label}}
+                                {% render_field form.registration_number class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.registration_number.help_text}}</small>
+
+                                {% for error in form.registration_number.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor%}
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{form.vat_number.label}}
+                                {% render_field form.vat_number class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.vat_number.help_text}}</small>
+                                   {% for error in form.vat_number.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor%}
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{form.address.label}}
+                                {% render_field form.address class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.address.help_text}}</small>
+                                   {% for error in form.address.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor%}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                {{form.website.label}}
+                                {% render_field form.website class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.website.help_text}}</small>
+                                   {% for error in form.website.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor%}
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-4">
+                            <div class="mb-3">
+                                <label class="form-label">{{form.city.label}}</label>
+                                {% render_field form.city class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.city.help_text}}</small>
+                                   {% for error in form.city.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor%}
+
+
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-md-3">
+                            <div class="mb-3">
+                                <label class="form-label">{{form.Post_code.label}}</label>
+                                {% render_field form.Post_code class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.Post_code.help_text}}</small>
+                                   {% for error in form.Post_code.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor%}
+
+
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="mb-3">
+                                <label class="form-label">{{form.country.label}}</label>
+                                {% render_field form.country class="form-control" %}
+                                <small class="text-sm text-secondary">{{form.country.help_text}}</small>
+                                   {% for error in form.country.errors %}
+                                <small class="text-sm text-danger">
+                                        {{error}}
+                                </small>
+                                {% endfor%}
+
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="mb-3">
+                                <label class="form-label">{{form.is_active.label}}</label>
+                                {% render_field form.is_active %}
+                                <small class="text-sm text-secondary">{{form.is_active.help_text}}</small>
+                            </div>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-check-circle"></i> Submit
+                    </button>
+                </form>
+
             </div>
         </div>
     </div>
+</div>
 
 {% endblock %}
