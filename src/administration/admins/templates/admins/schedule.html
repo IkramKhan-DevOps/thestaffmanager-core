@@ -14,6 +14,99 @@
 {% block base_css %}
     <link href="{% static 'mobi/css/mobiscroll.jquery.min.css' %}" rel="stylesheet"/>
     <link href="{% static 'core/css/schedule.css' %}" rel="stylesheet"/>
+    <style>
+        .md-rect-bg {
+            opacity: 0.8;
+            background-image: repeating-linear-gradient(45deg, #ffd6d6 25%, transparent 25%, transparent 75%, #ffd6d6 75%, #ffd6d6), repeating-linear-gradient(45deg, #ffd6d6 25%, #ffefef 25%, #ffefef 75%, #ffd6d6 75%, #ffd6d6);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
+        }
+
+        .md-shift-management-calendar .mbsc-schedule-event {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 36px;
+}
+
+.md-shift-management-calendar .mbsc-timeline-slots {
+    height: 94px;
+}
+
+.md-shift-management-calendar .mbsc-timeline-header-placeholder {
+    height: 120px;
+}
+
+.md-shift-management-calendar .mbsc-timeline-resource {
+    display: flex;
+    align-items: center;
+}
+
+.md-shift-management-calendar .mbsc-timeline-slot {
+    width: 200px;
+}
+
+.md-shift-header-controls {
+    flex: 1 0 auto;
+    display: flex;
+    justify-content: end;
+}
+
+.md-shift-header-controls .mbsc-checkbox {
+    padding: 18px 0 18px 45px;
+}
+
+.md-shift-cal-view.mbsc-textfield-wrapper {
+    margin: 12px 12px 12px 28px;
+}
+
+.md-shift-cal-view .mbsc-select.mbsc-textfield {
+    height: 32px;
+    width: 120px;
+}
+
+.md-shift-cal-view .mbsc-icon.mbsc-select-icon {
+    width: 20px;
+    height: 20px;
+    top: 7px;
+}
+
+.md-shift-resource {
+    font-size: 18px;
+}
+
+.md-shift-resource-icon {
+    margin-right: 10px;
+}
+
+.md-shift-header {
+    margin: 3px 6px;
+    display: flex;
+    flex-direction: column;
+}
+
+.md-shift-name {
+    font-size: 15px;
+}
+
+.md-shift-time {
+    opacity: .5;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.md-shift-count {
+    margin-top: 6px;
+    margin-right: 12px;
+    display: inline-block;
+    width: 26px;
+    height: 20px;
+}
+
+.md-shift-icon {
+    padding-right: 3px;
+}
+    </style>
 {% endblock %}
 
 
@@ -38,7 +131,8 @@
                                 </div>
                             </div>
                         </form>
-                        <p class="text-muted mb-1"><small>Last updated: 00:00:00 00/00/0000&nbsp;&nbsp;<a href="#">(paused)</a>&nbsp;&nbsp;</small>
+                        <p class="text-muted mb-1"><small>Last updated: 00:00:00 00/00/0000&nbsp;&nbsp;<a
+                                href="#">(paused)</a>&nbsp;&nbsp;</small>
                         </p>
 
                     </div>
@@ -147,7 +241,7 @@
                     name: 'Not assigned',
                     color: 'red',
                     title: 'Shifts are not assigned',
-                    icon: '🍜'
+                    icon: '<span class="fa fa-ban"></span>'
                 }
             ]
             {% for object in employees %}
@@ -156,7 +250,7 @@
                     name: '{{ object }}',
                     color: 'green',
                     title: 'Employee',
-                    icon: '🥨'
+                    icon: '<span class="fa fa-user-circle"></span>'
 
                 });
             {% endfor %}
@@ -183,9 +277,21 @@
                         startDay: 1,
                         endDay: 0,
                         startTime: '00:00',
-                        endTime: '00:00'
-                    }
+                        endTime: '00:00',
+                        allDay: true
+                    },
                 },
+                slots: [{
+                    id: 1,
+                    name: 'Night',
+                    time: '2AM - 10AM'
+                }],
+                colors: [{
+                    date: '2023-01-05T00:00:00',
+                    title: '',
+                    allDay: true,
+                    cssClass: 'md-rect-bg'
+                }],
                 resources: types,
                 dragToCreate: false,
                 dragToResize: false,
@@ -206,6 +312,17 @@
                         '<div class="md-meal-planner-title" style="color:' + resource.color + '">' +
                         '<span class="md-meal-planner-icon">' + resource.icon + '</span>' + resource.name + '</div>' +
                         '</div>';
+                },
+                renderSlot: function (args) {
+                    var slot = args.slot;
+                    var date = formatDate(args.date);
+                    var shiftsElm = '';
+                    console.log(slot)
+                    shiftsElm += '<div class="md-shift-count">😶 empty...</div>';
+
+                    return '<div class="md-shift-header">' +
+                '<div class="md-shift-name">' + slot.name + '<span class="md-shift-time">' + slot.time + '</span></div>' +
+                '<div class="md-shift-counts-' + date + '-' + slot.id + '">' + shiftsElm + '</div></div>';
                 },
                 renderScheduleEventContent: function (args) {
                     {# schedule: check: render event details #}
