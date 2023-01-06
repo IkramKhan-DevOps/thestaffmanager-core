@@ -13,7 +13,7 @@ from .views import (
     SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView,
     DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView,
 
-    AbsenseTypeListView, AbsenseTypeCreateView, AbsenseTypeDeleteView, AbsenseTypeUpdateView
+    AbsenseTypeListView, AbsenseTypeCreateView, AbsenseTypeDeleteView, AbsenseTypeUpdateView, AbsenseScheduleView
 )
 
 app_name = 'admins'
@@ -21,6 +21,7 @@ urlpatterns = [
     path('', DashboardView.as_view(), name="dashboard"),
     path('schedule/', ScheduleView.as_view(), name="schedule"),
     path('time-clock/', TimeClockView.as_view(), name="time-clock"),
+    path('absenses/', AbsenseScheduleView.as_view(), name="absense-schedule"),
 ]
 
 urlpatterns += [
