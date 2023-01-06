@@ -11,7 +11,9 @@ from .views import (
     ShiftListView, ShiftDetailView, ShiftCustomCreateView,
     CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView, SubContractorListView,
     SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView,
-    DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView
+    DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView,
+
+    AbsenseTypeListView, AbsenseTypeCreateView, AbsenseTypeDeleteView, AbsenseTypeUpdateView
 )
 
 app_name = 'admins'
@@ -76,6 +78,13 @@ urlpatterns += [
     path('report-type/add/', ReportTypeCreateView.as_view(), name='report-type-add'),
     path('report-type/<int:pk>/change/', ReportTypeUpdateView.as_view(), name='report-type-update'),
     path('report-type/<int:pk>/delete/', ReportTypeDeleteView.as_view(), name='report-type-delete'),
+]
+
+urlpatterns += [
+    path('absense-type/', AbsenseTypeListView.as_view(), name='absense-type-list'),
+    path('absense-type/add/', AbsenseTypeCreateView.as_view(), name='absense-type-add'),
+    path('absense-type/<int:pk>/change/', AbsenseTypeUpdateView.as_view(), name='absense-type-update'),
+    path('absense-type/<int:pk>/delete/', AbsenseTypeDeleteView.as_view(), name='absense-type-delete'),
 ]
 
 urlpatterns += [

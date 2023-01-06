@@ -25,7 +25,7 @@ from .forms import (
     EMPMGMTUserNotesForm
 )
 from .models import (
-    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department,
+    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department, AbsenseType,
 )
 import datetime
 
@@ -615,6 +615,34 @@ class ReportTypeUpdateView(UpdateView):
 class ReportTypeDeleteView(DeleteView):
     model = ReportType
     success_url = reverse_lazy('admins:report-type-list')
+
+
+""" Absense Types """
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeListView(ListView):
+    queryset = AbsenseType.objects.all()
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeCreateView(CreateView):
+    model = AbsenseType
+    fields = '__all__'
+    success_url = reverse_lazy('admins:absense-type-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeUpdateView(UpdateView):
+    model = AbsenseType
+    fields = '__all__'
+    success_url = reverse_lazy('admins:absense-type-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeDeleteView(DeleteView):
+    model = AbsenseType
+    success_url = reverse_lazy('admins:absense-type-list')
 
 
 """ Sub Contractors """

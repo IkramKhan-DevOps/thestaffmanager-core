@@ -473,6 +473,18 @@ class AbsenseType(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
+    def fake(cls, loop=10):
+        print()
+        print("- ABSENSE TYPES: build")
+        for x in range(loop):
+            Site.objects.create(
+                name=fake.isbn10(),
+            )
+            print(f"---- ABSENSE TYPES: {x} faked.")
+        print("- END ")
+        print()
+
 
 class Absense(models.Model):
     TYPE_CHOICES = (
