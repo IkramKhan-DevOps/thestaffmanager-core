@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template.context_processors import csrf
 from crispy_forms.utils import render_crispy_form
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
@@ -97,7 +98,6 @@ class UserUpdateJsonView(View):
 class EmployeeWorkJsonView(View):
 
     def post(self, request, pk, *args, **kwargs):
-
         instance = get_object_or_404(Employee, pk=pk)
         form = EMPMGMTEmployeeWorkForm(instance=instance.employeework, data=request.POST)
 
@@ -273,7 +273,6 @@ class EmployeeDocumentDeleteJsonView(View):
 class EmployeeHealthJsonView(View):
 
     def post(self, request, pk, *args, **kwargs):
-
         instance = get_object_or_404(Employee, pk=pk)
         form = EMPMGMTEmployeeHealthForm(instance=instance.employeehealth, data=request.POST)
 
@@ -291,7 +290,6 @@ class EmployeeHealthJsonView(View):
 class EmployeeAppearanceJsonView(View):
 
     def post(self, request, pk, *args, **kwargs):
-
         instance = get_object_or_404(Employee, pk=pk)
         form = EMPMGMTEmployeeAppearanceForm(instance=instance.employeeappearance, data=request.POST)
 
@@ -365,3 +363,27 @@ class EmployeePositionsUpdateJsonView(View):
         EmployeePosition.objects.filter(employee=employee).delete()
         for value in post_dictionary.keys():
             EmployeePosition.objects.get_or_create(employee=employee, position_id=int(value))
+
+
+"""" START """
+
+from bootstrap_modal_forms.forms import BSModalModelForm
+from bootstrap_modal_forms.generic import BSModalUpdateView
+
+
+class EmployeeFormBSModal(BSModalModelForm):
+    class Meta:
+        model = Employee
+        fields = '__all__'
+
+
+class EmployeeUpdateModelView(BSModalUpdateView):
+    template_name = 'admins/employee-models/employee_form.html'
+    form_class = EmployeeFormBSModal
+    success_url = reverse_lazy('admins:user-list')
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(Employee, pk=self.kwargs['pk'])
+
+
+""" END """

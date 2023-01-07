@@ -7,7 +7,7 @@
         {# LEFT #}
         <div class="col-sm-6">
             <div class="mb-2">
-                <button class="btn btn-primary" id="btn-employee-details-edit">
+                <button class="btn btn-primary" id="btn-employee-details-edit2">
                     <i class="fa fa-user-check"></i>&nbsp;Update Personal Details
                 </button>
             </div>
@@ -230,6 +230,25 @@
         </div>
     </div>
 </div>
+
+{# CALL AREA START - HTML #}
+<div class="modal fade" tabindex="-1" role="dialog" id="modal">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content"></div>
+  </div>
+</div>
+{# CALL AREA END - HTML #}
+
+
+{# CALL AREA START - JS #}
+<script>
+    $(document).ready(function () {
+        $("#btn-employee-details-edit2").modalForm({
+            formURL: "{% url 'admins:admins-json:employee-update-model-form' employee.pk %}"
+        });
+    })
+</script>
+{# CALL AREA END - JS #}
 
 <script>
     $(document).ready(function () {

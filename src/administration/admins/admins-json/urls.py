@@ -8,7 +8,7 @@ from .views import (
     EmployeeEducationAddJsonView, EmployeeEducationDeleteJsonView, EmployeeDocumentAddJsonView,
     EmployeeDocumentDeleteJsonView,
     EmployeeContractDeleteJsonView, EmployeeContractAddJsonView, EmployeeSitesUpdateJsonView,
-    EmployeeDepartmentsUpdateJsonView, EmployeePositionsUpdateJsonView, UserUpdateJsonView
+    EmployeeDepartmentsUpdateJsonView, EmployeePositionsUpdateJsonView, UserUpdateJsonView, EmployeeUpdateModelView
 )
 
 app_name = 'admins-json'
@@ -46,5 +46,7 @@ urlpatterns = [
     path('employee/<int:pk>/sites/change/', EmployeeSitesUpdateJsonView.as_view(), name='employee_sites_update'),
     path('employee/<int:pk>/departments/change/', EmployeeDepartmentsUpdateJsonView.as_view(), name='employee_departments_update'),
     path('employee/<int:pk>/positions/change/', EmployeePositionsUpdateJsonView.as_view(), name='employee_positions_update'),
+
+    path('employee/<int:pk>/update/', EmployeeUpdateModelView.as_view(), name='employee-update-model-form')
 
 ]
