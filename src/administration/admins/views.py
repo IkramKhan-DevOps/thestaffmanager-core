@@ -99,6 +99,11 @@ class AbsenseScheduleView(TemplateView):
     template_name = '000.html'
 
 
+@method_decorator([admin_protected], name='dispatch')
+class CheckCallsView(TemplateView):
+    template_name = '000.html'
+
+
 @method_decorator(admin_protected, name='dispatch')
 class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
