@@ -137,9 +137,9 @@ class Employee(models.Model):
     )
 
     # MANY TO MANY
-    sites = models.ManyToManyField('admins.Site', through='EmployeeSite')
-    positions = models.ManyToManyField('admins.Position', through='EmployeePosition')
-    departments = models.ManyToManyField('admins.Department', through='EmployeeDepartment')
+    sites = models.ManyToManyField('admins.Site', blank=True, through='EmployeeSite')
+    positions = models.ManyToManyField('admins.Position', blank=True, through='EmployeePosition')
+    departments = models.ManyToManyField('admins.Department', blank=True, through='EmployeeDepartment')
 
     # CHECKS
     driver_license = models.BooleanField(default=False)
@@ -154,7 +154,7 @@ class Employee(models.Model):
         return self.user.username
 
     @classmethod
-    def fake_employees(cls, loop=10):
+    def fake_employees(cls, loop=30):
         print()
         print("- EMPLOYEES: build")
         for x in range(loop):

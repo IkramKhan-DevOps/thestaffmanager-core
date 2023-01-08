@@ -8,7 +8,6 @@ from django.contrib.auth import get_user_model
 from src.accounts.models import Employee
 from faker import Faker
 
-
 User = get_user_model()
 fake = Faker()
 
@@ -243,7 +242,6 @@ class Site(models.Model):
 
 
 class Shift(models.Model):
-
     JOB_TYPE_CHOICE = (
         ('o', 'Open'),
         ('p', 'Pattern'),
@@ -297,7 +295,6 @@ class Shift(models.Model):
 
 
 class ShiftDay(models.Model):
-
     STATUS_CHOICE = (
         ('awa', 'Awaiting'),
         ('run', 'Running'),
@@ -454,8 +451,56 @@ class ShiftDay(models.Model):
 
     def get_extra_hours(self):
         if self.clock_in and self.clock_out:
-            required = datetime.combine(self.shift_end_date, self.shift_end_time) - datetime.combine(self.shift_date, self.shift_time)
-            active = datetime.combine(self.shift_end_date, self.clock_out) - datetime.combine(self.shift_date, self.clock_in)
+            required = datetime.combine(self.shift_end_date, self.shift_end_time) - datetime.combine(self.shift_date,
+                                                                                                     self.shift_time)
+            active = datetime.combine(self.shift_end_date, self.clock_out) - datetime.combine(self.shift_date,
+                                                                                              self.clock_in)
             return round((active - required).total_seconds() / 3600)
         return 0
 
+
+class AbsenseType(models.Model):
+    name = models.CharField(max_length=50)
+    is_paid = models.BooleanField(
+        default=False,
+        help_text="Is this absense type is paid, means if employee is absent with this type he will be paid"
+    )
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = "Absense Types"
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def fake(cls, loop=10):
+        print()
+        print("- ABSENSE TYPES: build")
+        for x in range(loop):
+            Site.objects.create(
+                name=fake.isbn10(),
+            )
+            print(f"---- ABSENSE TYPES: {x} faked.")
+        print("- END ")
+        print()
+
+
+class Absense(models.Model):
+    TYPE_CHOICES = (
+        ('s', 'Sick Leave'),
+        ('o', 'Other'),
+    )
+
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    absense_type = models.ForeignKey(AbsenseType, on_delete=models.SET_NULL, null=True, blank=False)
+    date_from = models.DateField(help_text="Employee holiday starts from")
+    date_to = models.DateField(help_text="Employee holiday ends on")
+    comment = models.TextField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = "Absences"
+
+    def __str__(self):
+        return self.employee.user.get_user_name() + " " + "Leave: " + str(self.pk)

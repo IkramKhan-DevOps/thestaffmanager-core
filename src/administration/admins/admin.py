@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import (
     Client,  Site, Position,
-    ReportType, Employee, ShiftDay, Shift, Country
+    ReportType, Employee, ShiftDay, Shift, Country, AbsenseType, Absense
 )
 
 
@@ -29,3 +29,5 @@ admin.site.register(ReportType)
 admin.site.register(Shift, ShiftAdmin)
 admin.site.register(Country, CountryAdmin)
 admin.site.register(ShiftDay, ShiftDayAdmin)
+admin.site.register(AbsenseType)
+admin.site.register(Absense)
