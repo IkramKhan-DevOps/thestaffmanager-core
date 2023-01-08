@@ -364,26 +364,3 @@ class EmployeePositionsUpdateJsonView(View):
         for value in post_dictionary.keys():
             EmployeePosition.objects.get_or_create(employee=employee, position_id=int(value))
 
-
-"""" START """
-
-from bootstrap_modal_forms.forms import BSModalModelForm
-from bootstrap_modal_forms.generic import BSModalUpdateView
-
-
-class EmployeeFormBSModal(BSModalModelForm):
-    class Meta:
-        model = Employee
-        fields = '__all__'
-
-
-class EmployeeUpdateModelView(BSModalUpdateView):
-    template_name = 'admins/employee-models/employee_form.html'
-    form_class = EmployeeFormBSModal
-    success_url = reverse_lazy('admins:user-list')
-
-    def get_object(self, queryset=None):
-        return get_object_or_404(Employee, pk=self.kwargs['pk'])
-
-
-""" END """

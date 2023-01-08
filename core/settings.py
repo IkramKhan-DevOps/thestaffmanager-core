@@ -42,7 +42,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'colorfield',
     'widget_tweaks',
-    'bootstrap_modal_forms',
 
     # SYSTEM APPS
     'src.accounts',
