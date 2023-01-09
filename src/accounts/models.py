@@ -125,8 +125,7 @@ class Employee(models.Model):
         'admins.Country', max_length=255, null=True, blank=True,
         on_delete=models.CASCADE, related_name='employee_country'
     )
-    nationality = models.CharField(max_length=3)
-
+    nationality = models.CharField(max_length=100, null=True, blank=True)
     # GENDER AND DOB
     gender = models.CharField(max_length=1, choices=EMPLOYEE_GENDER_CHOICE, default='m')
     date_of_birth = models.DateField(null=True, blank=True, verbose_name="Date of Birth")
