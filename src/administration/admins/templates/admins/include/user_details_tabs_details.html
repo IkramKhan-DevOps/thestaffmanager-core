@@ -1,7 +1,6 @@
 {% load static %}
-{% load crispy_forms_tags %}
 {% load widget_tweaks %}
-
+{% load crispy_forms_tags %}
 
 <div class="tab-pane active show" id="tabs-details" role="tabpanel">
     <div class="row">
@@ -93,7 +92,7 @@
 </div>
 
 <div class="modal" id="modal-employee-details-edit" tabindex="-1">
-    <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Employee Details Update</h5>
@@ -102,225 +101,11 @@
             <div class="modal-body">
                 <form id="form_employee_details" method="post">
                     {% csrf_token %}
-
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.employee_id.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.employee_id class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.employee_id.help_text}}</small>
-                                {% for error in employee_form.employee_id.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.type.label}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.type class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.type.help_text}}</small>
-                                {% for error in employee_form.type.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.pob.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.pob class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.pob.help_text}}</small>
-                                {% for error in employee_form.pob.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.phone_number_2.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.phone_number_2 class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.phone_number_2.help_text}}</small>
-                                {% for error in employee_form.phone_number_2.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.address.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.address class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.address.help_text}}</small>
-                                {% for error in employee_form.address.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.city.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.city class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.city.help_text}}</small>
-                                {% for error in employee_form.city.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.post_code.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.post_code class="form-control" %}
-                                </div>
-                            </div>
-                            <small class="text-sm text-secondary">{{employee_form.post_code.help_text}}</small>
-                            {% for error in employee_form.code.errors %}
-                            <small class="text-sm text-danger">
-                                {{error}}
-                            </small>
-                            {% endfor %}
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.country.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.country class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.country.help_text}}</small>
-                                {% for error in employee_form.country.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.nationality.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.nationality class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.nationality.help_text}}</small>
-                                {% for error in employee_form.nationality.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.gender.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.gender class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.gender.help_text}}</small>
-                                {% for error in employee_form.gender.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.country_of_birth.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.country_of_birth class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.country_of_birth.help_text}}</small>
-                                {% for error in employee_form.country_of_birth.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.city_of_birth.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.city_of_birth class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.city_of_birth.help_text}}</small>
-                                {% for error in employee_form.city_of_birth.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-label">{{employee_form.date_of_birth.label_tag}}</label>
-                                <div class="input-group input-group-flat">
-                                    {% render_field employee_form.date_of_birth class="form-control" %}
-                                </div>
-                                <small class="text-sm text-secondary">{{employee_form.date_of_birth.help_text}}</small>
-                                {% for error in employee_form.date_of_birth.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-check form-switch">
-                                    {% render_field employee_form.driver_license class="form-check-input" %}
-                                    <span class="form-check-label">{{employee_form.driver_license.label}}</span>
-                                </label>
-                                <small class="text-sm text-secondary">{{employee_form.driver_license.help_text}}</small>
-                                {% for error in employee_form.driver_license.errors %}
-                                <small class="text-sm text-danger">
-                                        {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="mb-3">
-                                <label class="form-check form-switch">
-                                    {% render_field employee_form.access_to_car class="form-check-input" %}
-                                    <span class="form-check-label">{{employee_form.access_to_car.label}}</span>
-                                </label>
-                                              <small class="text-sm text-secondary">{{employee_form.access_to_car.help_text}}</small>
-                                {% for error in employee_form.access_to_car.errors %}
-                                <small class="text-sm text-danger">
-                                        {{error}}
-                                </small>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-
+                                            {% crispy employee_form %}
                 </form>
             </div>
             <div class="modal-footer text-left">
-                <button class="btn btn-success me-auto"
-                        data-action="{% url 'admins:admins-json:employee_change' employee.pk %}"
+                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_change' employee.pk %}"
                         data-method="POST" data-param=""
                         id="btn_employee_details_submit"
                         type="button"
@@ -347,9 +132,7 @@
                     {% for site in sites %}
                     <div class="form-check" id="div_id_need_condition">
                         <input %} %}
-                               checked class="checkboxinput form-check-input" employee_sites_list endif
-                               id="site_{{ forloop.counter }}" if in name="{{ forloop.counter }}" site.pk
-                               type="checkbox"
+                               checked class="checkboxinput form-check-input" employee_sites_list endif id="site_{{ forloop.counter }}" if in name="{{ forloop.counter }}" site.pk type="checkbox"
                                {% {%>
                         <label class="form-check-label"
                                for="site_{{ forloop.counter }}"> {{ site.name }} </label>
@@ -360,8 +143,7 @@
                 </form>
             </div>
             <div class="modal-footer text-left">
-                <button class="btn btn-success me-auto"
-                        data-action="{% url 'admins:admins-json:employee_sites_update' employee.pk %}"
+                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_sites_update' employee.pk %}"
                         data-method="POST" data-param=""
                         id="site_submit_btn"
                         type="button"
@@ -388,9 +170,7 @@
                     {% for department in departments %}
                     <div class="form-check" id="div_id_need_condition">
                         <input %} %}
-                               checked class="checkboxinput form-check-input" department.pk employee_department_list
-                               endif id="department_{{ forloop.counter }}" if in name="{{ forloop.counter }}"
-                               type="checkbox"
+                               checked class="checkboxinput form-check-input" department.pk employee_department_list endif id="department_{{ forloop.counter }}" if in name="{{ forloop.counter }}" type="checkbox"
                                {% {%>
                         <label class="form-check-label"
                                for="department_{{ forloop.counter }}"> {{ department.name }} </label>
@@ -401,8 +181,7 @@
 
             </div>
             <div class="modal-footer text-left">
-                <button class="btn btn-success me-auto"
-                        data-action="{% url 'admins:admins-json:employee_departments_update' employee.pk %}"
+                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_departments_update' employee.pk %}"
                         data-method="POST"
                         data-param=""
                         id="department_submit_btn"
@@ -430,9 +209,7 @@
                     {% for position in positions %}
                     <div class="form-check" id="div_id_need_condition">
                         <input %} %}
-                               checked class="checkboxinput form-check-input" employee_positions_list endif
-                               id="position_{{ forloop.counter }}" if in name="{{ forloop.counter }}" position.pk
-                               type="checkbox"
+                               checked class="checkboxinput form-check-input" employee_positions_list endif id="position_{{ forloop.counter }}" if in name="{{ forloop.counter }}" position.pk type="checkbox"
                                {% {%>
                         <label class="form-check-label"
                                for="position_{{ forloop.counter }}"> {{ position.name }} </label>
@@ -443,8 +220,7 @@
 
             </div>
             <div class="modal-footer text-left">
-                <button class="btn btn-success me-auto"
-                        data-action="{% url 'admins:admins-json:employee_positions_update' employee.pk %}"
+                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_positions_update' employee.pk %}"
                         data-method="POST" data-param=""
                         id="position_submit_btn"
                         type="button"
@@ -533,8 +309,6 @@
         let btn_employee_details_edit = $('body #btn-employee-details-edit')
         let btn_employee_details_submit = $('body #btn_employee_details_submit')
 
-        modal_employee_details_edit.modal('show');
-
         {# ACTIONS/EVENTS/METHODS #}
         btn_employee_details_edit.click(function () {
             modal_employee_details_edit.modal('show')
@@ -558,6 +332,5 @@
         });
 
     });
-
 
 </script>
