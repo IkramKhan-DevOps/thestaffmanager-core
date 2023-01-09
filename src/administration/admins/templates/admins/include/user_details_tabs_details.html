@@ -1,4 +1,5 @@
 {% load static %}
+{% load widget_tweaks %}
 {% load crispy_forms_tags %}
 
 <div class="tab-pane active show" id="tabs-details" role="tabpanel">
@@ -54,9 +55,9 @@
             </div>
             <div>
                 {% if employee.employeedepartment_set.all %}
-                    {% for oobject in employee.employeedepartment_set.all %}
-                        <span class="badge bg-yellow-lt">{{ oobject.department.name }}</span>
-                    {% endfor %}
+                {% for oobject in employee.employeedepartment_set.all %}
+                <span class="badge bg-yellow-lt">{{ oobject.department.name }}</span>
+                {% endfor %}
                 {% endif %}
                 <span class="badge bg-primary-lt" id="department_update_btn">+ Add more</span>
             </div>
@@ -67,9 +68,9 @@
             <div>
 
                 {% if employee.employeesite_set.all %}
-                    {% for oobject in employee.employeesite_set.all %}
-                        <span class="badge bg-danger-lt">{{ oobject.site.name }}</span>
-                    {% endfor %}
+                {% for oobject in employee.employeesite_set.all %}
+                <span class="badge bg-danger-lt">{{ oobject.site.name }}</span>
+                {% endfor %}
                 {% endif %}
                 <span class="badge bg-primary-lt" id="site_update_btn">+ Add more</span>
             </div>
@@ -79,9 +80,9 @@
             </div>
             <div>
                 {% if employee.employeeposition_set.all %}
-                    {% for oobject in employee.employeeposition_set.all %}
-                        <span class="badge bg-cyan-lt">{{ oobject.position.name }}</span>
-                    {% endfor %}
+                {% for oobject in employee.employeeposition_set.all %}
+                <span class="badge bg-cyan-lt">{{ oobject.position.name }}</span>
+                {% endfor %}
                 {% endif %}
                 <span class="badge bg-primary-lt" id="position_update_btn">+ Add more</span>
             </div>
@@ -90,24 +91,24 @@
     </div>
 </div>
 
-<div class="modal" tabindex="-1" id="modal-employee-details-edit">
+<div class="modal" id="modal-employee-details-edit" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Employee Details Update</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body">
-                <form method="post" id="form_employee_details">
+                <form id="form_employee_details" method="post">
                     {% csrf_token %}
-                    {{ employee_form|crispy }}
+                                            {% crispy employee_form %}
                 </form>
             </div>
             <div class="modal-footer text-left">
-                <button type="button" id="btn_employee_details_submit"
-                        data-action="{% url 'admins:admins-json:employee_change' employee.pk %}" data-param=""
-                        data-method="POST"
-                        class="btn btn-success me-auto"
+                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_change' employee.pk %}"
+                        data-method="POST" data-param=""
+                        id="btn_employee_details_submit"
+                        type="button"
                 >
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -116,36 +117,36 @@
     </div>
 </div>
 
-<div class="modal" tabindex="-1" id="site_model">
+<div class="modal" id="site_model" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Employee Sites</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body">
 
                 <form>
                     {% csrf_token %}
                     {% if sites %}
-                        {% for site in sites %}
-                            <div id="div_id_need_condition" class="form-check">
-                                <input type="checkbox" class="checkboxinput form-check-input"
-                                        {% if site.pk in employee_sites_list %} checked {% endif %}
-                                       name="{{ forloop.counter }}" id="site_{{ forloop.counter }}">
-                                <label for="site_{{ forloop.counter }}"
-                                       class="form-check-label"> {{ site.name }} </label>
-                            </div>
-                        {% endfor %}
+                    {% for site in sites %}
+                    <div class="form-check" id="div_id_need_condition">
+                        <input %} %}
+                               checked class="checkboxinput form-check-input" employee_sites_list endif id="site_{{ forloop.counter }}" if in name="{{ forloop.counter }}" site.pk type="checkbox"
+                               {% {%>
+                        <label class="form-check-label"
+                               for="site_{{ forloop.counter }}"> {{ site.name }} </label>
+                    </div>
+                    {% endfor %}
                     {% endif %}
 
                 </form>
             </div>
             <div class="modal-footer text-left">
-                <button type="button" id="site_submit_btn"
-                        data-action="{% url 'admins:admins-json:employee_sites_update' employee.pk %}" data-param=""
-                        data-method="POST"
-                        class="btn btn-success me-auto"
+                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_sites_update' employee.pk %}"
+                        data-method="POST" data-param=""
+                        id="site_submit_btn"
+                        type="button"
                 >
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -154,37 +155,37 @@
     </div>
 </div>
 
-<div class="modal" tabindex="-1" id="department_model">
+<div class="modal" id="department_model" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Employee Departments</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body">
 
                 <form>
                     {% csrf_token %}
                     {% if departments %}
-                        {% for department in departments %}
-                            <div id="div_id_need_condition" class="form-check">
-                                <input type="checkbox" class="checkboxinput form-check-input"
-                                        {% if department.pk in employee_department_list %} checked {% endif %}
-                                       name="{{ forloop.counter }}" id="department_{{ forloop.counter }}">
-                                <label for="department_{{ forloop.counter }}"
-                                       class="form-check-label"> {{ department.name }} </label>
-                            </div>
-                        {% endfor %}
+                    {% for department in departments %}
+                    <div class="form-check" id="div_id_need_condition">
+                        <input %} %}
+                               checked class="checkboxinput form-check-input" department.pk employee_department_list endif id="department_{{ forloop.counter }}" if in name="{{ forloop.counter }}" type="checkbox"
+                               {% {%>
+                        <label class="form-check-label"
+                               for="department_{{ forloop.counter }}"> {{ department.name }} </label>
+                    </div>
+                    {% endfor %}
                     {% endif %}
                 </form>
 
             </div>
             <div class="modal-footer text-left">
-                <button type="button" id="department_submit_btn"
-                        data-action="{% url 'admins:admins-json:employee_departments_update' employee.pk %}"
-                        data-param=""
+                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_departments_update' employee.pk %}"
                         data-method="POST"
-                        class="btn btn-success me-auto"
+                        data-param=""
+                        id="department_submit_btn"
+                        type="button"
                 >
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -193,36 +194,36 @@
     </div>
 </div>
 
-<div class="modal" tabindex="-1" id="position_model">
+<div class="modal" id="position_model" tabindex="-1">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Employee Positions</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button aria-label="Close" class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
             <div class="modal-body">
 
                 <form>
                     {% csrf_token %}
                     {% if positions %}
-                        {% for position in positions %}
-                            <div id="div_id_need_condition" class="form-check">
-                                <input type="checkbox" class="checkboxinput form-check-input"
-                                        {% if position.pk in employee_positions_list %} checked {% endif %}
-                                       name="{{ forloop.counter }}" id="position_{{ forloop.counter }}">
-                                <label for="position_{{ forloop.counter }}"
-                                       class="form-check-label"> {{ position.name }} </label>
-                            </div>
-                        {% endfor %}
+                    {% for position in positions %}
+                    <div class="form-check" id="div_id_need_condition">
+                        <input %} %}
+                               checked class="checkboxinput form-check-input" employee_positions_list endif id="position_{{ forloop.counter }}" if in name="{{ forloop.counter }}" position.pk type="checkbox"
+                               {% {%>
+                        <label class="form-check-label"
+                               for="position_{{ forloop.counter }}"> {{ position.name }} </label>
+                    </div>
+                    {% endfor %}
                     {% endif %}
                 </form>
 
             </div>
             <div class="modal-footer text-left">
-                <button type="button" id="position_submit_btn"
-                        data-action="{% url 'admins:admins-json:employee_positions_update' employee.pk %}" data-param=""
-                        data-method="POST"
-                        class="btn btn-success me-auto"
+                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_positions_update' employee.pk %}"
+                        data-method="POST" data-param=""
+                        id="position_submit_btn"
+                        type="button"
                 >
                     <i class="fa fa-check"></i>&nbsp;Submit
                 </button>
@@ -331,4 +332,5 @@
         });
 
     });
+
 </script>

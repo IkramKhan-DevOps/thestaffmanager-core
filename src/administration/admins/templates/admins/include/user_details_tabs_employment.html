@@ -100,7 +100,7 @@
             <div class="modal-body">
                 <form method="post">
                     {% csrf_token %}
-                    {{ employee_work_form|crispy }}
+                    {% crispy employee_work_form %}
                 </form>
             </div>
 
@@ -127,7 +127,7 @@
             <div class="modal-body">
                 <form method="post">
                     {% csrf_token %}
-                    {{ employee_contracts_form|crispy }}
+                    {% crispy employee_contracts_form %}
                 </form>
             </div>
 
