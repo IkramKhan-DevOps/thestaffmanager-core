@@ -1,4 +1,5 @@
 import json
+from calendar import monthrange
 
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -28,7 +29,7 @@ from .forms import (
     EMPMGMTUserNotesForm, ShiftForm
 )
 from .models import (
-    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department, AbsenseType,
+    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department, AbsenseType, Absense,
 )
 import datetime
 
@@ -99,8 +100,17 @@ class ScheduleView(TemplateView):
 
 
 @method_decorator([admin_protected], name='dispatch')
-class AbsenseScheduleView(TemplateView):
-    template_name = '000.html'
+class AbsenseScheduleView(ListView):
+    queryset = Absense
+    template_name = 'admins/absense_schedule.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        num_days = monthrange(datetime.datetime.now().year, datetime.datetime.now().month)[1]
+        context['days'] = list(range(1, num_days + 1))
+        context['employees'] = Employee.objects.all()
+        context['absent_types'] = AbsenseType.objects.all()
+        return context
 
 
 @method_decorator([admin_protected], name='dispatch')
