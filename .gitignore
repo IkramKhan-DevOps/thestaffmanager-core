@@ -139,3 +139,4 @@ media/
 .idea/
 /.idea
 .idea
+db.sqlite3
