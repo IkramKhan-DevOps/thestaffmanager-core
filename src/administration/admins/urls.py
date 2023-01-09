@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import (
-    DashboardView, ScheduleView, TimeClockView,
+    DashboardView, ScheduleView, TimeClockView, CheckCallsView,
     PositionListView, PositionDeleteView, PositionCreateView, PositionUpdateView,
     UserPasswordResetView, UserListView, UserStaffCreateView, UserEmployeeCreateView, UserUpdateView, UserDeleteView,
     ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView,
@@ -11,7 +11,9 @@ from .views import (
     ShiftListView, ShiftDetailView, ShiftCustomCreateView,
     CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView, SubContractorListView,
     SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView,
-    DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView
+    DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView,
+
+    AbsenseTypeListView, AbsenseTypeCreateView, AbsenseTypeDeleteView, AbsenseTypeUpdateView, AbsenseScheduleView
 )
 
 app_name = 'admins'
@@ -19,6 +21,8 @@ urlpatterns = [
     path('', DashboardView.as_view(), name="dashboard"),
     path('schedule/', ScheduleView.as_view(), name="schedule"),
     path('time-clock/', TimeClockView.as_view(), name="time-clock"),
+    path('absenses/', AbsenseScheduleView.as_view(), name="absense-schedule"),
+    path('check-calls/', CheckCallsView.as_view(), name="check-calls"),
 ]
 
 urlpatterns += [
@@ -76,6 +80,13 @@ urlpatterns += [
     path('report-type/add/', ReportTypeCreateView.as_view(), name='report-type-add'),
     path('report-type/<int:pk>/change/', ReportTypeUpdateView.as_view(), name='report-type-update'),
     path('report-type/<int:pk>/delete/', ReportTypeDeleteView.as_view(), name='report-type-delete'),
+]
+
+urlpatterns += [
+    path('absense-type/', AbsenseTypeListView.as_view(), name='absense-type-list'),
+    path('absense-type/add/', AbsenseTypeCreateView.as_view(), name='absense-type-add'),
+    path('absense-type/<int:pk>/change/', AbsenseTypeUpdateView.as_view(), name='absense-type-update'),
+    path('absense-type/<int:pk>/delete/', AbsenseTypeDeleteView.as_view(), name='absense-type-delete'),
 ]
 
 urlpatterns += [

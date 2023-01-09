@@ -25,10 +25,10 @@ from .forms import (
     EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
     EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
     EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm,
-    EMPMGMTUserNotesForm
+    EMPMGMTUserNotesForm, ShiftForm
 )
 from .models import (
-    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department,
+    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department, AbsenseType,
 )
 import datetime
 
@@ -88,6 +88,7 @@ class ScheduleView(TemplateView):
 
         # CONTEXT: data
         context['shifts'] = shifts
+        context['shift_form'] = ShiftForm()
         context['employees'] = employees
         context['current_day'] = datetime.date.today().day
         context['current_month'] = current_month
@@ -95,6 +96,16 @@ class ScheduleView(TemplateView):
         context['current_date'] = datetime.date.today()
 
         return context
+
+
+@method_decorator([admin_protected], name='dispatch')
+class AbsenseScheduleView(TemplateView):
+    template_name = '000.html'
+
+
+@method_decorator([admin_protected], name='dispatch')
+class CheckCallsView(TemplateView):
+    template_name = '000.html'
 
 
 @method_decorator(admin_protected, name='dispatch')
@@ -618,6 +629,34 @@ class ReportTypeUpdateView(UpdateView):
 class ReportTypeDeleteView(DeleteView):
     model = ReportType
     success_url = reverse_lazy('admins:report-type-list')
+
+
+""" Absense Types """
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeListView(ListView):
+    queryset = AbsenseType.objects.all()
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeCreateView(CreateView):
+    model = AbsenseType
+    fields = '__all__'
+    success_url = reverse_lazy('admins:absense-type-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeUpdateView(UpdateView):
+    model = AbsenseType
+    fields = '__all__'
+    success_url = reverse_lazy('admins:absense-type-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeDeleteView(DeleteView):
+    model = AbsenseType
+    success_url = reverse_lazy('admins:absense-type-list')
 
 
 """ Sub Contractors """

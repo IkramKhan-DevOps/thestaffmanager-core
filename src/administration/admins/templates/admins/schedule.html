@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block base_subtitle %} Schedule{% endblock %}
 {% block base_subhead_heading %} Schedule &rAarr; Details{% endblock %}
@@ -12,135 +13,101 @@
 {% endblock %}
 
 {% block base_css %}
-
+    <link href="{% static 'mobi/css/mobiscroll.jquery.min.css' %}" rel="stylesheet"/>
+    <link href="{% static 'core/css/schedule.css' %}" rel="stylesheet"/>
     <style>
-        .md-meal-type {
-            font-size: 14px;
-            font-weight: 600;
-            opacity: .6;
+        .md-rect-bg {
+            opacity: 0.8;
+            background-image: repeating-linear-gradient(45deg, #ffd6d6 25%, transparent 25%, transparent 75%, #ffd6d6 75%, #ffd6d6), repeating-linear-gradient(45deg, #ffd6d6 25%, #ffefef 25%, #ffefef 75%, #ffd6d6 75%, #ffd6d6);
+            background-position: 0 0, 10px 10px;
+            background-size: 20px 20px;
         }
 
-        .md-meal-planner-popup .mbsc-popup .mbsc-popup-header {
-            padding-top: 8px;
-            padding-bottom: 8px;
+        .md-shift-management-calendar .mbsc-schedule-event {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 36px;
         }
 
-        .md-meal-planner-cont {
-            position: relative;
-            padding-left: 34px;
-            text-align: left;
+        .md-shift-management-calendar .mbsc-timeline-slots {
+            height: 94px;
         }
 
-        .md-meal-planner-title {
-            font-size: 20px;
+        .md-shift-management-calendar .mbsc-timeline-header-placeholder {
+            height: 120px;
         }
 
-        .md-meal-planner-kcal {
-            color: #929292;
-        }
-
-        .md-meal-planner-icon {
-            position: absolute;
-            left: 0;
-        }
-
-        .md-meal-planner-calendar.mbsc-calendar .mbsc-schedule-event-all-day-inner {
-            height: 40px;
+        .md-shift-management-calendar .mbsc-timeline-resource {
             display: flex;
             align-items: center;
         }
 
-        .md-meal-planner-calendar .md-meal-planner-event-title {
-            font-size: 12px;
+        .md-shift-management-calendar .mbsc-timeline-slot {
+            width: 200px;
         }
 
-        .md-meal-planner-calendar .md-meal-planner-event-desc {
-            opacity: .6;
+        .md-shift-header-controls {
+            flex: 1 0 auto;
+            display: flex;
+            justify-content: end;
         }
 
-        .md-meal-planner-popup .mbsc-segmented-item:first-child .mbsc-selected.mbsc-material,
-        .md-meal-planner-popup .mbsc-segmented-item:first-child .mbsc-selected.mbsc-windows,
-        .md-meal-planner-popup .mbsc-segmented-item:first-child .mbsc-segmented-selectbox-inner {
-            background: #f08786;
+        .md-shift-header-controls .mbsc-checkbox {
+            padding: 18px 0 18px 45px;
         }
 
-        .md-meal-planner-popup .mbsc-segmented-item:nth-child(2) .mbsc-selected.mbsc-material,
-        .md-meal-planner-popup .mbsc-segmented-item:nth-child(2) .mbsc-selected.mbsc-windows,
-        .md-meal-planner-popup .mbsc-segmented-item:nth-child(2) .mbsc-segmented-selectbox-inner {
-            background: #8abe89;
+        .md-shift-cal-view.mbsc-textfield-wrapper {
+            margin: 12px 12px 12px 28px;
         }
 
-        .md-meal-planner-popup .mbsc-segmented-item:nth-child(3) .mbsc-selected.mbsc-material,
-        .md-meal-planner-popup .mbsc-segmented-item:nth-child(3) .mbsc-selected.mbsc-windows,
-        .md-meal-planner-popup .mbsc-segmented-item:nth-child(3) .mbsc-segmented-selectbox-inner {
-            background: #99d3ef;
+        .md-shift-cal-view .mbsc-select.mbsc-textfield {
+            height: 32px;
+            width: 120px;
         }
 
-        .md-meal-planner-popup .mbsc-segmented-item:nth-child(4) .mbsc-selected.mbsc-material,
-        .md-meal-planner-popup .mbsc-segmented-item:nth-child(4) .mbsc-selected.mbsc-windows,
-        .md-meal-planner-popup .mbsc-segmented-item:nth-child(4) .mbsc-segmented-selectbox-inner {
-            background: #f0ce8e;
+        .md-shift-cal-view .mbsc-icon.mbsc-select-icon {
+            width: 20px;
+            height: 20px;
+            top: 7px;
         }
 
-        .md-meal-planner-popup .mbsc-segmented-item:last-child .mbsc-selected.mbsc-material,
-        .md-meal-planner-popup .mbsc-segmented-item:last-child .mbsc-selected.mbsc-windows,
-        .md-meal-planner-popup .mbsc-segmented-item:last-child .mbsc-segmented-selectbox-inner {
-            background: #b48bce;
+        .md-shift-resource {
+            font-size: 18px;
         }
 
-        .md-tooltip .mbsc-popup-content {
-            padding: 0;
+        .md-shift-resource-icon {
+            margin-right: 10px;
         }
 
-        .md-tooltip {
+        .md-shift-header {
+            margin: 3px 6px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .md-shift-name {
             font-size: 15px;
-            font-weight: 600;
         }
 
-        .md-tooltip-header {
-            padding: 12px 16px;
-            color: #eee;
-        }
-
-        .md-tooltip-info {
-            padding: 16px 16px 60px 16px;
-            position: relative;
-            line-height: 32px;
-        }
-
-        .md-tooltip-time,
-        .md-tooltip-status-button {
-            float: right;
-        }
-
-        .md-tooltip-title {
-            margin-bottom: 0px;
-        }
-
-        .md-tooltip-text {
-            font-weight: 200;
-        }
-
-        .md-tooltip-info .mbsc-button {
-            font-size: 14px;
-            margin: 0;
-        }
-
-        .md-tooltip-info .mbsc-button.mbsc-material {
+        .md-shift-time {
+            opacity: .5;
             font-size: 12px;
+            margin-left: 5px;
         }
 
-        .md-tooltip-view-button {
-            position: absolute;
+        .md-shift-count {
+            margin-top: 6px;
+            margin-right: 12px;
+            display: inline-block;
+            width: 26px;
+            height: 20px;
         }
 
-        .md-tooltip-delete-button {
-            position: absolute;
-            bottom: 16px;
-            right: 16px;
+        .md-shift-icon {
+            padding-right: 3px;
         }
     </style>
-    <link href="{% static 'mobi/css/mobiscroll.jquery.min.css' %}" rel="stylesheet"/>
 {% endblock %}
 
 
@@ -148,7 +115,7 @@
 
     <div class="row">
         <div class="col-12">
-            <div class="card">
+            <div class="card border-0">
                 <div class="card-body">
                     <div id="news-feed-index-table" data-livecount="0">
                         <form action="" method="GET" class="row m-0 mb-2">
@@ -165,76 +132,275 @@
                                 </div>
                             </div>
                         </form>
-                        <p class="text-muted mb-2"><small>Last updated: 00:00:00 00/00/0000&nbsp;&nbsp;<a href="#">(paused)</a>&nbsp;&nbsp;</small>
+                        <p class="text-muted mb-1"><small>Last updated: 00:00:00 00/00/0000&nbsp;&nbsp;<a
+                                href="#">(paused)</a>&nbsp;&nbsp;</small>
                         </p>
-                        <hr>
-
-                        <div id="demo-meal-planner" class="md-meal-planner-calendar"></div>
-
-                        {# SHIFT DETAIL MODEL DESIGN START #}
-                        <div id="custom-event-tooltip-popup" class="md-tooltip">
-                            <div id="tooltip-event-header" class="md-tooltip-header">
-                                <span id="tooltip-event-name-age" class="md-tooltip-name-age"></span>
-                                <span id="tooltip-event-time" class="md-tooltip-time"></span>
-                            </div>
-                            <div class="md-tooltip-info p-4">
-                                <div class="row text-center">
-
-                                    <div class="col">
-                                        <h3 class="mb-0">
-                                            <i class="fa fa-check-double"></i>
-                                        </h3>
-                                        <p class="mb-0"><b>Shift ID</b></p>
-                                        <p class="mb-0 text-muted" id="tooltip-event-title">256154</p>
-                                    </div>
-                                    <div class="col">
-                                        <h3 class="mb-0">
-                                            <i class="fa fa-user-cog"></i>
-                                        </h3>
-                                        <p class="mb-0"><b>Employee</b></p>
-                                        <p class="mb-0 text-muted" id="tooltip-event-reason">Ikram Khan</p>
-                                    </div>
-
-                                    <div class="col">
-                                        <h3 class="mb-0">
-                                            <i class="fa fa-campground"></i>
-                                        </h3>
-                                        <p class="mb-0"><b>Client</b></p>
-                                        <p class="mb-0 text-muted" id="tooltip-event-location">Pepsi Co</p>
-                                    </div>
-                                </div>
-                                <button id="tooltip-event-view" mbsc-button data-color="success"
-                                        class="btn btn-block">Update Shift
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="modal fade" id="mark_custom-event-tooltip-popup" tabindex="-1" role="dialog"
-                             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        ...
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
-                                        </button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div id="demo-custom-event-tooltip"></div>
-                        {# SHIFT DETAIL MODEL DESIGN END #}
 
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="demo-meal-planner" class="md-meal-planner-calendar p-2" style="height: 800px"></div>
+
+            {# SHIFT DETAIL MODEL DESIGN START #}
+            <div id="custom-event-tooltip-popup" class="md-tooltip">
+                <div id="tooltip-event-header" class="md-tooltip-header">
+                    <span id="tooltip-event-name-age" class="md-tooltip-name-age"></span>
+                    <span id="tooltip-event-time" class="md-tooltip-time"></span>
+                </div>
+                <div class="md-tooltip-info p-4">
+                    <div class="row text-center">
+
+                        <div class="col">
+                            <h3 class="mb-0">
+                                <i class="fa fa-check-double"></i>
+                            </h3>
+                            <p class="mb-0"><b>Shift ID</b></p>
+                            <p class="mb-0 text-muted" id="tooltip-event-title">256154</p>
+                        </div>
+                        <div class="col">
+                            <h3 class="mb-0">
+                                <i class="fa fa-user-cog"></i>
+                            </h3>
+                            <p class="mb-0"><b>Employee</b></p>
+                            <p class="mb-0 text-muted" id="tooltip-event-reason">Ikram Khan</p>
+                        </div>
+
+                        <div class="col">
+                            <h3 class="mb-0">
+                                <i class="fa fa-campground"></i>
+                            </h3>
+                            <p class="mb-0"><b>Client</b></p>
+                            <p class="mb-0 text-muted" id="tooltip-event-location">Pepsi Co</p>
+                        </div>
+                    </div>
+                    <button id="tooltip-event-view" mbsc-button data-color="success"
+                            class="btn btn-block">Update Shift
+                    </button>
+                </div>
+            </div>
+
+            <div class="modal fade" id="mark_custom-event-tooltip-popup" tabindex="-1" role="dialog"
+                 aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            ...
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close
+                            </button>
+                            <button type="button" class="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="demo-custom-event-tooltip"></div>
+            {# SHIFT DETAIL MODEL DESIGN END #}
+
+        </div>
+    </div>
+
+    {# TODO: now #}
+    <div class="modal" tabindex="-1" role="dialog" id="poiu">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="" method="post">
+
+                        <form method="post" id="form">
+                            {% csrf_token %}
+
+                            <div class="card">
+
+                                <div class="text-center">
+                                    <iframe src="https://embed.lottiefiles.com/animation/7448" height="200"
+                                            class="border-0"></iframe>
+                                </div>
+
+                                {% csrf_token %}
+                                <div class="card-body">
+
+                                    {{ shift_form|crispy }}
+
+                                </div>
+                            </div>
+
+                            <div id="div_policies" class="card">
+                                <div class="card-body border-bottom">
+                                    <p class="mb-0 card-title">Repeat Policy</p>
+                                </div>
+                                <div class="card-body" id="customize">
+                                    <div>
+                                        <div id="weekly">
+                                            <p class="mb-2 h3">Weekly Repeat</p>
+                                            <div class="form-group row">
+                                                <div class="col-md-9">
+                                                    <div class="checkbox my-2">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="monday" name="monday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ monday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="monday">
+                                                                Monday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="tuesday" name="tuesday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ tuesday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="tuesday">
+                                                                Tuesday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="wednesday" name="wednesday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ wednesday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="wednesday">
+                                                                Wednesday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="thursday" name="thursday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ thursday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="thursday">
+                                                                Thursday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="friday" name="friday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ friday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="friday">
+                                                                Friday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="saturday" name="saturday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                    {% if object %}{{ saturday }}{% else %}{% endif %}>
+                                                            <label class="custom-control-label" for="saturday">
+                                                                Saturday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="sunday" name="sunday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                    {% if object %}{{ sunday }}{% else %}{% endif %}>
+                                                            <label class="custom-control-label" for="sunday">
+                                                                Sunday
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="selected_dates">
+                                            <p class="mb-2 h3">Selected Dates</p>
+                                            <form method="POST" class="form-horizontal well" role="form">
+                                                <fieldset>
+                                                    <div class="repeater-custom-show-hide">
+                                                        <div data-repeater-list="car">
+
+                                                            {% if shift.repeat_policy == 'd' %}
+                                                                {% for shift_day in shift.shiftday_set.all %}
+
+                                                                    <div data-repeater-item="">
+                                                                        <div class="form-group row d-flex align-items-end">
+                                                                            <div class="col-sm-8">
+                                                                                <input id="selected-date-item"
+                                                                                       type="date"
+                                                                                       name="car[{{ forloop.counter }}][date]"
+                                                                                       class="form-control"
+                                                                                       value="{{ shift_day.shift_date.isoformat }}">
+                                                                            </div>
+                                                                            <div class="col-sm-4">
+                                                            <span data-repeater-delete="" class="btn btn-danger">
+                                                                Remove
+                                                            </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <div data-repeater-item="">
+                                                                    <div class="form-group row d-flex align-items-end">
+                                                                        <div class="col-sm-8">
+                                                                            <input id="selected-date-item" type="date"
+                                                                                   name="car[0][date]"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                            <span data-repeater-delete="" class="btn btn-danger">
+                                                                Remove
+                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+
+                                                        </div>
+                                                        <div class="form-group row mb-0">
+                                                            <div class="col-sm-12">
+                                                    <span data-repeater-create="" class="btn btn-light btn-md">
+                                                        <span class="fa fa-plus"></span> Add Date
+                                                    </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+
+                                        <div id="regular">
+                                            <p class="text-danger">Your selected repeat policy is <b>Regular</b>, in
+                                                regular repeat
+                                                policy all dates are selected from start to end of this shift</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <button type="submit" id="submit" class="btn btn-primary">
+                                        <i class="fa fa-check-circle"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </form>
                 </div>
             </div>
         </div>
@@ -250,9 +416,8 @@
 
 {% block base_external_scripts %}
     <script>
-
         mobiscroll.setOptions({
-            theme: 'ios',
+            theme: 'windows',
             themeVariant: 'light'
         });
 
@@ -271,7 +436,7 @@
                     name: 'Not assigned',
                     color: 'red',
                     title: 'Shifts are not assigned',
-                    icon: '🍜'
+                    icon: '<span class="fa fa-ban"></span>'
                 }
             ]
             {% for object in employees %}
@@ -280,7 +445,7 @@
                     name: '{{ object }}',
                     color: 'green',
                     title: 'Employee',
-                    icon: '🥨'
+                    icon: '<span class="fa fa-user-circle"></span>'
 
                 });
             {% endfor %}
@@ -298,6 +463,7 @@
             var $status = $('#tooltip-event-title');
             var $reason = $('#tooltip-event-reason');
             var $location = $('#tooltip-event-location');
+            var $poiu = $('#poiu');
 
             var calendar = $('#demo-meal-planner').mobiscroll().eventcalendar({
                 view: {
@@ -305,14 +471,30 @@
                         type: 'week',
                         eventList: true,
                         startDay: 1,
-                        endDay: 0
-                    }
+                        endDay: 0,
+                        startTime: '00:00',
+                        endTime: '00:00',
+                        allDay: true,
+                        fixedHeader: true
+                    },
                 },
+                slots: [{
+                    id: 1,
+                    name: '',
+                    time: ''
+                }],
+                colors: [{
+                    date: '2023-01-05T00:00:00',
+                    title: '',
+                    allDay: true,
+                    cssClass: 'md-rect-bg'
+                }],
                 resources: types,
                 dragToCreate: false,
                 dragToResize: false,
                 dragToMove: true,
                 clickToCreate: true,
+                showEventTooltip: false,
                 extendDefaultEvent: function (ev) {
                     return {
                         title: 'New meal',
@@ -320,8 +502,8 @@
                     };
                 },
                 onEventCreate: function (args, inst) {
-                    // store temporary event
-
+                    $poiu.modal('show');
+                    console.log("event create")
                 },
                 renderResource: function (resource) {
                     return '<div class="md-meal-planner-cont">' +
@@ -329,14 +511,39 @@
                         '<span class="md-meal-planner-icon">' + resource.icon + '</span>' + resource.name + '</div>' +
                         '</div>';
                 },
+                renderSlot: function (args) {
+                    var slot = args.slot;
+                    var date = formatDate(args.date);
+                    var shiftsElm = '';
+                    shiftsElm += '';
+
+                    return '<div class="md-shift-header">' +
+                        '<div class="md-shift-name">' + slot.name + '<span class="md-shift-time">' + slot.time + '</span></div>' +
+                        '<div class="md-shift-counts-' + date + '-' + slot.id + '">' + shiftsElm + '</div></div>';
+                },
                 renderScheduleEventContent: function (args) {
-                    var event = args.original;
+                    {# schedule: check: render event details #}
+                    let event = args.original;
+                    let start_date = event.start.toString().split("T")[1];
+                    let end_date = event.end.toString().split("T")[1];
+
+                    if (start_date) {
+                        start_date = start_date.toString().split(":")[0] + ":" + start_date.toString().split(":")[1]
+                    } else {
+                        start_date = "not defined"
+                    }
+
+                    if (end_date) {
+                        end_date = end_date.toString().split(":")[0] + ":" + end_date.toString().split(":")[1]
+                    } else {
+                        end_date = "not defined"
+                    }
+
                     return '<div class="md-meal-planner-event">' +
                         '<div class="md-meal-planner-event-title">' + event.title + '</div>' +
-                        '<div class="md-meal-planner-event-desc">' + event.start.toString().split("T")[1] + "-" + event.end.toString().split("T")[1] + '</div>' +
+                        '<div class="md-meal-planner-event-desc">' + start_date + " - " + end_date + '</div>' +
                         '</div>';
                 },
-                showEventTooltip: false,
                 onEventHoverIn: function (args, inst) {
                     var event = args.event;
                     var resource = types.find(function (dr) {
@@ -380,7 +587,19 @@
                     }
                 },
                 onEventClick: function (event, inst) {
-                    $mark_tooltip.open();
+                    {#$mark_tooltip.open();#}
+                    {# TODO: current #}
+
+                    {# STEP1: get_event details/form from server using ajax #}
+                    {# STEP2: check the type of update towards server #}
+                    {# STEP3: place form according to type #}
+                    {# STEP4: submit after changes #}
+                    {# STEP5: submit data using AJAX request #}
+                    {# STEP6: on success page refresh #}
+                    {# STEP7: on show errors in forms #}
+
+                    $poiu.modal('show');
+                    {# ------------- #}
                 },
                 onPageLoading: function (event, inst) {
 
@@ -401,6 +620,8 @@
                         }
 
                         inst.setEvents(events);
+
+                        console.log($('#demo-meal-planner .mbsc-timeline .mbsc-timeline-grid-scroll mbsc-timeline-grid').find('.mbsc-timeline-row').html())
 
                         mobiscroll.toast({
                             message: 'shifts are updated'
@@ -424,13 +645,11 @@
                     timer = null;
                 }
             });
-
             $tooltip.mouseleave(function (ev) {
                 timer = setTimeout(function () {
                     tooltip.close();
                 }, 200);
             });
-
             $statusButton.on('click', function (ev) {
                 tooltip.close();
                 currentEvent.confirmed = !currentEvent.confirmed;
@@ -440,12 +659,13 @@
                     message: 'Appointment ' + (currentEvent.confirmed ? 'confirmed' : 'canceled')
                 });
             });
-
             $fileButton.on('click', function (ev) {
                 tooltip.close();
 
                 window.location = "/a/shift/" + currentEvent.id + "/"
             });
+
+            {# BETTER SHIFT MANAGMENT CODE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> #}
 
 
         });
