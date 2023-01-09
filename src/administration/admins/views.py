@@ -22,7 +22,7 @@ from .forms import (
     EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
     EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
     EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm,
-    EMPMGMTUserNotesForm
+    EMPMGMTUserNotesForm, ShiftForm
 )
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department, AbsenseType,
@@ -85,6 +85,7 @@ class ScheduleView(TemplateView):
 
         # CONTEXT: data
         context['shifts'] = shifts
+        context['shift_form'] = ShiftForm()
         context['employees'] = employees
         context['current_day'] = datetime.date.today().day
         context['current_month'] = current_month

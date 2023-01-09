@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block base_subtitle %} Schedule{% endblock %}
 {% block base_subhead_heading %} Schedule &rAarr; Details{% endblock %}
@@ -207,6 +208,201 @@
 
             <div id="demo-custom-event-tooltip"></div>
             {# SHIFT DETAIL MODEL DESIGN END #}
+
+        </div>
+    </div>
+
+    {# TODO: now #}
+    <div class="modal" tabindex="-1" role="dialog" id="poiu">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <form action="" method="post">
+
+                        <form method="post" id="form">
+                            {% csrf_token %}
+
+                            <div class="card">
+
+                                <div class="text-center">
+                                    <iframe src="https://embed.lottiefiles.com/animation/7448" height="200"
+                                            class="border-0"></iframe>
+                                </div>
+
+                                {% csrf_token %}
+                                <div class="card-body">
+
+                                    {{ shift_form|crispy }}
+
+                                </div>
+                            </div>
+
+                            <div id="div_policies" class="card">
+                                <div class="card-body border-bottom">
+                                    <p class="mb-0 card-title">Repeat Policy</p>
+                                </div>
+                                <div class="card-body" id="customize">
+                                    <div>
+                                        <div id="weekly">
+                                            <p class="mb-2 h3">Weekly Repeat</p>
+                                            <div class="form-group row">
+                                                <div class="col-md-9">
+                                                    <div class="checkbox my-2">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="monday" name="monday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ monday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="monday">
+                                                                Monday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="tuesday" name="tuesday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ tuesday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="tuesday">
+                                                                Tuesday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="wednesday" name="wednesday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ wednesday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="wednesday">
+                                                                Wednesday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="thursday" name="thursday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ thursday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="thursday">
+                                                                Thursday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="friday" name="friday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ friday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="friday">
+                                                                Friday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="saturday" name="saturday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                    {% if object %}{{ saturday }}{% else %}{% endif %}>
+                                                            <label class="custom-control-label" for="saturday">
+                                                                Saturday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="sunday" name="sunday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                    {% if object %}{{ sunday }}{% else %}{% endif %}>
+                                                            <label class="custom-control-label" for="sunday">
+                                                                Sunday
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="selected_dates">
+                                            <p class="mb-2 h3">Selected Dates</p>
+                                            <form method="POST" class="form-horizontal well" role="form">
+                                                <fieldset>
+                                                    <div class="repeater-custom-show-hide">
+                                                        <div data-repeater-list="car">
+
+                                                            {% if shift.repeat_policy == 'd' %}
+                                                                {% for shift_day in shift.shiftday_set.all %}
+
+                                                                    <div data-repeater-item="">
+                                                                        <div class="form-group row d-flex align-items-end">
+                                                                            <div class="col-sm-8">
+                                                                                <input id="selected-date-item"
+                                                                                       type="date"
+                                                                                       name="car[{{ forloop.counter }}][date]"
+                                                                                       class="form-control"
+                                                                                       value="{{ shift_day.shift_date.isoformat }}">
+                                                                            </div>
+                                                                            <div class="col-sm-4">
+                                                            <span data-repeater-delete="" class="btn btn-danger">
+                                                                Remove
+                                                            </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <div data-repeater-item="">
+                                                                    <div class="form-group row d-flex align-items-end">
+                                                                        <div class="col-sm-8">
+                                                                            <input id="selected-date-item" type="date"
+                                                                                   name="car[0][date]"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                            <span data-repeater-delete="" class="btn btn-danger">
+                                                                Remove
+                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+
+                                                        </div>
+                                                        <div class="form-group row mb-0">
+                                                            <div class="col-sm-12">
+                                                    <span data-repeater-create="" class="btn btn-light btn-md">
+                                                        <span class="fa fa-plus"></span> Add Date
+                                                    </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+
+                                        <div id="regular">
+                                            <p class="text-danger">Your selected repeat policy is <b>Regular</b>, in
+                                                regular repeat
+                                                policy all dates are selected from start to end of this shift</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card">
+                                <div class="card-body">
+                                    <button type="submit" id="submit" class="btn btn-primary">
+                                        <i class="fa fa-check-circle"></i> Submit
+                                    </button>
+                                </div>
+                            </div>
+
+                        </form>
+
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -220,7 +416,6 @@
 
 {% block base_external_scripts %}
     <script>
-
         mobiscroll.setOptions({
             theme: 'windows',
             themeVariant: 'light'
@@ -268,6 +463,7 @@
             var $status = $('#tooltip-event-title');
             var $reason = $('#tooltip-event-reason');
             var $location = $('#tooltip-event-location');
+            var $poiu = $('#poiu');
 
             var calendar = $('#demo-meal-planner').mobiscroll().eventcalendar({
                 view: {
@@ -279,7 +475,7 @@
                         startTime: '00:00',
                         endTime: '00:00',
                         allDay: true,
-                        fixedHeader:true
+                        fixedHeader: true
                     },
                 },
                 slots: [{
@@ -298,6 +494,7 @@
                 dragToResize: false,
                 dragToMove: true,
                 clickToCreate: true,
+                showEventTooltip: false,
                 extendDefaultEvent: function (ev) {
                     return {
                         title: 'New meal',
@@ -305,8 +502,8 @@
                     };
                 },
                 onEventCreate: function (args, inst) {
-                    // store temporary event
-
+                    $poiu.modal('show');
+                    console.log("event create")
                 },
                 renderResource: function (resource) {
                     return '<div class="md-meal-planner-cont">' +
@@ -347,7 +544,6 @@
                         '<div class="md-meal-planner-event-desc">' + start_date + " - " + end_date + '</div>' +
                         '</div>';
                 },
-                showEventTooltip: false,
                 onEventHoverIn: function (args, inst) {
                     var event = args.event;
                     var resource = types.find(function (dr) {
@@ -391,7 +587,19 @@
                     }
                 },
                 onEventClick: function (event, inst) {
-                    $mark_tooltip.open();
+                    {#$mark_tooltip.open();#}
+                    {# TODO: current #}
+
+                    {# STEP1: get_event details/form from server using ajax #}
+                    {# STEP2: check the type of update towards server #}
+                    {# STEP3: place form according to type #}
+                    {# STEP4: submit after changes #}
+                    {# STEP5: submit data using AJAX request #}
+                    {# STEP6: on success page refresh #}
+                    {# STEP7: on show errors in forms #}
+
+                    $poiu.modal('show');
+                    {# ------------- #}
                 },
                 onPageLoading: function (event, inst) {
 
@@ -437,13 +645,11 @@
                     timer = null;
                 }
             });
-
             $tooltip.mouseleave(function (ev) {
                 timer = setTimeout(function () {
                     tooltip.close();
                 }, 200);
             });
-
             $statusButton.on('click', function (ev) {
                 tooltip.close();
                 currentEvent.confirmed = !currentEvent.confirmed;
@@ -453,14 +659,17 @@
                     message: 'Appointment ' + (currentEvent.confirmed ? 'confirmed' : 'canceled')
                 });
             });
-
             $fileButton.on('click', function (ev) {
                 tooltip.close();
 
                 window.location = "/a/shift/" + currentEvent.id + "/"
             });
 
+            {# BETTER SHIFT MANAGMENT CODE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> #}
+
+
         });
+
 
     </script>
 {% endblock %}
