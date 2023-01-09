@@ -46,17 +46,6 @@
         <a class="dropdown-item" href="{% url 'admins:check-calls' %}">Check Calls</a>
     </div>
 </li>
-<li class="nav-item">
-    <a class="nav-link"
-       href="{% url 'admins:time-clock' %}?shift_date=today&shift__employee__user__username=">
-                                    <span class="nav-link-icon d-md-none d-lg-inline-block">
-
-                                    </span>
-        <span class="nav-link-title">
-                                        TimeClock
-                                    </span>
-    </a>
-</li>
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle"
        data-bs-toggle="dropdown"
@@ -81,6 +70,31 @@
         <a class="dropdown-item"
            href="{% url 'admins:time-clock' %}">Time Clock</a>
         <a class="dropdown-item" href="{% url 'admins:check-calls' %}">Check Calls</a>
+    </div>
+</li>
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle"
+       data-bs-toggle="dropdown"
+       data-bs-auto-close="outside" role="button" aria-expanded="false">
+        <span class="nav-link-icon d-md-none d-lg-inline-block">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 class="icon icon-tabler icon-tabler-user-check" width="24" height="24"
+                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
+                 stroke-linecap="round" stroke-linejoin="round">
+                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                 <circle cx="9" cy="7" r="4"></circle>
+                <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
+                <path d="M16 11l2 2l4 -4"></path>
+            </svg>
+        </span>
+        <span class="nav-link-title">
+            People
+        </span>
+    </a>
+    <div class="dropdown-menu">
+        <a class="dropdown-item"
+           href="{% url 'admins:user-list' %}">employees</a>
+        <a class="dropdown-item" href="{% url 'admins:sub-contractor-list' %}">Sub Contractors</a>
     </div>
 </li>
 <li class="nav-item">
@@ -161,31 +175,6 @@
             Absences
         </span>
     </a>
-</li>
-<li class="nav-item dropdown">
-    <a class="nav-link dropdown-toggle"
-       data-bs-toggle="dropdown"
-       data-bs-auto-close="outside" role="button" aria-expanded="false">
-        <span class="nav-link-icon d-md-none d-lg-inline-block">
-            <svg xmlns="http://www.w3.org/2000/svg"
-                 class="icon icon-tabler icon-tabler-user-check" width="24" height="24"
-                 viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                 stroke-linecap="round" stroke-linejoin="round">
-                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                 <circle cx="9" cy="7" r="4"></circle>
-                <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2"></path>
-                <path d="M16 11l2 2l4 -4"></path>
-            </svg>
-        </span>
-        <span class="nav-link-title">
-            Users
-        </span>
-    </a>
-    <div class="dropdown-menu">
-        <a class="dropdown-item"
-           href="{% url 'admins:user-list' %}">employees</a>
-        <a class="dropdown-item" href="{% url 'admins:sub-contractor-list' %}">Sub Contractors</a>
-    </div>
 </li>
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle"

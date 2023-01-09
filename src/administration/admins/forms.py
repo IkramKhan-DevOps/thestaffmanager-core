@@ -8,7 +8,7 @@ from src.accounts.models import (
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
-from src.administration.admins.models import Country, Absense, AbsenseType
+from src.administration.admins.models import Country, Absense, AbsenseType, Shift
 
 User = get_user_model()
 
@@ -25,7 +25,7 @@ class UserProfileForm(ModelForm):
 class ShiftForm(ModelForm):
 
     class Meta:
-        model = User
+        model = Shift
         fields = '__all__'
 
 
