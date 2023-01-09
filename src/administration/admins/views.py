@@ -26,8 +26,9 @@ from .forms import (
     EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
     EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
     EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm,
-    EMPMGMTUserNotesForm, ShiftForm
+    EMPMGMTUserNotesForm, ShiftForm, SubContractorForm
 )
+from .mail import sent_email_over_employee_create
 from .models import (
     Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department, AbsenseType, Absense,
 )
@@ -283,6 +284,10 @@ class UserEmployeeCreateView(CreateView):
     def form_valid(self, form):
         form.instance.is_employee = True
         return super().form_valid(form)
+
+    def get_success_url(self):
+        # sent_email_over_employee_create('Title', 'body', self.object.email)
+        return reverse_lazy('admins:user-list')
 
 
 @method_decorator(admin_protected, name='dispatch')
@@ -681,7 +686,7 @@ class SubContractorListView(ListView):
 @method_decorator(admin_protected, name='dispatch')
 class SubContractorCreateView(CreateView):
     model = SubContractor
-    fields = '__all__'
+    form_class = SubContractorForm
     template_name = 'admins/subcontractor_form.html'
     success_url = reverse_lazy('admins:sub-contractor-list')
 
@@ -689,7 +694,7 @@ class SubContractorCreateView(CreateView):
 @method_decorator(admin_protected, name='dispatch')
 class SubContractorUpdateView(UpdateView):
     model = SubContractor
-    fields = '__all__'
+    form_class = SubContractorForm
     template_name = 'admins/subcontractor_form.html'
     success_url = reverse_lazy('admins:sub-contractor-list')
 

@@ -26,8 +26,8 @@
                     {{form.non_field_errors}}
                     <div class="row row-cards">
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.name.label}}
+                            <div class="">
+                                <label class="form-label">{{form.name.label}}</label>
                                 {% render_field form.name class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.registration.help_text}}</small>
                                 {% for error in form.name.errors %}
@@ -39,8 +39,8 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.phone.label}}
+                            <div class="">
+                                <label class="form-label">{{form.phone.label}}</label>
                                 {% render_field form.phone class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.phone.help_text}}</small>
 
@@ -53,8 +53,8 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.registration_number.label}}
+                            <div class="">
+                                <label class="form-label">{{form.registration_number.label}}</label>
                                 {% render_field form.registration_number class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.registration_number.help_text}}</small>
 
@@ -67,8 +67,8 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.vat_number.label}}
+                            <div class="">
+                                <label class="form-label">{{form.vat_number.label}}</label>
                                 {% render_field form.vat_number class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.vat_number.help_text}}</small>
                                    {% for error in form.vat_number.errors %}
@@ -81,8 +81,8 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.address.label}}
+                            <div class="">
+                                <label class="form-label">{{form.address.label}}</label>
                                 {% render_field form.address class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.address.help_text}}</small>
                                    {% for error in form.address.errors %}
@@ -93,8 +93,8 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.website.label}}
+                            <div class="">
+                                <label class="form-label">{{form.website.label}}</label>
                                 {% render_field form.website class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.website.help_text}}</small>
                                    {% for error in form.website.errors %}
@@ -106,7 +106,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 col-md-4">
-                            <div class="mb-3">
+                            <div class="">
                                 <label class="form-label">{{form.city.label}}</label>
                                 {% render_field form.city class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.city.help_text}}</small>
@@ -120,7 +120,7 @@
                             </div>
                         </div>
                         <div class="col-sm-6 col-md-3">
-                            <div class="mb-3">
+                            <div class="">
                                 <label class="form-label">{{form.Post_code.label}}</label>
                                 {% render_field form.Post_code class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.Post_code.help_text}}</small>
@@ -134,7 +134,7 @@
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <div class="mb-3">
+                            <div class="">
                                 <label class="form-label">{{form.country.label}}</label>
                                 {% render_field form.country class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.country.help_text}}</small>
@@ -147,7 +147,7 @@
                             </div>
                         </div>
                         <div class="col-md-5">
-                            <div class="mb-3">
+                            <div class="">
                                 <label class="form-label">{{form.is_active.label}}</label>
                                 {% render_field form.is_active %}
                                 <small class="text-sm text-secondary">{{form.is_active.help_text}}</small>

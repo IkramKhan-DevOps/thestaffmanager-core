@@ -33,7 +33,7 @@
                     {{form.non_field_errors}}
                     <div class="row row-cards">
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 {{form.site_id.label}}
                                 {% render_field form.site_id class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.site_id.help_text}}</small>
@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 {{form.name.label}}
                                 {% render_field form.name class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.name.help_text}}</small>
@@ -60,7 +60,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 {{form.client.label}}
                                 {% render_field form.client class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.client.help_text}}</small>
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 {{form.check_calls_enable.label}}
                                 {% render_field form.check_calls_enable class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.check_calls_enable.help_text}}</small>
@@ -88,7 +88,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 {{form.camera_system_url.label}}
                                 {% render_field form.camera_system_url class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.camera_system_url.help_text}}</small>
@@ -100,7 +100,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 {{form.geo_fencing_range.label}}
                                 {% render_field form.geo_fencing_range class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.geo_fencing_range.help_text}}</small>
@@ -112,7 +112,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="mb-3">
+                            <div>
                                 {{form.address_line_1.label}}
                                 {% render_field form.address_line_1 class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.address_line_1.help_text}}</small>
@@ -124,7 +124,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="mb-3">
+                            <div>
                                 {{form.address_line_2.label}}
                                 {% render_field form.address_line_2 class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.address_line_2.help_text}}</small>
@@ -136,7 +136,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="mb-3">
+                            <div>
                                 {{form.notes.label}}
                                 {% render_field form.notes class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.notes.help_text}}</small>
@@ -149,7 +149,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-4">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.company_name.label}}</label>
                                 {% render_field form.company_name class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.company_name.help_text}}</small>
@@ -163,7 +163,7 @@
                             </div>
                         </div>
                         <div class="col-sm-4 col-md-4">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.city.label}}</label>
                                 {% render_field form.city class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.city.help_text}}</small>
@@ -177,7 +177,7 @@
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.country.label}}</label>
                                 {% render_field form.country class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.country.help_text}}</small>
@@ -215,7 +215,7 @@
                             {% endfor%}
                         </div>
                          <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.check_in_day_start.label}}</label>
                                 {% render_field form.check_in_day_start class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.check_in_day_start.help_text}}</small>
@@ -228,7 +228,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.check_in_night_start.label}}</label>
                                 {% render_field form.check_in_night_start class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.check_in_night_start.help_text}}</small>
@@ -240,7 +240,7 @@
 
                             </div>
                         </div>    <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.check_in_day_frequency_min_minutes.label}}</label>
                                 {% render_field form.check_in_day_frequency_min_minutes class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.check_in_day_frequency_min_minutes.help_text}}</small>
@@ -252,7 +252,7 @@
 
                             </div>
                         </div>    <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.check_in_day_frequency_max_minutes.label}}</label>
                                 {% render_field form.check_in_day_frequency_max_minutes class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.check_in_day_frequency_max_minutes.help_text}}</small>
@@ -264,7 +264,7 @@
 
                             </div>
                         </div>  <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.check_in_night_frequency_min_minutes.label}}</label>
                                 {% render_field form.check_in_night_frequency_min_minutes class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.check_in_night_frequency_min_minutes.help_text}}</small>
@@ -277,7 +277,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.check_in_night_frequency_max_minutes.label}}</label>
                                 {% render_field form.check_in_night_frequency_max_minutes class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.check_in_night_frequency_max_minutes.help_text}}</small>
@@ -314,7 +314,7 @@
                             {% endfor%}
                         </div>
         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.first_shift_confirmation_minutes_before.label}}</label>
                                 {% render_field form.first_shift_confirmation_minutes_before class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.first_shift_confirmation_minutes_before.help_text}}</small>
@@ -327,7 +327,7 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.second_shift_confirmation_minutes_before.label}}</label>
                                 {% render_field form.second_shift_confirmation_minutes_before class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.second_shift_confirmation_minutes_before.help_text}}</small>
@@ -340,7 +340,7 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <div class="mb-3">
+                            <div>
                                 <label class="form-label">{{form.assignment_instructions.label}}</label>
                                 {% render_field form.assignment_instructions class="form-control" %}
                                 <small class="text-sm text-secondary">{{form.assignment_instructions.help_text}}</small>

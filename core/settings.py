@@ -16,7 +16,7 @@ DEBUG = bool(env('DEBUG'))
 SECRET_KEY = env('SECRET_KEY')
 ENVIRONMENT = env('ENVIRONMENT')
 AUTH_USER_MODEL = 'accounts.User'
-ALLOWED_HOSTS = [env('ALLOWED_HOST')]
+ALLOWED_HOSTS = ['*']
 WSGI_APPLICATION = 'core.wsgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
