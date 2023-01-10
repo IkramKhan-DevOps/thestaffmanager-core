@@ -1,4 +1,5 @@
 import json
+from calendar import monthrange
 
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -25,10 +26,11 @@ from .forms import (
     EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
     EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
     EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm,
-    EMPMGMTUserNotesForm, ShiftForm
+    EMPMGMTUserNotesForm, ShiftForm, SubContractorForm
 )
+from .mail import sent_email_over_employee_create
 from .models import (
-    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department, AbsenseType,
+    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department, AbsenseType, Absense,
 )
 import datetime
 
@@ -99,8 +101,17 @@ class ScheduleView(TemplateView):
 
 
 @method_decorator([admin_protected], name='dispatch')
-class AbsenseScheduleView(TemplateView):
-    template_name = '000.html'
+class AbsenseScheduleView(ListView):
+    queryset = Absense
+    template_name = 'admins/absense_schedule.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        num_days = monthrange(datetime.datetime.now().year, datetime.datetime.now().month)[1]
+        context['days'] = list(range(1, num_days + 1))
+        context['employees'] = Employee.objects.all()
+        context['absent_types'] = AbsenseType.objects.all()
+        return context
 
 
 @method_decorator([admin_protected], name='dispatch')
@@ -273,6 +284,10 @@ class UserEmployeeCreateView(CreateView):
     def form_valid(self, form):
         form.instance.is_employee = True
         return super().form_valid(form)
+
+    def get_success_url(self):
+        # sent_email_over_employee_create('Title', 'body', self.object.email)
+        return reverse_lazy('admins:user-list')
 
 
 @method_decorator(admin_protected, name='dispatch')
@@ -671,7 +686,7 @@ class SubContractorListView(ListView):
 @method_decorator(admin_protected, name='dispatch')
 class SubContractorCreateView(CreateView):
     model = SubContractor
-    fields = '__all__'
+    form_class = SubContractorForm
     template_name = 'admins/subcontractor_form.html'
     success_url = reverse_lazy('admins:sub-contractor-list')
 
@@ -679,7 +694,7 @@ class SubContractorCreateView(CreateView):
 @method_decorator(admin_protected, name='dispatch')
 class SubContractorUpdateView(UpdateView):
     model = SubContractor
-    fields = '__all__'
+    form_class = SubContractorForm
     template_name = 'admins/subcontractor_form.html'
     success_url = reverse_lazy('admins:sub-contractor-list')
 

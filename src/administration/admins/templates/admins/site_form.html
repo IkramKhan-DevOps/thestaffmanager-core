@@ -6,390 +6,413 @@
 {% block base_subhead_heading %}Site &rAarr; Form {% endblock %}
 {% block base_subhead_paragraph %}Site create/update form{% endblock %}
 {% block base_subhead_button %}
-<a href="{% url 'admins:site-list' %}">&larr; Sites</a>
+    <a href="{% url 'admins:site-list' %}">&larr; Sites</a>
 {% endblock %}
 
 {% block base_css %}
-<link crossorigin="anonymous"
-      href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
-      integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" rel="stylesheet"/>
+    <link crossorigin="anonymous"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" rel="stylesheet"/>
 {% endblock %}
 
 
 {% block base_content %}
+    <form method="post">
 
-<div class="row justify-content-center">
-    <div class="col-8">
-        <div class="card">
-            <div class="card-body">
+        <div class="row justify-content-center mb-4">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-body">
 
-                <div class="text-center">
-                    <iframe class="border-0" height="200"
-                            src="https://embed.lottiefiles.com/animation/93663"></iframe>
-                </div>
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        <div class="row row-cards">
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.site_id.label }}</label>
+                                    {% render_field form.site_id class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.site_id.help_text }}</small>
+                                    {% for error in form.site_id.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
 
-                <form method="post">
-                    {% csrf_token %}
-                    {{form.non_field_errors}}
-                    <div class="row row-cards">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.name.label }}</label>
+                                    {% render_field form.name class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.name.help_text }}</small>
+
+                                    {% for error in form.name.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.client.label }}</label>
+                                    {% render_field form.client class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.client.help_text }}</small>
+
+                                    {% for error in form.client.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.check_calls_enable.label }}</label>
+                                    {% render_field form.check_calls_enable class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.check_calls_enable.help_text }}</small>
+                                    {% for error in form.check_calls_enable.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.camera_system_url.label }}</label>
+                                    {% render_field form.camera_system_url class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.camera_system_url.help_text }}</small>
+                                    {% for error in form.camera_system_url.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+                                </div>
+                            </div>
                         <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.site_id.label}}
-                                {% render_field form.site_id class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.site_id.help_text}}</small>
-                                {% for error in form.site_id.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
+                                <div>
+                                    <label class="form-label">{{ form.geo_fencing_range.label }}</label>
+                                    {% render_field form.geo_fencing_range class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.geo_fencing_range.help_text }}</small>
+                                    {% for error in form.geo_fencing_range.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.name.label}}
-                                {% render_field form.name class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.name.help_text}}</small>
+                            <div class="col-sm-6 col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.company_name.label }}</label>
+                                    {% render_field form.company_name class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.company_name.help_text }}</small>
+                                    {% for error in form.company_name.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
 
-                                {% for error in form.name.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.client.label}}
-                                {% render_field form.client class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.client.help_text}}</small>
+                            <div class="col-sm-6 col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.city.label }}</label>
+                                    {% render_field form.city class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.city.help_text }}</small>
+                                    {% for error in form.city.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
 
-                                {% for error in form.client.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
 
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.check_calls_enable.label}}
-                                {% render_field form.check_calls_enable class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.check_calls_enable.help_text}}</small>
-                                {% for error in form.check_calls_enable.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.country.label }}</label>
+                                    {% render_field form.country class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.country.help_text }}</small>
+                                    {% for error in form.country.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div>
+                                    <label class="form-label">{{ form.address_line_1.label }}</label>
+                                    {% render_field form.address_line_1 class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.address_line_1.help_text }}</small>
+                                    {% for error in form.address_line_1.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div>
+                                    <label class="form-label">{{ form.address_line_2.label }}</label>
+                                    {% render_field form.address_line_2 class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.address_line_2.help_text }}</small>
+                                    {% for error in form.address_line_2.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div>
+                                    <label class="form-label">{{ form.notes.label }}</label>
+                                    {% render_field form.notes class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.notes.help_text }}</small>
+                                    {% for error in form.notes.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
 
 
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.camera_system_url.label}}
-                                {% render_field form.camera_system_url class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.camera_system_url.help_text}}</small>
-                                {% for error in form.camera_system_url.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                {{form.geo_fencing_range.label}}
-                                {% render_field form.geo_fencing_range class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.geo_fencing_range.help_text}}</small>
-                                {% for error in form.geo_fencing_range.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                {{form.address_line_1.label}}
-                                {% render_field form.address_line_1 class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.address_line_1.help_text}}</small>
-                                {% for error in form.address_line_1.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                {{form.address_line_2.label}}
-                                {% render_field form.address_line_2 class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.address_line_2.help_text}}</small>
-                                {% for error in form.address_line_2.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                {{form.notes.label}}
-                                {% render_field form.notes class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.notes.help_text}}</small>
-                                {% for error in form.notes.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>
-                        <div class="col-sm-4 col-md-4">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.company_name.label}}</label>
-                                {% render_field form.company_name class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.company_name.help_text}}</small>
-                                {% for error in form.company_name.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-
-                            </div>
-                        </div>
-                        <div class="col-sm-4 col-md-4">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.city.label}}</label>
-                                {% render_field form.city class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.city.help_text}}</small>
-                                {% for error in form.city.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.country.label}}</label>
-                                {% render_field form.country class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.country.help_text}}</small>
-                                {% for error in form.country.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <label class="form-check form-check-single form-switch">
-                                {{form.enable_night_check_ins.label}}
-                                {% render_field form.enable_night_check_ins class="form-check-input" %}
-                            </label>
-                            <small class="text-sm text-secondary">{{form.enable_night_check_ins.help_text}}</small>
-                            {% for error in form.enable_night_check_ins.errors %}
-                            <small class="text-sm text-danger">
-                                {{error}}
-                            </small>
-                            {% endfor%}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-check form-check-single form-switch">
-                                {{form.enable_night_check_ins.label}}
-                                {% render_field form.enable_night_check_ins class="form-check-input" %}
-                            </label>
-                            <small class="text-sm text-secondary">{{form.enable_night_check_ins.help_text}}</small>
-                            {% for error in form.enable_night_check_ins.errors %}
-                            <small class="text-sm text-danger">
-                                {{error}}
-                            </small>
-                            {% endfor%}
-                        </div>
-                         <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.check_in_day_start.label}}</label>
-                                {% render_field form.check_in_day_start class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.check_in_day_start.help_text}}</small>
-                                {% for error in form.check_in_day_start.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.check_in_night_start.label}}</label>
-                                {% render_field form.check_in_night_start class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.check_in_night_start.help_text}}</small>
-                                {% for error in form.check_in_night_start.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>    <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.check_in_day_frequency_min_minutes.label}}</label>
-                                {% render_field form.check_in_day_frequency_min_minutes class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.check_in_day_frequency_min_minutes.help_text}}</small>
-                                {% for error in form.check_in_day_frequency_min_minutes.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>    <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.check_in_day_frequency_max_minutes.label}}</label>
-                                {% render_field form.check_in_day_frequency_max_minutes class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.check_in_day_frequency_max_minutes.help_text}}</small>
-                                {% for error in form.check_in_day_frequency_max_minutes.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>  <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.check_in_night_frequency_min_minutes.label}}</label>
-                                {% render_field form.check_in_night_frequency_min_minutes class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.check_in_night_frequency_min_minutes.help_text}}</small>
-                                {% for error in form.check_in_night_frequency_min_minutes.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.check_in_night_frequency_max_minutes.label}}</label>
-                                {% render_field form.check_in_night_frequency_max_minutes class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.check_in_night_frequency_max_minutes.help_text}}</small>
-                                {% for error in form.check_in_night_frequency_max_minutes.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-check form-check-single form-switch">
-                                {{form.enable_first_shift_confirmation.label}}
-                                {% render_field form.enable_first_shift_confirmation class="form-check-input" %}
-                            </label>
-                            <small class="text-sm text-secondary">{{form.enable_first_shift_confirmation.help_text}}</small>
-                            {% for error in form.enable_first_shift_confirmation.errors %}
-                            <small class="text-sm text-danger">
-                                {{error}}
-                            </small>
-                            {% endfor%}
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-check form-check-single form-switch">
-                                {{form.enable_second_shift_confirmation.label}}
-                                {% render_field form.enable_second_shift_confirmation class="form-check-input" %}
-                            </label>
-                            <small class="text-sm text-secondary">{{form.enable_second_shift_confirmation.help_text}}</small>
-                            {% for error in form.enable_second_shift_confirmation.errors %}
-                            <small class="text-sm text-danger">
-                                {{error}}
-                            </small>
-                            {% endfor%}
-                        </div>
-        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.first_shift_confirmation_minutes_before.label}}</label>
-                                {% render_field form.first_shift_confirmation_minutes_before class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.first_shift_confirmation_minutes_before.help_text}}</small>
-                                {% for error in form.first_shift_confirmation_minutes_before.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.second_shift_confirmation_minutes_before.label}}</label>
-                                {% render_field form.second_shift_confirmation_minutes_before class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.second_shift_confirmation_minutes_before.help_text}}</small>
-                                {% for error in form.second_shift_confirmation_minutes_before.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="form-label">{{form.assignment_instructions.label}}</label>
-                                {% render_field form.assignment_instructions class="form-control" %}
-                                <small class="text-sm text-secondary">{{form.assignment_instructions.help_text}}</small>
-                                {% for error in form.assignment_instructions.errors %}
-                                <small class="text-sm text-danger">
-                                    {{error}}
-                                </small>
-                                {% endfor%}
-
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-check form-check-single form-switch">
-                                {{form.is_active.label}}
-                                {% render_field form.is_active class="form-check-input" %}
-                            </label>
-                            <small class="text-sm text-secondary">{{form.is_active.help_text}}</small>
-                            {% for error in form.is_active.errors %}
-                            <small class="text-sm text-danger">
-                                {{error}}
-                            </small>
-                            {% endfor%}
-                        </div>
-                        <div class="col-md-6 text-center">
-                           <button class="btn btn-primary" type="submit">
-                        <i class="fa fa-check-circle"></i> Submit
-                    </button>
-                        </div>
 
                     </div>
-
-                </form>
-
+                </div>
             </div>
         </div>
-    </div>
-</div>
+        <div class="row justify-content-center mb-4">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-body">
+                                            <div class="row row-cards">
+
+
+
+
+                            <div class="col-md-6">
+                                <label class="form-check form-switch form">
+                                    {% render_field form.enable_night_check_ins class="form-check-input" %}
+
+                                    <span class="form-check-label">{{ form.enable_night_check_ins.label }}</span>
+                                </label>
+                                <small class="text-sm text-secondary">{{ form.enable_night_check_ins.help_text }}</small>
+                                {% for error in form.enable_night_check_ins.errors %}
+                                    <small class="text-sm text-danger">
+                                        {{ error }}
+                                    </small>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-check form-switch">
+                                    {% render_field form.enable_night_check_ins class="form-check-input" %}
+
+                                    <span class="form-check-label">{{ form.enable_night_check_ins.label }}</span>
+                                </label>
+                                <small class="text-sm text-secondary">{{ form.enable_night_check_ins.help_text }}</small>
+                                {% for error in form.enable_night_check_ins.errors %}
+                                    <small class="text-sm text-danger">
+                                        {{ error }}
+                                    </small>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.check_in_day_start.label }}</label>
+                                    {% render_field form.check_in_day_start class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.check_in_day_start.help_text }}</small>
+                                    {% for error in form.check_in_day_start.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.check_in_night_start.label }}</label>
+                                    {% render_field form.check_in_night_start class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.check_in_night_start.help_text }}</small>
+                                    {% for error in form.check_in_night_start.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.check_in_day_frequency_min_minutes.label }}</label>
+                                    {% render_field form.check_in_day_frequency_min_minutes class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.check_in_day_frequency_min_minutes.help_text }}</small>
+                                    {% for error in form.check_in_day_frequency_min_minutes.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.check_in_day_frequency_max_minutes.label }}</label>
+                                    {% render_field form.check_in_day_frequency_max_minutes class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.check_in_day_frequency_max_minutes.help_text }}</small>
+                                    {% for error in form.check_in_day_frequency_max_minutes.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.check_in_night_frequency_min_minutes.label }}</label>
+                                    {% render_field form.check_in_night_frequency_min_minutes class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.check_in_night_frequency_min_minutes.help_text }}</small>
+                                    {% for error in form.check_in_night_frequency_min_minutes.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.check_in_night_frequency_max_minutes.label }}</label>
+                                    {% render_field form.check_in_night_frequency_max_minutes class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.check_in_night_frequency_max_minutes.help_text }}</small>
+                                    {% for error in form.check_in_night_frequency_max_minutes.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-check  form-switch">
+                                    {% render_field form.enable_first_shift_confirmation class="form-check-input" %}
+                                    <span class="form-check-label">{{ form.enable_first_shift_confirmation.label }}</span>
+
+                                </label>
+                                <small class="text-sm text-secondary">{{ form.enable_first_shift_confirmation.help_text }}</small>
+                                {% for error in form.enable_first_shift_confirmation.errors %}
+                                    <small class="text-sm text-danger">
+                                        {{ error }}
+                                    </small>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-check form-switch">
+                                    {% render_field form.enable_second_shift_confirmation class="form-check-input" %}
+
+                                    <span class="form-check-label">{{ form.enable_second_shift_confirmation.label }}</span>
+                                </label>
+                                <small class="text-sm text-secondary">{{ form.enable_second_shift_confirmation.help_text }}</small>
+                                {% for error in form.enable_second_shift_confirmation.errors %}
+                                    <small class="text-sm text-danger">
+                                        {{ error }}
+                                    </small>
+                                {% endfor %}
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.first_shift_confirmation_minutes_before.label }}</label>
+                                    {% render_field form.first_shift_confirmation_minutes_before class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.first_shift_confirmation_minutes_before.help_text }}</small>
+                                    {% for error in form.first_shift_confirmation_minutes_before.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.second_shift_confirmation_minutes_before.label }}</label>
+                                    {% render_field form.second_shift_confirmation_minutes_before class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.second_shift_confirmation_minutes_before.help_text }}</small>
+                                    {% for error in form.second_shift_confirmation_minutes_before.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div>
+                                    <label class="form-label">{{ form.assignment_instructions.label }}</label>
+                                    {% render_field form.assignment_instructions class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.assignment_instructions.help_text }}</small>
+                                    {% for error in form.assignment_instructions.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-check form-switch">
+                                    {% render_field form.is_active class="form-check-input" %}
+                                    <span class="form-check-label">{{ form.is_active.label }}</span>
+                                </label>
+                                <small class="text-sm text-secondary">{{ form.is_active.help_text }}</small>
+                                {% for error in form.is_active.errors %}
+                                    <small class="text-sm text-danger">
+                                        {{ error }}
+                                    </small>
+                                {% endfor %}
+                            </div>
+                                            </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    <div class="row ">
+        <div class="">
+                                        <div class="col-md-5 text-center">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-check-circle"></i> Submit
+                                </button>
+                            </div>
+
+        </div>
+        </div>
+
+    </form>
 
 {% endblock %}
 
 
 {% block base_internal_scripts %}
-<script crossorigin="anonymous"
-        integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk="
-        src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
+    <script crossorigin="anonymous"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk="
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 {% endblock %}
 
 {% block base_external_scripts %}
-<script>
+    <script>
         $(document).ready(function () {
             $('#id_check_in_day_start').datetimepicker({
                 datepicker: false,
@@ -402,7 +425,5 @@
         });
 
 
-
-
-</script>
+    </script>
 {% endblock %}

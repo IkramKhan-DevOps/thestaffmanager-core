@@ -5,7 +5,7 @@ from django.forms import ModelForm, TextInput
 from src.accounts.models import (
     Employee, UserDocument, EmployeeWork, EmployeeIdPass, EmployeeHealth, EmployeeAppearance,
     EmployeeContract, EmployeeDocument, EmployeeEducation, EmployeeEmployment, EmployeeQualification, EmployeeTraining,
-    EmployeeLanguageSkill, EmployeeEmergencyContact
+    EmployeeLanguageSkill, EmployeeEmergencyContact, SubContractor
 )
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
@@ -83,6 +83,14 @@ class AbsenseForm(ModelForm):
     class Meta:
         model = Absense
         fields = '__all__'
+
+
+class SubContractorForm(ModelForm):
+
+    class Meta:
+        model = SubContractor
+        fields = '__all__'
+        exclude = ['positions', 'departments']
 
 
 """ EMPLOYEE FORMS ALL """
