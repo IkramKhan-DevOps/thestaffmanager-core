@@ -146,15 +146,14 @@
 
                             </div>
                         </div>
-                        <div class="col-md-5">
-                            <div class="">
-                                <label class="form-label">{{form.is_active.label}}</label>
-                                {% render_field form.is_active %}
-                                <small class="text-sm text-secondary">{{form.is_active.help_text}}</small>
-                            </div>
-                        </div>
+                    <label class="form-check form-switch">
+                    {% render_field form.is_active class="form-check-input" %}
+                        <span class="form-check-label">{{form.is_active.label}}</span>
+                                                        <small class="text-sm text-secondary">{{form.is_active.help_text}}</small>
+
+                            </label>
                     </div>
-                    <button class="btn btn-primary" type="submit">
+                    <button class="btn btn-primary mt-2" type="submit">
                         <i class="fa fa-check-circle"></i> Submit
                     </button>
                 </form>
