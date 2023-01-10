@@ -146,6 +146,7 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
+        sent_email_over_employee_create(User.objects.get(email='ikram.khan0762@gmail.com'))
         context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
         context['shifts_all'] = Shift.objects.count()
         context['sites_all'] = Site.objects.count()
@@ -282,7 +283,14 @@ class UserEmployeeCreateView(CreateView):
     success_url = reverse_lazy('admins:user-list')
 
     def form_valid(self, form):
+        username = str(form.instance.email).split('@')[0]
+        form.instance.username = username
+        form.instance.set_password(f'1100@0011{username}0011@0011')
         form.instance.is_employee = True
+        form.instance.is_staff = False
+
+        # sent html formatted email here
+
         return super().form_valid(form)
 
     def get_success_url(self):

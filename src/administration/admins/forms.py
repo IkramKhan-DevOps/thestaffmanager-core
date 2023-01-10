@@ -1,6 +1,8 @@
 from crispy_forms.helper import FormHelper
+from django.utils.translation import gettext, gettext_lazy as _
 from crispy_forms.layout import Layout, Row, Field, Submit, Div, Column
 from django.forms import ModelForm, TextInput
+from django.core.exceptions import ValidationError
 
 from src.accounts.models import (
     Employee, UserDocument, EmployeeWork, EmployeeIdPass, EmployeeHealth, EmployeeAppearance,
@@ -49,12 +51,19 @@ class EmployeeForm(ModelForm):
         ]
 
 
-class EmployeeUserCreateForm(UserCreationForm):
+class EmployeeUserCreateForm(ModelForm):
+
     class Meta:
         model = User
-        fields = [
-            'username', 'email', 'password1', 'password2'
-        ]
+        fields = ["email"]
+
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        if User.objects.filter(email=email):
+            raise ValidationError(
+                "email already registered with some other account."
+            )
+        return email
 
 
 class StaffUserCreateForm(UserCreationForm):
