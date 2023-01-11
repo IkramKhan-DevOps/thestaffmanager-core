@@ -15,6 +15,7 @@ from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
     CreateView)
 
+from core.settings import SYS_VERIFICATION_EMAILS
 from .bll import shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
 from .forms import (
@@ -146,7 +147,6 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        sent_email_over_employee_create(User.objects.get(email='ikram.khan0762@gmail.com'))
         context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
         context['shifts_all'] = Shift.objects.count()
         context['sites_all'] = Site.objects.count()
@@ -289,12 +289,12 @@ class UserEmployeeCreateView(CreateView):
         form.instance.is_employee = True
         form.instance.is_staff = False
 
-        # sent html formatted email here
-
         return super().form_valid(form)
 
     def get_success_url(self):
-        # sent_email_over_employee_create('Title', 'body', self.object.email)
+        if SYS_VERIFICATION_EMAILS and not sent_email_over_employee_create(self.object):
+            messages.warning(self.request, "Failed to sent email verification")
+
         return reverse_lazy('admins:user-list')
 
 
