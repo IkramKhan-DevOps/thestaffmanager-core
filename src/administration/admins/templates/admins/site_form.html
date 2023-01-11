@@ -19,8 +19,8 @@
 {% block base_content %}
     <form method="post">
 
-        <div class="row justify-content-center mb-4">
-            <div class="col-8">
+        <div class="row justify-content-center mb-2">
+            <div class="col-sm-8">
                 <div class="card">
                     <div class="card-body">
 
@@ -94,7 +94,7 @@
                                     {% endfor %}
                                 </div>
                             </div>
-                        <div class="col-md-6">
+                            <div class="col-md-6">
                                 <div>
                                     <label class="form-label">{{ form.geo_fencing_range.label }}</label>
                                     {% render_field form.geo_fencing_range class="form-control" %}
@@ -193,13 +193,11 @@
                 </div>
             </div>
         </div>
-        <div class="row justify-content-center mb-4">
-            <div class="col-8">
+        <div class="row justify-content-center mb-2">
+            <div class="col-sm-8">
                 <div class="card">
                     <div class="card-body">
-                                            <div class="row row-cards">
-
-
+                        <div class="row row-cards">
 
 
                             <div class="col-md-6">
@@ -383,21 +381,21 @@
                                     </small>
                                 {% endfor %}
                             </div>
-                                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
-    <div class="row ">
-        <div class="">
-                                        <div class="col-md-5 text-center">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fa fa-check-circle"></i> Submit
-                                </button>
-                            </div>
+        <div class="row">
+            <div class="">
+                <div class="col-md-5 text-center">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-check-circle"></i> Submit
+                    </button>
+                </div>
 
-        </div>
+            </div>
         </div>
 
     </form>
