@@ -292,8 +292,9 @@ class UserEmployeeCreateView(CreateView):
         return super().form_valid(form)
 
     def get_success_url(self):
-        if SYS_VERIFICATION_EMAILS and not sent_email_over_employee_create(self.object):
-            messages.warning(self.request, "Failed to sent email verification")
+        if bool(SYS_VERIFICATION_EMAILS):
+            if not sent_email_over_employee_create(self.object):
+                messages.warning(self.request, "Failed to sent email verification")
 
         return reverse_lazy('admins:user-list')
 

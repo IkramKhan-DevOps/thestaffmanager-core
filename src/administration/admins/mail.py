@@ -4,6 +4,8 @@ from core.settings import EMAIL_HOST_USER
 
 def sent_email_over_employee_create(recipient):
     try:
+        addresses = [recipient]
+
         subject = 'Employee Account Created'
         from_email = EMAIL_HOST_USER
         to = recipient.email
@@ -18,14 +20,12 @@ def sent_email_over_employee_create(recipient):
         msg.attach_alternative(html_content, "text/html")
         msg.send()
 
-        results = EmailMessage(
+        EmailMessage(
             subject,
             html_content,
             EMAIL_HOST_USER,
-            [recipient],
-            True
+            addresses,
         )
-        print(results)
         return True
     except Exception as e:
         print(e)
