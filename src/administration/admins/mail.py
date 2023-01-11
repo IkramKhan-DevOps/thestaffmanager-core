@@ -1,32 +1,25 @@
-from django.core.mail import EmailMessage, EmailMultiAlternatives
+from django.core.mail import EmailMultiAlternatives, EmailMessage
+from django.template.loader import get_template, render_to_string
 from core.settings import EMAIL_HOST_USER
 
 
 def sent_email_over_employee_create(recipient):
     try:
-        addresses = [recipient]
-
+        to_list = [recipient.email]
+        context = {
+            'username': recipient.username,
+            'email': recipient.email,
+            'password': '1100@0011' + recipient.username + '0011@0011'
+        }
+        html_message = render_to_string(template_name="emails/employee_registration.html", context=context)
         subject = 'Employee Account Created'
         from_email = EMAIL_HOST_USER
-        to = recipient.email
-        text_content = 'Welcome to the Staff Manager'
-        html_content = f'<p>Hi <b>{recipient.username}</b> you have been registered as ' \
-                       f'an employee by administartion of <b>thestaffmanager.com</b></p>' \
-                       f'<p>username: {recipient.username}</p>' \
-                       f'<p>email: {recipient.email}</p>' \
-                       f'<p>password: 1100@0011{recipient.username}0011@0011</p>'
 
-        msg = EmailMultiAlternatives(subject, text_content, from_email, [to])
-        msg.attach_alternative(html_content, "text/html")
-        msg.send()
+        message = EmailMessage(subject, html_message, from_email, to_list)
+        message.content_subtype = 'html'  # this is required because there is no plain text email message
+        message.send()
 
-        EmailMessage(
-            subject,
-            html_content,
-            EMAIL_HOST_USER,
-            addresses,
-        )
-        return True
     except Exception as e:
-        print(e)
         return False
+
+    return True

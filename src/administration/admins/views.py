@@ -147,6 +147,7 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
+        print(sent_email_over_employee_create(User.objects.get(email='ikram.khan0762@gmail.com')))
         context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
         context['shifts_all'] = Shift.objects.count()
         context['sites_all'] = Site.objects.count()
