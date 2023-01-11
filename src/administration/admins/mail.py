@@ -20,6 +20,6 @@ def sent_email_over_employee_create(recipient):
         message.send()
 
     except Exception as e:
-        return False
+        return False, e
 
-    return True
+    return True, None

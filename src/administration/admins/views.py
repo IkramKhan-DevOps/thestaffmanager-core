@@ -147,7 +147,8 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        print(sent_email_over_employee_create(User.objects.get(email='ikram.khan0762@gmail.com')))
+        # flag, message = sent_email_over_employee_create(User.objects.first())
+        # messages.warning(self.request, message)
         context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
         context['shifts_all'] = Shift.objects.count()
         context['sites_all'] = Site.objects.count()
@@ -294,8 +295,9 @@ class UserEmployeeCreateView(CreateView):
 
     def get_success_url(self):
         if bool(SYS_VERIFICATION_EMAILS):
-            if not sent_email_over_employee_create(self.object):
-                messages.warning(self.request, "Failed to sent email verification")
+            flag, message = sent_email_over_employee_create(self.object)
+            if not flag:
+                messages.warning(self.request, str(message))
 
         return reverse_lazy('admins:user-list')
 
