@@ -1,5 +1,4 @@
 {% load i18n %}
-{% load i18n %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,40 +33,58 @@
                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                     <td class="content-block"
                                         style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; color: #5766da; font-size: 24px; font-weight: 700; text-align: center; vertical-align: top; margin: 0; padding: 0 0 10px;"
-                                        valign="top">Welcome to TheStaffManager
+                                        valign="top">{{ org }}
                                     </td>
                                 </tr>
                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                     <td class="content-block"
-                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; color: #888; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-                                        valign="top">Please Check your account credentials below
+                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box;
+                                        color: #5766da; font-size: 15px; font-weight: 500; text-align: center; vertical-align: top;
+                                        margin: 0; padding: 0 0 10px;"
+                                        valign="top">Welcome to {{ tagline }}
                                     </td>
                                 </tr>
-                                <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+                                <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;padding: 0 0 10px">
+                                    <td class="content-block"
+                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; color: #888; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
+                                        valign="top">You have been registered as an employee successfully.
+                                    </td>
+                                </tr>
+                                <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin-bottom: 0">
                                     <td class="content-block"
                                         style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
-                                        valign="top">Thanks for choosing TheStaffManager you are registered as employee -
-                                        You're receiving this e-mail because administration registered you on <b>The staff Manager</b> as an employee.
+                                        valign="top">Thanks for choosing <b><a href="{{ link }}">{{ org }}</a></b>,
+                                        you're receiving this e-mail because administration registered you on
+                                        <b><a href="{{ link }}">{{ org }}</a></b> as an employee<br><br>
+                                        kindly check your credentials you can login into it using the link below.
                                     </td>
                                 </tr>
                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-                                    <td class="content-block"
-                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; color: #888; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
+                                    <td class="content-block" itemprop="handler" itemscope=""
+                                        itemtype="http://schema.org/HttpActionHandler"
+                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0px 10px;"
                                         valign="top">Username: <b>{{ username }}</b>
                                     </td>
                                 </tr>
                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                     <td class="content-block" itemprop="handler" itemscope=""
                                         itemtype="http://schema.org/HttpActionHandler"
-                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
+                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0px 10px;"
                                         valign="top">Email: <b>{{ email }}</b>
                                     </td>
                                 </tr>
                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
                                     <td class="content-block" itemprop="handler" itemscope=""
                                         itemtype="http://schema.org/HttpActionHandler"
-                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 10px 10px;"
+                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0px 10px;"
                                         valign="top">Password: <b>{{ password }}</b>
+                                    </td>
+                                </tr>
+                                <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin-top: 10px;margin-bottom: 10px">
+                                    <td class="content-block" itemprop="handler" itemscope=""
+                                        itemtype="http://schema.org/HttpActionHandler"
+                                        style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0px 10px;"
+                                        valign="top"><a href="{{ login_link }}"><br>Click here to login with given credentials<br></a></b>
                                     </td>
                                 </tr>
                                 <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
