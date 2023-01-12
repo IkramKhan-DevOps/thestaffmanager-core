@@ -108,7 +108,7 @@ class Client(models.Model):
 
     is_active = models.BooleanField(
         default=False,
-        help_text="Only active countries will be visible to all users except admins"
+        help_text="Is this client is active"
     )
 
     class Meta:
@@ -165,28 +165,29 @@ class Site(models.Model):
     )
     site_id = models.CharField(max_length=1000, null=True, blank=True)
     name = models.CharField(max_length=255)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-
-    notes = models.TextField(null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
 
     company_name = models.CharField(max_length=255, null=True, blank=True)
-    country = models.CharField(max_length=255)
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
     geo_fencing_range = models.CharField(
         max_length=1000, help_text="What is the maximum distance an employee can "
                                    "be from their designated location when starting their shift? in meters."
     )
 
+    notes = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=255, verbose_name='City/Town')
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
+
     longitude = models.FloatField(null=True, blank=True)
     latitude = models.FloatField(null=True, blank=True)
 
     check_calls_enabled = models.BooleanField(
         default=False, help_text="Enabling check calls will allow the system to track employee work during their shift."
     )
-
     is_active = models.BooleanField(default=False)
+
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -212,7 +213,7 @@ class Site(models.Model):
                 company_name=fake.bs(),
                 address=fake.address(),
                 city=fake.city(),
-                country=fake.country(),
+                country=Country.objects.order_by('?').first(),
                 geo_fencing_range=fake.random_number(digits=5, fix_len=False),
             )
             print(f"---- Site: {x} faked.")
@@ -442,7 +443,7 @@ class AbsenseType(models.Model):
     name = models.CharField(max_length=50)
     is_paid = models.BooleanField(
         default=False,
-        help_text="Is this absense type is paid, means if employee is absent with this type he will be paid"
+        help_text="Is this absence type considered as a paid leave"
     )
     is_active = models.BooleanField(default=True)
 

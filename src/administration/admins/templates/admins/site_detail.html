@@ -22,11 +22,32 @@
 {% block base_content %}
 
     <div class="row">
-        <div class="col-sm-9">
+        <div class="col-sm-8">
+            <div class="card">
+                <div class="card-header border-0">
+                    <div>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <div class="card-title">Location</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="#" class="btn">
+                            <i class="fa fa-map"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
 
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d9552220.816410426!2d-13.426433936249252!3d54.23168146465824!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x25a3b1142c791a9%3A0xc4f8a0433288257a!2sUnited%20Kingdom!5e0!3m2!1sen!2s!4v1673546465551!5m2!1sen!2s" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
 
+                </div>
+            </div>
         </div>
-        <div class="col-sm-3">
+        <div class="col-sm-4">
 
             <div class="card mb-2">
                 <div class="card-body">
@@ -90,6 +111,56 @@
                     <div class="mb-2">
                         <i class="fa fa-map-marked text-muted"></i>
                         Location: <strong class="small">{{ object.latitude }} - {{ object.longitude }}</strong>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card mb-2">
+                <div class="card-header">
+                    <div>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <div class="card-title">Description</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="#" class="btn">
+                            <i class="fa fa-edit"></i>
+                            &nbsp;Edit
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="">
+                        {{ object.description|safe }}
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card mb-2">
+                <div class="card-header">
+                    <div>
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <div class="card-title">Notes</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-actions">
+                        <a href="#" class="btn">
+                            <i class="fa fa-edit"></i>
+                            &nbsp;Edit
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+
+                    <div class="">
+                        {{ object.notes|safe }}
                     </div>
 
                 </div>
