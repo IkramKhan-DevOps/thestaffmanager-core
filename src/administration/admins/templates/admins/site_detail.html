@@ -24,52 +24,6 @@
     <div class="row">
         <div class="col-sm-9">
 
-            <div class="card">
-                <table class="table card-table table-vcenter text-nowrap datatable table-hover">
-                    <tr>
-                        <th class="text-uppercase">Day check in Enabled</th>
-                        <td>
-                            {% if object.enable_day_check_ins %}
-                                <i class="fa fa-check-circle text-success"></i>
-                            {% else %}
-                                <i class="fa fa-times-circle text-danger"></i>
-                            {% endif %}
-                        </td>
-                        <th class="text-uppercase">Night check in Enabled</th>
-                        <td>
-                            {% if object.enable_night_check_ins %}
-                                <i class="fa fa-check-circle text-success"></i>
-                            {% else %}
-                                <i class="fa fa-times-circle text-danger"></i>
-                            {% endif %}
-                        </td>
-                    </tr>
-                    <tr>
-                        <th class="text-uppercase">Check in Day start</th>
-                        <td>{{ object.check_in_day_start }}</td>
-                        <th class="text-uppercase">Check in Night start</th>
-                        <td>{{ object.check_in_night_start }}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-uppercase">Check in day frequency min minutes</th>
-                        <td>{{ object.check_in_day_frequency_min_minutes }}</td>
-                        <th class="text-uppercase">Check in night frequency min minutes</th>
-                        <td>{{ object.check_in_night_frequency_min_minutes }}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-uppercase">Check in day frequency max minutes</th>
-                        <td>{{ object.check_in_day_frequency_max_minutes }}</td>
-                        <th class="text-uppercase">Check in night frequency max minutes</th>
-                        <td>{{ object.check_in_night_frequency_max_minutes }}</td>
-                    </tr>
-                    <tr>
-                        <th class="text-uppercase">First shift confirmation hours before</th>
-                        <td>{{ object.first_shift_confirmation_minutes_before }}</td>
-                        <th class="text-uppercase">Second shift confirmation hours before</th>
-                        <td>{{ object.second_shift_confirmation_minutes_before }}</td>
-                    </tr>
-                </table>
-            </div>
 
         </div>
         <div class="col-sm-3">
@@ -97,40 +51,8 @@
                     <div class="mb-2">
                         <i class="fa fa-phone-square text-muted"></i>
                         Check Calls: <strong>
-                        {% if object.check_calls_enable %}
+                        {% if object.check_calls_enabled %}
                             <i class="fa fa-check text-success"></i>
-                        {% else %}
-                            <i class="fa fa-times text-danger"></i>
-                        {% endif %}
-                    </strong>
-                    </div>
-                    <div class="mb-2">
-                        <i class="fa fa-phone text-muted"></i>
-                        First Confirmation Calls: <strong>
-                        {% if object.enable_first_shift_confirmation %}
-                            <i class="fa fa-check text-success"></i>
-                        {% else %}
-                            <i class="fa fa-times text-danger"></i>
-                        {% endif %}
-                    </strong>
-                    </div>
-                    <div class="mb-2">
-                        <i class="fa fa-phone text-muted"></i>
-                        Second Confirmation Calls: <strong>
-                        {% if object.enable_second_shift_confirmation %}
-                            <i class="fa fa-check text-success"></i>
-                        {% else %}
-                            <i class="fa fa-times text-danger"></i>
-                        {% endif %}
-                    </strong>
-                    </div>
-                    <div class="mb-2">
-                        <i class="fa fa-camera text-muted"></i>
-                        Camera: <strong>
-                        {% if object.camera_system_url %}
-                            <a href="{{ object.camera_system_url }}">
-                                <i class="fa fa-globe"></i> Visit
-                            </a>
                         {% else %}
                             <i class="fa fa-times text-danger"></i>
                         {% endif %}
@@ -152,12 +74,7 @@
 
                     <div class="mb-2">
                         <i class="fa fa-map-marked text-muted"></i>
-                        Address 1: <strong>{{ object.address_line_1 }}</strong>
-                    </div>
-
-                    <div class="mb-2">
-                        <i class="fa fa-map-marked text-muted"></i>
-                        Address 2: <strong>{{ object.address_line_2 }}</strong>
+                        Address : <strong>{{ object.address }}</strong>
                     </div>
 
                     <div class="mb-2">
@@ -168,6 +85,11 @@
                     <div class="mb-2">
                         <i class="fa fa-globe text-muted"></i>
                         Country: <strong>{{ object.country }}</strong>
+                    </div>
+
+                    <div class="mb-2">
+                        <i class="fa fa-map-marked text-muted"></i>
+                        Location: <strong class="small">{{ object.latitude }} - {{ object.longitude }}</strong>
                     </div>
 
                 </div>

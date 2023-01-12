@@ -179,8 +179,8 @@ class Site(models.Model):
 
     address = models.CharField(max_length=255)
     city = models.CharField(max_length=255, verbose_name='City/Town')
-    longitude = models.DecimalField(decimal_places=30, max_digits=100, null=True, blank=True)
-    latitude = models.DecimalField(decimal_places=30, max_digits=100, null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
 
     check_calls_enabled = models.BooleanField(
         default=False, help_text="Enabling check calls will allow the system to track employee work during their shift."
@@ -457,7 +457,7 @@ class AbsenseType(models.Model):
         print()
         print("- ABSENSE TYPES: build")
         for x in range(loop):
-            Site.objects.create(
+            AbsenseType.objects.create(
                 name=fake.isbn10(),
             )
             print(f"---- ABSENSE TYPES: {x} faked.")
