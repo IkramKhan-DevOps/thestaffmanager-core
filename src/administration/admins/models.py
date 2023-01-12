@@ -176,7 +176,7 @@ class Site(models.Model):
     address_line_2 = models.CharField(max_length=255)
     city = models.CharField(max_length=255, verbose_name='City/Town')
     country = models.CharField(max_length=255)
-    geo_fencing_range = models.CharField(max_length=1000)
+    geo_fencing_range = models.CharField(max_length=1000, help_text="No of meters away from site a client can clockin")
 
     enable_day_check_ins = models.BooleanField(default=True)
     enable_night_check_ins = models.BooleanField(default=True)

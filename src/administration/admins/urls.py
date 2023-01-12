@@ -13,7 +13,8 @@ from .views import (
     SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView,
     DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView,
 
-    AbsenseTypeListView, AbsenseTypeCreateView, AbsenseTypeDeleteView, AbsenseTypeUpdateView, AbsenseScheduleView
+    AbsenseTypeListView, AbsenseTypeCreateView, AbsenseTypeDeleteView, AbsenseTypeUpdateView, AbsenseScheduleView,
+    UserEmployeeInviteCreateView
 )
 
 app_name = 'admins'
@@ -104,6 +105,7 @@ urlpatterns += [
     path('user/<int:pk>/delete/', UserDeleteView.as_view(), name='user-delete'),
     path('user/staff/add/', UserStaffCreateView.as_view(), name='user-staff-add'),
     path('user/employee/add/', UserEmployeeCreateView.as_view(), name='user-employee-add'),
+    path('user/employee/invite/add/', UserEmployeeInviteCreateView.as_view(), name='user-employee-invite-add'),
     path('user/<int:pk>/reset/password/', UserPasswordResetView.as_view(), name='user-password-reset'),
 ]
 

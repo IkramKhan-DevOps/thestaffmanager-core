@@ -51,7 +51,7 @@ class EmployeeForm(ModelForm):
         ]
 
 
-class EmployeeUserCreateForm(ModelForm):
+class EmployeeUserInviteCreateForm(ModelForm):
 
     class Meta:
         model = User
@@ -64,6 +64,13 @@ class EmployeeUserCreateForm(ModelForm):
                 "email already registered with some other account."
             )
         return email
+
+
+class EmployeeUserCreateForm(ModelForm):
+
+    class Meta:
+        model = User
+        fields = '__all__'
 
 
 class StaffUserCreateForm(UserCreationForm):

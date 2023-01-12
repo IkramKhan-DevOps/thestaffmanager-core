@@ -12,11 +12,13 @@
 
 {% block base_content %}
 
-    <div class="row justify-content-center">
-        <div class="col-sm-6">
+    <div class="row">
+        <div class="col-sm-8">
             <div class="card">
                 <div class="card-body">
-
+                    <p class="mb-0 card-title">Employee Form</p>
+                </div>
+                <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
                         {{ form|crispy }}
@@ -25,16 +27,32 @@
                             <i class="fa fa-check-circle"></i> Submit
                         </button>
                     </form>
-
                 </div>
             </div>
-
-            <p class="text-secondary px-2" style="margin-top: 10px;">
-                just enter the email of employee above, account will be created automatically and an email with
-                login credentials and links will be forwarded to user.
-            </p>
         </div>
+        <div class="col-sm-4">
+            <div class="card">
+                <div class="card-body">
+                    <p class="mb-0 card-title">Invitation To</p>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{% url 'admins:user-employee-invite-add' %}">
+                        {% csrf_token %}
 
+                        <input id="email" name="email" type="email" placeholder="example@thestaffmanager.com" class="form-control">
+
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-check-circle"></i> Submit
+                        </button>
+
+                        <p class="mb-0 mt-2">
+                            Invite new employees via email for efficient onboarding. Our system automatically sends
+                            login credentials and a link for easy profile management.
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}
