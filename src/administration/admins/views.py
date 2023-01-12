@@ -1,5 +1,7 @@
 import json
+import re
 from calendar import monthrange
+from random import randint
 
 from django.contrib import messages
 from django.core.paginator import Paginator
@@ -282,24 +284,54 @@ class UserEmployeeCreateView(CreateView):
     model = User
     form_class = EmployeeUserCreateForm
     template_name = 'admins/user_create_form.html'
-    success_url = reverse_lazy('admins:user-list')
 
     def form_valid(self, form):
-        username = str(form.instance.email).split('@')[0]
-        form.instance.username = username
-        form.instance.set_password(f'1100@0011{username}0011@0011')
         form.instance.is_employee = True
-        form.instance.is_staff = False
-
-        return super().form_valid(form)
+        return super(UserEmployeeCreateView, self).form_valid(form)
 
     def get_success_url(self):
-        if bool(SYS_VERIFICATION_EMAILS):
-            flag, message = sent_email_over_employee_create(self.object)
-            if not flag:
-                messages.warning(self.request, str(message))
+        return reverse_lazy('admins:user-detail', args=[self.object.pk])
 
-        return reverse_lazy('admins:user-list')
+
+@method_decorator(admin_protected, name='dispatch')
+class UserEmployeeInviteCreateView(View):
+
+    def post(self, request):
+
+        def get_random_username(username):
+            if User.objects.filter(username=username):
+                new_username = username + str(randint(10, 1000))
+                return get_random_username(new_username)
+            return username
+
+        email = request.POST['email']
+        if email and re.search(r"^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$", email):
+
+            if not User.objects.filter(email=email):
+
+                # SAVE USER
+                username = get_random_username(str(email).split('@')[0])
+                password = User.objects.make_random_password()
+                password = User.objects.make_random_password()
+                user = User.objects.create_user(username, email, password)
+
+                # EMAIL SETTINGS
+                if bool(SYS_VERIFICATION_EMAILS):
+                    flag, message = sent_email_over_employee_create(user)
+                    if not flag:
+                        messages.warning(self.request, str(message))
+                        user.delete()
+                    else:
+                        user.is_employee = True
+                        user.save()
+                        messages.success(request, "An invitation link has been sent user successfully")
+
+                return redirect("admins:user-list")
+            else:
+                messages.error(request, "Email already registered, try to use another one")
+        else:
+            messages.error(request, "Email field must not be empty")
+        return redirect('admins:user-employee-add')
 
 
 @method_decorator(admin_protected, name='dispatch')
@@ -722,5 +754,3 @@ class SubContractorDeleteView(DeleteView):
     model = SubContractor
     template_name = 'admins/subcontractor_confirm_delete.html'
     success_url = reverse_lazy('admins:sub-contractor-list')
-
-

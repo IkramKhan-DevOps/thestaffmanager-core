@@ -13,7 +13,7 @@ def sent_email_over_employee_create(recipient):
             'login_link': 'https://nationalfmservices.thestaffmanager.com/accounts/login/',
             'username': recipient.username,
             'email': recipient.email,
-            'password': '1100@0011' + recipient.username + '0011@0011',
+            'password': '1100@0011'+recipient.username+'0011@0011'
 
         }
         html_message = render_to_string(template_name="emails/employee_registration.html", context=context)
