@@ -284,7 +284,13 @@ class UserEmployeeCreateView(CreateView):
     model = User
     form_class = EmployeeUserCreateForm
     template_name = 'admins/user_create_form.html'
-    success_url = reverse_lazy('admins:user-list')
+
+    def form_valid(self, form):
+        form.instance.is_employee = True
+        return super(UserEmployeeCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('admins:user-detail', args=[self.object.pk])
 
 
 @method_decorator(admin_protected, name='dispatch')
