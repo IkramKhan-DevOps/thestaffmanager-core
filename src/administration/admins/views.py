@@ -48,6 +48,20 @@ from src.accounts.models import (
 """ MAIN """
 
 
+def temp_check_mail():
+    pass
+
+
+def temp_fake_date():
+    Employee.fake_employees()
+    # Country.fake()
+    Position.fake()
+    ReportType.fake()
+    Department.fake()
+    Client.fake()
+    Site.fake()
+
+
 @method_decorator([admin_protected, never_cache], name='dispatch')
 class ScheduleView(TemplateView):
     template_name = 'admins/schedule.html'
@@ -149,8 +163,7 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        # flag, message = sent_email_over_employee_create(User.objects.first())
-        # messages.warning(self.request, message)
+        temp_fake_date()
         context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
         context['shifts_all'] = Shift.objects.count()
         context['sites_all'] = Site.objects.count()

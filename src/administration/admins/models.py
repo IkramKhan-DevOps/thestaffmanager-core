@@ -16,7 +16,7 @@ class Position(models.Model):
     name = models.CharField(max_length=255)
     card_color = ColorField(default='#FFFFFF')
     charge_rate = models.FloatField()
-    pay_rate = models.FloatField(help_text="Please provide payments")
+    pay_rate = models.FloatField()
 
     is_active = models.BooleanField(default=False)
 

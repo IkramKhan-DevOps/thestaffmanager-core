@@ -189,6 +189,8 @@ class EmployeeWork(models.Model):
     utr = models.CharField(max_length=255, null=True, blank=True)
     tax_code = models.CharField(null=True, blank=True, max_length=255)
     visa_required = models.BooleanField(default=False)
+    visa_country = models.ForeignKey('admins.Country', null=True, blank=True, on_delete=models.SET_NULL)
+    visa_type = models.CharField(max_length=255, null=True, blank=True)
 
     class Meta:
         ordering = ['-employee']
