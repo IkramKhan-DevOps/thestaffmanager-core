@@ -1,7 +1,7 @@
 from crispy_forms.helper import FormHelper
 from django.utils.translation import gettext, gettext_lazy as _
 from crispy_forms.layout import Layout, Row, Field, Submit, Div, Column
-from django.forms import ModelForm, TextInput
+from django.forms import ModelForm, TextInput, inlineformset_factory
 from django.core.exceptions import ValidationError
 
 from src.accounts.models import (
@@ -43,16 +43,7 @@ class UserDocumentForm(ModelForm):
         ]
 
 
-class EmployeeForm(ModelForm):
-    class Meta:
-        model = Employee
-        fields = [
-            'employee_id', 'type', 'address'
-        ]
-
-
 class EmployeeUserInviteCreateForm(ModelForm):
-
     class Meta:
         model = User
         fields = ["email"]
@@ -66,18 +57,30 @@ class EmployeeUserInviteCreateForm(ModelForm):
         return email
 
 
-class EmployeeUserCreateForm(ModelForm):
+class EmployeeForm(ModelForm):
+    class Meta:
+        model = Employee
+        fields = [
+            'employee_id', 'type', 'gender',
+            'address', 'city', 'post_code', 'country',
+            'nationality', 'driver_license', 'access_to_car'
+        ]
 
+
+class EmployeeUserCreateForm(UserCreationForm):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = [
+            'first_name', 'last_name', 'username', 'email', 'phone_number',
+        ]
 
 
 class StaffUserCreateForm(UserCreationForm):
     class Meta:
         model = User
         fields = [
-            'username', 'email', 'password1', 'password2'
+            'first_name', 'last_name',
+            'username', 'email'
         ]
 
 
@@ -88,21 +91,18 @@ class CountryForm(ModelForm):
 
 
 class AbsenseTypeForm(ModelForm):
-
     class Meta:
         model = AbsenseType
         fields = '__all__'
 
 
 class AbsenseForm(ModelForm):
-
     class Meta:
         model = Absense
         fields = '__all__'
 
 
 class SubContractorForm(ModelForm):
-
     class Meta:
         model = SubContractor
         fields = '__all__'
