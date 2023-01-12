@@ -54,7 +54,7 @@ def temp_check_mail():
 
 def temp_fake_date():
     Employee.fake_employees()
-    # Country.fake()
+    Country.fake()
     Position.fake()
     ReportType.fake()
     Department.fake()
@@ -163,7 +163,6 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        temp_fake_date()
         context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
         context['shifts_all'] = Shift.objects.count()
         context['sites_all'] = Site.objects.count()
