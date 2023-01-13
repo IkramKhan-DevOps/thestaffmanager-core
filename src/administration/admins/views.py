@@ -141,7 +141,9 @@ class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
     def get_queryset(self):
-        return ShiftDay.objects.all().order_by('-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
+        return ShiftDay.objects.exclude(employee=None).order_by(
+            '-shift_date', '-clock_in', '-shift_end_date', '-clock_out'
+        )
 
     def get_context_data(self, **kwargs):
         context = super(TimeClockView, self).get_context_data(**kwargs)
@@ -163,8 +165,7 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
-        context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
-        context['shifts_all'] = Shift.objects.count()
+        context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now()).exclude(employee=None)
         context['sites_all'] = Site.objects.count()
         context['employees_all'] = Employee.objects.count()
         context['clients_all'] = Client.objects.count()
@@ -662,6 +663,8 @@ class ShiftDayUpdateView(UpdateView):
     ]
 
     def get_success_url(self):
+        if self.request.GET.get('next') == 'time_clock':
+            return reverse_lazy('admins:time-clock')
         return reverse_lazy('admins:shift-detail', args=[self.object.shift.pk])
 
 

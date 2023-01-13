@@ -19,7 +19,7 @@
 
     {# TOP STATISTICS #}
     <div class="row">
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-sm-6 col-lg-4">
             <div class="card card-sm">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -48,7 +48,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-sm-6 col-lg-4">
             <div class="card card-sm">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -78,7 +78,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-lg-3">
+        <div class="col-sm-6 col-lg-4">
             <div class="card card-sm">
                 <div class="card-body">
                     <div class="row align-items-center">
@@ -111,37 +111,6 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 col-lg-3">
-            <div class="card card-sm">
-                <div class="card-body">
-                    <div class="row align-items-center">
-                        <div class="col-auto">
-                            <span class="bg-danger text-white avatar">
-                              <svg xmlns="http://www.w3.org/2000/svg"
-                                   class="icon icon-tabler icon-tabler-calendar-event" width="24" height="24"
-                                   viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none"
-                                   stroke-linecap="round" stroke-linejoin="round">
-                                           <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                           <rect x="4" y="5" width="16" height="16" rx="2"></rect>
-                                           <line x1="16" y1="3" x2="16" y2="7"></line>
-                                           <line x1="8" y1="3" x2="8" y2="7"></line>
-                                           <line x1="4" y1="11" x2="20" y2="11"></line>
-                                           <rect x="8" y="15" width="2" height="2"></rect>
-                                        </svg>
-                            </span>
-                        </div>
-                        <div class="col">
-                            <div class="font-weight-medium">
-                                {{ shifts_all }} Shifts
-                            </div>
-                            <div class="text-muted">
-                                <a href="{% url 'admins:shift-list' %}"><i class="fa fa-eye"></i> view</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 
@@ -159,7 +128,6 @@
                             <thead class="thead-light">
                             <tr>
                                 <th>Status</th>
-                                <th>Shift</th>
                                 <th>Employee</th>
                                 <th>Date</th>
                                 <th>Time</th>
@@ -190,13 +158,6 @@
                                         {% else %}
                                             <span class="badge bg-secondary-lt">{{ current_status }}</span>
                                         {% endif %}
-                                    </td>
-                                    <td>
-                                        <b>
-                                            <a href="{% url 'admins:shift-detail' object.shift.pk %}">
-                                                # {{ object.shift.pk }}
-                                            </a>
-                                        </b>
                                     </td>
                                     <td>
                                         <b>

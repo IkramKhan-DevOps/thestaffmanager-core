@@ -129,7 +129,13 @@
                             <line x1="18" y1="7" x2="18" y2="7.01"></line>
                             <line x1="21" y1="7" x2="21" y2="7.01"></line>
                         </svg>
-                        Phone: <strong>{{ object.phone }}</strong>
+                        Phone: <strong>
+                        {% if not object.phone %}
+                            <a href="#" class="">-</a>
+                        {% else %}
+                            <a href="tel:{{ object.phone }}">{{ object.phone }}</a>
+                        {% endif %}
+                    </strong>
                     </div>
                     <div class="mb-2">
                         <svg xmlns="http://www.w3.org/2000/svg"
@@ -142,7 +148,13 @@
                             <path d="M9.02 8.801l-.6 6a2 2 0 0 0 1.99 2.199h7.98a2 2 0 0 0 1.99 -1.801l.6 -6a2 2 0 0 0 -1.99 -2.199h-7.98a2 2 0 0 0 -1.99 1.801z"></path>
                             <path d="M9.8 7.5l2.982 3.28a3 3 0 0 0 4.238 .202l3.28 -2.982"></path>
                         </svg>
-                        Email: <strong>{{ object.email }}</strong>
+                        Email: <strong>
+                        {% if not object.email %}
+                            <a href="#" class="">-</a>
+                        {% else %}
+                            <a href="mailto:{{ object.email }}">{{ object.email }}</a>
+                        {% endif %}
+                    </strong>
                     </div>
                     <div class="mb-2">
                         <svg xmlns="http://www.w3.org/2000/svg"
