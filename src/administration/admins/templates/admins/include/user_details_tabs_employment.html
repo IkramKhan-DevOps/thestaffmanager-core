@@ -19,16 +19,17 @@
                 <dt class="col-5">Visa required</dt>
                 <dd class="col-7">
                     {% if employee_work.visa_required %}
-                        <b><i class="fa fa-check text-success"></i></b>
+                        <i class="fa fa-check text-success"></i>&nbsp;
+                        <b id="passport_required_text">
+                            {{ employee_work.visa_country.name }} - {{ employee_work.visa_type }}
+                        </b>
                     {% else %}
-                        <b><i class="fa fa-times text-danger"></i></b>
+                        <i class="fa fa-times text-danger"></i>&nbsp;
+                        <b id="passport_required_text">
+                        </b>
+
                     {% endif %}
                 </dd>
-
-                <dt id="visa_required_info" class="col-5">Visa Country</dt>
-                <dd id="visa_required_info" class="col-7">{{ employee_work.vi }}</dd>
-                <dt id="visa_required_info" class="col-5">Visa Type</dt>
-                <dd id="visa_required_info" class="col-7">{{ employee_work.utr }}</dd>
 
             </dl>
         </div>
@@ -151,25 +152,25 @@
 
 <script>
     $(document).ready(function () {
-        let visa_check = "{{ employee_work.visa_required }}";
-        if (visa_check == "False") {
-            $('id_visa_country').hide();
-            $('id_visa_type').hide();
-            $('visa_required_info').hide();
-        }
 
-        let id_visa_required = $('id_visa_required');
-        id_visa_required.change(function () {
-            if ($(this).checked) {
-                $('id_visa_country').show();
-                $('id_visa_type').show();
-                $('visa_required_info').show();
-            } else {
-                $('id_visa_country').hide();
-                $('id_visa_type').hide();
-                $('visa_required_info').hide();
-            }
+        validate_visa_areas();
+
+        $('#id_visa_required').change(function () {
+            validate_visa_areas();
         })
+
+        function validate_visa_areas() {
+            let country = $('#div_id_visa_country');
+            let type = $('#div_id_visa_type');
+
+            if ($('#id_visa_required').is(":checked")){
+                country.show();
+                type.show();
+            }else{
+                country.hide();
+                type.hide();
+            }
+        }
 
         $('#id_start').datetimepicker({
             format: 'Y-m-d',
