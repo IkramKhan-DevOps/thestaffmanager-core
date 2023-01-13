@@ -57,7 +57,6 @@
                             <thead class="thead-light">
                             <tr>
                                 <th>Status</th>
-                                <th>Shift</th>
                                 <th>Employee</th>
                                 <th>Date</th>
                                 <th>Time</th>
@@ -88,13 +87,6 @@
                                         {% else %}
                                             <span class="badge bg-secondary-lt">{{ current_status }}</span>
                                         {% endif %}
-                                    </td>
-                                    <td>
-                                        <b>
-                                            <a href="{% url 'admins:shift-detail' object.shift.pk %}">
-                                                # {{ object.shift.pk }}
-                                            </a>
-                                        </b>
                                     </td>
                                     <td>
                                         <b>
@@ -215,7 +207,7 @@
                                     </td>
                                     <td>
                                         <b>
-                                            <a href="{% url 'admins:shift-day-update' object.pk %}">
+                                            <a href="{% url 'admins:shift-day-update' object.pk %}?next=time_clock">
                                                 <svg xmlns="http://www.w3.org/2000/svg"
                                                      class="icon icon-tabler icon-tabler-eye" width="24" height="24"
                                                      viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"

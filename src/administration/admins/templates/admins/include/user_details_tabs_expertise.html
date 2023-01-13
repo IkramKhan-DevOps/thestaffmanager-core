@@ -15,7 +15,6 @@
                 <table class="table table-sm table-hover">
                     <thead class="thead-light">
                     <tr>
-                        <th>ID</th>
                         <th>Type</th>
                         <th>Certificate Number</th>
                         <th>Expiry Date</th>
@@ -25,7 +24,6 @@
                     <tbody>
                     {% for oobject in employee_qualifications %}
                         <tr>
-                            <td>{{ oobject.pk }}</td>
                             <td>{{ oobject.get_type_display }}</td>
                             <td>{{ oobject.certificate_number }}</td>
                             <td>{{ oobject.expiry_date }}</td>
@@ -61,7 +59,6 @@
                 <table class="table table-sm table-hover">
                     <thead class="thead-light">
                     <tr>
-                        <th>ID</th>
                         <th>Provider</th>
                         <th>Course</th>
                         <th>Start Date</th>
@@ -72,7 +69,6 @@
                     <tbody>
                     {% for oobject in employee_trainings %}
                         <tr>
-                            <td>#{{ oobject.id }}</td>
                             <td>{{ oobject.provider }}</td>
                             <td>{{ oobject.course }}</td>
                             <td>{{ oobject.start_date }}</td>
@@ -203,7 +199,7 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Employment Appearance Update</h5>
+                <h5 class="modal-title">Add Training</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 

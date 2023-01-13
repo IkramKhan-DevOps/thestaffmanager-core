@@ -122,28 +122,34 @@ class EMPMGMTEmployeeForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['type'].widget.attrs.update({"class": "form-control"})
         self.fields['country'].widget.attrs.update({"class": "form-control"})
+        self.fields['passport_country'].widget.attrs.update({"class": "form-control"})
         self.fields['gender'].widget.attrs.update({"class": "form-control"})
+        self.fields['country_of_birth'].widget.attrs.update({"class": "form-control"})
         self.fields['country_of_birth'].widget.attrs.update({"class": "form-control"})
         self.fields['driver_license'].widget.attrs.update({"class": "form-check-input"})
         self.fields['access_to_car'].widget.attrs.update({"class": "form-check-input"})
+        self.fields['passport_required'].widget.attrs.update({"class": "form-check-input"})
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
-                Column('employee_id', css_class='form-group col-md-6 mb-3'),
-                Column('type', css_class=' col-md-6 mb-3'),
-                Column('pob', css_class='form-group col-md-6 mb-3'),
-                Column('phone_number_2', css_class='form-group col-md-6 mb-3'),
-                Column('address', css_class='form-group col-md-12 mb-3'),
-                Column('city', css_class='form-group col-md-4 mb-3'),
-                Column('post_code', css_class='form-group col-md-4 mb-3'),
-                Column('country', css_class='col-md-4 mb-3'),
-                Column('nationality', css_class='form-group col-md-6 mb-3'),
-                Column('gender', css_class='col-md-6 mb-3'),
-                Column('date_of_birth', css_class='form-group col-md-4 mb-3'),
-                Column('city_of_birth', css_class='form-group col-md-4 mb-3'),
-                Column('country_of_birth', css_class='col-md-4 mb-3'),
-                Column('driver_license', css_class='form-check form-switch col-md-6 mb-3'),
-                Column('access_to_car', css_class='form-check form-switch col-md-6 mb-3'),
+                Column('employee_id', css_class='form-group col-sm-6 mb-3'),
+                Column('type', css_class=' col-sm-6 mb-3'),
+                Column('pob', css_class='form-group col-sm-6 mb-3'),
+                Column('phone_number_2', css_class='form-group col-sm-6 mb-3'),
+                Column('address', css_class='form-group col-sm-12 mb-3'),
+                Column('city', css_class='form-group col-sm-4 mb-3'),
+                Column('post_code', css_class='form-group col-sm-4 mb-3'),
+                Column('country', css_class='col-sm-4 mb-3'),
+                Column('nationality', css_class='form-group col-sm-6 mb-3'),
+                Column('gender', css_class='col-sm-6 mb-3'),
+                Column('date_of_birth', css_class='form-group col-sm-4 mb-3'),
+                Column('city_of_birth', css_class='form-group col-sm-4 mb-3'),
+                Column('country_of_birth', css_class='col-sm-4 mb-3'),
+                Column('driver_license', css_class='form-check form-switch col-sm-4 mb-3'),
+                Column('access_to_car', css_class='form-check form-switch col-sm-4 mb-3'),
+                Column('passport_required', css_class='form-check form-switch col-sm-4 mb-3'),
+                Column('passport_country', css_class='form-group col-sm-6'),
+                Column('passport_expiry', css_class='form-group col-sm-6'),
             ),
 
         )
@@ -164,7 +170,9 @@ class EMPMGMTEmployeeWorkForm(ModelForm):
                 Column('ni_number', css_class='form-group col-md-6 mb-3'),
                 Column('utr', css_class='form-group col-md-6 mb-3'),
                 Column('tax_code', css_class='form-group col-md-12 mb-3'),
-                Column('visa_required', css_class='form-check form-switch col-md-6 mb-3'),
+                Column('visa_required', css_class='form-check form-switch col-md-12 mb-3'),
+                Column('visa_type', css_class='form-group col-md-6'),
+                Column('visa_expiry', css_class='form-group col-md-6'),
             ),
 
         )

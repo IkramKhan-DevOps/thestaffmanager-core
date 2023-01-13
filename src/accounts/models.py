@@ -107,7 +107,7 @@ class Employee(models.Model):
     EMPLOYEE_GENDER_CHOICE = (
         ('m', 'Male'),
         ('f', 'Female'),
-        ('t', 'Tans'),
+        ('t', 'Trans'),
     )
 
     # USER CONNECT
@@ -134,6 +134,10 @@ class Employee(models.Model):
         'admins.Country', null=True, blank=True, on_delete=models.CASCADE,
         verbose_name="Country of Birth", related_name='employee_country_of_birth'
     )
+
+    passport_required = models.BooleanField(default=False)
+    passport_country = models.ForeignKey('admins.Country', on_delete=models.SET_NULL, null=True, blank=True)
+    passport_expiry = models.DateField(null=True, blank=True)
 
     # MANY TO MANY
     sites = models.ManyToManyField('admins.Site', blank=True, through='EmployeeSite')
@@ -188,7 +192,10 @@ class EmployeeWork(models.Model):
     ni_number = models.CharField(max_length=255, null=True, blank=True)
     utr = models.CharField(max_length=255, null=True, blank=True)
     tax_code = models.CharField(null=True, blank=True, max_length=255)
+
     visa_required = models.BooleanField(default=False)
+    visa_type = models.CharField(max_length=255, null=True, blank=True)
+    visa_expiry = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ['-employee']
@@ -230,7 +237,7 @@ class EmployeeContract(models.Model):
 class EmployeeQualification(models.Model):
     TYPE_CHOICE = (
         ('fad', 'First AID'),
-        ('sia', 'SIA No'),
+        ('sia', 'SIA License'),
     )
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     type = models.CharField(max_length=3, choices=TYPE_CHOICE)

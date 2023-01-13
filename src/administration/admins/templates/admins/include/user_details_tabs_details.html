@@ -9,13 +9,13 @@
         <div class="col-sm-6">
             <div class="mb-2">
                 <button class="btn btn-primary" id="btn-employee-details-edit">
-                    <i class="fa fa-user-check"></i>&nbsp;Update Personal Details
+                    <i class="fa fa-edit"></i>&nbsp;Update Personal Details
                 </button>
             </div>
             <dl class="row">
                 <h3 class="">Personal Details</h3>
                 <dt class="col-5">Gender:</dt>
-                <dd class="col-7">{{ employee.gender }}</dd>
+                <dd class="col-7">{{ employee.get_gender_display }}</dd>
                 <dt class="col-5">Employee ID:</dt>
                 <dd class="col-7">{{ employee.employee_id }}</dd>
                 <dt class="col-5">Type:</dt>
@@ -32,6 +32,36 @@
                 <dt class="col-5">Country of Birth:</dt>
                 <dd class="col-7">{{ employee.country_of_birth }}</dd>
 
+                <dt class="col-5">Driver License</dt>
+                <dd class="col-7">
+                    {% if employee.driver_license %}
+                        <i class="fa fa-check text-success"></i>
+                    {% else %}
+                        <i class="fa fa-times text-danger"></i>
+                    {% endif %}
+                </dd>
+                <dt class="col-5">Access to Car</dt>
+                <dd class="col-7">
+                    {% if employee.driver_license %}
+                        <i class="fa fa-check text-success"></i>
+                    {% else %}
+                        <i class="fa fa-times text-danger"></i>
+                    {% endif %}
+                </dd>
+                <dt class="col-5">Passport required</dt>
+                <dd class="col-7">
+                    {% if employee.passport_required %}
+                        <i class="fa fa-check text-success"></i>&nbsp;
+                        <b id="passport_required_text">
+                            {{ employee.passport_country.name }} - {{ employee.passport_expiry }}
+                        </b>
+                    {% else %}
+                        <i class="fa fa-times text-danger"></i>&nbsp;
+                        <b id="passport_required_text">
+                        </b>
+
+                    {% endif %}
+                </dd>
 
                 <h3 class="mt-4">Contact Details</h3>
 
@@ -55,9 +85,9 @@
             </div>
             <div>
                 {% if employee.employeedepartment_set.all %}
-                {% for oobject in employee.employeedepartment_set.all %}
-                <span class="badge bg-yellow-lt">{{ oobject.department.name }}</span>
-                {% endfor %}
+                    {% for oobject in employee.employeedepartment_set.all %}
+                        <span class="badge bg-yellow-lt">{{ oobject.department.name }}</span>
+                    {% endfor %}
                 {% endif %}
                 <span class="badge bg-primary-lt" id="department_update_btn">+ Add more</span>
             </div>
@@ -68,9 +98,9 @@
             <div>
 
                 {% if employee.employeesite_set.all %}
-                {% for oobject in employee.employeesite_set.all %}
-                <span class="badge bg-danger-lt">{{ oobject.site.name }}</span>
-                {% endfor %}
+                    {% for oobject in employee.employeesite_set.all %}
+                        <span class="badge bg-danger-lt">{{ oobject.site.name }}</span>
+                    {% endfor %}
                 {% endif %}
                 <span class="badge bg-primary-lt" id="site_update_btn">+ Add more</span>
             </div>
@@ -80,9 +110,9 @@
             </div>
             <div>
                 {% if employee.employeeposition_set.all %}
-                {% for oobject in employee.employeeposition_set.all %}
-                <span class="badge bg-cyan-lt">{{ oobject.position.name }}</span>
-                {% endfor %}
+                    {% for oobject in employee.employeeposition_set.all %}
+                        <span class="badge bg-cyan-lt">{{ oobject.position.name }}</span>
+                    {% endfor %}
                 {% endif %}
                 <span class="badge bg-primary-lt" id="position_update_btn">+ Add more</span>
             </div>
@@ -101,11 +131,12 @@
             <div class="modal-body">
                 <form id="form_employee_details" method="post">
                     {% csrf_token %}
-                                            {% crispy employee_form %}
+                    {% crispy employee_form %}
                 </form>
             </div>
             <div class="modal-footer text-left">
-                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_change' employee.pk %}"
+                <button class="btn btn-success me-auto"
+                        data-action="{% url 'admins:admins-json:employee_change' employee.pk %}"
                         data-method="POST" data-param=""
                         id="btn_employee_details_submit"
                         type="button"
@@ -129,21 +160,30 @@
                 <form>
                     {% csrf_token %}
                     {% if sites %}
-                    {% for site in sites %}
-                    <div class="form-check" id="div_id_need_condition">
-                        <input %} %}
-                               checked class="checkboxinput form-check-input" employee_sites_list endif id="site_{{ forloop.counter }}" if in name="{{ forloop.counter }}" site.pk type="checkbox"
-                               {% {%>
-                        <label class="form-check-label"
-                               for="site_{{ forloop.counter }}"> {{ site.name }} </label>
-                    </div>
-                    {% endfor %}
+                        {% for site in sites %}
+                            <div class="form-check" id="div_id_need_condition">
+                                {% if site.pk in employee_sites_list %}
+                                    <input
+                                            checked class="checkboxinput form-check-input"
+                                            id="site_{{ forloop.counter }}" name="{{ forloop.counter }}"
+                                            type="checkbox">
+                                {% else %}
+                                    <input
+                                            class="checkboxinput form-check-input"
+                                            id="site_{{ forloop.counter }}" name="{{ forloop.counter }}"
+                                            type="checkbox">
+                                {% endif %}
+                                <label class="form-check-label"
+                                       for="site_{{ forloop.counter }}"> {{ site.name }} </label>
+                            </div>
+                        {% endfor %}
                     {% endif %}
 
                 </form>
             </div>
             <div class="modal-footer text-left">
-                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_sites_update' employee.pk %}"
+                <button class="btn btn-success me-auto"
+                        data-action="{% url 'admins:admins-json:employee_sites_update' employee.pk %}"
                         data-method="POST" data-param=""
                         id="site_submit_btn"
                         type="button"
@@ -167,21 +207,30 @@
                 <form>
                     {% csrf_token %}
                     {% if departments %}
-                    {% for department in departments %}
-                    <div class="form-check" id="div_id_need_condition">
-                        <input %} %}
-                               checked class="checkboxinput form-check-input" department.pk employee_department_list endif id="department_{{ forloop.counter }}" if in name="{{ forloop.counter }}" type="checkbox"
-                               {% {%>
-                        <label class="form-check-label"
-                               for="department_{{ forloop.counter }}"> {{ department.name }} </label>
-                    </div>
-                    {% endfor %}
+                        {% for department in departments %}
+                            <div class="form-check" id="div_id_need_condition">
+
+                                {% if department in employee_department_list %}
+                                    <input checked class="checkboxinput form-check-input"
+                                           id="department_{{ forloop.counter }}"
+                                           name="{{ forloop.counter }}" type="checkbox">
+                                {% else %}
+                                    <input class="checkboxinput form-check-input"
+                                           id="department_{{ forloop.counter }}"
+                                           name="{{ forloop.counter }}" type="checkbox">
+                                {% endif %}
+
+                                <label class="form-check-label"
+                                       for="department_{{ forloop.counter }}"> {{ department.name }} </label>
+                            </div>
+                        {% endfor %}
                     {% endif %}
                 </form>
 
             </div>
             <div class="modal-footer text-left">
-                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_departments_update' employee.pk %}"
+                <button class="btn btn-success me-auto"
+                        data-action="{% url 'admins:admins-json:employee_departments_update' employee.pk %}"
                         data-method="POST"
                         data-param=""
                         id="department_submit_btn"
@@ -206,21 +255,30 @@
                 <form>
                     {% csrf_token %}
                     {% if positions %}
-                    {% for position in positions %}
-                    <div class="form-check" id="div_id_need_condition">
-                        <input %} %}
-                               checked class="checkboxinput form-check-input" employee_positions_list endif id="position_{{ forloop.counter }}" if in name="{{ forloop.counter }}" position.pk type="checkbox"
-                               {% {%>
-                        <label class="form-check-label"
-                               for="position_{{ forloop.counter }}"> {{ position.name }} </label>
-                    </div>
-                    {% endfor %}
+                        {% for position in positions %}
+                            <div class="form-check" id="div_id_need_condition">
+
+                                {% if position.pk in employee_positions_list %}
+                                    <input checked class="checkboxinput form-check-input"
+                                           id="position_{{ forloop.counter }}"
+                                           name="{{ forloop.counter }}" type="checkbox"
+                                    >
+                                {% else %}
+                                    <input class="checkboxinput form-check-input" id="position_{{ forloop.counter }}"
+                                           name="{{ forloop.counter }}" type="checkbox"
+                                    >
+                                {% endif %}
+                                <label class="form-check-label"
+                                       for="position_{{ forloop.counter }}"> {{ position.name }} </label>
+                            </div>
+                        {% endfor %}
                     {% endif %}
                 </form>
 
             </div>
             <div class="modal-footer text-left">
-                <button class="btn btn-success me-auto" data-action="{% url 'admins:admins-json:employee_positions_update' employee.pk %}"
+                <button class="btn btn-success me-auto"
+                        data-action="{% url 'admins:admins-json:employee_positions_update' employee.pk %}"
                         data-method="POST" data-param=""
                         id="position_submit_btn"
                         type="button"
@@ -235,10 +293,33 @@
 <script>
     $(document).ready(function () {
 
+        validate_passport_areas();
+
         $('#id_date_of_birth').datetimepicker({
             format: 'Y-m-d',
             timepicker: false,
         });
+        $('#id_passport_expiry').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
+        $('#id_passport_required').change(function () {
+            validate_passport_areas();
+        })
+
+        function validate_passport_areas() {
+            let country = $('#div_id_passport_country');
+            let expiry = $('#div_id_passport_expiry');
+
+            if ($('#id_passport_required').is(":checked")){
+                country.show();
+                expiry.show();
+            }else{
+                country.hide();
+                expiry.hide();
+            }
+        }
 
         let site_model = $('#site_model')
         let site_form = site_model.find('form')

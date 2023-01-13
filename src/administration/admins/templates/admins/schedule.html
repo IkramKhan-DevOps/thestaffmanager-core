@@ -442,7 +442,7 @@
             {% for object in employees %}
                 types.push({
                     id: '{{ object.id }}',
-                    name: '{{ object }}',
+                    name: '{{ object.user.get_user_name }}',
                     color: 'green',
                     title: 'Employee',
                     icon: '<span class="fa fa-user-circle"></span>'
@@ -506,9 +506,11 @@
                     console.log("event create")
                 },
                 renderResource: function (resource) {
-                    return '<div class="md-meal-planner-cont">' +
-                        '<div class="md-meal-planner-title" style="color:' + resource.color + '">' +
-                        '<span class="md-meal-planner-icon">' + resource.icon + '</span>' + resource.name + '</div>' +
+                    return '<div class="">' +
+                        '<div class="m-0 p-0" style=";color:' + resource.color + '">' +
+                        '<h3 class="mb-0">' + resource.name + '</h3>' +
+                        '<small class="mb-0 text-secondary">ID# '+resource.id+'<p/>' +
+                        '</div>' +
                         '</div>';
                 },
                 renderSlot: function (args) {
@@ -609,6 +611,7 @@
 
                         for (var i = 0; i < data.length; i++) {
                             var event = data[i];
+
                             events.push({
                                 id: event.shift.id,
                                 employee: event.shift.employee == null ? '-' : event.shift.employee.user.username,

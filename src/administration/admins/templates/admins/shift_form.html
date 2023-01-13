@@ -32,8 +32,9 @@
                         <div class="card">
 
                             <div class="text-center">
-                                <iframe src="https://embed.lottiefiles.com/animation/7448" height="200"
-                                        class="border-0"></iframe>
+                                <iframe src="https://embed.lottiefiles.com/animation/7448"
+                                        height="200" class="border-0">
+                                </iframe>
                             </div>
                             <div class="card-body">
                                 <div class="row row-cards">
@@ -73,7 +74,7 @@
                                             {% endfor %}
                                         </div>
                                     </div>
-                                    <div class="col-md-3">
+                                    <div class="col-md-3" id="div_id_end_date">
                                         <div>
                                             {{ form.end_date.label }}
                                             {% render_field form.end_date class="form-control" %}
@@ -99,7 +100,7 @@
                                     </div>
                                     <div class="col-md-3" id="div_id_end_date">
                                         <div>
-                                            {{ form.end_date.label }}
+                                            {{ form.end_time.label }}
                                             {% render_field form.end_time class="form-control" %}
                                             <small class="text-sm text-secondary">{{ form.end_time.help_text }}</small>
                                             {% for error in form.end_time.errors %}
