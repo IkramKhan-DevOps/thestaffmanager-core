@@ -107,7 +107,7 @@ class Employee(models.Model):
     EMPLOYEE_GENDER_CHOICE = (
         ('m', 'Male'),
         ('f', 'Female'),
-        ('t', 'Tans'),
+        ('t', 'Trans'),
     )
 
     # USER CONNECT
@@ -194,8 +194,8 @@ class EmployeeWork(models.Model):
     tax_code = models.CharField(null=True, blank=True, max_length=255)
 
     visa_required = models.BooleanField(default=False)
-    visa_country = models.ForeignKey('admins.Country', null=True, blank=True, on_delete=models.SET_NULL)
     visa_type = models.CharField(max_length=255, null=True, blank=True)
+    visa_expiry = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ['-employee']

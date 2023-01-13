@@ -21,7 +21,7 @@
                     {% if employee_work.visa_required %}
                         <i class="fa fa-check text-success"></i>&nbsp;
                         <b id="passport_required_text">
-                            {{ employee_work.visa_country.name }} - {{ employee_work.visa_type }}
+                            {{ employee_work.visa_type }} - {{ employee_work.visa_expiry }}
                         </b>
                     {% else %}
                         <i class="fa fa-times text-danger"></i>&nbsp;
@@ -160,17 +160,22 @@
         })
 
         function validate_visa_areas() {
-            let country = $('#div_id_visa_country');
+            let expiry = $('#div_id_visa_expiry');
             let type = $('#div_id_visa_type');
 
             if ($('#id_visa_required').is(":checked")){
-                country.show();
+                expiry.show();
                 type.show();
             }else{
-                country.hide();
+                expiry.hide();
                 type.hide();
             }
         }
+
+        $('#id_visa_expiry').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
 
         $('#id_start').datetimepicker({
             format: 'Y-m-d',

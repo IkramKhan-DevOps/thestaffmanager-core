@@ -164,7 +164,6 @@ class EMPMGMTEmployeeWorkForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['visa_required'].widget.attrs.update({'class': "form-check-input"})
-        self.fields['visa_country'].widget.attrs.update({'class': "form-control"})
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(
@@ -172,8 +171,8 @@ class EMPMGMTEmployeeWorkForm(ModelForm):
                 Column('utr', css_class='form-group col-md-6 mb-3'),
                 Column('tax_code', css_class='form-group col-md-12 mb-3'),
                 Column('visa_required', css_class='form-check form-switch col-md-12 mb-3'),
-                Column('visa_country', css_class='form-group col-md-6'),
                 Column('visa_type', css_class='form-group col-md-6'),
+                Column('visa_expiry', css_class='form-group col-md-6'),
             ),
 
         )
