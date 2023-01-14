@@ -419,6 +419,13 @@
                 },
                 legend: {
                     horizontalAlign: 'left'
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val
+                        }
+                    }
                 }
             };
             var shifts_chart = new ApexCharts(document.querySelector("#shifts-chart"), shifts_chart_options);
