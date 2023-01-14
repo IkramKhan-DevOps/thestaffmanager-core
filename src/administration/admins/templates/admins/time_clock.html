@@ -21,7 +21,7 @@
                 <div class="card-body">
 
                     {% csrf_token %}
-                    <form method="get">
+                    <form method="get" id="filter-form">
                         <div class="input-group">
                             {{ filter_form }}
                             <div class="input-group-append">
@@ -210,8 +210,9 @@
                                         <button id="time_update_model_btn" data-id="{{ object.pk }}"
                                                 data-end="{{ object.clock_out|date:"G:i" }}"
                                                 data-start="{{ object.clock_in|date:"G:i" }}"
+                                                class="btn btn-sm btn-outline-primary"
                                                 data-action="{% url 'admins:admins-json:shift_day_change' object.pk %}" data-method="#">
-                                            <i class="fa fa-edit"></i>&nbsp; Edit
+                                            <i class="fa fa-edit"></i>
                                         </button>
                                     </td>
                                 {% endwith %}
@@ -265,7 +266,7 @@
 
                 <div class="modal-body">
                     <h5 class="modal-title border-0">
-                        <b><i class="fa fa-clock"></i>Shift Clock View</b>
+                        <b><i class="fa fa-clock"></i>&nbsp; SHIFT CLOCK</b>
                     </h5>
 
                     <form method="post" id="time_form">
@@ -297,6 +298,7 @@
 
             $("#id_shift_date option:first").text("-- Start Date --");
             $("#id_shift_end_date option:first").text("-- End Date --");
+            $('#time_update_model input').addClass('mb-2')
 
 
             $('body #id_clock_in').datetimepicker({
@@ -400,7 +402,7 @@
                 location.reload();
             })
 
-            $('label').hide();
+            $('#filter-form label').hide();
             $('input').addClass('form-control');
             $('select').addClass('form-control');
 
