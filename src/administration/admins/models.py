@@ -275,12 +275,6 @@ class Shift(models.Model):
 
 
 class ShiftDay(models.Model):
-    STATUS_CHOICE = (
-        ('awa', 'Awaiting'),
-        ('run', 'Running'),
-        ('com', 'Completed'),
-        ('mis', 'Missed'),
-    )
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE)
 
     clock_in = models.TimeField(null=True, blank=True)

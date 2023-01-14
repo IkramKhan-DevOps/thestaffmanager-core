@@ -1,4 +1,3 @@
-import json
 import re
 from calendar import monthrange
 from random import randint
@@ -6,7 +5,7 @@ from random import randint
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q
-from django.http import HttpResponse
+from django.db.models.functions import TruncDay
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.urls import reverse_lazy
@@ -165,11 +164,51 @@ class DashboardView(TemplateView):
     template_name = 'admins/dashboard.html'
 
     def get_context_data(self, **kwargs):
+        from django.db.models import Count
+        from datetime import datetime, timedelta
+        start_of_week = datetime.now().date() - timedelta(days=datetime.now().weekday())
+        end_of_week = start_of_week + timedelta(days=6)
+
         context = super(DashboardView, self).get_context_data(**kwargs)
-        context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now()).exclude(employee=None)
+        context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.now()).exclude(employee=None)
         context['sites_all'] = Site.objects.count()
         context['employees_all'] = Employee.objects.count()
         context['clients_all'] = Client.objects.count()
+
+        week_days_total_shifts_count = ShiftDay.objects.filter(shift_date__range=(start_of_week, end_of_week)).annotate(
+            day=TruncDay('shift_date')).values('day').annotate(count=Count('id')).values_list('count', flat=True)
+
+        week_days_assigned_shifts_count = ShiftDay.objects.filter(
+            shift_date__range=(start_of_week, end_of_week), shift__employee__isnull=False).annotate(
+            day=TruncDay('shift_date')).values('day').annotate(count=Count('id')).values_list('count', flat=True)
+
+        week_days_unassigned_shifts_count = ShiftDay.objects.filter(
+            shift_date__range=(start_of_week, end_of_week), shift__employee__isnull=True
+        ).annotate(day=TruncDay('shift_date')).values('day').annotate(count=Count('id')).values_list('count', flat=True)
+
+        shifts_months_total = []
+        shifts_months_assigned = []
+        shifts_months_unassigned = []
+
+        for index in range(1, 13):
+            total = ShiftDay.objects.filter(
+                shift_date__month=index, shift_date__year=datetime.today().year).annotate(
+                count=Count('id')).values_list('count', flat=True).count()
+            unassigned = ShiftDay.objects.filter(
+                shift_date__month=index, shift_date__year=datetime.today().year, shift__employee=None).annotate(
+                count=Count('id')).values_list('count', flat=True).count()
+            assigned = total - unassigned
+
+            shifts_months_total.append(total)
+            shifts_months_unassigned.append(unassigned)
+            shifts_months_assigned.append(assigned)
+
+        context['week_days_total_shifts_count'] = list(week_days_total_shifts_count)
+        context['week_days_assigned_shifts_count'] = list(week_days_assigned_shifts_count)
+        context['week_days_unassigned_shifts_count'] = list(week_days_unassigned_shifts_count)
+        context['shifts_months_total'] = shifts_months_total
+        context['shifts_months_assigned'] = shifts_months_assigned
+        context['shifts_months_unassigned'] = shifts_months_unassigned
 
         return context
 
