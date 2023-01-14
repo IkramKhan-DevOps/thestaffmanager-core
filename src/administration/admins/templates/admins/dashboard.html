@@ -276,21 +276,6 @@
                                             {% endif %}
                                         {% endwith %}
                                     </td>
-                                    <td>
-                                        <b>
-                                            <a href="{% url 'admins:shift-day-update' object.pk %}">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                     class="icon icon-tabler icon-tabler-eye" width="24" height="24"
-                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                     fill="none"
-                                                     stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <circle cx="12" cy="12" r="2"></circle>
-                                                    <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
-                                                </svg>
-                                            </a>
-                                        </b>
-                                    </td>
                                 {% endwith %}
                             </tr>
                             {% endfor %}
@@ -406,14 +391,14 @@
             {# CHARTS #}
             var shifts_chart_options = {
                 series: [{
-                    name: 'Total Shifts',
-                    data: [44, 55, 57, 56, 61, 58, 63]
+                    name: 'Total',
+                    data: {{ week_days_total_shifts_count }}
                 }, {
-                    name: 'Completed',
-                    data: [76, 85, 101, 98, 87, 105, 91]
+                    name: 'Assigned',
+                    data: {{ week_days_assigned_shifts_count }}
                 }, {
-                    name: 'Absent',
-                    data: [35, 41, 36, 26, 45, 48, 52]
+                    name: 'Un assigned',
+                    data: {{ week_days_unassigned_shifts_count }}
                 }],
                 chart: {
                     type: 'area',
@@ -432,11 +417,15 @@
                 xaxis: {
                     categories: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
                 },
-                yaxis: {
-                    opposite: true
-                },
                 legend: {
                     horizontalAlign: 'left'
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return val
+                        }
+                    }
                 }
             };
             var shifts_chart = new ApexCharts(document.querySelector("#shifts-chart"), shifts_chart_options);
@@ -445,14 +434,14 @@
 
             var shifts_detail_chart_options = {
                 series: [{
-                    name: 'Total Shifts',
-                    data: [44, 55, 57, 56, 61, 58, 63, 60, 66, 100, 99, 61]
+                    name: 'Total',
+                    data: {{ shifts_months_total }}
                 }, {
-                    name: 'Completed',
-                    data: [76, 85, 101, 98, 87, 105, 91, 114, 94, 50, 40, 20]
+                    name: 'Assigned',
+                    data: {{ shifts_months_assigned }}
                 }, {
-                    name: 'Absent',
-                    data: [35, 41, 36, 26, 45, 48, 52, 53, 41, 10, 8, 10]
+                    name: 'Un assigned',
+                    data: {{ shifts_months_unassigned }}
                 }],
                 chart: {
                     type: 'bar',
@@ -482,7 +471,7 @@
                 tooltip: {
                     y: {
                         formatter: function (val) {
-                            return "shifts"
+                            return val
                         }
                     }
                 }
