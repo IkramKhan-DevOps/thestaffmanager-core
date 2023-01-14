@@ -12,7 +12,7 @@ from src.accounts.models import (
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import get_user_model
 
-from src.administration.admins.models import Country, Absense, AbsenseType, Shift
+from src.administration.admins.models import Country, Absense, AbsenseType, Shift, ShiftDay
 
 User = get_user_model()
 
@@ -248,6 +248,12 @@ class EMPMGMTEmployeeAppearanceForm(ModelForm):
 
 
 """ ------ """
+
+
+class ShiftDayTimeForm(ModelForm):
+    class Meta:
+        model = ShiftDay
+        fields = 'clock_in', 'clock_out'
 
 
 class EMPMGMTEmployeeContractForm(ModelForm):

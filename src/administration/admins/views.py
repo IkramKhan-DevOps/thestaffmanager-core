@@ -29,7 +29,7 @@ from .forms import (
     EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
     EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
     EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm,
-    EMPMGMTUserNotesForm, ShiftForm, SubContractorForm
+    EMPMGMTUserNotesForm, ShiftForm, SubContractorForm, ShiftDayTimeForm
 )
 from .mail import sent_email_over_employee_create
 from .models import (
@@ -150,6 +150,7 @@ class TimeClockView(ListView):
 
         filter_object = ShiftDayFilter(self.request.GET, queryset=self.get_queryset())
         context['filter_form'] = filter_object.form
+        context['shift_day_form'] = ShiftDayTimeForm()
 
         paginator = Paginator(filter_object.qs, 50)
         page_number = self.request.GET.get('page')

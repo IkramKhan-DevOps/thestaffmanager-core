@@ -8,7 +8,7 @@ from .views import (
     EmployeeEducationAddJsonView, EmployeeEducationDeleteJsonView, EmployeeDocumentAddJsonView,
     EmployeeDocumentDeleteJsonView,
     EmployeeContractDeleteJsonView, EmployeeContractAddJsonView, EmployeeSitesUpdateJsonView,
-    EmployeeDepartmentsUpdateJsonView, EmployeePositionsUpdateJsonView, UserUpdateJsonView
+    EmployeeDepartmentsUpdateJsonView, EmployeePositionsUpdateJsonView, UserUpdateJsonView, ShiftDayUpdateJsonView
 )
 
 app_name = 'admins-json'
@@ -18,6 +18,8 @@ urlpatterns = [
     path('country/add/', CountryJsonView.as_view(), name='country_add'),
     path('country/<int:pk>/change/', CountryJsonView.as_view(), name='country_change'),
     path('country/<int:pk>/delete/', CountryJsonView.as_view(), name='country_delete'),
+
+    path('shift-day/<int:pk>/change/', ShiftDayUpdateJsonView.as_view(), name="shift_day_change"),
 
     path('user/<int:pk>/notes/change/', UserUpdateJsonView.as_view(), name="user_notes_change"),
     path('employee/<int:pk>/change/', EmployeeJsonView.as_view(), name="employee_change"),
