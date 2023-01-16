@@ -441,7 +441,7 @@
             ]
             {% for object in employees %}
                 types.push({
-                    id: '{{ object.id }}',
+                    id: '{{ object.employee_id }}',
                     name: '{{ object.user.get_user_name }}',
                     color: 'green',
                     title: 'Employee',

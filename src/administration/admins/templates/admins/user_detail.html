@@ -110,12 +110,17 @@
                                                 </span>
                                             {% elif object.is_employee %}
                                                 <b class="badge bg-success-lt">
-                                                    Employee</b>
+                                                    Employee
+                                                </b>&nbsp;
+                                                <b class="badge bg-purple-lt">
+                                                    {{ employee.get_type_display }}
+                                                </b>
                                             {% else %}
                                                 <b class="badge bg-warning-lt">
                                                     Undefined</b>
                                             {% endif %}
                                         {% endif %}
+
                                     </td>
                                 </tr>
                             </table>
