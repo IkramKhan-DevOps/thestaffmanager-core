@@ -441,7 +441,7 @@
             ]
             {% for object in employees %}
                 types.push({
-                    id: '{{ object.id }}',
+                    id: '{{ object.employee_id }}',
                     name: '{{ object.user.get_user_name }}',
                     color: 'green',
                     title: 'Employee',
@@ -608,24 +608,20 @@
                     $.getJSON('{% url 'admins:admins-api:shift-list' %}', function (data) {
                         var events = [];
 
-
                         for (var i = 0; i < data.length; i++) {
                             var event = data[i];
 
                             events.push({
                                 id: event.shift.id,
-                                employee: event.shift.employee == null ? '-' : event.shift.employee.user.username,
+                                employee: event.employee == null ? '-' : event.employee.user.username,
                                 title: event.shift.site.name,
                                 start: event.shift_date + "T" + event.shift.start_time,
                                 end: event.shift_date + "T" + event.shift.end_time,
-                                resource: event.shift.employee == null ? 0 : event.shift.employee.id
+                                resource: event.employee == null ? 0 : event.employee.id
                             });
                         }
 
                         inst.setEvents(events);
-
-                        console.log($('#demo-meal-planner .mbsc-timeline .mbsc-timeline-grid-scroll mbsc-timeline-grid').find('.mbsc-timeline-row').html())
-
                         mobiscroll.toast({
                             message: 'shifts are updated'
                         });

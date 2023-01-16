@@ -101,8 +101,9 @@ class UserDocument(models.Model):
 
 class Employee(models.Model):
     EMPLOYEE_TYPE_CHOICE = (
-        ('s', 'Service Partner'),
-        ('f', 'Full Time')
+        ('em', 'Employed'),
+        ('se', 'Self-Employed'),
+        ('sc', 'Sub Contractor')
     )
     EMPLOYEE_GENDER_CHOICE = (
         ('m', 'Male'),
@@ -112,8 +113,10 @@ class Employee(models.Model):
 
     # USER CONNECT
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    employee_id = models.CharField(max_length=255, null=True, blank=True, help_text="Employee id must be unique")
-    type = models.CharField(max_length=1, choices=EMPLOYEE_TYPE_CHOICE, default='s')
+    employee_id = models.CharField(
+        max_length=255, null=True, blank=True, help_text="Employee id must be unique"
+    )
+    type = models.CharField(max_length=2, choices=EMPLOYEE_TYPE_CHOICE, default='em')
     pob = models.CharField(null=True, blank=True, max_length=255)
 
     # CONTACT AND ADDRESS
@@ -136,7 +139,9 @@ class Employee(models.Model):
     )
 
     passport_required = models.BooleanField(default=False)
-    passport_country = models.ForeignKey('admins.Country', on_delete=models.SET_NULL, null=True, blank=True)
+    passport_country = models.ForeignKey(
+        'admins.Country', on_delete=models.SET_NULL, null=True, blank=True
+    )
     passport_expiry = models.DateField(null=True, blank=True)
 
     # MANY TO MANY
@@ -171,7 +176,7 @@ class Employee(models.Model):
         print()
 
 
-""" EMPLOYEE USER STATS"""
+""" EMPLOYEE USER STATS """
 
 
 class EmployeeIdPass(models.Model):
@@ -292,7 +297,9 @@ class EmployeeLanguageSkill(models.Model):
 
 class EmployeeDocument(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, null=False, blank=True)
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=True, related_name="uploaded_by")
+    uploaded_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=False, blank=True, related_name="uploaded_by"
+    )
     name = models.CharField(max_length=255)
     file = models.FileField(upload_to='accounts/files/employees/docs/')
 

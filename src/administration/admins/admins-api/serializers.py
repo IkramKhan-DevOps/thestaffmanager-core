@@ -33,12 +33,11 @@ class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields = [
-            'id', 'user'
+            'id', 'user', 'employee_id'
         ]
 
 
 class ShiftSerializer(serializers.ModelSerializer):
-    employee = EmployeeSerializer(many=False, read_only=True)
     site = SiteSerializer(many=False, read_only=True)
     client = ClientSerializer(many=False, read_only=True)
 
@@ -51,9 +50,8 @@ class ShiftSerializer(serializers.ModelSerializer):
 
 class ShiftDaySerializer(serializers.ModelSerializer):
     shift = ShiftSerializer(many=False, read_only=True)
+    employee = EmployeeSerializer(many=False, read_only=True)
 
     class Meta:
         model = ShiftDay
-        fields = [
-            'id', 'shift', 'shift_date'
-        ]
+        fields = '__all__'
