@@ -171,7 +171,7 @@ class Employee(models.Model):
         print()
 
 
-""" EMPLOYEE USER STATS"""
+""" EMPLOYEE USER STATS """
 
 
 class EmployeeIdPass(models.Model):
