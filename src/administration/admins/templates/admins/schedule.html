@@ -623,7 +623,7 @@
                             }
 
                             events.push({
-                                id: event.id,
+                                id: event.shift.id,
                                 employee: event.employee == null ? '-' : event.employee.user.username,
                                 title: event.shift.site.name,
                                 start: event.shift_date + "T" + event.shift.start_time,
