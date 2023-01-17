@@ -441,9 +441,10 @@
             ]
             {% for object in employees %}
                 types.push({
-                    id: '{{ object.employee_id }}',
+                    id: '{{ object.id }}',
                     name: '{{ object.user.get_user_name }}',
-                    color: 'green',
+                    type: '{{ object.get_type_display }}',
+                    color: 'dark',
                     title: 'Employee',
                     icon: '<span class="fa fa-user-circle"></span>'
 
@@ -509,7 +510,9 @@
                     return '<div class="">' +
                         '<div class="m-0 p-0" style=";color:' + resource.color + '">' +
                         '<h3 class="mb-0">' + resource.name + '</h3>' +
-                        '<small class="mb-0 text-secondary">ID# '+resource.id+'<p/>' +
+                        '<small class="mb-0 text-secondary">' +
+                        '<span class="bg-secondary-lt">'+resource.type+'</span>' +
+                        '<p/>' +
                         '</div>' +
                         '</div>';
                 },
@@ -606,17 +609,26 @@
                 onPageLoading: function (event, inst) {
 
                     $.getJSON('{% url 'admins:admins-api:shift-list' %}', function (data) {
-                        var events = [];
+                        let events = [];
 
-                        for (var i = 0; i < data.length; i++) {
-                            var event = data[i];
+                        for (let i = 0; i < data.length; i++) {
+                            let event = data[i];
+                            let color = "#FF4D4D";
+                            if(event.employee != null){
+                                if(event.shift.position != null){
+                                    color = event.shift.position.card_color;
+                                }else{
+                                    color = "#3BBADD";
+                                }
+                            }
 
                             events.push({
-                                id: event.shift.id,
+                                id: event.id,
                                 employee: event.employee == null ? '-' : event.employee.user.username,
                                 title: event.shift.site.name,
                                 start: event.shift_date + "T" + event.shift.start_time,
                                 end: event.shift_date + "T" + event.shift.end_time,
+                                color: color,
                                 resource: event.employee == null ? 0 : event.employee.id
                             });
                         }

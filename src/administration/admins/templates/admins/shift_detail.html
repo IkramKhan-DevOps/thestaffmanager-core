@@ -241,8 +241,8 @@
                             <path d="M12 15h8"></path>
                         </svg>
                         Position: <strong>
-                        {% if object.employee %}
-                            <a href="{% url 'admins:position-update' object.position.pk %}">
+                        {% if object.position %}
+                            <a style="color: {{ object.position.card_color }}" href="{% url 'admins:position-update' object.position.pk %}">
                                 {{ object.position.name }}
                             </a>
                         {% else %}
