@@ -1,5 +1,5 @@
 from src.accounts.models import User
-from src.administration.admins.models import ShiftDay, Shift, Employee, Client, Site
+from src.administration.admins.models import ShiftDay, Shift, Employee, Client, Site, Position
 from rest_framework import serializers
 
 
@@ -8,6 +8,14 @@ class SiteSerializer(serializers.ModelSerializer):
         model = Site
         fields = [
             'id', 'name'
+        ]
+
+
+class PositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
+        fields = [
+            'id', 'name', 'card_color'
         ]
 
 
@@ -40,11 +48,12 @@ class EmployeeSerializer(serializers.ModelSerializer):
 class ShiftSerializer(serializers.ModelSerializer):
     site = SiteSerializer(many=False, read_only=True)
     client = ClientSerializer(many=False, read_only=True)
+    position = PositionSerializer(many=False, read_only=True)
 
     class Meta:
         model = Shift
         fields = [
-            'id', 'start_date', 'end_date', 'start_time', 'end_time', 'client', 'employee', 'site'
+            'id', 'start_date', 'end_date', 'start_time', 'end_time', 'client', 'employee', 'site', 'position'
         ]
 
 
