@@ -140,7 +140,7 @@ class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
     def get_queryset(self):
-        return ShiftDay.objects.exclude(employee=None).order_by(
+        return ShiftDay.objects.exclude().order_by(
             '-shift_date', '-clock_in', '-shift_end_date', '-clock_out'
         )
 
@@ -151,7 +151,7 @@ class TimeClockView(ListView):
         context['filter_form'] = filter_object.form
         context['shift_day_form'] = ShiftDayTimeForm()
 
-        paginator = Paginator(filter_object.qs, 2)
+        paginator = Paginator(filter_object.qs, 15)
         page_number = self.request.GET.get('page')
         page_object = paginator.get_page(page_number)
 

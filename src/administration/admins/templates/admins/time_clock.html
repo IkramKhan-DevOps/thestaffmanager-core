@@ -223,13 +223,15 @@
                         </table>
                     </div>
 
-                    <div class="card-footer">
-                        <ul class="pagination">
-                            {% if object_list.has_next %}
-                                <a class="infinite-more-link" href="?page={{ object_list.next_page_number }}">More</a>
-                            {% endif %}
-                        </ul>
-                    </div>
+                    {% if object_list.has_next %}
+                        <div class="card-footer">
+                            <ul class="pagination">
+                                <a class="infinite-more-link" href="?page={{ object_list.next_page_number }}">
+                                    <b><i class="fa fa-cog fa fa-spin"></i> Loading</b>
+                                </a>
+                            </ul>
+                        </div>
+                    {% endif %}
 
                 {% else %}
 
@@ -281,141 +283,143 @@
     <script>
         $(document).ready(function () {
 
-            $("#id_shift_date option:first").text("-- Start Date --");
-            $("#id_shift_end_date option:first").text("-- End Date --");
-            $('#time_update_model input').addClass('mb-2')
+            init();
 
+            function init() {
+                $('#filter-form label').hide();
+                $('input').addClass('form-control');
+                $('select').addClass('form-control');
 
-            $('body #id_clock_in').datetimepicker({
-                datepicker: false,
-                format: 'H:i'
-            });
+                $("#id_shift_date option:first").text("-- Start Date --");
+                $("#id_shift_end_date option:first").text("-- End Date --");
+                $('#time_update_model input').addClass('mb-2')
 
-            $('body #id_clock_out').datetimepicker({
-                datepicker: false,
-                format: 'H:i'
-            });
+                $('body #id_clock_in').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i'
+                });
 
-            $('body #time_clock_in').datetimepicker({
-                datepicker: false,
-                format: 'H:i'
-            });
+                $('body #id_clock_out').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i'
+                });
 
-            $('body #time_clock_out').datetimepicker({
-                datepicker: false,
-                format: 'H:i'
-            });
+                $('body #time_clock_in').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i'
+                });
 
-            $('body #time_update_model_btn').click(function () {
-                const start_date = $(this).data('start');
-                const end_date = $(this).data('end');
-                const id = $(this).data('id');
-                const action = $(this).data('action');
+                $('body #time_clock_out').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i'
+                });
 
-                $('#time_update_model #id_clock_in').val(start_date)
-                $('#time_update_model #id_clock_out').val(end_date)
-                $('#time_update_model #time_update_model_btn_submit').data('action', action)
-                $('#time_update_model #time_update_model_btn_submit').data('id', id)
+                $('body #time_update_model_btn').click(function () {
+                    const start_date = $(this).data('start');
+                    const end_date = $(this).data('end');
+                    const id = $(this).data('id');
+                    const action = $(this).data('action');
 
-                $('#time_update_model').modal('show');
-            })
+                    $('#time_update_model #id_clock_in').val(start_date)
+                    $('#time_update_model #id_clock_out').val(end_date)
+                    $('#time_update_model #time_update_model_btn_submit').data('action', action)
+                    $('#time_update_model #time_update_model_btn_submit').data('id', id)
 
-            $('body #time_update_model_btn_submit').click(function () {
-                const id = $(this).data('id');
-                const action = $(this).data('action');
-                const form = $('#time_update_model form').serialize();
+                    $('#time_update_model').modal('show');
+                })
 
-                $.ajax({
-                    url: action,
-                    type: "POST",
-                    data: form,
-                    success: function (data) {
-                        if (!(data['success'])) {
-                            $('form').replaceWith(data['form_html']);
-                        } else {
+                $('body #time_update_model_btn_submit').click(function () {
+                    const id = $(this).data('id');
+                    const action = $(this).data('action');
+                    const form = $('#time_update_model form').serialize();
+
+                    $.ajax({
+                        url: action,
+                        type: "POST",
+                        data: form,
+                        success: function (data) {
+                            if (!(data['success'])) {
+                                $('form').replaceWith(data['form_html']);
+                            } else {
+                                location.reload();
+                            }
+                        },
+                        error: function () {
+                            $('form').find('.error-message').show()
+                        }
+                    });
+
+                })
+
+                $('body .custom_btn_clock_in').click(function (event) {
+                    event.preventDefault();
+
+                    let shift_day_id = $(this).data('id');
+                    let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                    let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/a/api/shift-day/" + shift_day_id + "/clock/in/",
+                        data: {
+                            start_time: start_time,
+                            end_time: end_time,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        dataType: 'application/json',
+                    }).then(function (data, status) {
+                        console.log(status);
+                    });
+                    location.reload();
+                })
+
+                $('body .custom_btn_clock_out').click(function (event) {
+                    event.preventDefault();
+
+                    let shift_day_id = $(this).data('id');
+                    let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                    let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/a/api/shift-day/" + shift_day_id + "/clock/out/",
+                        data: {
+                            start_time: start_time,
+                            end_time: end_time,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        dataType: 'application/json',
+                    }).then(function (data, status) {
+                        console.log(status);
+                    });
+                    location.reload();
+                })
+
+                $('#table #status_change_btn').on("click", function (event) {
+                    const id = $(this).attr('data-id')
+                    const status = $(this).attr('data-action')
+
+                    $.get("/a/api/shift-day/" + id + "/status/" + status + "/change/", function (data, status) {
+                        if (status === 'success') {
                             location.reload();
                         }
-                    },
-                    error: function () {
-                        $('form').find('.error-message').show()
-                    }
+                    });
                 });
+            }
 
-            })
+            var infinite = new Waypoint.Infinite({
+                element: $('.infinite-container')[0],
+                onBeforePageLoad: function () {
+                    $('.loading').show();
+                },
+                onAfterPageLoad: function ($items) {
 
-            $('body .custom_btn_clock_in').click(function (event) {
-                event.preventDefault();
-
-                let shift_day_id = $(this).data('id');
-                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
-                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
-
-                $.ajax({
-                    type: "POST",
-                    url: "/a/api/shift-day/" + shift_day_id + "/clock/in/",
-                    data: {
-                        start_time: start_time,
-                        end_time: end_time,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    },
-                    dataType: 'application/json',
-                }).then(function (data, status) {
-                    console.log(status);
-                });
-                location.reload();
-            })
-
-            $('body .custom_btn_clock_out').click(function (event) {
-                event.preventDefault();
-
-                let shift_day_id = $(this).data('id');
-                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
-                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
-
-                $.ajax({
-                    type: "POST",
-                    url: "/a/api/shift-day/" + shift_day_id + "/clock/out/",
-                    data: {
-                        start_time: start_time,
-                        end_time: end_time,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    },
-                    dataType: 'application/json',
-                }).then(function (data, status) {
-                    console.log(status);
-                });
-                location.reload();
-            })
-
-            $('#filter-form label').hide();
-            $('input').addClass('form-control');
-            $('select').addClass('form-control');
-
-            $('#table #status_change_btn').on("click", function (event) {
-                const id = $(this).attr('data-id')
-                const status = $(this).attr('data-action')
-
-                $.get("/a/api/shift-day/" + id + "/status/" + status + "/change/", function (data, status) {
-                    if (status === 'success') {
-                        location.reload();
-                    }
-                });
+                    $('.loading').hide();
+                    init();
+                }
             });
 
 
-        });
-    </script>
-
-    <script>
-
-        var infinite = new Waypoint.Infinite({
-            element: $('.infinite-container')[0],
-            onBeforePageLoad: function () {
-                $('.loading').show();
-            },
-            onAfterPageLoad: function ($items) {
-                $('.loading').hide();
-            }
         });
     </script>
 {% endblock %}
