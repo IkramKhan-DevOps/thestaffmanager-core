@@ -19,7 +19,19 @@
                 <dt class="col-5">Employee ID:</dt>
                 <dd class="col-7">{{ employee.employee_id }}</dd>
                 <dt class="col-5">Type:</dt>
-                <dd class="col-7">{{ employee.get_type_display }}</dd>
+                <dd class="col-7">
+                    <span class="bg-azure-lt badge">
+                        {{ employee.get_type_display }}
+                    </span>
+                    {% if employee.type == 'sc' %}
+                        <br>Sub Contract by
+                        {% if employee_sub_contractor %}
+                            <a href="{% url 'admins:sub-contractor-detail' employee.sub_contractor.pk %}"></a>
+                        {% else %}
+                            <b class="text-danger">Undefined</b>
+                        {% endif %}
+                    {% endif %}
+                </dd>
                 <dt class="col-5">Nationality:</dt>
                 <dd class="col-7">{{ employee.nationality }}</dd>
                 <dt class="col-5">POB:</dt>
@@ -294,6 +306,7 @@
     $(document).ready(function () {
 
         validate_passport_areas();
+        validate_sub_contractor();
 
         $('#id_date_of_birth').datetimepicker({
             format: 'Y-m-d',
@@ -307,15 +320,28 @@
         $('#id_passport_required').change(function () {
             validate_passport_areas();
         })
+        $('#id_type').change(function () {
+            validate_sub_contractor();
+        })
+
+        function validate_sub_contractor() {
+            let sub_contractor = $('#div_id_sub_contractor');
+
+            if ($('#id_type').val() === 'sc') {
+                sub_contractor.show();
+            } else {
+                sub_contractor.hide();
+            }
+        }
 
         function validate_passport_areas() {
             let country = $('#div_id_passport_country');
             let expiry = $('#div_id_passport_expiry');
 
-            if ($('#id_passport_required').is(":checked")){
+            if ($('#id_passport_required').is(":checked")) {
                 country.show();
                 expiry.show();
-            }else{
+            } else {
                 country.hide();
                 expiry.hide();
             }

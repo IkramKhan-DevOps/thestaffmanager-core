@@ -4,8 +4,8 @@ from random import randint
 
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.db.models import Q
-from django.db.models.functions import TruncDay
+from django.db.models import Q, F
+from django.db.models.functions import TruncDay, Abs
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.urls import reverse_lazy
@@ -140,9 +140,13 @@ class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
     def get_queryset(self):
-        return ShiftDay.objects.exclude(employee=None).order_by(
-            '-shift_date', '-clock_in', '-shift_end_date', '-clock_out'
-        )
+        today = datetime.datetime.now().date()
+        sorted_shift_days = ShiftDay.objects.exclude().order_by('shift_date', 'shift_end_date', 'clock_in',
+                                                                'clock_out').annotate(
+            shift_date_diff=Abs(F('shift_date') - today),
+            shift_end_date_diff=Abs(F('shift_end_date') - today)
+        ).order_by('shift_date_diff', 'shift_end_date_diff', 'clock_in', 'clock_out')
+        return sorted_shift_days
 
     def get_context_data(self, **kwargs):
         context = super(TimeClockView, self).get_context_data(**kwargs)
@@ -151,7 +155,7 @@ class TimeClockView(ListView):
         context['filter_form'] = filter_object.form
         context['shift_day_form'] = ShiftDayTimeForm()
 
-        paginator = Paginator(filter_object.qs, 50)
+        paginator = Paginator(filter_object.qs, 15)
         page_number = self.request.GET.get('page')
         page_object = paginator.get_page(page_number)
 
