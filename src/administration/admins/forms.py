@@ -122,6 +122,7 @@ class EMPMGMTEmployeeForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['type'].widget.attrs.update({"class": "form-control"})
         self.fields['country'].widget.attrs.update({"class": "form-control"})
+        self.fields['sub_contractor'].widget.attrs.update({"class": "form-control"})
         self.fields['passport_country'].widget.attrs.update({"class": "form-control"})
         self.fields['gender'].widget.attrs.update({"class": "form-control"})
         self.fields['country_of_birth'].widget.attrs.update({"class": "form-control"})
@@ -150,6 +151,7 @@ class EMPMGMTEmployeeForm(ModelForm):
                 Column('passport_required', css_class='form-check form-switch col-sm-4 mb-3'),
                 Column('passport_country', css_class='form-group col-sm-6'),
                 Column('passport_expiry', css_class='form-group col-sm-6'),
+                Column('sub_contractor', css_class='form-group col-sm-12'),
             ),
 
         )

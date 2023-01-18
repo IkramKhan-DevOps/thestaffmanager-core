@@ -8,9 +8,7 @@
 {% block base_subhead_paragraph %}View and apply actions on time clock{% endblock %}
 
 {% block base_css %}
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
-          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="{% static 'libs/datetime-picker/jquery.datetimepicker.min.css' %}"/>
 {% endblock %}
 
 {% block base_content %}
@@ -279,8 +277,7 @@
 
 
 {% block base_internal_scripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
-            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <script src="{% static 'libs/datetime-picker/jquery.datetimepicker.min.js' %}"></script>
     <script src="{% static 'libs/waypoint/noframework.waypoints.min.js' %}"></script>
     <script src="{% static 'libs/waypoint/infinite.min.js' %}"></script>
 {% endblock %}

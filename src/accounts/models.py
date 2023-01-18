@@ -145,6 +145,7 @@ class Employee(models.Model):
         'admins.Country', on_delete=models.SET_NULL, null=True, blank=True
     )
     passport_expiry = models.DateField(null=True, blank=True)
+    sub_contractor = models.ForeignKey("SubContractor", on_delete=models.SET_NULL, null=True, blank=True)
 
     # MANY TO MANY
     sites = models.ManyToManyField('admins.Site', blank=True, through='EmployeeSite')
