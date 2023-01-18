@@ -151,7 +151,7 @@ class TimeClockView(ListView):
         context['filter_form'] = filter_object.form
         context['shift_day_form'] = ShiftDayTimeForm()
 
-        paginator = Paginator(filter_object.qs, 50)
+        paginator = Paginator(filter_object.qs, 2)
         page_number = self.request.GET.get('page')
         page_object = paginator.get_page(page_number)
 

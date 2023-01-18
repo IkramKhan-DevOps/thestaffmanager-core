@@ -68,10 +68,10 @@
                                 <th>-</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="infinite-container">
                             {% for object in object_list %}
                                 {% with current_status=object.get_current_status %}
-                                    <tr id="row_{{ object.pk }}">
+                                    <tr id="row_{{ object.pk }}" class="infinite-item">
                                     <td>
                                         {% if current_status == "completed" %}
                                             <span class="badge bg-success-lt">{{ current_status }}</span>
@@ -211,7 +211,8 @@
                                                 data-end="{{ object.clock_out|date:"G:i" }}"
                                                 data-start="{{ object.clock_in|date:"G:i" }}"
                                                 class="btn btn-sm btn-outline-primary"
-                                                data-action="{% url 'admins:admins-json:shift_day_change' object.pk %}" data-method="#">
+                                                data-action="{% url 'admins:admins-json:shift_day_change' object.pk %}"
+                                                data-method="#">
                                             <i class="fa fa-edit"></i>
                                         </button>
                                     </td>
@@ -224,26 +225,8 @@
 
                     <div class="card-footer">
                         <ul class="pagination">
-                            {% if object_list.has_previous %}
-                                <li>
-                            <span>
-                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
-                                    Previous
-                                </a>
-                            </span>
-                                </li>
-                            {% endif %}
-                            <li class="">
-                                <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
-                            </li>
                             {% if object_list.has_next %}
-                                <li>
-                            <span>
-                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
-                                    Next
-                                </a>
-                            </span>
-                                </li>
+                                <a class="infinite-more-link" href="?page={{ object_list.next_page_number }}">More</a>
                             {% endif %}
                         </ul>
                     </div>
@@ -290,6 +273,7 @@
 {% block base_internal_scripts %}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
             integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <script src="{% static 'libs/waypoint/noframework.waypoints.min.js' %}"></script>
 {% endblock %}
 
 {% block base_external_scripts %}
@@ -418,6 +402,19 @@
             });
 
 
+        });
+    </script>
+
+    <script>
+
+        var infinite = new Waypoint.Infinite({
+            element: $('.infinite-container')[0],
+            onBeforePageLoad: function () {
+                $('.loading').show();
+            },
+            onAfterPageLoad: function ($items) {
+                $('.loading').hide();
+            }
         });
     </script>
 {% endblock %}
