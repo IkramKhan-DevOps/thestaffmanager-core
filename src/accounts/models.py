@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.dispatch import receiver
 from django_resized import ResizedImageField
@@ -160,6 +162,14 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def is_sia_expired(self):
+        sia_license = EmployeeQualification.objects.filter(employee=self, type='sia')
+        if sia_license:
+            sia_license = sia_license[0]
+            if sia_license.expiry_date <= datetime.datetime.now().date():
+                return True
+        return False
 
     @classmethod
     def fake_employees(cls, loop=30):

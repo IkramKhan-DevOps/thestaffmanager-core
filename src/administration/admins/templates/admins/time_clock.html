@@ -96,7 +96,13 @@
                                                     <b>
                                                         <span class="badge bg-primary me-1"></span> {{ object.employee.user.get_user_name }}
                                                     </b>
-                                                </a>
+                                                </a>&nbsp;
+                                                {% if object.employee.is_sia_expired %}
+                                                    <i class="fa fa-exclamation-circle text-danger"
+                                                       data-bs-toggle="tooltip"
+                                                       data-bs-placement="right" data-bs-title="SIA License Expired">
+                                                    </i>
+                                                {% endif %}
                                             {% else %}
                                                 <b class="text-danger">
                                                     <span class="badge bg-danger me-1"></span> Not Assigned
