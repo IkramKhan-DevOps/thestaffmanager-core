@@ -55,8 +55,7 @@ class UserCustomAdmin(admin.ModelAdmin):
         'username', 'email', 'date_joined', 'is_superuser', 'is_staff', 'is_active'
     ]
     search_fields = [
-        'username', 'first_name', 'last_name',
-        'email', 'referred_by__username'
+        'username', 'first_name', 'last_name', 'email'
     ]
     list_filter = [
         'is_active', 'is_superuser', 'is_staff']
