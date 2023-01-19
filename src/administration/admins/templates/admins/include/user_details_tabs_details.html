@@ -26,7 +26,7 @@
                     {% if employee.type == 'sc' %}
                         <br>Sub Contract by
                         {% if employee_sub_contractor %}
-                            <a href="{% url 'admins:sub-contractor-detail' employee.sub_contractor.pk %}"></a>
+                            <a href="{% url 'admins:sub-contractor-detail' employee.sub_contractor.pk %}">{{ employee.sub_contractor.name }}</a>
                         {% else %}
                             <b class="text-danger">Undefined</b>
                         {% endif %}
