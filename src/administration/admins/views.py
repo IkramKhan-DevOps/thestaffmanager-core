@@ -371,12 +371,11 @@ class UserEmployeeInviteCreateView(View):
                 # SAVE USER
                 username = get_random_username(str(email).split('@')[0])
                 password = User.objects.make_random_password()
-                password = User.objects.make_random_password()
                 user = User.objects.create_user(username, email, password)
 
                 # EMAIL SETTINGS
                 if bool(SYS_VERIFICATION_EMAILS):
-                    flag, message = sent_email_over_employee_create(user)
+                    flag, message = sent_email_over_employee_create(user, password)
                     if not flag:
                         messages.warning(self.request, str(message))
                         user.delete()
