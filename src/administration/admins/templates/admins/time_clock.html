@@ -231,7 +231,7 @@
                         <div class="card-footer">
                             <ul class="pagination">
                                 <a class="infinite-more-link" href="?page={{ object_list.next_page_number }}">
-                                    <b><i class="fa fa-cog fa fa-spin"></i> Loading</b>
+                                    <b><i class="fa fa-cog fa fa-spin loading"></i> Load more</b>
                                 </a>
                             </ul>
                         </div>
@@ -277,7 +277,7 @@
 
 
 {% block base_internal_scripts %}
-    <script src="{% static 'libs/datetime-picker/jquery.datetimepicker.min.js' %}"></script>
+    <script src="{% static 'libs/datetime-picker/jquery.datetimepicker.full.min.js' %}"></script>
     <script src="{% static 'libs/waypoint/noframework.waypoints.min.js' %}"></script>
     <script src="{% static 'libs/waypoint/infinite.min.js' %}"></script>
 {% endblock %}

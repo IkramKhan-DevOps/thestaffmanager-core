@@ -4,8 +4,8 @@ from random import randint
 
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.db.models import Q, F
-from django.db.models.functions import TruncDay, Abs
+from django.db.models import Q, IntegerField
+from django.db.models.functions import TruncDay, Extract
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.urls import reverse_lazy
@@ -140,12 +140,14 @@ class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
     def get_queryset(self):
+        from django.db.models import F, Sum
+
         today = datetime.datetime.now().date()
-        sorted_shift_days = ShiftDay.objects.exclude().order_by('shift_date', 'shift_end_date', 'clock_in',
-                                                                'clock_out').annotate(
-            shift_date_diff=Abs(F('shift_date') - today),
-            shift_end_date_diff=Abs(F('shift_end_date') - today)
+        sorted_shift_days = ShiftDay.objects.exclude().annotate(
+            shift_date_diff=Sum(F('shift_date') - today),
+            shift_end_date_diff=Sum(F('shift_end_date') - today)
         ).order_by('shift_date_diff', 'shift_end_date_diff', 'clock_in', 'clock_out')
+
         return sorted_shift_days
 
     def get_context_data(self, **kwargs):
