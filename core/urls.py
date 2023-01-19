@@ -3,7 +3,7 @@ from django.shortcuts import render
 from django.views.static import serve
 from django.urls import path, include, re_path
 
-from .settings import MEDIA_ROOT, STATIC_ROOT
+from .settings import MEDIA_ROOT, STATIC_ROOT, DEBUG, ENVIRONMENT
 
 
 def handler404(request, *args, **kwargs):
@@ -37,6 +37,7 @@ urlpatterns += [
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
 ]
 
-urlpatterns += [
-    path("__reload__/", include("django_browser_reload.urls"))
-]
+if ENVIRONMENT != 'server':
+    urlpatterns += [
+        path("__reload__/", include("django_browser_reload.urls"))
+    ]

@@ -177,3 +177,14 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 
 """ APP """
 SYS_VERIFICATION_EMAILS = env('SYS_VERIFICATION_EMAILS')
+
+
+""" DEBUGGING TOOLS """
+
+if ENVIRONMENT != 'server':
+    INSTALLED_APPS += [
+        'django_browser_reload'
+    ]
+    MIDDLEWARE += [
+        'django_browser_reload.middleware.BrowserReloadMiddleware'
+    ]
