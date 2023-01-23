@@ -15,4 +15,5 @@ django-widget-tweaks
 django-jsonview
 django-ses
 django-browser-reload
+folium
 # python -m pip install --upgrade Pillow >>> install pillow with this
