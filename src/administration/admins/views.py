@@ -2,6 +2,7 @@ import re
 from calendar import monthrange
 from random import randint
 
+import folium
 from django.contrib import messages
 from django.core.paginator import Paginator
 from django.db.models import Q, IntegerField
@@ -555,18 +556,25 @@ class ClientDeleteView(DeleteView):
 @method_decorator(admin_protected, name='dispatch')
 class SiteListView(ListView):
     queryset = Site.objects.all()
-    paginate_by = 50
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super(SiteListView, self).get_context_data(**kwargs)
         _filter = SiteFilter(self.request.GET, queryset=self.queryset)
         context['filter_form'] = _filter.form
 
-        paginator = Paginator(_filter.qs, 50)
+        paginator = Paginator(_filter.qs, 10)
         page_number = self.request.GET.get('page')
         page_object = paginator.get_page(page_number)
 
+        # TODO: add correct location co-ordinates to UK [41.5025, -72.699997]
+        markers = folium.Map(location=[54.251186, -4.463196], zoom_start=6)
+        for site in page_object:
+            co_ordinates = (site.latitude, site.longitude)
+            folium.Marker(co_ordinates, popup=str(site.name)).add_to(markers)
+
         context['object_list'] = page_object
+        context['map'] = markers._repr_html_()
         return context
 
 
@@ -576,6 +584,12 @@ class SiteDetailView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(SiteDetailView, self).get_context_data(**kwargs)
+
+        # TODO: add correct location co-ordinates to UK [41.5025, -72.699997]
+        marks = folium.Map(location=[54.251186, -4.463196], zoom_start=6)
+        co_ordinates = (self.object.latitude, self.object.longitude)
+        folium.Marker(co_ordinates, popup=str(self.object.name)).add_to(marks)
+        context['map'] = marks._repr_html_()
         return context
 
 
