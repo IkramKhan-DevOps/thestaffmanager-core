@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'src.accounts',
     'src.administration.employees',
     'src.administration.admins',
+    'src.content.apps.ContentConfig'
 
     # NOTIFICATIONS APPS
 ]
