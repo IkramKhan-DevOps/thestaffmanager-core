@@ -27,6 +27,7 @@ class LoginView(View):
     def get(self, request):
 
         if request.user.is_authenticated:
+            messages.info(request, "You are already logged in")
             return redirect("accounts:cross-auth")
 
         form = AuthenticationForm()

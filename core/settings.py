@@ -24,8 +24,8 @@ CSRF_TRUSTED_ORIGINS = [f'{PROTOCOL}://{host}' for host in ALLOWED_HOSTS]
 GOOGLE_CALLBACK_ADDRESS = f"{BASE_URL}/accounts/google/login/callback/"
 
 AUTH_USER_MODEL = 'accounts.User'
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/accounts/cross-auth/'
+LOGOUT_REDIRECT_URL = '/accounts/cross-auth/'
 WSGI_APPLICATION = 'core.wsgi.application'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
@@ -61,7 +61,6 @@ INSTALLED_APPS = [
     'src.accounts',
     'src.administration.employees',
     'src.administration.admins',
-    'src.website',
 
     # NOTIFICATIONS APPS
 ]
