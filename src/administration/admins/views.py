@@ -16,6 +16,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
     CreateView)
+from notifications.signals import notify
 
 from core.settings import SYS_VERIFICATION_EMAILS
 from .bll import shifts_create_update
@@ -167,6 +168,9 @@ class DashboardView(TemplateView):
     template_name = 'admins/dashboard.html'
 
     def get_context_data(self, **kwargs):
+
+        notify.send(self.request.user, recipient=self.request.user, verb='You have been invited to join the platform')
+
         from django.db.models import Count
         from datetime import datetime, timedelta
         start_of_week = datetime.now().date() - timedelta(days=datetime.now().weekday())

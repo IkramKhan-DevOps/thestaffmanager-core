@@ -1,10 +1,10 @@
+import notifications
 from django.contrib import admin
 from django.shortcuts import render, redirect
 from django.views.static import serve
 from django.urls import path, include, re_path
 
 from .settings import MEDIA_ROOT, STATIC_ROOT, ENVIRONMENT
-
 
 """ __ ERROR HANDLERS AND VIEWS __ """
 
@@ -24,9 +24,7 @@ def home(request, *args, **kwargs):
 handler404 = handler404
 handler500 = handler500
 
-
 """ __ URLS __ """
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -41,6 +39,7 @@ urlpatterns += [
 
 urlpatterns += [
     path('accounts/', include('allauth.urls')),
+    path('inbox/notifications/', include('notifications.urls', namespace='notifications')),
 ]
 
 urlpatterns += [
@@ -48,9 +47,7 @@ urlpatterns += [
     re_path(r'^static/(?P<path>.*)$', serve, {'document_root': STATIC_ROOT}),
 ]
 
-
 """ __ DEBUG URLS __ """
-
 
 if ENVIRONMENT != 'server':
     urlpatterns += [

@@ -15,6 +15,7 @@ django-widget-tweaks
 django-jsonview
 django-ses
 django-browser-reload
+django-notifications-hq
 
 folium
 crispy-bootstrap5
