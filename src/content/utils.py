@@ -2,5 +2,5 @@ from .models import Application
 
 
 def my_application():
-    created, obj = Application.objects.get_or_create()
+    obj, created = Application.objects.get_or_create()
     return obj

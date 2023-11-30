@@ -169,8 +169,6 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
 
-        notify.send(self.request.user, recipient=self.request.user, verb='You have been invited to join the platform')
-
         from django.db.models import Count
         from datetime import datetime, timedelta
         start_of_week = datetime.now().date() - timedelta(days=datetime.now().weekday())
