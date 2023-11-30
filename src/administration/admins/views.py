@@ -1,6 +1,12 @@
+import re
+from calendar import monthrange
+from random import randint
+
+import folium
 from django.contrib import messages
 from django.core.paginator import Paginator
-from django.db.models import Q
+from django.db.models import Q, IntegerField
+from django.db.models.functions import TruncDay, Extract
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.forms import AdminPasswordChangeForm
 from django.urls import reverse_lazy
@@ -10,7 +16,9 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import (
     TemplateView, ListView, DetailView, UpdateView, DeleteView,
     CreateView)
+from notifications.signals import notify
 
+from core.settings import SYS_VERIFICATION_EMAILS
 from .bll import shifts_create_update
 from .filters import ShiftFilter, UserFilter, ClientFilter, SiteFilter, ShiftDayFilter
 from .forms import (
@@ -22,10 +30,11 @@ from .forms import (
     EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
     EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
     EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm,
-    EMPMGMTUserNotesForm
+    EMPMGMTUserNotesForm, ShiftForm, SubContractorForm, ShiftDayTimeForm
 )
+from .mail import sent_email_over_employee_create
 from .models import (
-    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department,
+    Position, Client, Site, ReportType, Shift, ShiftDay, Employee, Country, Department, AbsenseType, Absense,
 )
 import datetime
 
@@ -38,6 +47,16 @@ from src.accounts.models import (
 )
 
 """ MAIN """
+
+
+def temp_fake_date():
+    Employee.fake_employees()
+    # Country.fake()
+    Position.fake()
+    ReportType.fake()
+    Department.fake()
+    Client.fake()
+    Site.fake()
 
 
 @method_decorator([admin_protected, never_cache], name='dispatch')
@@ -85,6 +104,7 @@ class ScheduleView(TemplateView):
 
         # CONTEXT: data
         context['shifts'] = shifts
+        context['shift_form'] = ShiftForm()
         context['employees'] = employees
         context['current_day'] = datetime.date.today().day
         context['current_month'] = current_month
@@ -94,20 +114,48 @@ class ScheduleView(TemplateView):
         return context
 
 
+@method_decorator([admin_protected], name='dispatch')
+class AbsenseScheduleView(ListView):
+    queryset = Absense
+    template_name = 'admins/absense_schedule.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        num_days = monthrange(datetime.datetime.now().year, datetime.datetime.now().month)[1]
+        context['days'] = list(range(1, num_days + 1))
+        context['employees'] = Employee.objects.all()
+        context['absent_types'] = AbsenseType.objects.all()
+        return context
+
+
+@method_decorator([admin_protected], name='dispatch')
+class CheckCallsView(TemplateView):
+    template_name = '000.html'
+
+
 @method_decorator(admin_protected, name='dispatch')
 class TimeClockView(ListView):
     template_name = 'admins/time_clock.html'
 
     def get_queryset(self):
-        return ShiftDay.objects.all().order_by('-shift_date', '-clock_in', '-shift_end_date', '-clock_out')
+        from django.db.models import F, Sum
+
+        today = datetime.datetime.now().date()
+        sorted_shift_days = ShiftDay.objects.exclude().annotate(
+            shift_date_diff=Sum(F('shift_date') - today),
+            shift_end_date_diff=Sum(F('shift_end_date') - today)
+        ).order_by('shift_date_diff', 'shift_end_date_diff', 'clock_in', 'clock_out')
+
+        return sorted_shift_days
 
     def get_context_data(self, **kwargs):
         context = super(TimeClockView, self).get_context_data(**kwargs)
 
         filter_object = ShiftDayFilter(self.request.GET, queryset=self.get_queryset())
         context['filter_form'] = filter_object.form
+        context['shift_day_form'] = ShiftDayTimeForm()
 
-        paginator = Paginator(filter_object.qs, 50)
+        paginator = Paginator(filter_object.qs, 15)
         page_number = self.request.GET.get('page')
         page_object = paginator.get_page(page_number)
 
@@ -120,12 +168,54 @@ class DashboardView(TemplateView):
     template_name = 'admins/dashboard.html'
 
     def get_context_data(self, **kwargs):
+
+        notify.send(self.request.user, recipient=self.request.user, verb='You have been invited to join the platform')
+
+        from django.db.models import Count
+        from datetime import datetime, timedelta
+        start_of_week = datetime.now().date() - timedelta(days=datetime.now().weekday())
+        end_of_week = start_of_week + timedelta(days=6)
+
         context = super(DashboardView, self).get_context_data(**kwargs)
-        context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.datetime.now())
-        context['shifts_all'] = Shift.objects.count()
+        context['shifts_days'] = ShiftDay.objects.filter(shift_date=datetime.now()).exclude(employee=None)
         context['sites_all'] = Site.objects.count()
         context['employees_all'] = Employee.objects.count()
         context['clients_all'] = Client.objects.count()
+
+        week_days_total_shifts_count = ShiftDay.objects.filter(shift_date__range=(start_of_week, end_of_week)).annotate(
+            day=TruncDay('shift_date')).values('day').annotate(count=Count('id')).values_list('count', flat=True)
+
+        week_days_assigned_shifts_count = ShiftDay.objects.filter(
+            shift_date__range=(start_of_week, end_of_week), shift__employee__isnull=False).annotate(
+            day=TruncDay('shift_date')).values('day').annotate(count=Count('id')).values_list('count', flat=True)
+
+        week_days_unassigned_shifts_count = ShiftDay.objects.filter(
+            shift_date__range=(start_of_week, end_of_week), shift__employee__isnull=True
+        ).annotate(day=TruncDay('shift_date')).values('day').annotate(count=Count('id')).values_list('count', flat=True)
+
+        shifts_months_total = []
+        shifts_months_assigned = []
+        shifts_months_unassigned = []
+
+        for index in range(1, 13):
+            total = ShiftDay.objects.filter(
+                shift_date__month=index, shift_date__year=datetime.today().year).annotate(
+                count=Count('id')).values_list('count', flat=True).count()
+            unassigned = ShiftDay.objects.filter(
+                shift_date__month=index, shift_date__year=datetime.today().year, shift__employee=None).annotate(
+                count=Count('id')).values_list('count', flat=True).count()
+            assigned = total - unassigned
+
+            shifts_months_total.append(total)
+            shifts_months_unassigned.append(unassigned)
+            shifts_months_assigned.append(assigned)
+
+        context['week_days_total_shifts_count'] = list(week_days_total_shifts_count)
+        context['week_days_assigned_shifts_count'] = list(week_days_assigned_shifts_count)
+        context['week_days_unassigned_shifts_count'] = list(week_days_unassigned_shifts_count)
+        context['shifts_months_total'] = shifts_months_total
+        context['shifts_months_assigned'] = shifts_months_assigned
+        context['shifts_months_unassigned'] = shifts_months_unassigned
 
         return context
 
@@ -254,11 +344,53 @@ class UserEmployeeCreateView(CreateView):
     model = User
     form_class = EmployeeUserCreateForm
     template_name = 'admins/user_create_form.html'
-    success_url = reverse_lazy('admins:user-list')
 
     def form_valid(self, form):
         form.instance.is_employee = True
-        return super().form_valid(form)
+        return super(UserEmployeeCreateView, self).form_valid(form)
+
+    def get_success_url(self):
+        return reverse_lazy('admins:user-detail', args=[self.object.pk])
+
+
+@method_decorator(admin_protected, name='dispatch')
+class UserEmployeeInviteCreateView(View):
+
+    def post(self, request):
+
+        def get_random_username(username):
+            if User.objects.filter(username=username):
+                new_username = username + str(randint(10, 1000))
+                return get_random_username(new_username)
+            return username
+
+        email = request.POST['email']
+        if email and re.search(r"^[A-Za-z0-9_!#$%&'*+\/=?`{|}~^.-]+@[A-Za-z0-9.-]+$", email):
+
+            if not User.objects.filter(email=email):
+
+                # SAVE USER
+                username = get_random_username(str(email).split('@')[0])
+                password = User.objects.make_random_password()
+                user = User.objects.create_user(username, email, password)
+
+                # EMAIL SETTINGS
+                if bool(SYS_VERIFICATION_EMAILS):
+                    flag, message = sent_email_over_employee_create(user, password)
+                    if not flag:
+                        messages.warning(self.request, str(message))
+                        user.delete()
+                    else:
+                        user.is_employee = True
+                        user.save()
+                        messages.success(request, "An invitation link has been sent user successfully")
+
+                return redirect("admins:user-list")
+            else:
+                messages.error(request, "Email already registered, try to use another one")
+        else:
+            messages.error(request, "Email field must not be empty")
+        return redirect('admins:user-employee-add')
 
 
 @method_decorator(admin_protected, name='dispatch')
@@ -424,18 +556,25 @@ class ClientDeleteView(DeleteView):
 @method_decorator(admin_protected, name='dispatch')
 class SiteListView(ListView):
     queryset = Site.objects.all()
-    paginate_by = 50
+    paginate_by = 10
 
     def get_context_data(self, **kwargs):
         context = super(SiteListView, self).get_context_data(**kwargs)
         _filter = SiteFilter(self.request.GET, queryset=self.queryset)
         context['filter_form'] = _filter.form
 
-        paginator = Paginator(_filter.qs, 50)
+        paginator = Paginator(_filter.qs, 10)
         page_number = self.request.GET.get('page')
         page_object = paginator.get_page(page_number)
 
+        # TODO: add correct location co-ordinates to UK [41.5025, -72.699997]
+        markers = folium.Map(location=[54.251186, -4.463196], zoom_start=6)
+        for site in page_object:
+            co_ordinates = (site.latitude, site.longitude)
+            folium.Marker(co_ordinates, popup=str(site.name)).add_to(markers)
+
         context['object_list'] = page_object
+        context['map'] = markers._repr_html_()
         return context
 
 
@@ -445,6 +584,12 @@ class SiteDetailView(DetailView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(SiteDetailView, self).get_context_data(**kwargs)
+
+        # TODO: add correct location co-ordinates to UK [41.5025, -72.699997]
+        marks = folium.Map(location=[54.251186, -4.463196], zoom_start=6)
+        co_ordinates = (self.object.latitude, self.object.longitude)
+        folium.Marker(co_ordinates, popup=str(self.object.name)).add_to(marks)
+        context['map'] = marks._repr_html_()
         return context
 
 
@@ -577,6 +722,8 @@ class ShiftDayUpdateView(UpdateView):
     ]
 
     def get_success_url(self):
+        if self.request.GET.get('next') == 'time_clock':
+            return reverse_lazy('admins:time-clock')
         return reverse_lazy('admins:shift-detail', args=[self.object.shift.pk])
 
 
@@ -617,6 +764,34 @@ class ReportTypeDeleteView(DeleteView):
     success_url = reverse_lazy('admins:report-type-list')
 
 
+""" Absense Types """
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeListView(ListView):
+    queryset = AbsenseType.objects.all()
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeCreateView(CreateView):
+    model = AbsenseType
+    fields = '__all__'
+    success_url = reverse_lazy('admins:absense-type-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeUpdateView(UpdateView):
+    model = AbsenseType
+    fields = '__all__'
+    success_url = reverse_lazy('admins:absense-type-list')
+
+
+@method_decorator(admin_protected, name='dispatch')
+class AbsenseTypeDeleteView(DeleteView):
+    model = AbsenseType
+    success_url = reverse_lazy('admins:absense-type-list')
+
+
 """ Sub Contractors """
 
 
@@ -629,7 +804,7 @@ class SubContractorListView(ListView):
 @method_decorator(admin_protected, name='dispatch')
 class SubContractorCreateView(CreateView):
     model = SubContractor
-    fields = '__all__'
+    form_class = SubContractorForm
     template_name = 'admins/subcontractor_form.html'
     success_url = reverse_lazy('admins:sub-contractor-list')
 
@@ -637,7 +812,7 @@ class SubContractorCreateView(CreateView):
 @method_decorator(admin_protected, name='dispatch')
 class SubContractorUpdateView(UpdateView):
     model = SubContractor
-    fields = '__all__'
+    form_class = SubContractorForm
     template_name = 'admins/subcontractor_form.html'
     success_url = reverse_lazy('admins:sub-contractor-list')
 
@@ -653,7 +828,3 @@ class SubContractorDeleteView(DeleteView):
     model = SubContractor
     template_name = 'admins/subcontractor_confirm_delete.html'
     success_url = reverse_lazy('admins:sub-contractor-list')
-
-
-
-

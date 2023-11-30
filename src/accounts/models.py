@@ -1,3 +1,5 @@
+import datetime
+
 from django.db import models
 from django.dispatch import receiver
 from django_resized import ResizedImageField
@@ -101,19 +103,22 @@ class UserDocument(models.Model):
 
 class Employee(models.Model):
     EMPLOYEE_TYPE_CHOICE = (
-        ('s', 'Service Partner'),
-        ('f', 'Full Time')
+        ('em', 'Employed'),
+        ('se', 'Self-Employed'),
+        ('sc', 'Sub Contractor')
     )
     EMPLOYEE_GENDER_CHOICE = (
         ('m', 'Male'),
         ('f', 'Female'),
-        ('t', 'Tans'),
+        ('t', 'Trans'),
     )
 
     # USER CONNECT
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    employee_id = models.CharField(max_length=255, null=True, blank=True, help_text="Employee id must be unique")
-    type = models.CharField(max_length=1, choices=EMPLOYEE_TYPE_CHOICE, default='s')
+    employee_id = models.CharField(
+        max_length=255, null=True, blank=True, help_text="Employee id must be unique"
+    )
+    type = models.CharField(max_length=2, choices=EMPLOYEE_TYPE_CHOICE, default='em')
     pob = models.CharField(null=True, blank=True, max_length=255)
 
     # CONTACT AND ADDRESS
@@ -126,7 +131,6 @@ class Employee(models.Model):
         on_delete=models.CASCADE, related_name='employee_country'
     )
     nationality = models.CharField(max_length=100, null=True, blank=True)
-
     # GENDER AND DOB
     gender = models.CharField(max_length=1, choices=EMPLOYEE_GENDER_CHOICE, default='m')
     date_of_birth = models.DateField(null=True, blank=True, verbose_name="Date of Birth")
@@ -136,10 +140,17 @@ class Employee(models.Model):
         verbose_name="Country of Birth", related_name='employee_country_of_birth'
     )
 
+    passport_required = models.BooleanField(default=False)
+    passport_country = models.ForeignKey(
+        'admins.Country', on_delete=models.SET_NULL, null=True, blank=True
+    )
+    passport_expiry = models.DateField(null=True, blank=True)
+    sub_contractor = models.ForeignKey("SubContractor", on_delete=models.SET_NULL, null=True, blank=True)
+
     # MANY TO MANY
-    sites = models.ManyToManyField('admins.Site', through='EmployeeSite')
-    positions = models.ManyToManyField('admins.Position', through='EmployeePosition')
-    departments = models.ManyToManyField('admins.Department', through='EmployeeDepartment')
+    sites = models.ManyToManyField('admins.Site', blank=True, through='EmployeeSite')
+    positions = models.ManyToManyField('admins.Position', blank=True, through='EmployeePosition')
+    departments = models.ManyToManyField('admins.Department', blank=True, through='EmployeeDepartment')
 
     # CHECKS
     driver_license = models.BooleanField(default=False)
@@ -153,8 +164,16 @@ class Employee(models.Model):
     def __str__(self):
         return self.user.username
 
+    def is_sia_expired(self):
+        sia_license = EmployeeQualification.objects.filter(employee=self, type='sia')
+        if sia_license:
+            sia_license = sia_license[0]
+            if sia_license.expiry_date <= datetime.datetime.now().date():
+                return True
+        return False
+
     @classmethod
-    def fake_employees(cls, loop=10):
+    def fake_employees(cls, loop=30):
         print()
         print("- EMPLOYEES: build")
         for x in range(loop):
@@ -168,7 +187,7 @@ class Employee(models.Model):
         print()
 
 
-""" EMPLOYEE USER STATS"""
+""" EMPLOYEE USER STATS """
 
 
 class EmployeeIdPass(models.Model):
@@ -189,7 +208,10 @@ class EmployeeWork(models.Model):
     ni_number = models.CharField(max_length=255, null=True, blank=True)
     utr = models.CharField(max_length=255, null=True, blank=True)
     tax_code = models.CharField(null=True, blank=True, max_length=255)
+
     visa_required = models.BooleanField(default=False)
+    visa_type = models.CharField(max_length=255, null=True, blank=True)
+    visa_expiry = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ['-employee']
@@ -231,7 +253,7 @@ class EmployeeContract(models.Model):
 class EmployeeQualification(models.Model):
     TYPE_CHOICE = (
         ('fad', 'First AID'),
-        ('sia', 'SIA No'),
+        ('sia', 'SIA License'),
     )
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, blank=True)
     type = models.CharField(max_length=3, choices=TYPE_CHOICE)
@@ -286,7 +308,9 @@ class EmployeeLanguageSkill(models.Model):
 
 class EmployeeDocument(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, null=False, blank=True)
-    uploaded_by = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=True, related_name="uploaded_by")
+    uploaded_by = models.ForeignKey(
+        User, on_delete=models.CASCADE, null=False, blank=True, related_name="uploaded_by"
+    )
     name = models.CharField(max_length=255)
     file = models.FileField(upload_to='accounts/files/employees/docs/')
 

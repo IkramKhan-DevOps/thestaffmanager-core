@@ -27,6 +27,7 @@ class LoginView(View):
     def get(self, request):
 
         if request.user.is_authenticated:
+            messages.info(request, "You are already logged in")
             return redirect("accounts:cross-auth")
 
         form = AuthenticationForm()
@@ -77,7 +78,7 @@ class UserPasswordChange(View):
         return render(request, template_name='accounts/password_change_form.html', context=context)
 
     def post(self, request):
-        form = PasswordChangeForm(request.POST, instance=request.user)
+        form = PasswordChangeForm(user=request.user, data=request.POST or None)
         if form.is_valid():
             messages.success(request, "Your password changed successfully")
             form.save(commit=True)

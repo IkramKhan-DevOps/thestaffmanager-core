@@ -1,0 +1,121 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block base_subtitle %} Absences{% endblock %}
+{% block base_subhead_heading %} Absences &rAarr; Details{% endblock %}
+{% block base_subhead_paragraph %}Detailed down absences details{% endblock %}
+
+{% block base_content %}
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                {% if employees %}
+                    <div class="table-responsive">
+                        <table class="table table-sm table-hover">
+                            <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Employee</th>
+                                {% for day in days %}
+                                    <th scope="col">{{ day }}</th>
+                                {% endfor %}
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for employee in employees %}
+                                <tr>
+                                    <td class="border-right">{{ employee }}</td>
+                                    {% for day in days %}
+                                        <td><input id="day-{{ day }}" type="checkbox"></td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+
+                    </div>
+                {% else %}
+                    <div class="card-body">
+                        <p class="text-danger mb-0"><b>No employees available</b></p>
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+
+                    <h5 class="modal-title mt-0 mb-2" id="formModalLabel">Leave Form</h5>
+                    <form>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="employee">Employee</label>
+                                    <select class="form-control" id="employee">
+                                        {% for emp in employees %}
+                                            <option>{{ emp.user.get_user_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="leaveType">Leave Type</label>
+                                    <select class="form-control" id="leaveType">
+                                        {% for absent_type in absent_types %}
+                                            <option>{{ emp.user.get_user_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row mt-2">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="dateFrom">Date From</label>
+                                    <input type="date" class="form-control" id="dateFrom">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="dateTo">Date To</label>
+                                    <input type="date" class="form-control" id="dateTo">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group mt-2">
+                            <label for="reason">Reason</label>
+                            <textarea class="form-control" id="reason" rows="2"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+        $(document).ready(function () {
+            $('input[type="checkbox"]').change(function () {
+                if (this.checked) {
+                    $('#myModal').modal('show');
+                }
+            });
+        });
+
+    </script>
+{% endblock %}

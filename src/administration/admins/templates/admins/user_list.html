@@ -54,6 +54,7 @@
                                 <tr class="">
                                     <td>
                                         <a href="{% url 'admins:user-detail' object.pk %}">{{ object.username }}</a>
+
                                     </td>
                                     <td>{{ object.first_name }}</td>
                                     <td>{{ object.last_name }}</td>
@@ -74,10 +75,18 @@
                                                 </span>
                                             {% elif object.is_employee %}
                                                 <b class="badge bg-success-lt">
-                                                    Employee</b>
+                                                    Employee
+                                                </b>
+                                                {% if object.get_employee_profile.is_sia_expired %}
+                                                    <i class="fa fa-exclamation-circle text-danger"
+                                                       data-bs-toggle="tooltip"
+                                                       data-bs-placement="right" data-bs-title="SIA License Expired">
+                                                    </i>
+                                                {% endif %}
                                             {% else %}
                                                 <b class="badge bg-warning-lt">
-                                                    Undefined</b>
+                                                    Undefined
+                                                </b>
                                             {% endif %}
                                         {% endif %}
                                     </td>
@@ -170,7 +179,7 @@
 
 
 {% endblock %}
-
+<script src="{% static 'dialog.js' %}"></script>
 
 {% block base_external_scripts %}
     <script>

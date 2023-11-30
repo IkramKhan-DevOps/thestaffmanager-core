@@ -2,6 +2,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404
 from django.template.context_processors import csrf
 from crispy_forms.utils import render_crispy_form
+from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.decorators.csrf import csrf_protect, csrf_exempt
@@ -12,14 +13,14 @@ from src.administration.admins.forms import (
     CountryForm, EMPMGMTEmployeeForm, EMPMGMTEmployeeWorkForm, EMPMGMTEmployeeAppearanceForm, EMPMGMTEmployeeHealthForm,
     EMPMGMTEmployeeIdPassForm, EMPMGMTEmployeeContractForm, EMPMGMTEmployeeDocumentForm, EMPMGMTEmployeeEducationForm,
     EMPMGMTEmployeeEmploymentForm, EMPMGMTEmployeeQualificationForm, EMPMGMTEmployeeTrainingForm,
-    EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm, EMPMGMTUserNotesForm
+    EMPMGMTEmployeeEmergencyContactForm, EMPMGMTEmployeeLanguageSkillForm, EMPMGMTUserNotesForm, ShiftDayTimeForm
 )
 from src.accounts.models import (
     Employee, EmployeeContract, EmployeeDocument, EmployeeEducation, EmployeeEmployment, EmployeeQualification,
     EmployeeTraining, EmployeeLanguageSkill, EmployeeEmergencyContact, EmployeeAppearance, EmployeeHealth,
     EmployeeWork, EmployeeIdPass
 )
-from src.administration.admins.models import Country
+from src.administration.admins.models import Country, ShiftDay
 
 
 @method_decorator([admin_protected, json_view], name='dispatch')
@@ -97,7 +98,6 @@ class UserUpdateJsonView(View):
 class EmployeeWorkJsonView(View):
 
     def post(self, request, pk, *args, **kwargs):
-
         instance = get_object_or_404(Employee, pk=pk)
         form = EMPMGMTEmployeeWorkForm(instance=instance.employeework, data=request.POST)
 
@@ -273,7 +273,6 @@ class EmployeeDocumentDeleteJsonView(View):
 class EmployeeHealthJsonView(View):
 
     def post(self, request, pk, *args, **kwargs):
-
         instance = get_object_or_404(Employee, pk=pk)
         form = EMPMGMTEmployeeHealthForm(instance=instance.employeehealth, data=request.POST)
 
@@ -291,7 +290,6 @@ class EmployeeHealthJsonView(View):
 class EmployeeAppearanceJsonView(View):
 
     def post(self, request, pk, *args, **kwargs):
-
         instance = get_object_or_404(Employee, pk=pk)
         form = EMPMGMTEmployeeAppearanceForm(instance=instance.employeeappearance, data=request.POST)
 
@@ -365,3 +363,20 @@ class EmployeePositionsUpdateJsonView(View):
         EmployeePosition.objects.filter(employee=employee).delete()
         for value in post_dictionary.keys():
             EmployeePosition.objects.get_or_create(employee=employee, position_id=int(value))
+
+
+@method_decorator([admin_protected, json_view], name='dispatch')
+class ShiftDayUpdateJsonView(View):
+
+    def post(self, request, pk, *args, **kwargs):
+        instance = get_object_or_404(ShiftDay, pk=pk)
+        form = ShiftDayTimeForm(instance=instance, data=request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+            return {'success': True}
+
+        ctx = {}
+        ctx.update(csrf(request))
+        form_html = render_crispy_form(form, context=ctx)
+        return {'success': False, 'form_html': form_html}

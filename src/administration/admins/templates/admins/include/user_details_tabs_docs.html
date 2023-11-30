@@ -49,14 +49,14 @@
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">Add Education</h5>
+                <h5 class="modal-title">Add Document</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
                 <form method="post" id="employee_document_add_form_data" enctype="multipart/form-data">
                     {% csrf_token %}
-                    {{ employee_docs_form|crispy }}
+                    {% crispy employee_docs_form %}
                 </form>
             </div>
 

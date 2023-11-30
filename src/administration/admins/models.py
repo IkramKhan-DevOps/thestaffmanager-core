@@ -8,7 +8,6 @@ from django.contrib.auth import get_user_model
 from src.accounts.models import Employee
 from faker import Faker
 
-
 User = get_user_model()
 fake = Faker()
 
@@ -17,7 +16,7 @@ class Position(models.Model):
     name = models.CharField(max_length=255)
     card_color = ColorField(default='#FFFFFF')
     charge_rate = models.FloatField()
-    pay_rate = models.FloatField(help_text="Please provide payments")
+    pay_rate = models.FloatField()
 
     is_active = models.BooleanField(default=False)
 
@@ -109,7 +108,7 @@ class Client(models.Model):
 
     is_active = models.BooleanField(
         default=False,
-        help_text="Only active countries will be visible to all users except admins"
+        help_text="Is this client is active"
     )
 
     class Meta:
@@ -166,37 +165,29 @@ class Site(models.Model):
     )
     site_id = models.CharField(max_length=1000, null=True, blank=True)
     name = models.CharField(max_length=255)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE)
-    check_calls_enable = models.CharField(max_length=5, default='no', choices=CHECK_CALLS_ENABLE_TYPE)
-    camera_system_url = models.URLField(null=True, blank=True)
-
-    notes = models.TextField(null=True, blank=True)
 
     company_name = models.CharField(max_length=255, null=True, blank=True)
-    address_line_1 = models.CharField(max_length=255)
-    address_line_2 = models.CharField(max_length=255)
-    city = models.CharField(max_length=255, verbose_name='City/Town')
-    country = models.CharField(max_length=255)
-    geo_fencing_range = models.CharField(max_length=1000)
-
-    enable_day_check_ins = models.BooleanField(default=True)
-    enable_night_check_ins = models.BooleanField(default=True)
-    check_in_day_start = models.TimeField()
-    check_in_night_start = models.TimeField()
-    check_in_day_frequency_min_minutes = models.FloatField()
-    check_in_day_frequency_max_minutes = models.FloatField()
-    check_in_night_frequency_min_minutes = models.FloatField()
-    check_in_night_frequency_max_minutes = models.FloatField()
-    enable_first_shift_confirmation = models.BooleanField(default=False)
-    enable_second_shift_confirmation = models.BooleanField(default=False)
-    first_shift_confirmation_minutes_before = models.FloatField()  # show when upper active
-    second_shift_confirmation_minutes_before = models.FloatField()  # show when upper active
-
-    assignment_instructions = models.FileField(
-        upload_to='administration/admins/documents/assignments', null=True, blank=True
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
+    geo_fencing_range = models.CharField(
+        max_length=1000, help_text="What is the maximum distance an employee can "
+                                   "be from their designated location when starting their shift? in meters."
     )
 
+    notes = models.TextField(null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+
+    address = models.CharField(max_length=255)
+    city = models.CharField(max_length=255, verbose_name='City/Town')
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, blank=True)
+
+    longitude = models.FloatField(null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+
+    check_calls_enabled = models.BooleanField(
+        default=False, help_text="Enabling check calls will allow the system to track employee work during their shift."
+    )
     is_active = models.BooleanField(default=False)
+
     created_on = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -213,29 +204,17 @@ class Site(models.Model):
         for x in range(loop):
             Site.objects.create(
                 site_id=fake.random_number(digits=3, fix_len=False),
+                latitude=fake.random_number(digits=3, fix_len=False),
+                longitude=fake.random_number(digits=3, fix_len=False),
                 name=fake.isbn10(),
                 client=Client.objects.order_by('?').first(),
-                check_calls_enable=fake.pybool(),
-                camera_system_url=f"https://example.com/{fake.ean(length=13)}/",
                 notes=fake.paragraph(nb_sentences=3),
+                description=fake.paragraph(nb_sentences=3),
                 company_name=fake.bs(),
-                address_line_1=fake.address(),
-                address_line_2=fake.address(),
+                address=fake.address(),
                 city=fake.city(),
-                country=fake.country(),
+                country=Country.objects.order_by('?').first(),
                 geo_fencing_range=fake.random_number(digits=5, fix_len=False),
-                enable_day_check_ins=fake.pybool(),
-                enable_night_check_ins=fake.pybool(),
-                check_in_day_start=fake.date_time(),
-                check_in_night_start=fake.date_time(),
-                first_shift_confirmation_minutes_before=fake.random_number(digits=2, fix_len=False),
-                second_shift_confirmation_minutes_before=fake.random_number(digits=2, fix_len=False),
-                check_in_day_frequency_min_minutes=fake.random_number(digits=2, fix_len=False),
-                check_in_day_frequency_max_minutes=fake.random_number(digits=2, fix_len=False),
-                check_in_night_frequency_min_minutes=fake.random_number(digits=2, fix_len=False),
-                check_in_night_frequency_max_minutes=fake.random_number(digits=2, fix_len=False),
-                enable_first_shift_confirmation=fake.pybool(),
-                enable_second_shift_confirmation=fake.pybool(),
             )
             print(f"---- Site: {x} faked.")
         print("- END ")
@@ -243,7 +222,6 @@ class Site(models.Model):
 
 
 class Shift(models.Model):
-
     JOB_TYPE_CHOICE = (
         ('o', 'Open'),
         ('p', 'Pattern'),
@@ -297,13 +275,6 @@ class Shift(models.Model):
 
 
 class ShiftDay(models.Model):
-
-    STATUS_CHOICE = (
-        ('awa', 'Awaiting'),
-        ('run', 'Running'),
-        ('com', 'Completed'),
-        ('mis', 'Missed'),
-    )
     shift = models.ForeignKey(Shift, on_delete=models.CASCADE)
 
     clock_in = models.TimeField(null=True, blank=True)
@@ -454,8 +425,56 @@ class ShiftDay(models.Model):
 
     def get_extra_hours(self):
         if self.clock_in and self.clock_out:
-            required = datetime.combine(self.shift_end_date, self.shift_end_time) - datetime.combine(self.shift_date, self.shift_time)
-            active = datetime.combine(self.shift_end_date, self.clock_out) - datetime.combine(self.shift_date, self.clock_in)
+            required = datetime.combine(self.shift_end_date, self.shift_end_time) - datetime.combine(self.shift_date,
+                                                                                                     self.shift_time)
+            active = datetime.combine(self.shift_end_date, self.clock_out) - datetime.combine(self.shift_date,
+                                                                                              self.clock_in)
             return round((active - required).total_seconds() / 3600)
         return 0
 
+
+class AbsenseType(models.Model):
+    name = models.CharField(max_length=50)
+    is_paid = models.BooleanField(
+        default=False,
+        help_text="Is this absence type considered as a paid leave"
+    )
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = "Absense Types"
+
+    def __str__(self):
+        return self.name
+
+    @classmethod
+    def fake(cls, loop=10):
+        print()
+        print("- ABSENSE TYPES: build")
+        for x in range(loop):
+            AbsenseType.objects.create(
+                name=fake.isbn10(),
+            )
+            print(f"---- ABSENSE TYPES: {x} faked.")
+        print("- END ")
+        print()
+
+
+class Absense(models.Model):
+    TYPE_CHOICES = (
+        ('s', 'Sick Leave'),
+        ('o', 'Other'),
+    )
+
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    absense_type = models.ForeignKey(AbsenseType, on_delete=models.SET_NULL, null=True, blank=False)
+    date_from = models.DateField(help_text="Employee holiday starts from")
+    date_to = models.DateField(help_text="Employee holiday ends on")
+    comment = models.TextField(null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name_plural = "Absences"
+
+    def __str__(self):
+        return self.employee.user.get_user_name() + " " + "Leave: " + str(self.pk)

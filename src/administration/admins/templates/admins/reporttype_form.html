@@ -21,7 +21,7 @@
                         {% csrf_token %}
                         {{ form|crispy }}
                         <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-check-circle"></i> Submit
+                            <i class="fa fa-check-circle"></i>&nbsp;Submit
                         </button>
                     </form>
 
@@ -30,4 +30,12 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+    $(document).ready(function () {
+        $('input').addClass('my-2');
+    })
+    </script>
 {% endblock %}

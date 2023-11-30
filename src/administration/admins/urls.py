@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import (
-    DashboardView, ScheduleView, TimeClockView,
+    DashboardView, ScheduleView, TimeClockView, CheckCallsView,
     PositionListView, PositionDeleteView, PositionCreateView, PositionUpdateView,
     UserPasswordResetView, UserListView, UserStaffCreateView, UserEmployeeCreateView, UserUpdateView, UserDeleteView,
     ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView,
@@ -11,7 +11,10 @@ from .views import (
     ShiftListView, ShiftDetailView, ShiftCustomCreateView,
     CountryListView, CountryCreateView, CountryUpdateView, CountryDeleteView, SubContractorListView,
     SubContractorCreateView, SubContractorUpdateView, SubContractorDeleteView, SubContractorDetailView,
-    DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView
+    DepartmentListView, DepartmentCreateView, DepartmentUpdateView, DepartmentDeleteView,
+
+    AbsenseTypeListView, AbsenseTypeCreateView, AbsenseTypeDeleteView, AbsenseTypeUpdateView, AbsenseScheduleView,
+    UserEmployeeInviteCreateView
 )
 
 app_name = 'admins'
@@ -19,6 +22,8 @@ urlpatterns = [
     path('', DashboardView.as_view(), name="dashboard"),
     path('schedule/', ScheduleView.as_view(), name="schedule"),
     path('time-clock/', TimeClockView.as_view(), name="time-clock"),
+    path('absenses/', AbsenseScheduleView.as_view(), name="absense-schedule"),
+    path('check-calls/', CheckCallsView.as_view(), name="check-calls"),
 ]
 
 urlpatterns += [
@@ -79,6 +84,13 @@ urlpatterns += [
 ]
 
 urlpatterns += [
+    path('absense-type/', AbsenseTypeListView.as_view(), name='absense-type-list'),
+    path('absense-type/add/', AbsenseTypeCreateView.as_view(), name='absense-type-add'),
+    path('absense-type/<int:pk>/change/', AbsenseTypeUpdateView.as_view(), name='absense-type-update'),
+    path('absense-type/<int:pk>/delete/', AbsenseTypeDeleteView.as_view(), name='absense-type-delete'),
+]
+
+urlpatterns += [
     path('sub-contractor/', SubContractorListView.as_view(), name='sub-contractor-list'),
     path('sub-contractor/add/', SubContractorCreateView.as_view(), name='sub-contractor-add'),
     path('sub-contractor/<int:pk>/', SubContractorDetailView.as_view(), name='sub-contractor-detail'),
@@ -93,6 +105,7 @@ urlpatterns += [
     path('user/<int:pk>/delete/', UserDeleteView.as_view(), name='user-delete'),
     path('user/staff/add/', UserStaffCreateView.as_view(), name='user-staff-add'),
     path('user/employee/add/', UserEmployeeCreateView.as_view(), name='user-employee-add'),
+    path('user/employee/invite/add/', UserEmployeeInviteCreateView.as_view(), name='user-employee-invite-add'),
     path('user/<int:pk>/reset/password/', UserPasswordResetView.as_view(), name='user-password-reset'),
 ]
 

@@ -8,7 +8,7 @@
         <div class="col-sm-6">
             <div class="mb-2">
                 <button class="btn btn-primary" id="employee_a_update_btn">
-                    <i class="fa fa-user"></i>&nbsp;Update Appearance Details
+                    <i class="fa fa-user"></i>&nbsp;Update Appearance
                 </button>
             </div>
             <dl class="row">
@@ -59,7 +59,7 @@
             <dl class="row">
                 <div class="mb-2">
                     <button class="btn btn-primary" id="employee_h_update_btn">
-                        <i class="fa fa-heartbeat"></i>&nbsp;Update Health Details
+                        <i class="fa fa-heartbeat"></i>&nbsp;Update Health
                     </button>
                 </div>
 
@@ -129,7 +129,7 @@
             <div class="modal-body">
                 <form method="post">
                     {% csrf_token %}
-                    {{ employee_health_form|crispy }}
+                    {% crispy employee_health_form  %}
                 </form>
             </div>
 
@@ -157,7 +157,7 @@
             <div class="modal-body">
                 <form method="post">
                     {% csrf_token %}
-                    {{ employee_appearance_form|crispy }}
+                    {% crispy employee_appearance_form %}
                 </form>
             </div>
 

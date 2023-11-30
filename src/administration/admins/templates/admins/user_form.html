@@ -6,20 +6,15 @@
 {% block base_subhead_heading %}Employee &rAarr; Form {% endblock %}
 {% block base_subhead_paragraph %}Employee create/update form{% endblock %}
 {% block base_subhead_button %}
-    <a href="{% url 'admins:user-list' %}">&larr; Users</a>
+    <a href="{% url 'admins:user-detail' object.pk %}">&larr; User Details</a>
 {% endblock %}
 
 
 {% block base_content %}
 
     <div class="row">
-        <div class="col-6">
+        <div class="col-sm-6">
             <div class="card">
-                <div class="card-body border-bottom">
-                    <p class="mb-0 card-title">
-                        <b>Account Information</b>
-                    </p>
-                </div>
                 <div class="card-body">
 
                     <form method="post" enctype="multipart/form-data">
@@ -52,8 +47,8 @@
             </div>
         </div>
 
-        <div class="col-6">
-            <div class="card border border-danger">
+        <div class="col-sm-6">
+            <div class="card">
                 <div class="card-body border-bottom bg-danger">
                     <p class="mb-0 card-title text-white">
                         <b>Delete User</b>
@@ -74,4 +69,12 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+    $(document).ready(function () {
+        $('input').addClass('my-2');
+    })
+    </script>
 {% endblock %}

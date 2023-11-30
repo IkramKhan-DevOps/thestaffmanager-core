@@ -1,7 +1,7 @@
 {% extends 'core/base.html' %}
 {% load static %}
 {% load crispy_forms_tags %}
-
+{% load widget_tweaks %}
 {% block base_subtitle %}Site Form {% endblock %}
 {% block base_subhead_heading %}Site &rAarr; Form {% endblock %}
 {% block base_subhead_paragraph %}Site create/update form{% endblock %}
@@ -10,43 +10,232 @@
 {% endblock %}
 
 {% block base_css %}
-    <link rel="stylesheet"
+    <link crossorigin="anonymous"
           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
-          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" rel="stylesheet"/>
 {% endblock %}
 
 
 {% block base_content %}
+    <form method="post">
 
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <div class="card">
-                <div class="card-body">
+        <div class="row justify-content-center mb-2">
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-body">
 
-                    <div class="text-center">
-                                <iframe src="https://embed.lottiefiles.com/animation/93663" height="200"
-                                        class="border-0"></iframe>
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        <div class="row row-cards">
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.site_id.label }}</label>
+                                    {% render_field form.site_id class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.site_id.help_text }}</small>
+                                    {% for error in form.site_id.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.name.label }}</label>
+                                    {% render_field form.name class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.name.help_text }}</small>
+
+                                    {% for error in form.name.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.company_name.label }}</label>
+                                    {% render_field form.company_name class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.company_name.help_text }}</small>
+
+                                    {% for error in form.company_name.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.client.label }}</label>
+                                    {% render_field form.client class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.clent.help_text }}</small>
+                                    {% for error in form.client.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.notes.label }}</label>
+                                    {% render_field form.notes class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.notes.help_text }}</small>
+                                    {% for error in form.notes.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.description.label }}</label>
+                                    {% render_field form.description class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.description.help_text }}</small>
+                                    {% for error in form.description.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-4">
+                                <div>
+                                    <label class="form-label">{{ form.address.label }}</label>
+                                    {% render_field form.address class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.address.help_text }}</small>
+                                    {% for error in form.address.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div>
+                                    <label class="form-label">{{ form.city.label }}</label>
+                                    {% render_field form.city class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.city.help_text }}</small>
+                                    {% for error in form.city.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div>
+                                    <label class="form-label">{{ form.country.label }}</label>
+                                    {% render_field form.country class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.country.help_text }}</small>
+                                    {% for error in form.country.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.longitude.label }}</label>
+                                    {% render_field form.longitude class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.longitude.help_text }}</small>
+                                    {% for error in form.longitude.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-label">{{ form.latitude.label }}</label>
+                                    {% render_field form.latitude class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.latitude.help_text }}</small>
+                                    {% for error in form.latitude.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                                                    <div class="col-md-12">
+                                <div>
+                                    <label class="form-label">{{ form.geo_fencing_range.label }}</label>
+                                    {% render_field form.geo_fencing_range class="form-control" %}
+                                    <small class="text-sm text-secondary">{{ form.geo_fencing_range.help_text }}</small>
+                                    {% for error in form.geo_fencing_range.errors %}
+                                        <small class="text-sm text-danger">
+                                            {{ error }}
+                                        </small>
+                                    {% endfor %}
+                                </div>
                             </div>
 
-                    <form method="post">
-                        {% csrf_token %}
-                        {{ form|crispy }}
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fa fa-check-circle"></i> Submit
-                        </button>
-                    </form>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-check form-switch">
+                    {% render_field form.check_calls_enabled class="form-check-input" %}
+                        <span class="form-check-label">{{form.check_calls_enabled.label}}</span>
+                                                        <small class="text-sm text-secondary">{{form.check_calls_enabled.help_text}}</small>
 
+                            </label>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div>
+                                    <label class="form-check form-switch">
+                    {% render_field form.is_active class="form-check-input" %}
+                        <span class="form-check-label">{{form.is_active.label}}</span>
+                                                        <small class="text-sm text-secondary">{{form.is_active.help_text}}</small>
+
+                            </label>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+        <div class="row">
+            <div class="">
+                <div class="col-md-5 text-center">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-check-circle"></i> Submit
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
 
 {% endblock %}
 
 
 {% block base_internal_scripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
-            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <script crossorigin="anonymous"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk="
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"></script>
 {% endblock %}
 
 {% block base_external_scripts %}
@@ -61,5 +250,7 @@
                 format: 'H:i:s'
             });
         });
+
+
     </script>
 {% endblock %}

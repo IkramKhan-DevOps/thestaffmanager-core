@@ -7,7 +7,7 @@
         {# LEFT #}
         <div class="col-sm-6">
             <button class="btn btn-primary mb-2" id="employment_work_edit_button">
-                <i class="fa fa-edit"></i> Edit
+                <i class="fa fa-edit"></i>&nbsp;Edit
             </button>
             <dl class="row">
                 <dt class="col-5">NI number</dt>
@@ -18,12 +18,19 @@
                 <dd class="col-7">{{ employee_work.tax_code }}</dd>
                 <dt class="col-5">Visa required</dt>
                 <dd class="col-7">
-                    {% if employee_visa_required %}
-                        <b><i class="fa fa-check text-success"></i></b>
+                    {% if employee_work.visa_required %}
+                        <i class="fa fa-check text-success"></i>&nbsp;
+                        <b id="passport_required_text">
+                            {{ employee_work.visa_type }} - {{ employee_work.visa_expiry }}
+                        </b>
                     {% else %}
-                        <b><i class="fa fa-times text-danger"></i></b>
+                        <i class="fa fa-times text-danger"></i>&nbsp;
+                        <b id="passport_required_text">
+                        </b>
+
                     {% endif %}
                 </dd>
+
             </dl>
         </div>
 
@@ -100,7 +107,7 @@
             <div class="modal-body">
                 <form method="post">
                     {% csrf_token %}
-                    {{ employee_work_form|crispy }}
+                    {% crispy employee_work_form %}
                 </form>
             </div>
 
@@ -120,14 +127,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Employment Contract</h5>
+                <h5 class="modal-title">Add Contract</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
 
             <div class="modal-body">
                 <form method="post">
                     {% csrf_token %}
-                    {{ employee_contracts_form|crispy }}
+                    {% crispy employee_contracts_form %}
                 </form>
             </div>
 
@@ -145,6 +152,30 @@
 
 <script>
     $(document).ready(function () {
+
+        validate_visa_areas();
+
+        $('#id_visa_required').change(function () {
+            validate_visa_areas();
+        })
+
+        function validate_visa_areas() {
+            let expiry = $('#div_id_visa_expiry');
+            let type = $('#div_id_visa_type');
+
+            if ($('#id_visa_required').is(":checked")){
+                expiry.show();
+                type.show();
+            }else{
+                expiry.hide();
+                type.hide();
+            }
+        }
+
+        $('#id_visa_expiry').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
 
         $('#id_start').datetimepicker({
             format: 'Y-m-d',

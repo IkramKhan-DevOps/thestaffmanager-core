@@ -1,5 +1,6 @@
 {% extends 'core/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 {% load custom_tags %}
 
 {% block base_subtitle %} Time Clock{% endblock %}
@@ -7,9 +8,7 @@
 {% block base_subhead_paragraph %}View and apply actions on time clock{% endblock %}
 
 {% block base_css %}
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
-          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="{% static 'libs/datetime-picker/jquery.datetimepicker.min.css' %}"/>
 {% endblock %}
 
 {% block base_content %}
@@ -20,7 +19,7 @@
                 <div class="card-body">
 
                     {% csrf_token %}
-                    <form method="get">
+                    <form method="get" id="filter-form">
                         <div class="input-group">
                             {{ filter_form }}
                             <div class="input-group-append">
@@ -57,7 +56,6 @@
                             <thead class="thead-light">
                             <tr>
                                 <th>Status</th>
-                                <th>Shift</th>
                                 <th>Employee</th>
                                 <th>Date</th>
                                 <th>Time</th>
@@ -68,10 +66,10 @@
                                 <th>-</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="infinite-container">
                             {% for object in object_list %}
                                 {% with current_status=object.get_current_status %}
-                                    <tr id="row_{{ object.pk }}">
+                                    <tr id="row_{{ object.pk }}" class="infinite-item">
                                     <td>
                                         {% if current_status == "completed" %}
                                             <span class="badge bg-success-lt">{{ current_status }}</span>
@@ -91,19 +89,18 @@
                                     </td>
                                     <td>
                                         <b>
-                                            <a href="{% url 'admins:shift-detail' object.shift.pk %}">
-                                                # {{ object.shift.pk }}
-                                            </a>
-                                        </b>
-                                    </td>
-                                    <td>
-                                        <b>
                                             {% if object.employee %}
                                                 <a href="{% url 'admins:user-detail' object.employee.user.pk %}">
                                                     <b>
                                                         <span class="badge bg-primary me-1"></span> {{ object.employee.user.get_user_name }}
                                                     </b>
-                                                </a>
+                                                </a>&nbsp;
+                                                {% if object.employee.is_sia_expired %}
+                                                    <i class="fa fa-exclamation-circle text-danger"
+                                                       data-bs-toggle="tooltip"
+                                                       data-bs-placement="right" data-bs-title="SIA License Expired">
+                                                    </i>
+                                                {% endif %}
                                             {% else %}
                                                 <b class="text-danger">
                                                     <span class="badge bg-danger me-1"></span> Not Assigned
@@ -214,19 +211,14 @@
                                         {% endwith %}
                                     </td>
                                     <td>
-                                        <b>
-                                            <a href="{% url 'admins:shift-day-update' object.pk %}">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                     class="icon icon-tabler icon-tabler-eye" width="24" height="24"
-                                                     viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
-                                                     fill="none"
-                                                     stroke-linecap="round" stroke-linejoin="round">
-                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                    <circle cx="12" cy="12" r="2"></circle>
-                                                    <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
-                                                </svg>
-                                            </a>
-                                        </b>
+                                        <button id="time_update_model_btn" data-id="{{ object.pk }}"
+                                                data-end="{{ object.clock_out|date:"G:i" }}"
+                                                data-start="{{ object.clock_in|date:"G:i" }}"
+                                                class="btn btn-sm btn-outline-primary"
+                                                data-action="{% url 'admins:admins-json:shift_day_change' object.pk %}"
+                                                data-method="#">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
                                     </td>
                                 {% endwith %}
                             </tr>
@@ -235,31 +227,15 @@
                         </table>
                     </div>
 
-                    <div class="card-footer">
-                        <ul class="pagination">
-                            {% if object_list.has_previous %}
-                                <li>
-                            <span>
-                                <a href="{% relative_url object_list.previous_page_number 'page' request.GET.urlencode %}">
-                                    Previous
+                    {% if object_list.has_next %}
+                        <div class="card-footer">
+                            <ul class="pagination">
+                                <a class="infinite-more-link" href="?page={{ object_list.next_page_number }}">
+                                    <b><i class="fa fa-cog fa fa-spin loading"></i> Load more</b>
                                 </a>
-                            </span>
-                                </li>
-                            {% endif %}
-                            <li class="">
-                                <span>Page {{ object_list.number }} of {{ object_list.paginator.num_pages }}.</span>
-                            </li>
-                            {% if object_list.has_next %}
-                                <li>
-                            <span>
-                                <a href="{% relative_url object_list.next_page_number 'page' request.GET.urlencode %}">
-                                    Next
-                                </a>
-                            </span>
-                                </li>
-                            {% endif %}
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
+                    {% endif %}
 
                 {% else %}
 
@@ -273,88 +249,177 @@
         </div>
     </div>
 
+    <div class="modal" tabindex="-1" id="time_update_model">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+
+                <div class="modal-body">
+                    <h5 class="modal-title border-0">
+                        <b><i class="fa fa-clock"></i>&nbsp; SHIFT CLOCK</b>
+                    </h5>
+
+                    <form method="post" id="time_form">
+                        {% csrf_token %}
+                        {{ shift_day_form|crispy }}
+                        <div class="mt-3">
+                            <button type="button" id="time_update_model_btn_submit" data-action="" data-id=""
+                                    class="btn btn-primary btn-lg">
+                                <i class="fa fa-check-circle"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 
 {% block base_internal_scripts %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
-            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+    <script src="{% static 'libs/datetime-picker/jquery.datetimepicker.full.min.js' %}"></script>
+    <script src="{% static 'libs/waypoint/noframework.waypoints.min.js' %}"></script>
+    <script src="{% static 'libs/waypoint/infinite.min.js' %}"></script>
 {% endblock %}
 
 {% block base_external_scripts %}
     <script>
         $(document).ready(function () {
 
-            $("#id_shift_date option:first").text("-- Start Date --");
-            $("#id_shift_end_date option:first").text("-- End Date --");
+            init();
 
-            $('body #id_clock_in').datetimepicker({
-                datepicker: false,
-                format: 'H:i:s'
-            });
+            function init() {
+                $('#filter-form label').hide();
+                $('input').addClass('form-control');
+                $('select').addClass('form-control');
 
-            $('body #id_clock_out').datetimepicker({
-                datepicker: false,
-                format: 'H:i:s'
-            });
+                $("#id_shift_date option:first").text("-- Start Date --");
+                $("#id_shift_end_date option:first").text("-- End Date --");
+                $('#time_update_model input').addClass('mb-2')
 
-            $('body .custom_btn_clock_in').click(function (event) {
-                event.preventDefault();
-
-                let shift_day_id = $(this).data('id');
-                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
-                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
-
-                $.ajax({
-                    type: "POST",
-                    url: "/a/api/shift-day/" + shift_day_id + "/clock/in/",
-                    data: {
-                        start_time: start_time,
-                        end_time: end_time,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    },
-                    dataType: 'application/json',
-                }).then(function (data, status) {
-                    console.log(status);
+                $('body #id_clock_in').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i'
                 });
-                location.reload();
-            })
 
-            $('body .custom_btn_clock_out').click(function (event) {
-                event.preventDefault();
-
-                let shift_day_id = $(this).data('id');
-                let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
-                let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
-
-                $.ajax({
-                    type: "POST",
-                    url: "/a/api/shift-day/" + shift_day_id + "/clock/out/",
-                    data: {
-                        start_time: start_time,
-                        end_time: end_time,
-                        csrfmiddlewaretoken: '{{ csrf_token }}'
-                    },
-                    dataType: 'application/json',
-                }).then(function (data, status) {
-                    console.log(status);
+                $('body #id_clock_out').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i'
                 });
-                location.reload();
-            })
 
-            $('label').hide();
-            $('input').addClass('form-control');
-            $('select').addClass('form-control');
-
-            $('#table #status_change_btn').on("click", function (event) {
-                const id = $(this).attr('data-id')
-                const status = $(this).attr('data-action')
-
-                $.get("/a/api/shift-day/" + id + "/status/" + status + "/change/", function (data, status) {
-                    if (status === 'success') {
-                        location.reload();
-                    }
+                $('body #time_clock_in').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i'
                 });
+
+                $('body #time_clock_out').datetimepicker({
+                    datepicker: false,
+                    format: 'H:i'
+                });
+
+                $('body #time_update_model_btn').click(function () {
+                    const start_date = $(this).data('start');
+                    const end_date = $(this).data('end');
+                    const id = $(this).data('id');
+                    const action = $(this).data('action');
+
+                    $('#time_update_model #id_clock_in').val(start_date)
+                    $('#time_update_model #id_clock_out').val(end_date)
+                    $('#time_update_model #time_update_model_btn_submit').data('action', action)
+                    $('#time_update_model #time_update_model_btn_submit').data('id', id)
+
+                    $('#time_update_model').modal('show');
+                })
+
+                $('body #time_update_model_btn_submit').click(function () {
+                    const id = $(this).data('id');
+                    const action = $(this).data('action');
+                    const form = $('#time_update_model form').serialize();
+
+                    $.ajax({
+                        url: action,
+                        type: "POST",
+                        data: form,
+                        success: function (data) {
+                            if (!(data['success'])) {
+                                $('form').replaceWith(data['form_html']);
+                            } else {
+                                location.reload();
+                            }
+                        },
+                        error: function () {
+                            $('form').find('.error-message').show()
+                        }
+                    });
+
+                })
+
+                $('body .custom_btn_clock_in').click(function (event) {
+                    event.preventDefault();
+
+                    let shift_day_id = $(this).data('id');
+                    let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                    let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/a/api/shift-day/" + shift_day_id + "/clock/in/",
+                        data: {
+                            start_time: start_time,
+                            end_time: end_time,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        dataType: 'application/json',
+                    }).then(function (data, status) {
+                        console.log(status);
+                    });
+                    location.reload();
+                })
+
+                $('body .custom_btn_clock_out').click(function (event) {
+                    event.preventDefault();
+
+                    let shift_day_id = $(this).data('id');
+                    let start_time = $('body #row_' + shift_day_id + ' #id_clock_in').val();
+                    let end_time = $('body #row_' + shift_day_id + ' #id_clock_out').val();
+
+                    $.ajax({
+                        type: "POST",
+                        url: "/a/api/shift-day/" + shift_day_id + "/clock/out/",
+                        data: {
+                            start_time: start_time,
+                            end_time: end_time,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
+                        },
+                        dataType: 'application/json',
+                    }).then(function (data, status) {
+                        console.log(status);
+                    });
+                    location.reload();
+                })
+
+                $('#table #status_change_btn').on("click", function (event) {
+                    const id = $(this).attr('data-id')
+                    const status = $(this).attr('data-action')
+
+                    $.get("/a/api/shift-day/" + id + "/status/" + status + "/change/", function (data, status) {
+                        if (status === 'success') {
+                            location.reload();
+                        }
+                    });
+                });
+            }
+
+            var infinite = new Waypoint.Infinite({
+                element: $('.infinite-container')[0],
+                onBeforePageLoad: function () {
+                    $('.loading').show();
+                },
+                onAfterPageLoad: function ($items) {
+
+                    $('.loading').hide();
+                    init();
+                }
             });
 
 

@@ -70,6 +70,20 @@ def shift_create_in(dates, shift):
 
 # STEP2: get dates and redirect according to request type.
 def shifts_create_update_logic(shift, is_create, previous_shift, refresh, *args):
+    """
+    Create or update shifts based on the given shift data.
+    If is_create is True, create shifts for the specified dates. If is_create is False, update the shifts for the specified dates.
+
+    Parameters:
+    - shift (Shift): The shift data.
+    - is_create (bool): Whether to create or update shifts.
+    - previous_shift (Shift, optional): The previous shift data. Only needed for update operations.
+    - refresh (bool, optional): Whether to refresh the shifts after the operation.
+    - *args: Additional arguments.
+
+    Returns:
+    - None
+    """
     dates = date_range(shift, shift.start_date, shift.end_date, shift.repeat_policy, args)
     shifts_update_in(dates, shift, previous_shift, refresh) if not is_create else shift_create_in(dates, shift)
 

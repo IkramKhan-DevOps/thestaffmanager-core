@@ -37,21 +37,14 @@
                     </label>
                     <div class="input-group input-group-flat">
                         <input type="password" class="form-control" name="password" id="id_password" placeholder="Your password" autocomplete="off">
-                        <span class="input-group-text">
-                            <a href="#" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24"
-                                     stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round"
-                                     stroke-linejoin="round">
-                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="2"/>
-                                    <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"/>
-                                </svg>
-                            </a>
+                        <span class="input-group-text" style="padding-left: 10px;">
+                                <i class="fa fa-eye" id="password_show_btn" title="Show/Hide password" data-bs-toggle="tooltip"></i>
                         </span>
                     </div>
                 </div>
 
                 {# BUTTON | TEXTS #}
-                <div class="mb-2">
+                <div class="mt-2 mb-0">
                     <label class="form-check">
                         <input type="checkbox" class="form-check-input"/>
                         <span class="form-check-label">Remember me on this device</span>
@@ -65,7 +58,32 @@
         </div>
     </div>
     <div class="text-center text-muted mt-3">
-        Powered by <b><a href="https://thestaffmanager.com/">The Staff Manager</a></b>
+        copyright 2023 &copy; <b><a target="_blank" href="https://thestaffmanager.com/">
+        Staff Manager</a></b> - Developed by <b><a target="_blank" href="https://exarth.com/">Exarth</a></b>
+    <br>
+    <small><i>Version 0.1 - alpha</i></small>
     </div>
 
+{% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+    $(document).ready(function () {
+        const password_show_button = $('#password_show_btn');
+        const id_password = $('#id_password');
+
+        password_show_button.click(function () {
+            if (id_password.attr('type') === 'password'){
+                id_password.attr('type', 'text')
+                password_show_button.removeClass('fa fa-eye')
+                password_show_button.addClass('fa fa-eye-slash')
+            }else{
+                id_password.attr('type', 'password')
+                password_show_button.removeClass('fa fa-eye-slash')
+                password_show_button.addClass('fa fa-eye')
+            }
+        })
+
+    })
+    </script>
 {% endblock %}

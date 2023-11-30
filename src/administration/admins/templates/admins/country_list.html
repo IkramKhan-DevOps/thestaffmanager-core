@@ -68,11 +68,13 @@
                                     <button id="model-from-update-btn" class="btn btn-link"
                                             data-id="{{ object.pk }}" data-name="{{ object.name }}"
                                             data-language="{{ object.langauge }}" data-currency="{{ object.currency }}"
-                                            data-time_zone="{{ object.time_zone }}" data-phone_code="{{ object.phone_code }}"
+                                            data-time_zone="{{ object.time_zone }}"
+                                            data-phone_code="{{ object.phone_code }}"
                                     >
                                         <i class="fa fa-edit"></i>
                                     </button>
-                                    <button id="model-from-delete-btn" data-id="{{ object.pk }}" class="btn text-danger btn-link">
+                                    <button id="model-from-delete-btn" data-id="{{ object.pk }}"
+                                            class="btn text-danger btn-link">
                                         <i class="fa fa-trash"></i>
                                     </button>
                                 </th>
@@ -107,7 +109,8 @@
                     </form>
                 </div>
                 <div class="modal-footer text-left">
-                    <button type="button" id="model-from-submit-btn" data-action="" data-param="" data-method="" class="btn btn-success me-auto">
+                    <button type="button" id="model-from-submit-btn" data-action="" data-param="" data-method=""
+                            class="btn btn-success me-auto">
                         <i class="fa fa-check"></i>&nbsp;Submit
                     </button>
                 </div>
@@ -120,6 +123,8 @@
 {% block base_external_scripts %}
     <script>
         $(document).ready(function () {
+
+            $('input').addClass('my-2');
 
             {# GLOBALS#}
             let create_button = $('body #model-from-create-btn');
@@ -137,7 +142,7 @@
 
             delete_button.click(function () {
                 let id = $(this).data('id');
-                let url = '/a/json/country/'+id+'/delete/?action=DELETE'
+                let url = '/a/json/country/' + id + '/delete/?action=DELETE'
 
                 $.ajax({
                     url: url,
@@ -163,12 +168,12 @@
 
                 $('#modal-simple').modal('show');
                 submit_button.data('method', 'POST')
-                submit_button.data('action', '/a/json/country/'+id+'/change/')
+                submit_button.data('action', '/a/json/country/' + id + '/change/')
                 submit_button.data('params', '?action=PUT')
             })
 
             {# SUBMIT MODEL #}
-            submit_button.click(function (){
+            submit_button.click(function () {
                 $.ajax({
                     url: $(this).data('action'),
                     type: "POST",

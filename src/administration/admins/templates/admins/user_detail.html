@@ -40,9 +40,11 @@
                 <a href="{% url 'admins:user-update' object.pk %}" class="text-azure">
                     <i class="fa fa-edit"></i> Edit
                 </a>
-                &nbsp;&nbsp;&nbsp;
                 <a href="{% url 'admins:user-password-reset' object.pk %}" class="text-azure">
-                    <i class="fa fa-code"></i> Password Reset
+                    <i class="fa fa-code"></i> Password
+                </a>
+                <a href="{% url 'admins:user-employee-add' %}" class="text-azure">
+                    <i class="fa fa-plus"></i> New Employee
                 </a>
             </div>
         </div>
@@ -107,13 +109,21 @@
                                                     Staff
                                                 </span>
                                             {% elif object.is_employee %}
+                                                {% if object.get_employee_profile.is_sia_expired %}
+                                                    <i class="fa fa-exclamation-circle text-danger"
+                                                       data-bs-toggle="tooltip"
+                                                       data-bs-placement="right" data-bs-title="SIA License Expired">
+                                                    </i>
+                                                {% endif %}
                                                 <b class="badge bg-success-lt">
-                                                    Employee</b>
+                                                    Employee
+                                                </b>
                                             {% else %}
                                                 <b class="badge bg-warning-lt">
                                                     Undefined</b>
                                             {% endif %}
                                         {% endif %}
+
                                     </td>
                                 </tr>
                             </table>
@@ -172,31 +182,31 @@
     {% endif %}
 
     <div class="modal" tabindex="-1" id="user_notes_model">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Employment Details Update</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Employment Details Update</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
 
-            <div class="modal-body">
-                <form method="post">
-                    {% csrf_token %}
-                    {{ user_notes_form|crispy }}
-                </form>
-            </div>
+                <div class="modal-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        {{ user_notes_form|crispy }}
+                    </form>
+                </div>
 
-            <div class="modal-footer text-left">
-                <button type="button" id="user_notes_submit_btn"
-                        data-action="{% url 'admins:admins-json:user_notes_change' object.pk %}"
-                        data-param="" data-method="POST"
-                        class="btn btn-success me-auto">
-                    <i class="fa fa-check"></i>&nbsp;Submit
-                </button>
+                <div class="modal-footer text-left">
+                    <button type="button" id="user_notes_submit_btn"
+                            data-action="{% url 'admins:admins-json:user_notes_change' object.pk %}"
+                            data-param="" data-method="POST"
+                            class="btn btn-success me-auto">
+                        <i class="fa fa-check"></i>&nbsp;Submit
+                    </button>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
 {% endblock %}
 
@@ -205,6 +215,7 @@
     <script src="{% static 'core/pages/jquery.form-repeater.js' %}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
             integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+
 {% endblock %}
 
 {% block base_external_scripts %}
@@ -212,31 +223,31 @@
         $(document).ready(function () {
 
             {# EMPLOYEE WORK DETAILS #}
-        let open_notes_model = $('#open_notes_model')
-        let user_notes_submit_btn = $('#user_notes_submit_btn')
-        let user_notes_model = $('#user_notes_model')
-        let user_notes_form = user_notes_model.find('form')
+            let open_notes_model = $('#open_notes_model')
+            let user_notes_submit_btn = $('#user_notes_submit_btn')
+            let user_notes_model = $('#user_notes_model')
+            let user_notes_form = user_notes_model.find('form')
 
-        open_notes_model.click(function () {
-            user_notes_model.modal('show')
-        });
-        user_notes_submit_btn.click(function () {
-            $.ajax({
-                url: $(this).data('action'),
-                type: $(this).data('method'),
-                data: user_notes_form.serialize(),
-                success: function (data) {
-                    if (!(data['success'])) {
-                        user_notes_form.html(data['form_html']);
-                    } else {
-                        location.reload();
-                    }
-                },
-                error: function () {
-                    user_notes_form.find('.error-message').show()
-                }
+            open_notes_model.click(function () {
+                user_notes_model.modal('show')
             });
-        })
+            user_notes_submit_btn.click(function () {
+                $.ajax({
+                    url: $(this).data('action'),
+                    type: $(this).data('method'),
+                    data: user_notes_form.serialize(),
+                    success: function (data) {
+                        if (!(data['success'])) {
+                            user_notes_form.html(data['form_html']);
+                        } else {
+                            location.reload();
+                        }
+                    },
+                    error: function () {
+                        user_notes_form.find('.error-message').show()
+                    }
+                });
+            })
 
         })
     </script>
