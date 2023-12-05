@@ -73,7 +73,7 @@ class ScheduleView(TemplateView):
             shifts_queryset = ShiftDay.objects.filter(
                 Q(shift_date__month=datetime.date.today().month, shift_date__year=datetime.date.today().year)
             ).values(
-                'id', 'shift_id', 'shift__start_time', 'shift__end_time', 'shift_date',
+                'id', 'shift_id', 'shift_date', 'shift_end_date',
                 'shift__employee', 'shift__employee_id', 'shift__site__name'
             )
 
@@ -102,6 +102,10 @@ class ScheduleView(TemplateView):
         # CALL: get month, year and query over it
         shifts, current_month, current_year, employees = get_query_over_request(self.request)
 
+        for x in shifts:
+            print(x['shift__employee'])
+            break
+
         # CONTEXT: data
         context['shifts'] = shifts
         context['shift_form'] = ShiftForm()
@@ -110,6 +114,13 @@ class ScheduleView(TemplateView):
         context['current_month'] = current_month
         context['current_year'] = current_year
         context['current_date'] = datetime.date.today()
+
+        # CONTEXT: month and days
+        current_month_start_date = datetime.date(int(current_year), int(current_month), 1)
+        total_days_in_this_month = monthrange(int(current_year), int(current_month))[1]
+        current_month_end_date = datetime.date(int(current_year), int(current_month), total_days_in_this_month)
+        context['current_month_start_date'] = current_month_start_date
+        context['current_month_end_date'] = current_month_end_date
 
         return context
 
@@ -169,7 +180,7 @@ class DashboardView(TemplateView):
 
     def get_context_data(self, **kwargs):
 
-        notify.send(self.request.user, recipient=self.request.user, verb='You have been invited to join the platform')
+        # notify.send(self.request.user, recipient=self.request.user, verb='You have been invited to join the platform')
 
         from django.db.models import Count
         from datetime import datetime, timedelta
