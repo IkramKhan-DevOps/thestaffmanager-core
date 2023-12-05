@@ -1,0 +1,62 @@
+[
+  {
+    "model": "admins.country",
+    "pk": 1,
+    "fields": {
+      "name": "United States",
+      "language": "English",
+      "currency": "USD",
+      "time_zone": "America/New_York",
+      "phone_code": "+1",
+      "is_active": true
+    }
+  },
+  {
+    "model": "admins.country",
+    "pk": 2,
+    "fields": {
+      "name": "United Kingdom",
+      "language": "English",
+      "currency": "GBP",
+      "time_zone": "Europe/London",
+      "phone_code": "+44",
+      "is_active": true
+    }
+  },
+  {
+    "model": "admins.country",
+    "pk": 3,
+    "fields": {
+      "name": "Australia",
+      "language": "English",
+      "currency": "AUD",
+      "time_zone": "Australia/Sydney",
+      "phone_code": "+61",
+      "is_active": true
+    }
+  },
+  {
+    "model": "admins.country",
+    "pk": 4,
+    "fields": {
+      "name": "Canada",
+      "language": "English, French",
+      "currency": "CAD",
+      "time_zone": "America/Toronto",
+      "phone_code": "+1",
+      "is_active": true
+    }
+  },
+  {
+    "model": "admins.country",
+    "pk": 5,
+    "fields": {
+      "name": "Germany",
+      "language": "German",
+      "currency": "EUR",
+      "time_zone": "Europe/Berlin",
+      "phone_code": "+49",
+      "is_active": true
+    }
+  }
+]

@@ -39,6 +39,7 @@ follow some more steps.
 ```bash
 pip install -r requirements.txt
 python manage.py makemigrations accounts admins content
+python manage.py migrate
 python manage.py runserver
 ```
 
