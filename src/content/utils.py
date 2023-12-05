@@ -2,5 +2,10 @@ from .models import Application
 
 
 def my_application():
-    obj, created = Application.objects.get_or_create()
-    return obj
+    application = Application.objects.all()
+    if application.count() == 0:
+        application = Application.objects.create()
+    else:
+        application = application[0]
+
+    return application
