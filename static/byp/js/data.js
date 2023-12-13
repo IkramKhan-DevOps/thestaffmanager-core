@@ -6,7 +6,7 @@ columsM = [
     --------------------------------------------------------------------------
     * */
 
-    { text : 'Name', field : 'name', width : 130 },
+    { text : 'Name', field : 'name', width : 160 },
 ]
 
 resourcesM = [

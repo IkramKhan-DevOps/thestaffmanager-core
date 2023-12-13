@@ -48,6 +48,7 @@
                     name: '{{ shift.shift__site__name }}',
                     startDate: '{{ shift.shift_date|date:"Y-m-d" }}',
                     endDate: '{{ shift.shift_end_date|date:"Y-m-d" }}',
+                    eventStyle : 'colored'
                 });
             {% endfor %}
             return events;
@@ -56,6 +57,7 @@
 
         let scheduler = new bryntum.scheduler.Scheduler({
             appendTo: document.getElementById('schedular'),
+            autoAdjustTimeAxis : false,
 
             autoHeight: true,
             rowHeight: 40,
