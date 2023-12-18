@@ -1,0 +1,149 @@
+{% extends 'core/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block base_subtitle %} Schedule{% endblock %}
+{% block base_subhead_heading %} Schedule &rAarr; Details{% endblock %}
+{% block base_subhead_paragraph %}Details down shifts and scheduling{% endblock %}
+
+{% block base_subhead_button %}
+    <a class="btn btn-primary" href="{% url 'admins:shift-add' %}">
+        Add Shift
+    </a>
+{% endblock %}
+
+{% block base_css %}
+    <link href="{% static 'byp/css/scheduler.material.css' %}" rel="stylesheet" id="bryntum-theme">
+    <script src="{% static 'byp/js/data.js' %}"></script>
+    <script src="{% static 'byp/js/scheduler.umd.js' %}"></script>
+{% endblock %}
+
+
+{% block base_content %}
+
+
+    <div id="schedular">
+
+    </div>
+
+    <div id="models">
+        {% include 'schedular/models/shift_create_model.html' %}
+    </div>
+
+{% endblock %}
+
+{% block base_external_scripts %}
+    <script>
+
+        function get_employees() {
+            let names = [];
+            {% for employee in employees %}
+                names.push({
+                    id: {{ employee.id }}, name: '{{ employee.user.username }}'
+                });
+            {% endfor %}
+            return names;
+        }
+
+        function get_shifts_api() {
+            let events = [];
+
+            {% for shift in shifts %}
+                events.push({
+                    id: {{ shift.id }},
+                    resourceId: {{ shift.shift__employee_id }},
+                    name: '{{ shift.shift__site__name }}',
+                    startDate: '{{ shift.shift_date|date:"Y-m-d" }}',
+                    endDate: '{{ shift.shift_end_date|date:"Y-m-d" }}',
+                });
+            {% endfor %}
+            return events;
+        }
+
+
+        let scheduler = new bryntum.scheduler.Scheduler({
+            appendTo: document.getElementById('schedular'),
+            autoAdjustTimeAxis: false,
+
+            height: 600,
+
+            autoHeight: false,
+            rowHeight: 40,
+            barMargin: 4,
+            {#viewPreset: 'dayAndWeek',#}
+
+            startDate: '{{ current_month_start_date|date:"Y-m-d"   }}',
+            endDate: '{{ current_month_end_date|date:"Y-m-d"  }}',
+
+            // DATA -> ?
+            columns: columsM,
+            resources: get_employees(),
+            events: get_shifts_api(),
+
+            eventStyle: 'colored',
+
+            features: {
+
+                sort: 'name',
+                stripe: false,
+                columnLines: true,
+                eventEdit: true,
+                eventResize: false,
+                labels: false,
+                nonWorkingTime: true,
+
+                // eventDrag: false
+                eventDrag: { // TODO: Configuration object this or above
+                    constrainDragToResource: false
+                },
+
+                // timeRanges: true, // TODO: or the below one
+                timeRanges: {
+                    showCurrentTimeLine: true,
+                    showHeaderElements: true,
+                    enableResizing: true
+                },
+
+                eventMenu: {
+                    items: {
+                        // Remove "Edit event" item provided by EventEdit feature
+                        editEvent: false
+                    }
+                },
+
+                timeAxisHeaderMenu: {
+                    items: {
+                        // Remove "Filter tasks" item provided by EventFilter feature
+                        eventsFilter: true
+                    }
+                },
+
+                {# FILTERS_AND_SEARCH #}
+                filterBar: {
+                    filter: {property: 'name', value: ''},
+                },
+
+                {# CUSTOM_TOOLTIP #}
+                eventTooltip: {
+                    template: data => `
+                        <div class="b-sch-event-tooltip">
+                            <p class="text-center mb-0"><b>${data.eventRecord.data.name}</b></p>
+                            Start: ${data.eventRecord.data.startDate.toLocaleString()}<br>
+                            Ends : ${data.eventRecord.data.endDate.toLocaleString()}
+                        </div>
+                    `
+                },
+
+            },
+
+        });
+
+        {# SEARCH_EMPLOYEES #}
+        const filterInput = document.querySelector('#b-textfield-1-input');
+        if (filterInput) {
+            filterInput.setAttribute('placeholder', 'Search Employee...');
+        }
+
+
+    </script>
+{% endblock %}

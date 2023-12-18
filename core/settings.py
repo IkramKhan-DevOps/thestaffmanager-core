@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'src.administration.employees',
     'src.administration.admins',
     'src.content.apps.ContentConfig',
+    'src.services.schedular.apps.SchedularAppConfig',
 
     # NOTIFICATIONS APPS
     'notifications',
@@ -165,7 +166,7 @@ AWS_SES_REGION_NAME = 'eu-west-2'
 AWS_SES_REGION_ENDPOINT = 'email.eu-west-2.amazonaws.com'
 
 """ RESIZER IMAGE --------------------------------------------------------------------------------"""
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]

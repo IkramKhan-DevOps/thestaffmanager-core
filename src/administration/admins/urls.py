@@ -1,6 +1,6 @@
 from django.urls import path, include
 from .views import (
-    DashboardView, ScheduleView, TimeClockView, CheckCallsView,
+    DashboardView, TimeClockView, CheckCallsView,
     PositionListView, PositionDeleteView, PositionCreateView, PositionUpdateView,
     UserPasswordResetView, UserListView, UserStaffCreateView, UserEmployeeCreateView, UserUpdateView, UserDeleteView,
     ClientListView, ClientDetailView, ClientUpdateView, ClientDeleteView, ClientCreateView,
@@ -20,7 +20,6 @@ from .views import (
 app_name = 'admins'
 urlpatterns = [
     path('', DashboardView.as_view(), name="dashboard"),
-    path('schedule/', ScheduleView.as_view(), name="schedule"),
     path('time-clock/', TimeClockView.as_view(), name="time-clock"),
     path('absenses/', AbsenseScheduleView.as_view(), name="absense-schedule"),
     path('check-calls/', CheckCallsView.as_view(), name="check-calls"),

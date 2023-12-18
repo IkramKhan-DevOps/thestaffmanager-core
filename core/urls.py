@@ -35,6 +35,7 @@ urlpatterns += [
     path('accounts/', include('src.accounts.urls', namespace='accounts')),
     path('a/', include('src.administration.admins.urls', namespace='admins')),
     path('c/', include('src.administration.employees.urls', namespace='employees')),
+    path('scheduler/', include('src.services.schedular.urls', namespace='scheduler')),
 ]
 
 urlpatterns += [

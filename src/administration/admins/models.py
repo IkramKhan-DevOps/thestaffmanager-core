@@ -231,7 +231,7 @@ class Shift(models.Model):
         ('w', 'Weekly repeat'),
         ('d', 'Selected Dates'),
     )
-    job_type = models.CharField(default='p', choices=JOB_TYPE_CHOICE, max_length=1)
+    job_type = models.CharField(default='o', choices=JOB_TYPE_CHOICE, max_length=1)
 
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
