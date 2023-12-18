@@ -61,7 +61,7 @@ class ScheduleView(TemplateView):
 
         # CONTEXT: data
         context['shifts'] = shifts
-        context['shift_form'] = ShiftForm()
+        context['form'] = ShiftForm()
         context['employees'] = employees
         context['current_day'] = datetime.date.today().day
         context['current_month'] = current_month

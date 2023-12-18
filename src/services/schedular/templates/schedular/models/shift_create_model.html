@@ -1,24 +1,344 @@
-{% load crispy_forms_filters %}
+{% load static %}
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
 
-<div class="modal" id="myModal">
+<div class="modal modal-lg" id="event-create-model">
     <div class="modal-dialog">
         <div class="modal-content">
 
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Create New Event</h4>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-            </div>
-
             <!-- Modal Body -->
             <div class="modal-body">
-                {{ shift_form|crispy }}
-            </div>
 
-            <!-- Modal Footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <div class="col-sm-12 text-center">
+                    <div class="text-center">
+                        <iframe src="https://embed.lottiefiles.com/animation/7448"
+                                height="200" class="border-0">
+                        </iframe>
+                    </div>
+                </div>
+                <form method="post" id="form" action="{% url 'admins:shift-add' %}">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row row-cards">
+                                        <div class="col-sm-6">
+                                            <div>
+                                                {{ form.job_type.label }}
+                                                {% render_field form.job_type class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.job_type.help_text }}</small>
+                                                {% for error in form.job_type.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6" id="div_id_repeat_policy">
+                                            <div>
+                                                {{ form.repeat_policy.label }}
+                                                {% render_field form.repeat_policy class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.repeat_policy.help_text }}</small>
+                                                {% for error in form.repeat_policy.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div>
+                                                {{ form.start_date.label }}
+                                                {% render_field form.start_date class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.start_date.help_text }}</small>
+                                                {% for error in form.job_type.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" id="div_id_end_date">
+                                            <div>
+                                                {{ form.end_date.label }}
+                                                {% render_field form.end_date class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.end_date.help_text }}</small>
+                                                {% for error in form.end_date.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div>
+                                                {{ form.start_time.label }}
+                                                {% render_field form.start_time class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.start_time.help_text }}</small>
+                                                {% for error in form.start_time.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3" id="div_id_end_date">
+                                            <div>
+                                                {{ form.end_time.label }}
+                                                {% render_field form.end_time class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.end_time.help_text }}</small>
+                                                {% for error in form.end_time.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div>
+                                                {{ form.site.label }}
+                                                {% render_field form.site class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.site.help_text }}</small>
+                                                {% for error in form.site.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div>
+                                                {{ form.position.label }}
+                                                {% render_field form.position class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.position.help_text }}</small>
+                                                {% for error in form.position.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div>
+                                                {{ form.employee.label }}
+                                                {% render_field form.employee class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.employee.help_text }}</small>
+                                                {% for error in form.employee.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div>
+                                                {{ form.pay_rate.label }}
+                                                {% render_field form.pay_rate class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.pay_rate.help_text }}</small>
+                                                {% for error in form.pay_rate.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                {{ form.charge_rate.label }}
+                                                {% render_field form.charge_rate class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.charge_rate.help_text }}</small>
+                                                {% for error in form.charge_rate.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="mb-3">
+                                                {{ form.extra_charges.label }}
+                                                {% render_field form.extra_charges class="form-control" %}
+                                                <small class="text-sm text-secondary">{{ form.extra_charges.help_text }}</small>
+                                                {% for error in form.extra_charges.errors %}
+                                                    <small class="text-sm text-danger">
+                                                        {{ error }}
+                                                    </small>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+
+                            <div id="div_policies" class="card">
+                                <div class="card-body">
+                                    <p class="mb-0 card-title">Repeat Policy</p>
+                                </div>
+                                <div class="card-body" id="customize">
+                                    <div>
+                                        <div id="weekly">
+                                            <p class="mb-2 h3">Weekly Repeat</p>
+                                            <div class="form-group row">
+                                                <div class="col-md-9">
+                                                    <div class="checkbox my-2">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="monday" name="monday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ monday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="monday">
+                                                                Monday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="tuesday" name="tuesday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ tuesday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="tuesday">
+                                                                Tuesday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="wednesday" name="wednesday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ wednesday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="wednesday">
+                                                                Wednesday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="thursday" name="thursday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ thursday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="thursday">
+                                                                Thursday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="friday" name="friday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                   {% if object %}{{ friday }}{% else %}checked{% endif %}>
+                                                            <label class="custom-control-label" for="friday">
+                                                                Friday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="saturday" name="saturday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                    {% if object %}{{ saturday }}{% else %}{% endif %}>
+                                                            <label class="custom-control-label" for="saturday">
+                                                                Saturday
+                                                            </label>
+                                                        </div>
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input"
+                                                                   id="sunday" name="sunday"
+                                                                   data-parsley-multiple="groups"
+                                                                   data-parsley-mincheck="2"
+                                                                    {% if object %}{{ sunday }}{% else %}{% endif %}>
+                                                            <label class="custom-control-label" for="sunday">
+                                                                Sunday
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div id="selected_dates">
+                                            <p class="mb-2 h3">Selected Dates</p>
+                                            <form method="POST" class="form-horizontal well" role="form">
+                                                <fieldset>
+                                                    <div class="repeater-custom-show-hide">
+                                                        <div data-repeater-list="car">
+
+                                                            {% if shift.repeat_policy == 'd' %}
+                                                                {% for shift_day in shift.shiftday_set.all %}
+
+                                                                    <div data-repeater-item="" class="mb-2">
+                                                                        <div class="form-group row d-flex align-items-end">
+                                                                            <div class="col-sm-8">
+                                                                                <input id="selected-date-item"
+                                                                                       type="date"
+                                                                                       name="car[{{ forloop.counter }}][date]"
+                                                                                       class="form-control"
+                                                                                       value="{{ shift_day.shift_date.isoformat }}">
+                                                                            </div>
+                                                                            <div class="col-sm-4">
+                                                            <span data-repeater-delete="" class="btn btn-danger">
+                                                                Remove
+                                                            </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+
+                                                                {% endfor %}
+                                                            {% else %}
+                                                                <div data-repeater-item="" class="mb-2">
+                                                                    <div class="form-group row d-flex align-items-end">
+                                                                        <div class="col-sm-8">
+                                                                            <input id="selected-date-item" type="date"
+                                                                                   name="car[0][date]"
+                                                                                   class="form-control">
+                                                                        </div>
+                                                                        <div class="col-sm-4">
+                                                            <span data-repeater-delete="" class="btn btn-danger">
+                                                                <i class="fa fa-trash"></i>
+                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            {% endif %}
+
+                                                        </div>
+                                                        <div class="form-group row mb-0">
+                                                            <div class="col-sm-12">
+                                                    <span data-repeater-create="" class="btn btn-light btn-md">
+                                                        <span class="fa fa-plus"></span> Add Date
+                                                    </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </form>
+                                        </div>
+
+                                        <div id="regular">
+                                            <p class="text-danger">Your selected repeat policy is <b>Regular</b>, in
+                                                regular
+                                                repeat
+                                                policy all dates are selected from start to end of this shift</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <button type="submit" id="submit" class="btn btn-primary">
+                            <i class="fa fa-check-circle"></i> Submit
+                        </button>
+                    </div>
+
+                </form>
             </div>
 
         </div>
@@ -27,6 +347,124 @@
 
 <script>
     $(document).ready(function () {
-       alert("Model - SHIFT - Create")
-    });
+
+        let policies_div = $("#div_policies");
+        let repeat_policy_div = $("#div_id_repeat_policy");
+        let end_date_div = $("#div_id_end_date");
+        let end_date_field = $("#id_end_date");
+
+        let weekly_div = $("#weekly");
+        let regular_div = $("#regular");
+        let dates_div = $("#selected_dates");
+        let client_options = $('#id_client')
+        let site_options = $('#id_site')
+
+        const empty_html = "<option value>--------</option>"
+
+        let create = true;
+        let repeat_policy = "{{ object.repeat_policy }}";
+        let job_type = "{{ object.job_type }}";
+
+        init();
+
+        $('#id_repeat_policy').change(function () {
+            update_ui($(this).val())
+        });
+
+        $('#id_job_type').change(function () {
+            show_form($(this).val());
+        });
+
+        $('#id_start_date').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+        $('#id_end_date').datetimepicker({
+            format: 'Y-m-d',
+            timepicker: false,
+        });
+
+        $('#id_start_time').datetimepicker({
+            datepicker: false,
+            format: 'H:i:s'
+        });
+        $('#id_end_time').datetimepicker({
+            datepicker: false,
+            format: 'H:i:s'
+        });
+        document.getElementById("submit").addEventListener("click", function () {
+            $('form#form').submit();
+        });
+
+        client_options.change(function (event) {
+            site_options.html('')
+            let format_html = empty_html;
+            let value = $(this).val();
+            if (value !== undefined && value != null && value > 0) {
+                $.get('/a/api/client/' + value + '/sites/', function (data, status) {
+                    if (status === 'success') {
+                        for (const datum of data) {
+                            format_html += `<option value='${datum.id}'>${datum.name}</option>`;
+                        }
+                    }
+                    site_options.append(format_html);
+                });
+            }
+        });
+
+        function update_ui(action) {
+
+            switch (action) {
+                case 'w':
+                    weekly_div.show();
+                    dates_div.hide();
+                    regular_div.hide();
+                    break;
+
+                case 'd':
+                    weekly_div.hide();
+                    dates_div.show();
+                    regular_div.hide();
+                    break;
+
+                case 'r':
+                    weekly_div.hide();
+                    dates_div.hide();
+                    regular_div.show();
+                    break;
+
+                default:
+                    weekly_div.hide();
+                    dates_div.hide();
+            }
+
+        }
+
+        function init() {
+            if (!create && job_type === 'o') {
+                $('#id_job_type').hide();
+                show_open_form();
+            }
+            update_ui(repeat_policy);
+        }
+
+        function show_form(shift_type) {
+            shift_type === "o" ? show_open_form() : show_pattern_form()
+        }
+
+        function show_open_form() {
+            repeat_policy_div.hide();
+            policies_div.hide()
+            {#end_date_field.attr("disabled", true);#}
+            end_date_div.hide();
+        }
+
+        function show_pattern_form() {
+            repeat_policy_div.show();
+            policies_div.show();
+            {#end_date_field.attr("disabled", false);#}
+            end_date_div.show();
+        }
+
+    })
 </script>

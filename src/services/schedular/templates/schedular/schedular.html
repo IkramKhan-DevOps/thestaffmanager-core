@@ -13,6 +13,9 @@
 {% endblock %}
 
 {% block base_css %}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css"
+          integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous"/>
     <link href="{% static 'byp/css/scheduler.material.css' %}" rel="stylesheet" id="bryntum-theme">
     <script src="{% static 'byp/js/data.js' %}"></script>
     <script src="{% static 'byp/js/scheduler.umd.js' %}"></script>
@@ -29,6 +32,14 @@
     <div id="models">
         {% include 'schedular/models/shift_create_model.html' %}
     </div>
+
+{% endblock %}
+
+{% block base_internal_scripts %}
+    <script src="{% static 'core/plugins/repeater/jquery.repeater.min.js' %}"></script>
+    <script src="{% static 'core/pages/jquery.form-repeater.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js"
+            integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
 
 {% endblock %}
 
@@ -138,12 +149,26 @@
 
         });
 
+        scheduler.on({
+            beforeEventAdd: ({resourceRecord, startDate, endDate, eventRecord}) => {
+                openCustomModel();
+                return false;
+            },
+        });
+
         {# SEARCH_EMPLOYEES #}
         const filterInput = document.querySelector('#b-textfield-1-input');
         if (filterInput) {
             filterInput.setAttribute('placeholder', 'Search Employee...');
         }
 
+        {#  #}
+
+        function openCustomModel() {
+            $('#event-create-model').modal('show');
+        }
+
+    $('#event-create-model').modal('show');
 
     </script>
 {% endblock %}
