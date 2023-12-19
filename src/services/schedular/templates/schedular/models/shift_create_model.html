@@ -16,7 +16,7 @@
                         </iframe>
                     </div>
                 </div>
-                <form method="post" id="form" action="{% url 'admins:shift-add' %}">
+                <form method="post" id="form" action="{% url 'admins:shift-add' %}?from=schedular">
                     {% csrf_token %}
 
                     <div class="row">
@@ -333,7 +333,8 @@
                     </div>
 
                     <div class="mt-2">
-                        <button type="submit" id="submit" class="btn btn-primary">
+                        <button data-action="{% url 'schedular:model_shift_add' %}" data-method="POST"
+                                type="submit" id="submit" class="btn btn-primary">
                             <i class="fa fa-check-circle"></i> Submit
                         </button>
                     </div>
@@ -466,5 +467,52 @@
             end_date_div.show();
         }
 
-    })
+    });
+</script>
+
+<script>
+    $(document).ready(function () {
+        let event_create_model = $('body #event-create-model');
+        let event_create_form = $('body #event-create-form');
+        let event_create_btn = $('body #event-create-btn');
+
+        /*
+        * event_create_btn.click(function () {
+            $.ajax({
+                url: $(this).data('action'),
+                type: $(this).data('method'),
+                data: new FormData(document.getElementById('event-create-form')),
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function (data) {
+    console.log('AJAX success callback');
+    console.log(data);
+
+    if (!(data['success'])) {
+        console.log('Error in form submission');
+
+        // Create a new temporary container to hold the form content
+        let newFormContainer = $('<div>').html(data['form_html']);
+
+        // Update specific elements within the existing form with new content
+        event_create_form.find('.error-message').html(newFormContainer.find('.error-message').html());
+        // Repeat this for other form elements as needed
+
+        // Show the error messages
+        event_create_form.find('.error-message').show();
+    } else {
+        location.reload();
+    }
+},
+                error: function () {
+                    console.log('AJAX error callback');
+                    event_create_form.find('.error-message').show();
+                }
+            });
+
+        });*/
+    });
+
+
 </script>

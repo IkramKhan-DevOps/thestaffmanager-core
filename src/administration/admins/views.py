@@ -597,6 +597,8 @@ class ShiftCreateView(CreateView):
 
     def get_success_url(self):
         shifts_create_update(self.object, self.request.POST)
+        if self.request.GET.get('from') and self.request.GET.get('from') == "schedular":
+            return reverse_lazy("schedular:schedule")
         return reverse_lazy('admins:shift-detail', args=[self.object.pk])
 
 

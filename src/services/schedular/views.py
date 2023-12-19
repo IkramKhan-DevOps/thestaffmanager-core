@@ -2,18 +2,23 @@ import datetime
 from calendar import monthrange
 
 from django.db.models import Q
-from django.shortcuts import redirect
-from django.utils.decorators import method_decorator
-from django.views import View
 from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 
-from src.accounts.decorators import admin_protected
 from src.accounts.models import Employee
 from src.administration.admins.forms import ShiftForm
 from src.administration.admins.models import ShiftDay
+from crispy_forms.utils import render_crispy_form
+from django.template.context_processors import csrf
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
+from jsonview.decorators import json_view
 
-from django.urls import reverse
+from src.accounts.decorators import admin_protected
+from src.services.schedular.forms import ShiftModelForm
+
+""" SCHEDULAR """
 
 
 @method_decorator([admin_protected, never_cache], name='dispatch')
@@ -76,3 +81,21 @@ class ScheduleView(TemplateView):
         context['current_month_end_date'] = current_month_end_date
 
         return context
+
+
+""" SHIFTS """
+
+
+@method_decorator([admin_protected, json_view, csrf_exempt], name='dispatch')
+class ShiftAddModelView(View):
+
+    def post(self, request):
+        form = ShiftModelForm(request.POST)
+        if not form.is_valid():
+            ctx = {}
+            ctx.update(csrf(request))
+            form_html = render_crispy_form(form, context=ctx)
+            return {'success': False, 'form_html': form_html}
+
+        form.save(commit=True)
+        return {'success': True}
