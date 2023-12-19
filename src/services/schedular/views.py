@@ -6,6 +6,7 @@ from django.views.decorators.cache import never_cache
 from django.views.generic import TemplateView
 
 from src.accounts.models import Employee
+from src.administration.admins.bll import shifts_create_update
 from src.administration.admins.forms import ShiftForm
 from src.administration.admins.models import ShiftDay
 from crispy_forms.utils import render_crispy_form
@@ -66,7 +67,7 @@ class ScheduleView(TemplateView):
 
         # CONTEXT: data
         context['shifts'] = shifts
-        context['form'] = ShiftForm()
+        context['form'] = ShiftModelForm()
         context['employees'] = employees
         context['current_day'] = datetime.date.today().day
         context['current_month'] = current_month
@@ -97,5 +98,6 @@ class ShiftAddModelView(View):
             form_html = render_crispy_form(form, context=ctx)
             return {'success': False, 'form_html': form_html}
 
-        form.save(commit=True)
+        obj = form.save(commit=True)
+        shifts_create_update(obj, request.POST)
         return {'success': True}
